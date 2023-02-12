@@ -1,0 +1,184 @@
+/* create group modal content  */
+.chat-modal-content--group-chat-form {}
+
+.group-chat-form-header {
+    width: 100%;
+}
+
+.group-chat-form-header__title {
+    font-size: 18px;
+    font-weight: 800;
+    padding: 5px;
+    border-bottom: 1px solid rgba(var(--rgba-first-color), 0.2);
+}
+
+
+
+.group-chat-form-pic {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 7px 0 0px;
+}
+
+
+.group-chat-form-pic svg {
+    width: 50px;
+    height: 50px;
+    fill: var(--first-color);
+    stroke: var(--third-color);
+    stroke-width: 2;
+    display: block;
+}
+
+.group-chat-form-pic--hide-svg svg {
+    display: none;
+}
+
+.group-chat-form-pic img {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    transition: all 1;
+}
+
+.group-chat-form-pic--hide-img img {
+    display: none;
+}
+
+.group-chat-form-name {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
+.group-chat-form-name input {
+    width: 100%;
+    height: 36px;
+    border-radius: 7px;
+    padding: 4px 6px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid rgba(var(--rgba-first-color), 0.3);
+    outline: 0;
+}
+
+.group-chat-form-desc {
+    width: 100%;
+    margin: 10px 0 0 0;
+    padding: 0 5px;
+}
+
+.group-chat-form-desc textarea {
+    width: 100%;
+    height: 60px;
+    resize: none;
+    border: 1px solid rgba(var(--rgba-first-color), 0.3);
+    border-radius: 7px;
+    padding: 4px 6px;
+    font-size: 16px;
+    font-weight: 600;
+    outline: 0;
+}
+
+.group-chat-form-add-user {
+    width: 100%;
+}
+
+.chat-modal-content-row--group-chat-form-add-user {
+    justify-content: space-between;
+}
+
+.group-chat-form-add-user__title {
+    font-size: 19px;
+    font-weight: 700;
+    padding: 5px;
+}
+
+.group-chat-form-add-user__count {
+    font-size: 22px;
+    font-weight: 700;
+    padding: 5px;
+}
+
+.group-chat-form-add-user__info {
+    font-size: 14px;
+    font-weight: 700;
+    padding: 5px;
+    color: rgba(var(--rgba-fourth-color), 0.8);
+    opacity: 1;
+    transition: all 0.8s;
+}
+
+.group-chat-form-add-user__info--hide {
+    opacity: 0;
+
+
+}
+
+.group-chat-form-add-user__btn {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px 0 22px;
+}
+
+.group-chat-form-add-user__btn svg {
+    fill: var(--first-color);
+    stroke: var(--third-color);
+    stroke-width: 2;
+}
+
+
+.group-chat-form-added-user-container {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
+.group-chat-form-added-user {
+      display: inline-block;
+    /* background-color: rgba(var(--rgba-fourth-color),1); */
+    color: rgba(var(--rgba-third-color), 1);
+    padding: 2px 0 2px 4px;
+    border: 2px solid rgba(var(--rgba-fourth-color), 1);
+    border-radius: 12px;
+    margin: 6px 5px;
+}
+
+.group-chat-form-added-user__username {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.group-chat-form-added-user__remove {
+    font-weight: 900;
+    color: rgba(var(--rgba-first-color), 1);
+    background-color: rgba(var(--rgba-third-color), 1);
+    padding: 2px 4px;
+    border-radius: 50px;
+}
+
+.group-chat-form-btn-container {
+    margin: 22px 0 0 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.group-chat-form-btn-container__btn {
+    border: 1px solid rgba(var(--rgba-first-color), 0.6);
+    border-radius: 8px;
+    padding: 4px 6px;
+    font-size: 17px;
+    font-weight: 700;
+    background-color: var(--fourth-color);
+    color: var(--first-color);
+}
+
+.group-chat-form-btn-container__btn--active {
+    background-color: var(--third-color);
+    color: var(--first-color);
+}
+
+/* end of create group modal  */
+/* ////////////////////////////////////// */

@@ -1,0 +1,493 @@
+.editProfile-form-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background-color: var(--dark-color);
+    /* color: var(--light-color); */
+}
+
+.editProfile-form-container::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.editProfile-form-container>header {
+    font-size: 20px;
+    font-weight: 800;
+    margin-top: 15px;
+    color: var(--second-color);
+    ;
+}
+
+.editProfile-form-container .editProfile-progress {
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
+}
+
+.editProfile-form-container .editProfile-progress::after {
+    content: '';
+    width: 100%;
+    height: 3px;
+    position: absolute;
+    top: 100%;
+    background: linear-gradient(rgba(var(--rgba-light-color), 0.7), transparent);
+}
+
+.editProfile-form-container .editProfile-progress .editProfile-progress-info {
+    align-self: flex-start;
+    margin-left: 5%;
+}
+
+.editProfile-form-container .editProfile-progress .editProfile-progress-info .step {
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.6;
+
+}
+
+.editProfile-form-container .editProfile-progress .editProfile-progress-info .step-info {
+    font-size: 1rem;
+    font-weight: 700;
+
+
+
+}
+
+.editProfile-form-container .editProfile-progress .editProfile-progress-bar {
+    width: 90%;
+    height: 5px;
+    border-radius: 20px;
+    border: 1px solid var(--second-color);
+    margin-bottom: 7px;
+
+}
+
+.editProfile-form-container .editProfile-progress .editProfile-progress-bar .editProfile-progress-bar-highlighter {
+    height: 100%;
+    width: 33%;
+    border-radius: 20px 0 0 20px;
+    background-color: var(--second-color);
+    transition: all 0.3s;
+
+}
+
+
+/* editProfile form start  */
+.editProfile-form-container .editProfile-form {
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
+
+.editProfile-form-container .editProfile-form::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
+.editProfile-form .editProfile-form-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    transition: all 0.5s ease;
+}
+
+.editProfile-form .editProfile-form-page::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
+.editProfile-form .editProfile-form-page:not(#editProfileFormPage1) {
+    left: 150%;
+}
+
+
+#editProfileFormPage1 .profile-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#editProfileFormPage1 .profile-field #editProfileProfile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid var(--light-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+}
+
+#editProfileFormPage1 .profile-field #editProfileProfile svg {
+    width: 90%;
+    height: 90%;
+    opacity: 0.7;
+    fill: var(--first-color)
+}
+
+#editProfileFormPage1 .profile-field #editProfileProfile img {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    transform: scale(1.2);
+
+}
+
+#editProfileFormPage1 .profile-field p {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid var(--light-color);
+}
+
+.editProfile-form .editProfile-form-page .input-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 25px 0 0 0;
+}
+
+.editProfile-form .editProfile-form-page .input-field label {
+    align-self: flex-start;
+    margin-left: 8%;
+    font-size: 11px;
+    font-weight: 700;
+
+}
+
+.editProfile-form .editProfile-form-page .input-field label span.required {
+    /* related to parent font size  */
+    font-size: 1.1em;
+    position: relative;
+    top: -3px;
+    left: 3px;
+    color: var(--third-color);
+}
+
+.editProfile-form .editProfile-form-page .input-field input {
+    width: 90%;
+    padding: 5px 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 6px;
+    box-shadow: 2px 2px 8px rgba(var(--rgba-light-color), 0.6);
+    margin-top: 2px;
+    background-color: rgba(var(--rgba-light-color), 0.9);
+    color: var(--second-color);
+    letter-spacing: 1px;
+
+
+}
+
+.editProfile-form .editProfile-form-page .input-field input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+
+    opacity: 0.7;
+    /* Firefox */
+}
+
+.editProfile-form .editProfile-form-page .input-field input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    opacity: 0.7;
+}
+
+.editProfile-form .editProfile-form-page .input-field input::-ms-input-placeholder {
+    /* Microsoft Edge */
+    opacity: 0.7;
+}
+
+.editProfile-form .editProfile-form-page .input-field input:focus {
+    box-shadow: 1px 1px 2px var(--light-color), -1px -1px 2px var(--light-color)
+}
+
+.half-input-fields {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editProfile-form .editProfile-form-page .half-input-fields .input-field {
+    width: 50%;
+}
+
+.editProfile-form .editProfile-form-page .btn-field {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.editProfile-form .editProfile-form-page .btn-field button {
+    margin: 0px 2px;
+    /* width: 30%; */
+    height: 36px;
+    padding: 4px 5px;
+    border-radius: 13px;
+    border: 1px solid var(--light-color);
+    box-shadow: 2px 2px 2px rgba(var(--rgba-light-color), 0.6);
+    background-color: var(--second-color);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.15rem;
+
+}
+
+.editProfile-form .editProfile-form-page .btn-field button svg {
+    width: 100%;
+    height: 100%;
+}
+
+.editProfile-form .editProfile-form-page .btn-field button:hover,
+.editProfile-form .editProfile-form-page .btn-field button:active {
+    background-color: var(--light-color);
+    color: var(--first-color);
+}
+
+/* editProfile page 2  */
+
+
+.editProfile-form .editProfile-form-page .input-field ul.info {
+    margin: 2px 0 2px 10px;
+    width: 80%;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 14px;
+}
+
+.editProfile-form .editProfile-form-page .info li {
+    font-weight: 800;
+    margin-top: 8px;
+}
+
+.editProfile-form .editProfile-form-page .info .not-use {
+    color: #cc8383;
+}
+
+.editProfile-form .editProfile-form-page .input-field .editProfile-username-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+
+
+.editProfile-form .editProfile-form-page .input-field .editProfile-username-container #editProfileUsername.valid {
+    border: 1px solid var(--second-color);
+
+}
+
+.editProfile-form .editProfile-form-page .input-field .editProfile-username-container span.editProfile-username-refresh {
+    width: 22px;
+    position: absolute;
+    right: 6%;
+    top: 2px;
+    transition: all 0.5s;
+    transform-box: fill-box;
+}
+
+.editProfile-form .editProfile-form-page .input-field .editProfile-username-container span.editProfile-username-refresh svg {
+    width: 100%;
+
+}
+
+
+
+
+
+
+
+/* editProfile-page 4 */
+.editProfile-form .editProfile-form-page .input-field .gender-btns {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.editProfile-form .editProfile-form-page .input-field .gender-btns .gender-btn {
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.gender-btn .editProfile-gender-label {
+    align-self: center;
+    margin: 1px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+
+}
+
+
+
+input[type=radio] {
+    position: absolute;
+    opacity: 0;
+}
+
+input[type=radio]+.editProfile-gender-label:before {
+    content: "";
+    background: #f4f4f4;
+    border-radius: 100%;
+    border: 1px solid var(--first-color);
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    position: relative;
+    top: -0.2em;
+    left: 10px;
+    margin-right: 1em;
+    vertical-align: top;
+    cursor: pointer;
+    text-align: center;
+    transition: all 250ms ease;
+}
+
+input[type=radio]:checked+.editProfile-gender-label:before {
+    background-color: var(--first-color);
+    box-shadow: inset 0 0 0 4px #f4f4f4;
+}
+
+input[type=radio]:focus+.editProfile-gender-label:before {
+    outline: none;
+    border-color: var(--first-color);
+}
+
+input[type=radio]:disabled+.editProfile-gender-label:before {
+    box-shadow: inset 0 0 0 4px #f4f4f4;
+    border-color: #b4b4b4;
+    background: #b4b4b4;
+}
+
+input[type=radio]+.editProfile-gender-label:empty:before {
+    margin-right: 0;
+}
+
+
+
+
+
+.input-field select {
+        width: 90%;
+    text-align: center;
+    padding: 6px 12px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 9px;
+    box-shadow: 0px 2px  6px rgba(var(--rgba-light-color), 0.4);
+    margin-top: 8px;
+    background: rgba(var(--rgba-first-color), 0.3);
+    color: var(--second-color);
+
+}
+
+#editProfileCity {
+    display: none;
+}
+
+.input-field select option {
+    text-align: left;
+}
+
+.input-field select option:first-child {
+    text-align: center;
+
+}
+
+/* hack for remobing drop down arrow  */
+select {
+    appearance: none;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+}
+
+/* For IE10 */
+select::-ms-expand {
+    display: none;
+}
+
+.editProfile-form .editProfile-form-page .input-field textarea {
+    width: 90%;
+    height: 138px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px rgba(var(--rgba-light-color), 0.6);
+    margin-top: 2px;
+    background: rgba(var(--rgba-light-color), 0.9);
+    color: var(--second-color);
+    padding: 4px 6px 5px 7px;
+}
+
+#editProfileUserNotification {
+
+    display: none;
+}
+
+#editProfileSubmit {
+    background: var(--third-color);
+}

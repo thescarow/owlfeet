@@ -1,0 +1,22 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+(self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["dev-javascripts_user_js_createFollowerUserBox_js"],{
+
+/***/ "./dev-javascripts/user/js/createFollowerUserBox.js":
+/*!**********************************************************!*\
+  !*** ./dev-javascripts/user/js/createFollowerUserBox.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"createFollowerUserBox\": () => (/* binding */ createFollowerUserBox)\n/* harmony export */ });\nfunction createFollowerUserBox(userBoxContainer) {\n  var userBoxHtml = \" <div class=\\\"user-box\\\">\\n    <a class=\\\"user-box__link\\\" href=\\\"/\\\">\\n      <div class=\\\"user-box__column\\\">\\n\\n        <div class=\\\"user-box__pic\\\">\\n          <img\\n            src=\\\"https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg\\\"\\n            alt=\\\"user profile pic\\\">\\n        </div>\\n\\n      </div>\\n\\n      <div class=\\\"user-box__column user-box__column--left-margin\\\">\\n        <div class=\\\"user-box__username\\\">user1</div>\\n        <div class=\\\"user-box__full-name\\\">Jos Buttler</div>\\n      </div>\\n      <div class=\\\"user-box__column\\\">\\n        <div class=\\\"user-box__btns\\\">\\n\\n          <button class=\\\"user-box__btn unfollowBtn\\\">Following</button>\\n\\n        </div>\\n      </div>\\n    </a>\\n  </div>\\n    \";\n  userBoxContainer.insertAdjacentHTML(\"beforeend\", userBoxHtml);\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9kZXYtamF2YXNjcmlwdHMvdXNlci9qcy9jcmVhdGVGb2xsb3dlclVzZXJCb3guanMuanMiLCJtYXBwaW5ncyI6Ijs7OztBQUFPLFNBQVNBLHFCQUFULENBQStCQyxnQkFBL0IsRUFBaUQ7RUFDdEQsSUFBSUMsV0FBVyw2dUJBQWY7RUEwQkFELGdCQUFnQixDQUFDRSxrQkFBakIsQ0FBb0MsV0FBcEMsRUFBaURELFdBQWpEO0FBQ0QiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9mcm9udGVuZC8uL2Rldi1qYXZhc2NyaXB0cy91c2VyL2pzL2NyZWF0ZUZvbGxvd2VyVXNlckJveC5qcz8zMTI0Il0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBjcmVhdGVGb2xsb3dlclVzZXJCb3godXNlckJveENvbnRhaW5lcikge1xyXG4gIGxldCB1c2VyQm94SHRtbCA9IGAgPGRpdiBjbGFzcz1cInVzZXItYm94XCI+XHJcbiAgICA8YSBjbGFzcz1cInVzZXItYm94X19saW5rXCIgaHJlZj1cIi9cIj5cclxuICAgICAgPGRpdiBjbGFzcz1cInVzZXItYm94X19jb2x1bW5cIj5cclxuXHJcbiAgICAgICAgPGRpdiBjbGFzcz1cInVzZXItYm94X19waWNcIj5cclxuICAgICAgICAgIDxpbWdcclxuICAgICAgICAgICAgc3JjPVwiaHR0cHM6Ly9tZWRpYS5zcHJvdXRzb2NpYWwuY29tL3VwbG9hZHMvMjAyMi8wNi9wcm9maWxlLXBpY3R1cmUuanBlZ1wiXHJcbiAgICAgICAgICAgIGFsdD1cInVzZXIgcHJvZmlsZSBwaWNcIj5cclxuICAgICAgICA8L2Rpdj5cclxuXHJcbiAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgPGRpdiBjbGFzcz1cInVzZXItYm94X19jb2x1bW4gdXNlci1ib3hfX2NvbHVtbi0tbGVmdC1tYXJnaW5cIj5cclxuICAgICAgICA8ZGl2IGNsYXNzPVwidXNlci1ib3hfX3VzZXJuYW1lXCI+dXNlcjE8L2Rpdj5cclxuICAgICAgICA8ZGl2IGNsYXNzPVwidXNlci1ib3hfX2Z1bGwtbmFtZVwiPkpvcyBCdXR0bGVyPC9kaXY+XHJcbiAgICAgIDwvZGl2PlxyXG4gICAgICA8ZGl2IGNsYXNzPVwidXNlci1ib3hfX2NvbHVtblwiPlxyXG4gICAgICAgIDxkaXYgY2xhc3M9XCJ1c2VyLWJveF9fYnRuc1wiPlxyXG5cclxuICAgICAgICAgIDxidXR0b24gY2xhc3M9XCJ1c2VyLWJveF9fYnRuIHVuZm9sbG93QnRuXCI+Rm9sbG93aW5nPC9idXR0b24+XHJcblxyXG4gICAgICAgIDwvZGl2PlxyXG4gICAgICA8L2Rpdj5cclxuICAgIDwvYT5cclxuICA8L2Rpdj5cclxuICAgIGBcclxuICB1c2VyQm94Q29udGFpbmVyLmluc2VydEFkamFjZW50SFRNTChcImJlZm9yZWVuZFwiLCB1c2VyQm94SHRtbClcclxufVxyXG4iXSwibmFtZXMiOlsiY3JlYXRlRm9sbG93ZXJVc2VyQm94IiwidXNlckJveENvbnRhaW5lciIsInVzZXJCb3hIdG1sIiwiaW5zZXJ0QWRqYWNlbnRIVE1MIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./dev-javascripts/user/js/createFollowerUserBox.js\n");
+
+/***/ })
+
+}]);

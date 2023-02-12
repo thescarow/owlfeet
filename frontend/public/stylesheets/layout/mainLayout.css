@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap'); */
+
+@import "../partials/mainNavigation.css";
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* main container max width  */
+  --main-container-max-width: 700px;
+  /* we have used this value in index/account.css in login box so that we can't get the transition effect on loading if i use left:50% and translateX(-50%) media rule  */
+
+  /* main navigation height */
+  --main-nav-height: 50px;
+
+  /* application colors  */
+  --page-color: #ffffff;
+  --first-color: #162527;
+  --second-color: #08af7c;
+  --third-color: #ECB365;
+  --fourth-color: #ffffff;
+  --light-color: #ffffff;
+  --dark-color: #141615;
+  --danger-color: #eb6600;
+  --success-color: #a7f9a7;
+  /* information color  */
+  --information-light-color: #bbbbbb;
+  --information-dark-color: #444444;
+  /* password strength color  */
+  --password-strong-color: #a7f9a7;
+  --password-medium-color: #a1d8eb;
+  --password-weak-color: #e0c67d;
+  /* notification color  */
+  --notification-color: #a1d8eb;
+  --notification-border-color: #4cb3d4;
+  --notification-error-color: #e0c67d;
+  --notification-error-border-color: #e6a700;
+  --notification-success-color: #97dd97;
+  --notification-success-border-color: #009400;
+
+  /* main notification color  */
+  --main-notification-color: #cae1eb;
+  --main-notification-border-color: #4cb3d4;
+  --main-notification-text-color: #444;
+  --main-notification-error-color: #eee6c9;
+  --main-notification-error-border-color: #e6a700;
+  --main-notification-error-text-color: #444;
+  --main-notification-success-color: #c3ebc3;
+  --main-notification-success-border-color: #009400;
+  --main-notification-success-text-color: #444;
+
+  /* profile color  */
+  --profile-text-color: #413F42;
+  /* --profile-text-light-color: #f2f2f2; */
+  /* --profile-text-medium-color: #aaa; */
+
+
+
+
+
+
+
+  /* error page color  */
+  --error-page-title-color: #413F42;
+  --error-page-message-color: #aaa;
+  /* for rgba so that we can use the alpha value  */
+  /* application rgba color */
+  --rgba-page-color: 255, 255, 255;
+  --rgba-first-color: 22, 37, 39;
+  --rgba-second-color: 8, 175, 124;
+  --rgba-third-color: 236, 179, 101;
+  --rgba-fourth-color: 255, 255, 255;
+  --rgba-light-color: 255, 255, 255;
+  --rgba-dark-color: 20, 22, 21;
+  --rgba-danger-color: 204, 59, 33;
+  --rgba-success-color: 167, 249, 167;
+  /* notification rgba color  */
+  --rgba-notification-color: 238, 249, 253;
+  --rgba-notification-border-color: 76, 179, 212;
+  --rgba-notification-error-color: 255, 248, 230;
+  --rgba-notification-error-border-color: 230, 167, 0;
+  --rgba-notification-success-color: 230, 246, 230;
+  --rgba-notification-success-border-color: 0, 148, 0;
+}
+
+body {
+  height: 100vh;
+  /* in each page we define main container so it has 100vh height  */
+  width: 100vw;
+  background-color: var(--page-color);
+  /* we insert components container in it so make sure container be in center  */
+  display: flex;
+  /* flex-direction: column; */
+  /* we have use flex-direction row so that each container have 100vh height,
+  for flex-direction column we have to set height: auto; */
+  align-items: flex-start;
+  justify-content: center;
+  font-family: 'Nunito', Helvetica, Arial, sans-serif;
+  /* font-family: 'Mukta', sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+}
+
+body::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+}

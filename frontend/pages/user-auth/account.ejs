@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="/stylesheets/user-auth/account.css" />
+
+<div class="main-account-container" id='mainAccountContainer'>
+  <div class="form-structor" id="fromStructor">
+    <div id="signupBox" class="signup-box <% if(locals.accountType == 'signup'){ -%> slide-up <% }-%>">
+      <h2 class="form-title" id="openSignup"><span>or</span>Register</h2>
+      <div class="form-holder">
+        <div class="svg-field">
+          <%- include('../partials/illustrations/connectedWorld.svg') -%>
+        </div>
+        <div class="notification-field " id="signupNotification">this is notification
+        </div>
+
+        <div class="input-field signup">
+          <label for="signupMobile">Mobile No:</label>
+          <input id="signupMobile" type="number" size="10" maxlength="10" required placeholder="987XXX1234" min="0"
+            max="9999999999" pattern="[56789]\d{9}">
+
+        </div>
+        <div class="btn-field" id="sendOtpField">
+          <span class="" id="sendOtpCounter"><span id="sendOtpCounterMinute"></span><span
+              id="sendOtpCounterSecond"></span></span>
+          <button class="" id="sendOtp"><span id="sendOtpText">Send OTP</span></button>
+        </div>
+
+        <div class="input-field signup" id="otpField">
+          <label for="signupOtpFirst">OTP:</label>
+          <div id="signupOtp">
+            <input id="signupOtpFirst" type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
+            <input class="space" type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
+          </div>
+
+
+        </div>
+        <div class="submit-field" id="checkSignupOtp">
+          <%- include('../partials/icons/next.svg') -%>
+        </div>
+        <a class="have-account-field" href="/login">already have an account ?</a>
+        <div class="empty-space-field"></div>
+
+      </div>
+
+
+    </div>
+    <div id="loginBox" class="login-box <% if(locals.accountType == 'login'){ -%> slide-up <% }-%>">
+      <div id="loginBoxInner" class="login-box-inner">
+        <h2 class="form-title" id="openLogin"><span>or</span>Log in</h2>
+
+        <div class="form-holder">
+          <div class="notification-field" id="loginNotification">error: Number is already register
+          </div>
+          <div class="input-field login">
+            <label for="loginUsername">Username/Mobile</label>
+            <input type="text" id="loginUser" autocomplete="off" placeholder="Username / Mobile">
+          </div>
+          <div class="input-field login" id="loginPasswordField">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" autocomplete="off" placeholder="Password">
+            <span class="password-show">
+              <%- include('../partials/icons/index_account_passwordShow.svg') -%>
+            </span>
+          </div>
+          <div class="btn-field">
+            <button id="loginSubmit">Login</button>
+          </div>
+          <a class="reset-password-field" href="/user-auth/reset-password">Forgot password ?</a>
+          <div class="empty-space-field"></div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+<script defer src="/javascripts/user-auth/account.bundle.js"></script>

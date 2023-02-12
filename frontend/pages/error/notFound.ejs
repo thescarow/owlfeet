@@ -1,0 +1,24 @@
+<title>
+    <%= locals.errorTitle -%>
+</title>
+<link rel="stylesheet" href="/stylesheets/error/notFound.css">
+
+
+
+<div id="mainNotFoundErrorContainer">
+
+
+
+    <div id="oops">Oops! </div>
+    <div id="errorSvg">
+        <%- include('../partials/illustrations/notFound.svg') -%>
+    </div>
+
+    <div id="errorTitle">
+        <%= locals.errorTitle -%>
+    </div>
+    <div id="errorMessage">
+        <%= locals.errorMessage -%>
+    </div>
+    <a href="/login"><button id="backToHome">Back to Home</button></a>
+</div>

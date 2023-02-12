@@ -1,0 +1,19 @@
+<title>
+    <%= locals.errorTitle -%>
+</title>
+<link rel="stylesheet" href="/stylesheets/error/commonServerError.css">
+
+<div id="mainErrorContainer">
+    <div id="errorSvg">
+        <%- include('../partials/illustrations/serverError.svg') -%>
+    </div>
+    <div id="errorTitle">
+        <%= locals.errorTitle -%>
+    </div>
+    <div id="errorMessage">
+        <%= locals.errorMessage -%>
+    </div>
+    <a href="/login">
+        <button id="backToHome">Back to Home</button>
+    </a>
+</div>

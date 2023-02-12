@@ -1,0 +1,208 @@
+
+<%  var profileImageBasePath = '/uploads/userProfileImages'
+var newsImagesBasePath = "/uploads/uploadImages"
+var newsVideosBasePath = "/uploads/uploadVideos" -%>
+
+<div class="news-main-container" data-news-id="<%= news._id _%>">
+
+
+
+  <section class="news-top">
+    <div class="news-top-user">
+      <div class="news-top-user-profile user-profile">
+        <% let newsUserProfileFullPath = profileImageBasePath + "/" + news.user.profile %>
+        <img
+          class="profile-img-value"
+          src="<%= newsUserProfileFullPath _%>"
+        />
+      </div>
+
+      <div class="news-top-user-username">@<%= news.user.userName -%></div>
+
+      <% if(news.user.role == 'verified'){ -%>
+      <div class="news-top-user-verified-icon">
+        <ion-icon
+          class="news-top-username-verified-icon-inner"
+          name="checkmark-done"
+        ></ion-icon>
+      </div>
+      <% } -%>
+    </div>
+    <% if(loginUser.followings.includes(news.user._id)){ -%>
+    <div  class="user-follow-link active" data-follow-user-id="<%=news.user._id -%>">unfollow</div>
+
+    <% } else{ -%>
+      
+      <div  class="user-follow-link" data-follow-user-id="<%=news.user._id -%>">follow</div>
+
+
+    <% } -%>
+
+  </section>
+
+  <!-- use the video streaming heree -->
+
+  <section class="news-media">
+    <!-- news video section  -->
+
+    <% let i = 0 -%> 
+    <% for(i= 0; i < news.videos.length; i++){ -%>
+
+    <div class="news-video">
+      <video
+        class="video-js vjs-theme-city"
+        data-setup='{"controls": true, "autoplay": false, "loop": true, "preload": "auto", "fluid": true, "aspectRatio": "16:9", "poster": "https://images.hindustantimes.com/img/2022/06/11/550x309/WhatsApp_Image_2021-09-18_at_09.42.18_1631944439782_1654946030715.jpeg" }'
+      >
+      <% let newsVideoFullPath = newsVideosBasePath + "/" + news.videos[i].path -%>
+        <source
+          src="<%= newsVideoFullPath _%>"
+          type="<%= news.videos[i].mimeType _%>"
+        />
+
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to
+          a web browser that
+          <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+          >
+        </p>
+      </video>
+    </div>
+
+    <% } -%>
+
+    <!-- news video section end here  -->
+
+    <!-- news images section start here  -->
+    <% if(news.images.length >= 1){ news.images.forEach(p=>{
+      let newsImageFullPath = newsImagesBasePath + "/" + p 
+      -%>
+
+    <img src="<%= newsImageFullPath -%>" alt="News Image" class="news-image" />
+
+    <% }) } else {-%>
+
+    <img class="news-image" src="/defaults/news/news.jpg" alt="News Image" />
+
+    <% } -%>
+
+    <!-- images section end here  -->
+  </section>
+
+  <section class="news-data">
+    <div class="news-title" data-news-id="<%= news._id -%>"><%= news.title -%></div>
+  </section>
+
+
+
+  
+  <section class="user-actions">
+    <div class="user-action-left">
+      <div class="like user-action">
+        <% if(loginUser.likedNews.includes(news._id)){ -%>
+        <ion-icon
+          class="likeBtn active"
+          name="heart"
+          data-news-id="<%= news._id -%>"
+        ></ion-icon>
+        <% } else{ -%>
+        <ion-icon
+          class="likeBtn "
+          name="heart-outline"
+          data-news-id="<%= news._id -%>"
+        ></ion-icon>
+        <% } -%>
+      </div>
+      <div class="comment user-action">
+        <ion-icon
+          class="commentBtn"
+          name="chatbubble-outline"
+          data-news-id="<%= news._id -%>"
+        >
+        </ion-icon>
+      </div>
+      <div class="share user-action">
+        <ion-icon id="shareBtn" name="paper-plane-outline"></ion-icon>
+      </div>
+    </div>
+
+<div class="user-action-right">
+    <div class="save user-action">
+    
+    <% if(loginUser.savedNews.includes(news._id)){ -%>
+      <ion-icon
+      class="saveBtn active"
+      name="bookmark"
+      data-news-id="<%= news._id -%>"
+      ></ion-icon>
+        <% } else{ -%>
+          <ion-icon
+          class="saveBtn"
+          name="bookmark-outline"
+          data-news-id="<%= news._id -%>"
+          ></ion-icon>
+          <% } -%>
+          </div>
+      </div>
+  </section>
+  <!-- showing like data  -->
+  <div class="like-data">
+    <span class="like-data-value" id="like-count-<%= news._id _%>"
+      ><%= news.likes.length _%></span
+    >
+    likes
+  </div> 
+  <!-- ######  -->
+  <!-- showing comment data  -->
+  <div class="comment-data" data-news-id="<%= news._id -%>" >
+    view all
+    <span class="comment-data-value" id="comment-count-<%= news._id _%>"
+      ><%= news.comments.length _%></span
+    >
+    comments
+  </div>
+  <!-- #######  -->
+
+  <!-- commment box  -->
+  <div class="comment-box">
+    <div class="comment-output" id="comment-output-<%= news._id _%>">
+    </div>
+
+    <div class="comment-input">
+      <div class="user-profile">
+        <% let loginUserProfileFullPath = profileImageBasePath + "/" + loginUser.profile -%>
+        <img
+          class="profile-img-value"
+          data-username="<%= loginUser.userName _%>"
+          id="profile-<%= news._id _%>"
+          src="<%= loginUserProfileFullPath _%>"
+        />
+      </div>
+      <textarea
+        class="comment-value"
+        type="text"
+        id="comment-<%= news._id _%>"
+        placeholder="comment as <%= loginUser.userName -%>"
+      ></textarea>
+      <button
+        class="comment-send"
+        data-news-id="<%= news._id -%>"
+      >
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- ############# comment box end here  -->
+</div>
+<!-- ############# news main container end here  -->
+
+
+
+
+
+
+
+
+
+

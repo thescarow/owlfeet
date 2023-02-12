@@ -1,0 +1,116 @@
+
+  <link rel="stylesheet" href="/stylesheets/add.css">
+  <script src="/javascripts/add.js" defer></script>
+
+<div class="main-container">
+  <div class="switch">
+
+    <button class="btn news-btn">News</button>
+    <button class="btn trend-btn">Trend</button>
+  </div>
+  
+  <div class="inner-container active"  id="news-container">
+    <h1 class="title">News</h1>
+    <form class="multi-step-form" action="/news" method="post" enctype="multipart/form-data">
+      <div class="card form-step">
+        <h2 class="step-title">1/2
+        </h2>
+
+       <h3 class="step-subtitle">News Details</h3>
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title">
+        </div>
+        <div class="form-group">
+          <label for="desc">Description</label>
+          <textarea name="desc" id="desc" cols="30" rows="10"></textarea>
+        </div>
+        <div class="form-group form-group-row">
+            <label for="city">City</label>
+          <input type="text" name="city" id="city" required >
+                <div class="select">
+
+                  <select name="state" id="state">
+                    <%- include('partials/_states_options')  %> 
+                    
+                  </select>
+                </div>
+
+        </div>
+        
+        <div class="form-group">
+          <label for="category">Categories</label>
+          <div class="select">
+            <select name="category" id="category" >
+              <%- include('partials/_category_options')  %> 
+            </select>
+          </div>
+        </div>
+
+
+
+
+
+        <button type="button" class="btn btn-right" data-next>Next</button>
+      </div>
+      
+      <div class="card form-step">
+        <h2 class="step-title">2/2
+        </h2>
+
+       <h3 class="step-subtitle">News Data</h3>
+        <div class="form-group">
+          <label for="news-images">Images:</label>
+          <input type="file" name="images" class="images" id="news-images" accept="image/gif, image/jpeg  , image/png" multiple >
+        </div>
+        <div class="form-group">
+          <label for="news-videos">Videos:</label>
+          <input type="file" name="videos" class="videos" id="news-videos" accept="	video/mp4 , application/x-mpegURL,video/MP2T,	video/quicktime,	video/x-msvideo, video/3gpp,	video/x-ms-wmv,	video/x-flv,video/x-matroska , video/webm " multiple>
+        </div>
+        <button type="button" class="btn"  data-previous>Previous</button>
+        <button type="submit" class="btn btn-right">Submit</button>
+      </div>
+    </form>
+  </div>
+  
+     
+  <div class="inner-container " id="trend-container">
+    <h1 class="title">Trend</h1>
+    <form class="multi-step-form">
+      <div class="card active form-step">
+        <h2 class="step-title">1/2
+        </h2>
+
+       <h3 class="step-subtitle">Trend Details</h3>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password">
+        </div>
+        <button type="button" class="btn btn-right" data-next>Next</button>
+      </div>
+      
+      <div class="card form-step">
+        <h2 class="step-title">2/2
+        </h2>
+
+       <h3 class="step-subtitle">Trend Data</h3>
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" name="firstName" id="firstName">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" name="lastName" id="lastName">
+        </div>
+        <button type="button" class="btn"  data-previous>Previous</button>
+        <button type="submit" class="btn btn-right">Submit</button>
+      </div>
+    </form>
+  </div>
+  
+     
+</div>

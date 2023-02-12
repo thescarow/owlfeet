@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link id="layoutCss" rel="stylesheet" href="/stylesheets/layout/mainLayout.css">
+
+  <%- style %>
+
+</head>
+
+<body>
+  <script> let pageName = '<%= locals.pageName-%>'
+    let isLogin = '<%= locals.isLogin -%>'
+    isLogin = isLogin === "true"
+
+    let loginUser = '<%- JSON.stringify(locals.loginUser) -%>'
+    if (loginUser !== '') {
+      loginUser = JSON.parse(loginUser)
+    }
+
+    let activeChatData = {}
+    let allChatData = {}
+    let allChat = '<%- JSON.stringify(locals.allChat) -%>'
+    if (allChat !== '') {
+      allChat = JSON.parse(allChat)
+
+      allChat.forEach(chat => {
+        allChatData[chat._id] = chat
+      })
+
+    }
+
+
+
+    let isOwner = '<%= locals.isOwner-%>'
+    isOwner = isOwner === "true"
+    let profileUser = '<%- JSON.stringify(locals.profileUser)  _%>'
+    if (profileUser !== '') {
+      profileUser = JSON.parse(profileUser)
+    }
+  </script>
+
+  <%- include('../partials/mainNavigation.ejs') _%>
+    <%- body %>
+
+
+      <script src="/javascripts/socket/indexSocket.bundle.js" defer></script>
+
+      <script src="/javascripts/layout/mainLayout.bundle.js" defer></script>
+
+      <%- script %>
+</body>
+
+</html>

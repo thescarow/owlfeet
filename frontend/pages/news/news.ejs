@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="/stylesheets/news/newsTemplate.css" />
+<link href="https://vjs.zencdn.net/7.18.1/video-js.css" rel="stylesheet" />
+<link
+  href="https://unpkg.com/@videojs/themes@1/dist/city/index.css"
+  rel="stylesheet"
+/>
+
+<!-- newsTemplate  -->
+
+<%- include('_newsTemplate',{news: news,loginUser: loginUser}) %>
+
+
+<!-- description modal  -->
+
+<%- include('_newsModel') %>
+
+
+<!-- support IE8 (for Video.js versions prior to v7)   -->
+
+<script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+
+<!-- ------ -->
+<script src="https://vjs.zencdn.net/7.18.1/video.min.js"></script>
+
+<!-- for purifing the comment  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.6/purify.min.js" integrity="sha512-DJjvM/U3zCRpzrYboJgg23iLHapWcS2rlo7Ni18Cdv+FMs6b3gUF7hQihztj4uVkHHfUwk7dha97jVzRqUJ7hg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="/javascripts/news/newsTemplate.js" defer></script>
+
+
+
+
+
+

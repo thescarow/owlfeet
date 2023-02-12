@@ -1,0 +1,637 @@
+.main-account-container {
+    position: relative;
+    width: 100%;
+    max-width: var(--main-container-max-width);
+    height: calc(100% - var(--main-nav-height));
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    background-color: var(--page-color);
+
+
+}
+
+.main-account-container::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
+
+.signup-form-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+}
+
+.signup-form-container::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.signup-form-container>header {
+    font-size: 25px;
+    font-weight: 800;
+    margin-top: 15px;
+}
+
+.signup-form-container .signup-progress {
+    margin-top: 2px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
+}
+
+.signup-form-container .signup-progress::after {
+    content: '';
+    width: 100%;
+    height: 5px;
+    position: absolute;
+    top: 100%;
+    background: linear-gradient(var(--second-color), transparent);
+}
+
+.signup-form-container .signup-progress .signup-progress-info {
+    align-self: flex-start;
+    margin-left: 5%;
+}
+
+.signup-form-container .signup-progress .signup-progress-info .step {
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0.6;
+}
+
+.signup-form-container .signup-progress .signup-progress-info .step-info {
+    font-size: 20px;
+    font-weight: 700;
+
+}
+
+.signup-form-container .signup-progress .signup-progress-bar {
+    width: 90%;
+    height: 6px;
+    border-radius: 20px;
+    border: 2px solid var(--dark-color);
+    margin-bottom: 8px;
+
+}
+
+.signup-form-container .signup-progress .signup-progress-bar .signup-progress-bar-highlighter {
+    height: 100%;
+    width: 25%;
+    border-radius: 20px 0 0 20px;
+    background-color: var(--first-color);
+    transition: all 0.8s;
+
+}
+
+
+/* signup form start  */
+.signup-form-container .signup-form {
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
+
+.signup-form-container .signup-form::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
+.signup-form .signup-form-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    transition: all 0.5s ease;
+}
+
+.signup-form .signup-form-page::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+
+.signup-form .signup-form-page:not(#signupFormPage1) {
+    left: 150%;
+}
+
+
+#signupFormPage1 .profile-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 14px;
+}
+
+#signupFormPage1 .profile-field #signupProfile {
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+    border: 1px solid var(--first-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+}
+
+#signupFormPage1 .profile-field #signupProfile svg {
+    width: 90%;
+    height: 90%;
+    opacity: 0.7;
+    fill: var(--dark-color);
+}
+
+#signupFormPage1 .profile-field #signupProfile img {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    transform: scale(1.2);
+
+}
+
+#signupFormPage1 .profile-field #signupProfileBtn {
+
+    margin-top: 10px;
+    width: 150px;
+    height: 45px;
+    padding: 4px;
+    font-size: 14px;
+    font-weight: 800;
+    border-radius: 21px;
+    background: transparent;
+    border: 1px solid var(--dark-color);
+    box-shadow: 0px 2px 10px rgba(var(--rgba-dark-color), 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#signupFormPage1 .profile-field #signupProfileBtn svg {
+    width: 30px;
+    fill: var(--dark-color);
+    margin-right: 5px;
+
+}
+
+#signupFormPage1 .profile-field p {
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.signup-form .signup-form-page .input-field {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 25px;
+}
+
+.signup-form .signup-form-page .input-field label {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.signup-form .signup-form-page .input-field label span.required {
+    /* related to parent font size  */
+    font-size: 1.1em;
+    position: relative;
+    top: -3px;
+    left: 3px;
+    color: var(--third-color);
+}
+
+.signup-form .signup-form-page .input-field input {
+    width: 100%;
+    height: 31px;
+    padding: 4px 5px;
+    border: none;
+    outline: none;
+    font-size: 13px;
+    font-weight: 400;
+    border-radius: 6px;
+    box-shadow: 1px 2px 5px rgba(var(--rgba-dark-color), 0.6);
+    margin-top: 2px;
+    /* background-color: rgba(var(--rgba-light-color),0.9); */
+    color: var(--dark-color);
+    letter-spacing: 1px;
+}
+
+.signup-form .signup-form-page .input-field input:focus {
+    border: 1px solid var(--second-color)
+}
+
+.signup-form .signup-form-page .input-field input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+
+    opacity: 0.7;
+    /* Firefox */
+}
+
+.signup-form .signup-form-page .input-field input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    opacity: 0.7;
+}
+
+.signup-form .signup-form-page .input-field input::-ms-input-placeholder {
+    /* Microsoft Edge */
+    opacity: 0.7;
+}
+
+
+
+.half-input-fields {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.signup-form .signup-form-page .half-input-fields .input-field input {
+    width: 90%;
+}
+
+.signup-form .signup-form-page .btn-field {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.signup-form .signup-form-page .btn-field button {
+    margin: 0px 2px;
+    /* width: 30%; */
+    height: 36px;
+    padding: 4px 20px;
+    border-radius: 13px;
+    border: 1px solid var(--dark-color);
+    box-shadow: 1px 2px 2px rgba(var(--rgba-dark-color), 0.6);
+    background-color: var(--light-color);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.15rem;
+
+}
+
+.signup-form .signup-form-page .btn-field button svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--dark-color);
+}
+
+
+
+.signup-form .signup-form-page .btn-field button:hover,
+.signup-form .signup-form-page .btn-field button:active {
+    background-color: var(--light-color);
+    color: var(--second-color);
+}
+
+
+/* page second */
+
+.signup-form .signup-form-page .input-field h2 {
+    margin-top: 10px;
+    margin-right: 15px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.signup-form .signup-form-page .input-field ul {
+    margin: 10px 0 10px 10px;
+    width: 70%;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.signup-form .signup-form-page .input-field ul li.true {
+    color: #00e931;
+}
+
+.signup-form-page .input-field .signup-password-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+
+.signup-form-page .input-field .signup-password-container span.signup-password-show {
+    width: 10%;
+    position: absolute;
+    right: 6%;
+    /* because input length is 90% so 5-5 both side  */
+
+
+}
+
+.signup-form-page .input-field .signup-password-container span.signup-password-show svg {
+    width: 80%;
+    margin-top: 10px;
+    /* bcs input margin is 10px */
+}
+
+.signup-form-page .input-field .signup-password-container span.signup-password-show svg #passwordShowLine {
+    transform: scale(1);
+
+    transition: all 1s ease;
+}
+
+.signup-form-page .input-field .signup-password-container span.signup-password-show.show svg #passwordShowLine {
+    transform: scale(0) rotate(180deg);
+}
+
+.signup-form-page .input-field .signup-password-strength {
+
+    width: 90%;
+    /* bcs input field is 90% */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.signup-form-page .input-field .signup-password-strength div {
+    width: 25%;
+    height: 10px;
+    background: var(--light-color);
+    border-radius: 15px;
+    border: 1px solid var(--dark-color);
+    transition: all 0.5s;
+}
+
+.signup-form-page .input-field .signup-password-strength div:last-child {
+    width: 15%;
+    background: none;
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: -11px;
+    text-align: right;
+    border: none;
+
+
+}
+
+.signup-form-page .input-field .signup-password-confirm {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+
+}
+
+.signup-form-page .input-field .signup-password-confirm div:last-child {
+      width: 100%;
+    background: none;
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--dark-color);
+    margin-top: -6px;
+    text-align: right;
+
+
+}
+
+
+/* signup page 3  */
+.signup-form .signup-form-page .input-field .signup-username-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.signup-form .signup-form-page .input-field .info {
+    margin: 10px 0 0px 16px;
+    width: 80%;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.signup-form .signup-form-page .info .not-use {
+    color: #cf7d7d;
+}
+
+.signup-form .signup-form-page .input-field .signup-username-container #signupUsername.valid {
+    border: 1px solid var(--second-color);
+
+}
+
+.signup-form .signup-form-page .input-field .signup-username-container span.signup-username-refresh {
+    width: 10%;
+    height: 100%;
+    position: absolute;
+    right: 4%;
+    transition: all 0.5s;
+    transform-box: fill-box;
+}
+
+.signup-form .signup-form-page .input-field .signup-username-container span.signup-username-refresh svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--dark-color);
+
+}
+
+
+
+
+
+
+
+/* signup-page 4 */
+.signup-form .signup-form-page .input-field .gender-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.signup-form .signup-form-page .input-field .gender-btns .gender-btn {
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.gender-btn .signup-gender-label {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+
+}
+
+
+
+input[type=radio] {
+    position: absolute;
+    opacity: 0;
+}
+
+input[type=radio]+.signup-gender-label:before {
+    content: "";
+    background: #f4f4f4;
+    border-radius: 100%;
+    border: 1px solid var(--dark-color);
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    position: relative;
+    top: -0.2em;
+    left: 10px;
+    margin-right: 1em;
+    vertical-align: top;
+    cursor: pointer;
+    text-align: center;
+    transition: all 250ms ease;
+}
+
+input[type=radio]:checked+.signup-gender-label:before {
+    background-color: var(--dark-color);
+    box-shadow: inset 0 0 0 4px var(--light-color);
+}
+
+input[type=radio]:focus+.signup-gender-label:before {
+    outline: none;
+    border-color: var(--dark-color);
+}
+
+
+
+
+input[type=radio]:disabled+.signup-gender-label:before {
+    box-shadow: inset 0 0 0 4px #f2f2f2;
+    border-color: var(--dark-color);
+    background: var(--dark-colo);
+}
+
+input[type=radio]+.signup-gender-label:empty:before {
+    margin-right: 0;
+}
+
+
+
+
+
+.input-field select {
+
+    width: 100%;
+    text-align: center;
+    padding: 10px 5px 10px 5px;
+    border: 1px solid var(--dark-color);
+    outline: none;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 15px;
+    margin-top: 5px;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+
+}
+
+#signupCity {
+    display: none;
+}
+
+.input-field select option {
+    text-align: left;
+}
+
+.input-field select option:first-child {
+    text-align: center;
+
+}
+
+/* hack for remobing drop down arrow  */
+select {
+    appearance: none;
+    /* for Firefox */
+    -moz-appearance: none;
+    /* for Chrome */
+    -webkit-appearance: none;
+}
+
+/* For IE10 */
+select::-ms-expand {
+    display: none;
+}
+
+.signup-form .signup-form-page .input-field textarea {
+    width: 100%;
+    height: 150px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(var(--rgba-dark-color), 0.5);
+    margin-top: 5px;
+    background: var(--light-color);
+    padding: 10px 5px 10px 5px;
+}
+
+
+
+#signupSubmit {
+    background: var(--third-color);
+}

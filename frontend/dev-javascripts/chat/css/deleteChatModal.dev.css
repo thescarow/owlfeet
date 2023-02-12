@@ -1,0 +1,14 @@
+.inner-modal--delete-chat {}
+
+.inner-modal-content--delete-chat {}
+
+
+
+
+.delete-chat-info {
+    width: 100%;
+    padding: 5px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(var(--rgba-third-color), 0.9);
+}

@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+
+svg {
+    width: 100%;
+    height: 100%;
+    max-width: 300px;
+}
+
+svg #svgBalloonPart {
+    animation: svgBalloonParts 2s infinite both alternate linear;
+    transform-origin: 50% 50%;
+}
+
+@keyframes svgBalloonParts {
+    0% {
+        transform: translate(0);
+
+    }
+
+    100% {
+
+        transform: translateY(20px);
+    }
+
+}
+
+svg #svgBalloonPart #balloonParts path {
+    animation: balloonParts 15s infinite both alternate linear;
+
+}
+
+@keyframes balloonParts {
+    0% {
+        fill: rgb(248, 9, 9);
+    }
+
+    10% {
+        fill: rgb(255, 145, 0);
+    }
+
+    20% {
+        fill: rgb(255, 251, 0);
+    }
+
+    30% {
+
+        fill: rgb(1, 255, 1);
+    }
+
+    40% {
+
+        fill: rgb(3, 247, 174);
+    }
+
+    50% {
+
+        fill: rgb(0, 80, 252);
+    }
+
+    60% {
+
+        fill: rgb(119, 0, 255);
+    }
+
+    70% {
+
+        fill: rgb(171, 3, 248);
+    }
+
+    80% {
+
+        fill: rgb(255, 1, 170);
+    }
+
+    90% {
+
+        fill: rgb(255, 0, 43);
+    }
+
+    100% {
+
+        fill: rgb(255, 0, 0);
+    }
+
+}
+
+
+svg #svgErrorBoardPart {
+    animation: svgErrorBoardPart 2s infinite ease-in alternate;
+    transform-origin: 50% 100%;
+}
+
+@keyframes svgErrorBoardPart {
+    0% {
+        transform: translate(-10px, 0) rotateY(10deg);
+
+    }
+
+    100% {
+        transform: translate(15px, 0) rotateY(0deg);
+    }
+}
+
+svg #svgLightningPart {
+    animation: svgLightningPart 2s infinite ease-in alternate;
+    transform-origin: 50% 50%;
+}
+
+@keyframes svgLightningPart {
+    0% {
+        transform: scale(1);
+
+    }
+
+    100% {
+        transform: scale(1.1)
+    }
+}
+
+svg #svgErrorBoardPart #errorCodeMessage path {
+    animation: errorCodeMessage 2s infinite ease-in alternate;
+    transform-origin: 50% 50%;
+    transform-box: fill-box;
+}
+
+svg #svgErrorBoardPart #errorCodeMessage path:nth-child(2n) {
+    animation-delay: 1s;
+}
+
+@keyframes errorCodeMessage {
+    0% {
+        transform: translateY(-10px)
+    }
+
+    100% {
+        transform: translateY(5px);
+    }
+}
+
+
+svg #demonRightHand {
+    animation: demonRightHand 2s infinite both alternate linear;
+    transform-origin: 50% 50%;
+}
+
+@keyframes demonRightHand {
+    0% {
+        transform: translate(0);
+
+    }
+
+    100% {
+
+        transform: translateY(10px);
+    }
+
+}
+
+svg #demonLeftHand {
+    animation: demonLeftHand 2s infinite both alternate linear;
+    transform-origin: 50% 0%;
+    transform-box: fill-box;
+}
+
+@keyframes demonLeftHand {
+    0% {
+        transform: translate(0);
+
+    }
+
+    100% {
+
+        transform: rotate(10deg);
+    }
+
+}
+
+
+/* ////////////////////////////////////////////////////////////// */
+#mainNotFoundErrorContainer {
+    padding-bottom: var(--main-nav-height);
+    position: relative;
+    width: var(--main-container-max-width);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
+
+#mainNotFoundErrorContainer::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+#errorSvg {
+    margin: 5px auto;
+
+    width: 100%;
+    height: 500px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#oops {
+    display: inline-block;
+    font-family: 'Dancing Script', cursive;
+    font-size: 30px;
+    font-weight: 700;
+    transform: rotate(-20deg);
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    color: var(--first-color);
+}
+
+#errorTitle {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--error-page-title-color);
+
+    margin: 10px 15px;
+}
+
+#errorMessage {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--error-page-message-color);
+    margin: 5px 15px;
+    margin-bottom: 10px;
+
+}
+
+
+button#backToHome {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--first-color);
+}

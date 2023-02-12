@@ -1,0 +1,40 @@
+.inner-modal--clear-chat-history {}
+
+.inner-modal-content--clear-chat-history {}
+
+.clear-chat-history-for-all-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px 6px;
+    font-size: 15px;
+    font-weight: 800;
+    overflow: hidden;
+    color: rgba(var(--rgba-first-color), 1);
+}
+
+.clear-chat-history-for-all-checkbox {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    accent-color: rgba(var(--rgba-third-color), 1);
+
+}
+
+
+
+
+/* delete chat modal 
+.inner-modal--delete-chat {}
+
+.delete-chat-info {
+    width: 100%;
+    padding: 5px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(var(--rgba-third-color), 0.9);
+}
+
+/* leave group modal  */
+/* .inner-modal--leave-group {} */
