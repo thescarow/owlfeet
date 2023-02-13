@@ -857,7 +857,7 @@ em-emoji-picker {
 
 .chat-modal-content {
     width: auto;
-    max-width: 95%;
+    max-width: 100%;
     height: auto;
     max-height: 95%;
     margin: 0 auto;
@@ -867,7 +867,7 @@ em-emoji-picker {
     border-radius: 20px;
     color: var(--third-color);
     background-color: rgba(var(--rgba-first-color), 1);
-    animation: chatModalContentAnimation 0.5s ease both;
+    animation: chatModalContentAnimation 0.6s ease both;
     transition: all 0.5s;
     overflow-x: hidden;
     overflow-y: auto;
@@ -885,13 +885,12 @@ em-emoji-picker {
 
 @keyframes chatModalContentAnimation {
     0% {
-        transform: scale(0);
-        transform-origin: center bottom;
+        margin-top: -100%;
         opacity: 0;
     }
 
     100% {
-        transform: scale(1);
+        margin-top: 0;
         opacity: 1;
     }
 
@@ -1130,6 +1129,18 @@ em-emoji-picker {
     border-radius: 15px;
     background: rgba(var(--rgba-fourth-color), 1);
     animation: innerModalContentAnimation 0.5s ease both;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
+
+.inner-modal-content::-webkit-scrollbar::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 
@@ -1155,7 +1166,7 @@ em-emoji-picker {
 }
 
 .inner-modal-header__title {
-    font-size: 20px;
+    font-size: 21px;
     font-weight: 800;
     color: rgba(var(--rgba-first-color), 1);
     padding: 0 0 0 5px;
@@ -1164,6 +1175,13 @@ em-emoji-picker {
 .inner-modal-main {
     width: 100%;
     padding: 5px 5px;
+}
+
+.inner-modal-main__info {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(var(--rgba-first-color), 0.8);
+    padding: 0px 5px;
 }
 
 .inner-modal-btns-container {
@@ -1192,7 +1210,7 @@ em-emoji-picker {
 
 .inner-modal-content--delete-message {}
 
-.delete-message-for-all-container {
+.for-all-input-container {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -1203,7 +1221,7 @@ em-emoji-picker {
     color: rgba(var(--rgba-first-color), 1);
 }
 
-.delete-message-for-all-checkbox {
+.for-all-input-container__checkbox {
     margin-right: 8px;
     width: 20px;
     height: 20px;

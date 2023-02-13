@@ -151,7 +151,7 @@ export async function createActiveChatInfoModal(chatId) {
       activeChatSection.insertAdjacentElement("beforeend", activeChatInfoModal)
 
       updateActiveChatInfoModal()
-      initialiseEventToActiveChatInfo(activeChatInfoModal)
+      initialiseEventForActiveChatInfo(activeChatInfoModal)
     } else {
       activeChatInfoModal.classList.remove("chat-modal--hide")
     }
@@ -163,7 +163,7 @@ export async function createActiveChatInfoModal(chatId) {
   }
 }
 // initialise Event to Active Chat Info Modal
-function initialiseEventToActiveChatInfo(activeChatInfoModal) {
+function initialiseEventForActiveChatInfo(activeChatInfoModal) {
   document
     .getElementById("chatInfoEditGroupChatBtn")
     .addEventListener("click", async () => {
@@ -186,7 +186,7 @@ function initialiseEventToActiveChatInfo(activeChatInfoModal) {
     .getElementById("chatInfoDeleteChatBtn")
     .addEventListener("click", async () => {
       let { createDeleteChatModal } = await import("./deleteChatModal.dev")
-      createDeleteChatModal()
+      createDeleteChatModal(activeChatData)
     })
   /////////////////////////
   document

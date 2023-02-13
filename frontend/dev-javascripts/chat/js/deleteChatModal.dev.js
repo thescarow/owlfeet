@@ -1,7 +1,7 @@
 import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/deleteChatModal.dev.css"
 
-export async function createDeleteChatModal() {
+export async function createDeleteChatModal(chatData) {
   let chatMainContainer = document.getElementById("chatMainContainer")
   if (chatMainContainer) {
     let deleteChatModal = document.getElementById("deleteChatModal")
@@ -14,21 +14,20 @@ export async function createDeleteChatModal() {
       deleteChatModal.setAttribute("id", "deleteChatModal")
 
       deleteChatModal.innerHTML = `
-  <div class="inner-modal-content inner-modal-content--delete-chat-modal">
-  
-  <div class="inner-modal-header">
-  <div class="inner-modal-header__title">
-  Do you want to delete chat ?
-  </div>
-  </div>
-  <div class="inner-modal-main">
+        <div class="inner-modal-content inner-modal-content--delete-chat-modal">
 
-  </div>
-  <div class="inner-modal-btns-container">
-  <div class="inner-modal-btn" id="closeDeleteChatModalBtn">Cancel</div>
-  <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteChatRequestBtn">Delete</div>
-  </div>
-  `
+        <div class="inner-modal-header">
+        <div class="inner-modal-header__title">
+        Do you want to delete chat ?
+        </div>
+        </div>
+        <div class="inner-modal-main">
+
+        </div>
+        <div class="inner-modal-btns-container">
+        <div class="inner-modal-btn" id="closeDeleteChatModalBtn">Cancel</div>
+        <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteChatRequestBtn">Delete</div>
+        </div>`
 
       chatMainContainer.insertAdjacentElement("afterbegin", deleteChatModal)
       initialiseEventForDeleteChatModal(deleteChatModal)
@@ -39,13 +38,25 @@ export async function createDeleteChatModal() {
       deleteChatModal.getElementsByClassName("inner-modal-main")[0]
 
     innerModalMain.innerHTML = ""
-
     innerModalMain.insertAdjacentHTML(
       "beforeend",
-      `<div class="delete-chat-info">
-     After deleting chat all messages will be deleted and this chat is also deleted.
-     </div>`
+      `<div class="inner-modal-main__info">
+   After deleting chat, all messages will be deleted and this chat is also deleted.
+   </div>`
     )
+
+    if (
+      chatData.isGroupChat === true &&
+      chatData.groupChatAdmin.indexOf(loginUser._id.toString()) !== -1
+    ) {
+      innerModalMain.insertAdjacentHTML(
+        "beforeend",
+        `<lable class="for-all-input-container">
+         <input type="checkbox" class="for-all-input-container__checkbox" id="deleteChatForAllInput"> Delete Chat For All
+         </lable>
+     `
+      )
+    }
   }
 }
 
@@ -54,7 +65,15 @@ async function initialiseEventForDeleteChatModal(deleteChatModal) {
     .getElementById("submitDeleteChatRequestBtn")
     .addEventListener("click", () => {
       let deleteChatData = {}
+
       deleteChatData.chatId = activeChatData._id
+      deleteChatData.forAll = false
+      let deleteChatForAllInput = document.getElementById(
+        "deleteChatForAllInput"
+      )
+      if (deleteChatForAllInput && deleteChatForAllInput.checked === true) {
+        deleteChatData.forAll = true
+      }
 
       fetch("/chat/delete-chat", {
         method: "POST", // or 'PUT'

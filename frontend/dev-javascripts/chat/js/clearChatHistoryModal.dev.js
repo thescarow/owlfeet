@@ -14,21 +14,20 @@ export async function createClearChatHistoryModal(chatData) {
       clearChatHistoryModal.setAttribute("id", "clearChatHistoryModal")
 
       clearChatHistoryModal.innerHTML = `
-  <div class="inner-modal-content inner-modal-content--clear-chat-history">
-  
-  <div class="inner-modal-header">
-  <div class="inner-modal-header__title">
-  Do you want to clear chat history?
-  </div>
-  </div>
-  <div class="inner-modal-main">
+        <div class="inner-modal-content inner-modal-content--clear-chat-history">
 
-  </div>
-  <div class="inner-modal-btns-container">
-  <div class="inner-modal-btn" id="closeClearChatHistoryModal">Cancel</div>
-  <div class="inner-modal-btn inner-modal-btn--action" id="submitClearChatHistoryRequestBtn">Clear</div>
-  </div>
-  `
+        <div class="inner-modal-header">
+        <div class="inner-modal-header__title">
+        Do you want to clear chat history?
+        </div>
+        </div>
+        <div class="inner-modal-main">
+
+        </div>
+        <div class="inner-modal-btns-container">
+        <div class="inner-modal-btn" id="closeClearChatHistoryModal">Cancel</div>
+        <div class="inner-modal-btn inner-modal-btn--action" id="submitClearChatHistoryRequestBtn">Clear</div>
+        </div>`
 
       chatMainContainer.insertAdjacentElement(
         "afterbegin",
@@ -48,8 +47,8 @@ export async function createClearChatHistoryModal(chatData) {
     ) {
       innerModalMain.insertAdjacentHTML(
         "beforeend",
-        `<lable class="clear-chat-history-for-all-container">
-         <input type="checkbox" class="clear-chat-history-for-all-checkbox" id="clearChatHistoryForAllInput"> Clear Chat History For All
+        `<lable class="for-all-input-container">
+         <input type="checkbox" class="for-all-input-container__checkbox" id="clearChatHistoryForAllInput"> Clear Chat History For All
          </lable>`
       )
     }
