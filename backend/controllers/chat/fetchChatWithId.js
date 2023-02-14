@@ -22,7 +22,8 @@ exports.fetchChatWithId = async (req, res) => {
       const chatId = req.params.chatId
       let chat = await Chat.findOne({
         _id: chatId,
-        allChatMembers: { $elemMatch: { $eq: req.user.id } }
+        allChatMembers: { $elemMatch: { $eq: req.user.id } },
+        isDeleted: false
       })
         .populate({
           path: "currentChatMembers",

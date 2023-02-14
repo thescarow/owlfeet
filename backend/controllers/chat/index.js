@@ -3,7 +3,7 @@ const { fetchChatWithId } = require("./fetchChatWithId")
 const { getUserChatId } = require("./getUserChatId")
 const { createNewGroupChat } = require("./createNewGroupChat")
 const { editGroupChat } = require("./editGroupChat")
-const { clearChatHistory } = require("./clearChatHistory")
+const { clearChatAllMessages } = require("./clearChatAllMessages")
 const { deleteChat } = require("./deleteChat")
 
 module.exports = {
@@ -12,6 +12,6 @@ module.exports = {
   getUserChatId,
   createNewGroupChat,
   editGroupChat,
-  clearChatHistory,
+  clearChatAllMessages,
   deleteChat
 }

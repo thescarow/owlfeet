@@ -7,7 +7,7 @@ const {
   getUserChatId,
   createNewGroupChat,
   editGroupChat,
-  clearChatHistory,
+  clearChatAllMessages,
   deleteChat
 } = require("../controllers/chat")
 
@@ -16,7 +16,7 @@ router.get("/:chatId", getLoginUser, fetchChatWithId)
 router.post("/get-user-chat-id", getLoginUser, getUserChatId)
 router.post("/create-new-group-chat", getLoginUser, createNewGroupChat)
 router.post("/edit-group-chat", getLoginUser, editGroupChat)
-router.post("/clear-chat-history", getLoginUser, clearChatHistory)
+router.post("/clear-chat-all-messages", getLoginUser, clearChatAllMessages)
 router.post("/delete-chat", getLoginUser, deleteChat)
 
 module.exports = router

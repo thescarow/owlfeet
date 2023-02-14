@@ -35,7 +35,8 @@ exports.getChatPageWithAllChat = async (req, res) => {
       let allChat = await Chat.find({
         allChatMembers: {
           $elemMatch: { $eq: req.user.id }
-        }
+        },
+        isDeleted: false
       })
         .select({ allChatMembers: 0 })
         .sort({ updatedAt: -1 })

@@ -1,8 +1,8 @@
-.inner-modal--clear-chat-history {}
+.inner-modal--clear-chat-all-messages {}
 
-.inner-modal-content--clear-chat-history {}
+.inner-modal-content--clear-chat-all-messages {}
 
-.clear-chat-history-for-all-container {
+.clear-chat-all-messages-for-all-container {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -14,7 +14,7 @@
     color: rgba(var(--rgba-first-color), 1);
 }
 
-.clear-chat-history-for-all-checkbox {
+.clear-chat-all-messages-for-all-checkbox {
     margin-right: 8px;
     width: 20px;
     height: 20px;

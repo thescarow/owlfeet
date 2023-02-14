@@ -73,11 +73,11 @@ import "../css/activeChatInfoModal.dev.css"
 let userChatInfoBtnContainerHtml = `
 <div class="chat-info-btn">${svg_deleteBlankBtn} Delete Chat </div>
 
-<div class="chat-info-btn">${svg_clearChat} Clear Chat History </div>
+<div class="chat-info-btn">${svg_clearChat} Clear All Messages</div>
 
 <div class="chat-info-btn ">${svg_changeAppearance} Change Chat Appearance</div>
 
-<div class="chat-info-btn">${svg_shareBlankBtn} Share User Profile </div>
+<div class="chat-info-btn">${svg_shareBlankBtn} Share User Profile</div>
 `
 
 let groupChatInfoBtnContainerHtml = `
@@ -88,7 +88,7 @@ let groupChatInfoBtnContainerHtml = `
 
 <div class="chat-info-btn chat-info-btn--member">${svg_leaveGroupBtn} Leave Group </div>
 
-<div class="chat-info-btn " id="chatInfoClearChatHistoryBtn">${svg_clearChat} Clear Chat History </div>
+<div class="chat-info-btn " id="chatInfoClearChatAllMessagesBtn">${svg_clearChat} Clear All Messages</div>
 
 <div class="chat-info-btn chat-info-btn--admin">${svg_changeAppearance} Change Chat Appearance</div>
 `
@@ -151,7 +151,7 @@ export async function createActiveChatInfoModal(chatId) {
       activeChatSection.insertAdjacentElement("beforeend", activeChatInfoModal)
 
       updateActiveChatInfoModal()
-      initialiseEventToActiveChatInfo(activeChatInfoModal)
+      initialiseEventForActiveChatInfo(activeChatInfoModal)
     } else {
       activeChatInfoModal.classList.remove("chat-modal--hide")
     }
@@ -163,7 +163,7 @@ export async function createActiveChatInfoModal(chatId) {
   }
 }
 // initialise Event to Active Chat Info Modal
-function initialiseEventToActiveChatInfo(activeChatInfoModal) {
+function initialiseEventForActiveChatInfo(activeChatInfoModal) {
   document
     .getElementById("chatInfoEditGroupChatBtn")
     .addEventListener("click", async () => {
@@ -174,19 +174,19 @@ function initialiseEventToActiveChatInfo(activeChatInfoModal) {
       updateGroupChatFormModalData(activeChatData)
     })
   document
-    .getElementById("chatInfoClearChatHistoryBtn")
+    .getElementById("chatInfoClearChatAllMessagesBtn")
     .addEventListener("click", async () => {
-      let { createClearChatHistoryModal } = await import(
-        "./clearChatHistoryModal.dev"
+      let { createClearChatAllMessagesModal } = await import(
+        "./clearChatAllMessagesModal.dev"
       )
-      createClearChatHistoryModal(activeChatData)
+      createClearChatAllMessagesModal(activeChatData)
     })
 
   document
     .getElementById("chatInfoDeleteChatBtn")
     .addEventListener("click", async () => {
       let { createDeleteChatModal } = await import("./deleteChatModal.dev")
-      createDeleteChatModal()
+      createDeleteChatModal(activeChatData)
     })
   /////////////////////////
   document
