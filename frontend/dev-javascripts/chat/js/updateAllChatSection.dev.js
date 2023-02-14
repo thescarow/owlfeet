@@ -14,7 +14,15 @@ let svg_chatPic = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="h
 
 import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev"
 
+let allChatSection = document.getElementById("allChatSection")
+let activeChatSection = document.getElementById("activeChatSection")
+
 let allChatChatBoxContainer = document.getElementById("allChatChatBoxContainer")
+
+export function showAllChatSection() {
+  allChatSection.classList.remove("all-chat-section--hide")
+  activeChatSection.classList.add("active-chat-section--hide")
+}
 
 export function updateAllChatSection(message) {
   let chatBox = allChatChatBoxContainer.querySelector(
@@ -90,7 +98,7 @@ export function createChatBox(chat) {
   chatBox.getElementsByClassName("chat-box__name")[0].textContent =
     chat.chatName
 
-  if (chat.latestMessage) {
+  if (chat.hasOwnProperty(latestMessage) && chat.latestMessage !== "") {
     updateChatBoxLatestMessage(chatBox, chat.latestMessage)
   } else {
     if (chat.chatCreatedTime) {
@@ -166,4 +174,11 @@ export function clearChatBoxLatestMessage(chatId) {
     )[0].textContent = ""
     console.log("inside chatBox")
   }
+}
+
+export function deleteChatBox(chatId) {
+  let chatBox = allChatChatBoxContainer.querySelector(
+    `.chat-box[data-chat-id = "${chatId.toString()}"]`
+  )
+  chatBox.remove()
 }

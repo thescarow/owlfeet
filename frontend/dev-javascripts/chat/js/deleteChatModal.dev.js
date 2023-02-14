@@ -44,19 +44,6 @@ export async function createDeleteChatModal(chatData) {
    After deleting chat, all messages will be deleted and this chat is also deleted.
    </div>`
     )
-
-    if (
-      chatData.isGroupChat === true &&
-      chatData.groupChatAdmin.indexOf(loginUser._id.toString()) !== -1
-    ) {
-      innerModalMain.insertAdjacentHTML(
-        "beforeend",
-        `<lable class="for-all-input-container">
-         <input type="checkbox" class="for-all-input-container__checkbox" id="deleteChatForAllInput"> Delete Chat For All
-         </lable>
-     `
-      )
-    }
   }
 }
 
@@ -67,13 +54,6 @@ async function initialiseEventForDeleteChatModal(deleteChatModal) {
       let deleteChatData = {}
 
       deleteChatData.chatId = activeChatData._id
-      deleteChatData.forAll = false
-      let deleteChatForAllInput = document.getElementById(
-        "deleteChatForAllInput"
-      )
-      if (deleteChatForAllInput && deleteChatForAllInput.checked === true) {
-        deleteChatData.forAll = true
-      }
 
       fetch("/chat/delete-chat", {
         method: "POST", // or 'PUT'
@@ -92,10 +72,16 @@ async function initialiseEventForDeleteChatModal(deleteChatModal) {
           if (data.isSuccess) {
             deleteChatModal.classList.add("inner-modal--hide")
 
-            // let { clearActiveChatMessageContainer } = await import(
-            //   "./showActiveChatSection.dev"
-            // )
-            // clearActiveChatMessageContainer()
+            let { clearActiveChatMessageContainer } = await import(
+              "./showActiveChatSection.dev"
+            )
+            let { showAllChatSection, deleteChatBox } = await import(
+              "./updateAllChatSection.dev"
+            )
+
+            showAllChatSection()
+            deleteChatBox(data.deletedChatId)
+            clearActiveChatMessageContainer()
           } else {
             createMainNotification(data.error, "error")
           }

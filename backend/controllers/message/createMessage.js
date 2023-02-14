@@ -140,7 +140,7 @@ exports.createMessage = async (req, res) => {
                 .emit("chat:new-message", createdNewMessage)
             }
           })
-          console.log(createdNewMessage)
+          // console.log(createdNewMessage)
           res.json({
             isSuccess: true,
             message: createdNewMessage

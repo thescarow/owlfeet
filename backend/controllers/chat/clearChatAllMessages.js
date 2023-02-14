@@ -6,8 +6,8 @@ const mainErrorLog = chalk.white.bgYellow.bold
 const Chat = require("../../models/chat")
 const Message = require("../../models/message")
 
-// router.post("/clear-chat-history", getLoginUser, clearChatHistory)
-exports.clearChatHistory = async (req, res) => {
+// router.post("/clear-chat-all-messages", getLoginUser, clearChatAllMessages)
+exports.clearChatAllMessages = async (req, res) => {
   try {
     if (req.user) {
       let clearChatData = req.body
@@ -59,7 +59,7 @@ exports.clearChatHistory = async (req, res) => {
                 if (memberId.toString() !== req.user.id.toString()) {
                   req.io
                     .to(memberId.toString())
-                    .emit("chat:clear-chat-history", chat._id.toString())
+                    .emit("chat:clear-chat-all-messages", chat._id.toString())
                 }
               })
 
@@ -68,7 +68,7 @@ exports.clearChatHistory = async (req, res) => {
               res.json({
                 isSuccess: false,
                 error:
-                  "You Are Not authorized To Clear Chat History For All Of This Chat "
+                  "You Are Not authorized To Clear All Messages For All Of This Chat "
               })
             }
           } else {
@@ -80,7 +80,7 @@ exports.clearChatHistory = async (req, res) => {
         } else {
           res.json({
             isSuccess: false,
-            error: "You Are Not authorized To Clear Chat History Of This Chat"
+            error: "You Are Not authorized To Clear All Messages Of This Chat"
           })
         }
       } else {
@@ -97,12 +97,12 @@ exports.clearChatHistory = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Clearing Chat History :"),
+      errorLog("Server Error In Clearing Chat All Messages :"),
       mainErrorLog(err)
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server Error In Clearing Chat History, Please Try Again"
+      error: "Server Error In Clearing All Messages, Please Try Again"
     })
   }
 }

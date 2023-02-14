@@ -42,7 +42,7 @@ export function createMainChatSocket(socket) {
     updateActiveChatSection(activeChatData)
     updateChatBox(activeChatData)
   })
-  socket.on("chat:clear-chat-history", async chatId => {
+  socket.on("chat:clear-chat-all-messages", async chatId => {
     let { clearActiveChatMessageContainer } = await import(
       "../../chat/js/showActiveChatSection.dev"
     )
@@ -51,5 +51,17 @@ export function createMainChatSocket(socket) {
     )
     clearActiveChatMessageContainer()
     clearChatBoxLatestMessage(chatId)
+  })
+  socket.on("chat:delete-chat", async chatId => {
+    let { clearActiveChatMessageContainer } = await import(
+      "../../chat/js/showActiveChatSection.dev"
+    )
+    let { showAllChatSection, deleteChatBox } = await import(
+      "../../chat/js/updateAllChatSection.dev"
+    )
+
+    showAllChatSection()
+    deleteChatBox(chatId)
+    clearActiveChatMessageContainer()
   })
 }

@@ -1,44 +1,46 @@
 import { createMainNotification } from "../../common/mainNotification.dev"
-import "../css/clearChatHistoryModal.dev.css"
+import "../css/clearChatAllMessagesModal.dev.css"
 
-export async function createClearChatHistoryModal(chatData) {
+export async function createClearChatAllMessagesModal(chatData) {
   let chatMainContainer = document.getElementById("chatMainContainer")
   if (chatMainContainer) {
-    let clearChatHistoryModal = document.getElementById("clearChatHistoryModal")
-    if (!clearChatHistoryModal) {
-      clearChatHistoryModal = document.createElement("div")
-      clearChatHistoryModal.classList.add(
+    let clearChatAllMessagesModal = document.getElementById(
+      "clearChatAllMessagesModal"
+    )
+    if (!clearChatAllMessagesModal) {
+      clearChatAllMessagesModal = document.createElement("div")
+      clearChatAllMessagesModal.classList.add(
         "inner-modal",
-        "inner-modal--clear-chat-history"
+        "inner-modal--clear-chat-all-messages"
       )
-      clearChatHistoryModal.setAttribute("id", "clearChatHistoryModal")
+      clearChatAllMessagesModal.setAttribute("id", "clearChatAllMessagesModal")
 
-      clearChatHistoryModal.innerHTML = `
-        <div class="inner-modal-content inner-modal-content--clear-chat-history">
+      clearChatAllMessagesModal.innerHTML = `
+        <div class="inner-modal-content inner-modal-content--clear-chat-all-messages">
 
         <div class="inner-modal-header">
         <div class="inner-modal-header__title">
-        Do you want to clear chat history?
+        Do you want to clear all messages?
         </div>
         </div>
         <div class="inner-modal-main">
 
         </div>
         <div class="inner-modal-btns-container">
-        <div class="inner-modal-btn" id="closeClearChatHistoryModal">Cancel</div>
-        <div class="inner-modal-btn inner-modal-btn--action" id="submitClearChatHistoryRequestBtn">Clear</div>
+        <div class="inner-modal-btn" id="closeClearChatAllMessagesModal">Cancel</div>
+        <div class="inner-modal-btn inner-modal-btn--action" id="submitClearChatAllMessagesRequestBtn">Clear</div>
         </div>`
 
       chatMainContainer.insertAdjacentElement(
         "afterbegin",
-        clearChatHistoryModal
+        clearChatAllMessagesModal
       )
-      initialiseEventForClearChatHistoryModal(clearChatHistoryModal)
+      initialiseEventForClearChatAllMessagesModal(clearChatAllMessagesModal)
     } else {
-      clearChatHistoryModal.classList.remove("inner-modal--hide")
+      clearChatAllMessagesModal.classList.remove("inner-modal--hide")
     }
     let innerModalMain =
-      clearChatHistoryModal.getElementsByClassName("inner-modal-main")[0]
+      clearChatAllMessagesModal.getElementsByClassName("inner-modal-main")[0]
 
     innerModalMain.innerHTML = ""
     if (
@@ -48,31 +50,33 @@ export async function createClearChatHistoryModal(chatData) {
       innerModalMain.insertAdjacentHTML(
         "beforeend",
         `<lable class="for-all-input-container">
-         <input type="checkbox" class="for-all-input-container__checkbox" id="clearChatHistoryForAllInput"> Clear Chat History For All
+         <input type="checkbox" class="for-all-input-container__checkbox" id="clearChatAllMessagesForAllInput"> Clear Messages For All
          </lable>`
       )
     }
   }
 }
 
-async function initialiseEventForClearChatHistoryModal(clearChatHistoryModal) {
+async function initialiseEventForClearChatAllMessagesModal(
+  clearChatAllMessagesModal
+) {
   document
-    .getElementById("submitClearChatHistoryRequestBtn")
+    .getElementById("submitClearChatAllMessagesRequestBtn")
     .addEventListener("click", () => {
       let clearChatData = {}
       clearChatData.chatId = activeChatData._id
       clearChatData.forAll = false
-      let clearChatHistoryForAllInput = document.getElementById(
-        "clearChatHistoryForAllInput"
+      let clearChatAllMessagesForAllInput = document.getElementById(
+        "clearChatAllMessagesForAllInput"
       )
       if (
-        clearChatHistoryForAllInput &&
-        clearChatHistoryForAllInput.checked === true
+        clearChatAllMessagesForAllInput &&
+        clearChatAllMessagesForAllInput.checked === true
       ) {
         clearChatData.forAll = true
       }
       console.log(clearChatData)
-      fetch("/chat/clear-chat-history", {
+      fetch("/chat/clear-chat-all-messages", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json"
@@ -87,7 +91,7 @@ async function initialiseEventForClearChatHistoryModal(clearChatHistoryModal) {
         })
         .then(async data => {
           if (data.isSuccess) {
-            clearChatHistoryModal.classList.add("inner-modal--hide")
+            clearChatAllMessagesModal.classList.add("inner-modal--hide")
 
             let { clearActiveChatMessageContainer } = await import(
               "./showActiveChatSection.dev"
@@ -100,20 +104,20 @@ async function initialiseEventForClearChatHistoryModal(clearChatHistoryModal) {
         .catch(err => {
           console.log(err)
           createMainNotification(
-            "Server Error In Clearing Chat History, Please Try Again",
+            "Server Error In Clearing All Messages, Please Try Again",
             "error"
           )
         })
     })
 
   document
-    .getElementById("closeClearChatHistoryModal")
+    .getElementById("closeClearChatAllMessagesModal")
     .addEventListener("click", () => {
-      clearChatHistoryModal.classList.add("inner-modal--hide")
+      clearChatAllMessagesModal.classList.add("inner-modal--hide")
     })
   window.addEventListener("click", e => {
-    if (e.target === clearChatHistoryModal) {
-      clearChatHistoryModal.classList.add("inner-modal--hide")
+    if (e.target === clearChatAllMessagesModal) {
+      clearChatAllMessagesModal.classList.add("inner-modal--hide")
     }
   })
 }

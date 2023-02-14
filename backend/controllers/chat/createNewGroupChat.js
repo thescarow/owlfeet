@@ -78,7 +78,7 @@ exports.createNewGroupChat = async (req, res) => {
               if (user._id.toString() !== req.user.id.toString()) {
                 req.io
                   .to(user._id.toString())
-                  .emit("chat:created-new-group-chat", createdNewChat)
+                  .emit("chat:create-new-group-chat", createdNewChat)
               }
             })
             res.json({ isSuccess: true, chat: createdNewChat })
