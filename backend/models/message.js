@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const { mediaContentType } = require("./common/mediaContentType")
+const { infoMessageType } = require("./common/infoMessageType")
 const messageSchema = new mongoose.Schema(
   {
     chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
@@ -26,6 +27,9 @@ const messageSchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+
+    isInfoMessage: { type: Boolean, default: false },
+    infoMessageType: { type: String, default: infoMessageType.INFO },
 
     textContent: { type: String, trim: true, default: "" },
 
