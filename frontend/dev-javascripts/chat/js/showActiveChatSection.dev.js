@@ -15,7 +15,7 @@ export async function showActiveChatSection(chat) {
   updateActiveChatSection(chat)
 
   /////////////////////
-  const { createMessage } = await import("./message.dev")
+  const { checkTimeAndCreateOldMessage } = await import("./message.dev")
 
   fetch(`/message/fetch-message/${chat._id}`)
     .then(response => {
@@ -27,11 +27,10 @@ export async function showActiveChatSection(chat) {
     .then(data => {
       if (data.isSuccess) {
         console.log(data.allMessage)
-        data.allMessage.forEach(message => {
-          createMessage(message, activeChatMessageContainer, "afterbegin")
-        })
-        activeChatMessageContainer.scrollTop =
-          activeChatMessageContainer.scrollHeight + 1000
+        checkTimeAndCreateOldMessage(
+          data.allMessage,
+          activeChatMessageContainer
+        )
       } else {
         createMainNotification(data.error, "error")
       }

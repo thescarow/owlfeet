@@ -30,6 +30,7 @@ const messageSchema = new mongoose.Schema(
 
     isInfoMessage: { type: Boolean, default: false },
     infoMessageType: { type: String, default: infoMessageType.INFO },
+    infoMessage: { type: String, trim: true },
 
     textContent: { type: String, trim: true, default: "" },
 
