@@ -64,6 +64,8 @@ export async function createMessage(
                </div>
            </div>
        </div>
+       <div class="active-chat-message-box__btn">${svg_infoBlankBtn}
+       </div>
         `
   messageBox.insertAdjacentHTML("beforeend", messageBoxInnerHtml)
 
@@ -163,20 +165,13 @@ export async function createMessage(
     messageContentBox.insertAdjacentElement("afterbegin", textMessage)
   }
 
-  messageContentBox.insertAdjacentHTML(
-    "beforeend",
-    `<div class="active-chat-message-box__btn">${svg_infoBlankBtn}</div>`
-  )
-
   if (message.sender._id === loginUser._id) {
     messageBox.classList.add("active-chat-message-box--right")
-
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
       `<div class="active-chat-message-box__content-status-container ">
                <div class="active-chat-message-box__content-status">${svg_messageTick}
                 </div>
-
                <div class="active-chat-message-box__content-status active-chat-message-box__content-status--second ">${svg_messageTick}
                </div>
       </div>`
