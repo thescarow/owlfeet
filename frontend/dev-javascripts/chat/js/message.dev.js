@@ -66,16 +66,23 @@ export async function createMessage(
        </div>
         `
   messageBox.insertAdjacentHTML("beforeend", messageBoxInnerHtml)
+
   let messageContentBox = messageBox.getElementsByClassName(
     "active-chat-message-box__content-box"
+  )[0]
+  let messageContentInfo = messageBox.getElementsByClassName(
+    "active-chat-message-box__content-info"
   )[0]
 
   if (message.hasMediaContent) {
     if (message.mediaContentType === "video") {
+      messageBox.classList.add("active-chat-message-box--video")
       messageContentBox.classList.add(
         "active-chat-message-box__content-box--video"
       )
-
+      messageContentInfo.classList.add(
+        "active-chat-message-box__content-info--video"
+      )
       let video = document.createElement("video")
       video.classList.add("active-chat-message-box__video-content")
       let videoSource = document.createElement("source")
@@ -87,10 +94,13 @@ export async function createMessage(
       createPlyr(video, "video")
     }
     if (message.mediaContentType === "audio") {
+      messageBox.classList.add("active-chat-message-box--audio")
       messageContentBox.classList.add(
         "active-chat-message-box__content-box--audio"
       )
-
+      messageContentInfo.classList.add(
+        "active-chat-message-box__content-info--audio"
+      )
       let audio = document.createElement("audio")
       audio.classList.add("active-chat-message-box__audio-content")
 
@@ -103,10 +113,13 @@ export async function createMessage(
       createPlyr(audio, "audio")
     }
     if (message.mediaContentType === "youtube") {
+      messageBox.classList.add("active-chat-message-box--youtube")
       messageContentBox.classList.add(
         "active-chat-message-box__content-box--youtube"
       )
-
+      messageContentInfo.classList.add(
+        "active-chat-message-box__content-info--youtube"
+      )
       let youtube = document.createElement("div")
       youtube.classList.add("active-chat-message-box__youtube-content")
 
@@ -117,8 +130,12 @@ export async function createMessage(
       createPlyr(youtube, "youtube")
     }
     if (message.mediaContentType === "image") {
+      messageBox.classList.add("active-chat-message-box--image")
       messageContentBox.classList.add(
         "active-chat-message-box__content-box--image"
+      )
+      messageContentInfo.classList.add(
+        "active-chat-message-box__content-info--image"
       )
 
       let image = document.createElement("img")
@@ -130,8 +147,12 @@ export async function createMessage(
       messageContentBox.insertAdjacentElement("afterbegin", image)
     }
   } else {
+    messageBox.classList.add("active-chat-message-box--text")
     messageContentBox.classList.add(
       "active-chat-message-box__content-box--text"
+    )
+    messageContentInfo.classList.add(
+      "active-chat-message-box__content-info--text"
     )
 
     let textMessage = document.createElement("div")
@@ -149,10 +170,6 @@ export async function createMessage(
 
   if (message.sender._id === loginUser._id) {
     messageBox.classList.add("active-chat-message-box--right")
-
-    let messageContentInfo = messageBox.getElementsByClassName(
-      "active-chat-message-box__content-info"
-    )[0]
 
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
