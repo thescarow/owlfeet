@@ -6,12 +6,16 @@ let svg_messageTick = `<svg width="100" height="100" viewBox="0 0 100 75" xmlns=
 <path d="M35.5523 72.8954C34.3946 74.0434 32.7545 75 31.3073 75C29.8601 75 28.22 73.9955 27.014 72.8476L0 46.0619L8.58659 37.5478L31.3555 60.1244L91.5581 0L100 8.65752L35.5523 72.8954V72.8954Z" />
 </svg>`
 
-let svg_videoCallBlank = `<svg width="100" height="63" viewBox="0 0 100 66"  xmlns="http://www.w3.org/2000/svg">
+let svg_videoCallBlankIcon = `<svg width="100" height="63" viewBox="0 0 100 66"  xmlns="http://www.w3.org/2000/svg">
 <path d="M16.6636 0C7.46055 0 0 6.56645 0 14.6666V51.3334C0 59.433 7.46055 66 16.6636 66H58.3226C67.2118 66 74.4747 59.8738 74.9604 52.1577L93.7278 61.8362C95.0159 62.5005 96.6098 62.5072 97.9054 61.8538C99.201 61.2004 100 59.9867 100 58.6726V7.3275C100 6.01462 99.2026 4.80191 97.9087 4.148C96.6156 3.49409 95.0234 3.49879 93.7353 4.16032L74.9579 13.8005C74.4489 6.10357 67.1952 0 58.3226 0H16.6636ZM8.33181 14.6666C8.33181 10.6166 12.0621 7.33329 16.6636 7.33329H58.3226C62.9242 7.33329 66.6544 10.6166 66.6544 14.6666V51.3334C66.6544 55.3829 62.9242 58.6667 58.3226 58.6667H16.6636C12.0621 58.6667 8.33181 55.3829 8.33181 51.3334V14.6666ZM74.9871 43.6715V22.2753L91.6682 13.7111V52.2743L74.9871 43.6715Z" />
 </svg>`
-let svg_videoCall = `<svg width="100" height="63" viewBox="0 0 100 63"  xmlns="http://www.w3.org/2000/svg">
-<path d="M54.1685 0C61.0723 0 66.6689 5.28861 66.6689 11.8125V51.1875C66.6689 57.7112 61.0723 63 54.1685 63H12.5004C5.5966 63 0 57.7112 0 51.1875V11.8125C0 5.28861 5.5966 0 12.5004 0H54.1685ZM93.7398 1.40002C96.3037 0.0143579 99.4464 1.52154 99.916 4.13957L99.9758 4.81619L100 58.1805C100.002 60.9719 97.0555 62.8024 94.417 61.8875L93.7656 61.6006L75.005 51.4702V11.5269L93.7398 1.40002Z" />
-</svg>`
+let svg_newGroupIcon = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M30.4688 71.875C38.6667 71.875 45.3125 65.2292 45.3125 57.0312C45.3125 48.8333 38.6667 42.1875 30.4688 42.1875C22.2708 42.1875 15.625 48.8333 15.625 57.0312C15.625 65.2292 22.2708 71.875 30.4688 71.875Z" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M9.375 95.3125C9.375 89.0965 11.8443 83.1351 16.2397 78.7397C20.6351 74.3443 26.5965 71.875 32.8125 71.875M54.6875 95.3125C54.6875 92.2346 54.0813 89.1869 52.9034 86.3434C51.7256 83.4998 49.9992 80.9161 47.8228 78.7397C45.6464 76.5633 43.0627 74.8369 40.2191 73.6591C37.3756 72.4812 34.3279 71.875 31.25 71.875" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M66.4062 34.375C74.6042 34.375 81.25 27.7292 81.25 19.5312C81.25 11.3333 74.6042 4.6875 66.4062 4.6875C58.2083 4.6875 51.5625 11.3333 51.5625 19.5312C51.5625 27.7292 58.2083 34.375 66.4062 34.375Z" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M45.3125 56.25C45.3125 44.1563 55.7969 34.375 68.75 34.375M90.625 56.25C90.625 44.1563 80.1406 34.375 67.1875 34.375" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+</svg>
+`
 
 import Plyr from "plyr"
 
@@ -40,6 +44,9 @@ async function createPlyr(element, type) {
   })
 }
 
+const weekDaysArray = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
+let firstMessageTimePointer = ""
+let lastMessageTimePointer = ""
 function getTimeString(date) {
   let dateObj = typeof date === "string" ? new Date(date) : date
 
@@ -52,6 +59,42 @@ function getTimeString(date) {
 
   return dateString
 }
+function getDateString(date) {
+  let currentDate = new Date()
+  date = typeof date === "string" ? new Date(date) : date
+  if (
+    currentDate.getFullYear() === date.getFullYear() &&
+    currentDate.getMonth() === date.getMonth()
+  ) {
+    if (currentDate.getDate() - date.getDate() === 0) {
+      return "Today"
+    } else if (currentDate.getDate() - date.getDate() === 1) {
+      return "Yesterday"
+    } else if (currentDate.getDate() - date.getDate() === 2) {
+      return weekDaysArray[date.getDay()]
+    } else {
+      return (
+        weekDaysArray[date.getDay()] +
+        ", " +
+        date.getDate() +
+        "-" +
+        date.getMonth() +
+        "-" +
+        date.getFullYear()
+      )
+    }
+  } else {
+    return (
+      weekDaysArray[date.getDay()] +
+      ", " +
+      date.getDate() +
+      "-" +
+      date.getMonth() +
+      "-" +
+      date.getFullYear()
+    )
+  }
+}
 function isMessageDateChanged(messageDate, fromCheckingDate) {
   // convert to date object if it is not
   messageDate =
@@ -62,16 +105,15 @@ function isMessageDateChanged(messageDate, fromCheckingDate) {
       : fromCheckingDate
 
   if (fromCheckingDate.getDate() !== messageDate.getDate()) {
-    return false
-  } else if (fromCheckingDate.getMonth() !== messageDate.getMonth()) {
-    return false
-  } else if (fromCheckingDate.getFullYear() !== messageDate.getFullYear()) {
-    return false
-  } else {
     return true
+  } else if (fromCheckingDate.getMonth() !== messageDate.getMonth()) {
+    return true
+  } else if (fromCheckingDate.getFullYear() !== messageDate.getFullYear()) {
+    return true
+  } else {
+    return false
   }
 }
-let firstMessageTimePointer, lastMessageTimePointer
 
 export async function checkTimeAndCreateOldMessage(
   allMessages,
@@ -86,7 +128,11 @@ export async function checkTimeAndCreateOldMessage(
       if (
         isMessageDateChanged(allMessages[i].createdAt, lastMessageTimePointer)
       ) {
-        createDateMessage(lastMessageTimePointer)
+        createDateMessage(
+          lastMessageTimePointer,
+          activeChatMessageContainer,
+          "afterbegin"
+        )
         lastMessageTimePointer = allMessages[i].createdAt
       }
       createUserMessage(
@@ -96,8 +142,15 @@ export async function checkTimeAndCreateOldMessage(
       )
     }
   } else {
-    if (lastMessageTimePointer !== undefined) {
-      createDateMessage(lastMessageTimePointer)
+    if (lastMessageTimePointer !== "") {
+      createDateMessage(
+        lastMessageTimePointer,
+        activeChatMessageContainer,
+        "afterbegin"
+      )
+    } else {
+      firstMessageTimePointer = ""
+      lastMessageTimePointer = ""
     }
   }
   activeChatMessageContainer.scrollTop =
@@ -112,7 +165,11 @@ export async function checkTimeAndCreateNewMessage(
     firstMessageTimePointer = lastMessageTimePointer = message.createdAt
   }
   if (isMessageDateChanged(message.createdAt, firstMessageTimePointer)) {
-    createDateMessage(lastMessageTimePointer)
+    createDateMessage(
+      lastMessageTimePointer,
+      activeChatMessageContainer,
+      "beforeend"
+    )
     firstMessageTimePointer = message.createdAt
   }
   createUserMessage(message, activeChatMessageContainer, "beforeend")
@@ -123,6 +180,14 @@ export function createUserMessage(
   activeChatMessageContainer,
   addPosition = "beforeend"
 ) {
+  console.log(
+    "=>>>>>",
+    new Date(firstMessageTimePointer).getDate(),
+    "------",
+    new Date(lastMessageTimePointer).getDate()
+  )
+  console.log("---->", new Date(message.createdAt).getDate())
+
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-message-box")
   messageBox.setAttribute("data-message-id", message._id)
@@ -283,32 +348,38 @@ export function createInfoMessage(
     let infoMessageBoxContent = infoMessageBox.getElementsByClassName(
       "active-chat-info-message__content"
     )[0]
-    // if (message.infoMessageType === "video-call") {
-    infoMessageBoxContent.insertAdjacentHTML("afterbegin", svg_videoCallBtn)
-    // }
+    if (message.infoMessageType === "video-call") {
+      infoMessageBoxContent.insertAdjacentHTML(
+        "afterbegin",
+        svg_videoCallBlankIcon
+      )
+    }
+    if (message.infoMessageType === "new-group") {
+      infoMessageBoxContent.insertAdjacentHTML("afterbegin", svg_newGroupIcon)
+    }
     infoMessageBoxContent.textContent = message.infoMessage
 
-    activeChatMessageContainer.insertAdjacentHTML(addPosition, infoMessageBox)
+    activeChatMessageContainer.insertAdjacentElement(
+      addPosition,
+      infoMessageBox
+    )
   }
 }
-export function createDateMessage(messageTime, addPosition = "beforeend") {
-  messageTime =
-    typeof messageTime === "string"
-      ? new Date(messageTime).toDateString()
-      : messageTime.toDateString()
+export function createDateMessage(
+  messageDate,
+  activeChatMessageContainer,
+  addPosition = "beforeend"
+) {
   const dateMessageBox = document.createElement("div")
-  dateMessageBox.classList.add("active-chat-date-message")
+  dateMessageBox.classList.add("active-chat-date-message-box")
 
-  let dateMessageBoxInnerHtml = `<div class="active-chat-date-message__content">
+  let dateMessageBoxInnerHtml = `<div class="active-chat-date-message-box__content">
   </div>`
   dateMessageBox.insertAdjacentHTML("beforeend", dateMessageBoxInnerHtml)
 
-  let dateMessageBoxContent = dateMessageBox.getElementsByClassName(
-    "active-chat-date-message__content"
-  )[0]
+  dateMessageBox.getElementsByClassName(
+    "active-chat-date-message-box__content"
+  )[0].textContent = getDateString(messageDate)
 
-  dateMessageBoxContent.textContent = messageTime
-  console.log(messageTime)
-
-  activeChatMessageContainer.insertAdjacentHTML(addPosition, dateMessageBox)
+  activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
 }

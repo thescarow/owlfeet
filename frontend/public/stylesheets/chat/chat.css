@@ -760,7 +760,7 @@ svg {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0;
+    margin: 20px 0;
 }
 
 .active-chat-date-message-box__content {
@@ -770,7 +770,7 @@ svg {
     font-weight: 400;
     padding: 4px 8px;
     border-radius: 7px;
-    background: rgba(var(--rgba-first-color), 0.8);
+    background: rgba(var(--rgba-first-color), 0.7);
     color: rgba(var(--rgba-fourth-color), 1);
 }
 

@@ -5,11 +5,14 @@ const messageSchema = new mongoose.Schema(
   {
     chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
 
-    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
     reader: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 
     seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+
+    deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+
+    ////
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
     hasMediaContent: {
       type: Boolean,
@@ -28,10 +31,6 @@ const messageSchema = new mongoose.Schema(
       default: ""
     },
 
-    isInfoMessage: { type: Boolean, default: false },
-    infoMessageType: { type: String, default: infoMessageType.INFO },
-    infoMessage: { type: String, trim: true },
-
     textContent: { type: String, trim: true, default: "" },
 
     isRepliedMessage: {
@@ -43,8 +42,12 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Message"
     },
+    //// info message
+    isInfoMessage: { type: Boolean, default: false },
 
-    deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }]
+    infoMessageType: { type: String, default: infoMessageType.INFO },
+
+    infoMessage: { type: String, trim: true }
   },
   { timestamps: true }
 )

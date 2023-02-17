@@ -51,31 +51,46 @@
 
 
                         <div class="chat-box__latest-message-box">
+                            <% if( chat.hasOwnProperty(latestMessage)){ %>
 
-                            <div class="chat-box__sender">
-                                <% if(chat.latestMessage){%>
-                                    <% if (chat.latestMessage.sender._id.toString()==locals.loginUser._id.toString()) {
-                                        -%>
-                                        You:
-                                        <% } else { %>
-                                            <%= chat.latestMessage.sender.firstName + ":" -%>
-                                                <% } -%>
-                                                    <% } %>
-                            </div>
+                                <% if(chat.latestMessage.hasOwnProperty("isInfoMessage") &&
+                                    chat.latestMessage.isInfoMessage===true){ %>
+                                    <div class="chat-box__sender"></div>
 
-                            <div class="chat-box__latest-message">
-                                <% if(chat.latestMessage){%>
-                                    <%=(chat.latestMessage.hasMediaContent==true) ?
-                                        chat.latestMessage.mediaContentType.charAt(0).toUpperCase() +
-                                        chat.latestMessage.mediaContentType.slice(1) : chat.latestMessage.textContent-%>
-                                        <% }else{ %>
+                                    <div class="chat-box__latest-message">
+                                        <% if(chat.latestMessage.infoMessageType==='video-call' ){ %>
+                                            <%- include("../partials/icons/videoCallBlankIcon.svg") -%>
+                                                <% } %>
 
-                                            <% } %>
+                                                    <%= chat.latestMessage.infoMessageContent %>
 
+                                    </div>
+                                    <% } else { %>
+                                        <div class="chat-box__sender">
 
-                            </div>
+                                            <% if
+                                                (chat.latestMessage.sender._id.toString()==locals.loginUser._id.toString())
+                                                { -%>
+                                                You:
+                                                <% } else { %>
+                                                    <%= chat.latestMessage.sender.firstName + ":" -%>
+                                                        <% } -%>
 
+                                        </div>
 
+                                        <div class="chat-box__latest-message">
+
+                                            <%=(chat.latestMessage.hasMediaContent==true) ?
+                                                chat.latestMessage.mediaContentType.charAt(0).toUpperCase() +
+                                                chat.latestMessage.mediaContentType.slice(1) :
+                                                chat.latestMessage.textContent-%>
+
+                                        </div>
+                                        <% } %>
+                                            <% } else { %>
+                                                <div class="chat-box__sender"></div>
+                                                <div class="chat-box__latest-message"></div>
+                                                <% } %>
                         </div>
 
                     </div>

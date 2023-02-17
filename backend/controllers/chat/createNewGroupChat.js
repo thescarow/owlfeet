@@ -5,8 +5,12 @@ const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
 const Chat = require("../../models/chat")
 const Message = require("../../models/message")
+const User = require("../../models/user")
 ///////
-
+const {
+  createAndSendInfoMessage
+} = require("./common/createAndSendInfoMessage")
+const { infoMessageType } = require("../../models/common/infoMessageType")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 ////////
 const {
@@ -82,6 +86,7 @@ exports.createNewGroupChat = async (req, res) => {
               }
             })
             res.json({ isSuccess: true, chat: createdNewChat })
+            createInfoMessage(createdNewChat, req)
           } else {
             if (
               newGroupChatData.hasOwnProperty("chatPic") &&
@@ -152,4 +157,13 @@ exports.createNewGroupChat = async (req, res) => {
       error: "Server Error In Creating New Group Chat, Please Try Again"
     })
   }
+}
+
+async function createInfoMessage(chat, req) {
+  let user = await User.findById(req.user.id)
+    .select({ firstName: 1, lastName: 1, username: 1 })
+    .lean()
+  let messageContent = `"${user.firstName} ${user.lastName}" created "${chat.chatName}" group`
+  let messageType = infoMessageType.NEW_GROUP
+  createAndSendInfoMessage(messageContent, messageType, chat, req)
 }

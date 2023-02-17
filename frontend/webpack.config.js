@@ -16,11 +16,11 @@ module.exports = {
     //   "./dev-javascripts/user-auth/resetPassword.dev.js"
     // )
     // profile: path.resolve(__dirname, "./dev-javascripts/user/profile.dev.js")
-    chat: path.resolve(__dirname, "./dev-javascripts/chat/chat.dev.js")
-    // indexSocket: path.resolve(
-    //   __dirname,
-    //   "./dev-javascripts/socket/indexSocket.dev.js"
-    // )
+    // chat: path.resolve(__dirname, "./dev-javascripts/chat/chat.dev.js")
+    indexSocket: path.resolve(
+      __dirname,
+      "./dev-javascripts/socket/indexSocket.dev.js"
+    )
   },
   output: {
     filename: "[name].bundle.js",
@@ -28,8 +28,8 @@ module.exports = {
     // path: path.resolve(__dirname, "./public/javascripts/index/")
     // path: path.resolve(__dirname, "./public/javascripts/user-auth/")
     // path: path.resolve(__dirname, "./public/javascripts/user/")
-    path: path.resolve(__dirname, "./public/javascripts/chat/")
-    // path: path.resolve(__dirname, "./public/javascripts/socket/")
+    // path: path.resolve(__dirname, "./public/javascripts/chat/")
+    path: path.resolve(__dirname, "./public/javascripts/socket/")
   },
 
   module: {
