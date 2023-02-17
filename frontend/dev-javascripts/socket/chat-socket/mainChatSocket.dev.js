@@ -17,6 +17,20 @@ export function createMainChatSocket(socket) {
       createMessage(message, activeChatMessageContainer, "beforeend")
     }
   })
+  ////////////////////////////////////////////
+  socket.on("chat:new-info-message", async message => {
+    let chatId = activeChatSection.dataset.chatId
+    let { updateAllChatSection } = await import(
+      "../../chat/js/updateAllChatSection.dev"
+    )
+    updateAllChatSection(message)
+
+    if (chatId !== "" && chatId === message.chat._id) {
+      let { createInfoMessage } = await import("../../chat/js/message.dev")
+      createInfoMessage(message, activeChatMessageContainer, "beforeend")
+    }
+  })
+
   //////////////////////////////////////////
   socket.on("chat:create-new-group-chat", async chat => {
     console.log("created-new-group-chat")

@@ -144,7 +144,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
 
   // input message creation
   // ///////////////////////////////////////////////////////////// /////////////////////////////////////////////////////
-  const { createMessage } = await import("./js/message.dev")
+  const { checkTimeAndCreateNewMessage } = await import("./js/message.dev")
   const { updateAllChatSection } = await import("./js/updateAllChatSection.dev")
   const { default: Uppy } = await import("@uppy/core")
   const { default: Dashboard } = await import("@uppy/dashboard")
@@ -288,7 +288,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       })
       .then(data => {
         if (data.isSuccess) {
-          createMessage(data.message, activeChatMessageContainer, "beforeend")
+          checkTimeAndCreateNewMessage(data.message, activeChatMessageContainer)
           activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
           updateAllChatSection(data.message)
         } else {
@@ -336,7 +336,10 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         })
         .then(data => {
           if (data.isSuccess) {
-            createMessage(data.message, activeChatMessageContainer, "beforeend")
+            checkTimeAndCreateNewMessage(
+              data.message,
+              activeChatMessageContainer
+            )
             updateAllChatSection(data.message)
             activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
           } else {
@@ -399,7 +402,10 @@ const { createMainNotification } = require("../common/mainNotification.dev")
               activeChatMessageContainer.style.paddingBottom =
                 activeChatInputTextContent.style.height
             }
-            createMessage(data.message, activeChatMessageContainer, "beforeend")
+            checkTimeAndCreateNewMessage(
+              data.message,
+              activeChatMessageContainer
+            )
             updateAllChatSection(data.message)
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight + 1000

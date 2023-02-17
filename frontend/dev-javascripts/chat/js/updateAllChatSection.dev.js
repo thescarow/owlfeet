@@ -12,6 +12,17 @@ let svg_chatPic = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="h
 </svg>
 `
 
+let svg_videoCallBlankIcon = `<svg width="100" height="63" viewBox="0 0 100 66"  xmlns="http://www.w3.org/2000/svg">
+<path d="M16.6636 0C7.46055 0 0 6.56645 0 14.6666V51.3334C0 59.433 7.46055 66 16.6636 66H58.3226C67.2118 66 74.4747 59.8738 74.9604 52.1577L93.7278 61.8362C95.0159 62.5005 96.6098 62.5072 97.9054 61.8538C99.201 61.2004 100 59.9867 100 58.6726V7.3275C100 6.01462 99.2026 4.80191 97.9087 4.148C96.6156 3.49409 95.0234 3.49879 93.7353 4.16032L74.9579 13.8005C74.4489 6.10357 67.1952 0 58.3226 0H16.6636ZM8.33181 14.6666C8.33181 10.6166 12.0621 7.33329 16.6636 7.33329H58.3226C62.9242 7.33329 66.6544 10.6166 66.6544 14.6666V51.3334C66.6544 55.3829 62.9242 58.6667 58.3226 58.6667H16.6636C12.0621 58.6667 8.33181 55.3829 8.33181 51.3334V14.6666ZM74.9871 43.6715V22.2753L91.6682 13.7111V52.2743L74.9871 43.6715Z" />
+</svg>`
+let svg_newGroupIcon = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M30.4688 71.875C38.6667 71.875 45.3125 65.2292 45.3125 57.0312C45.3125 48.8333 38.6667 42.1875 30.4688 42.1875C22.2708 42.1875 15.625 48.8333 15.625 57.0312C15.625 65.2292 22.2708 71.875 30.4688 71.875Z" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M9.375 95.3125C9.375 89.0965 11.8443 83.1351 16.2397 78.7397C20.6351 74.3443 26.5965 71.875 32.8125 71.875M54.6875 95.3125C54.6875 92.2346 54.0813 89.1869 52.9034 86.3434C51.7256 83.4998 49.9992 80.9161 47.8228 78.7397C45.6464 76.5633 43.0627 74.8369 40.2191 73.6591C37.3756 72.4812 34.3279 71.875 31.25 71.875" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M66.4062 34.375C74.6042 34.375 81.25 27.7292 81.25 19.5312C81.25 11.3333 74.6042 4.6875 66.4062 4.6875C58.2083 4.6875 51.5625 11.3333 51.5625 19.5312C51.5625 27.7292 58.2083 34.375 66.4062 34.375Z" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+<path d="M45.3125 56.25C45.3125 44.1563 55.7969 34.375 68.75 34.375M90.625 56.25C90.625 44.1563 80.1406 34.375 67.1875 34.375" stroke="#010101" stroke-width="4" stroke-miterlimit="10"/>
+</svg>
+`
+
 import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev"
 
 let allChatSection = document.getElementById("allChatSection")
@@ -118,19 +129,43 @@ export function createChatBox(chat) {
 }
 
 export function updateChatBoxLatestMessage(chatBox, message) {
-  let sender =
-    message.sender._id.toString() === loginUser._id.toString()
-      ? "You:"
-      : message.sender.firstName + ":"
-  chatBox.getElementsByClassName("chat-box__sender")[0].textContent = sender
+  let chatBoxLatestMessage = chatBox.getElementsByClassName(
+    "chat-box__latest-message"
+  )[0]
+  let chatBoxSender = chatBox.getElementsByClassName("chat-box__sender")[0]
 
-  let latestMessage =
-    message.hasMediaContent == true
-      ? message.mediaContentType.charAt(0).toUpperCase() +
-        message.mediaContentType.slice(1)
-      : message.textContent
-  chatBox.getElementsByClassName("chat-box__latest-message")[0].textContent =
-    latestMessage
+  if (
+    message.hasOwnProperty("isInfoMessage") &&
+    message.isInfoMessage === true
+  ) {
+    chatBoxSender.textContent = ""
+
+    if (message.infoMessageType === "video-call") {
+      chatBoxLatestMessage.insertAdjacentHTML(
+        "afterbegin",
+        svg_videoCallBlankIcon
+      )
+    }
+    if (message.infoMessageType === "new-group") {
+      chatBoxLatestMessage.insertAdjacentHTML("afterbegin", svg_newGroupIcon)
+    }
+    chatBoxLatestMessage.textContent = message.infoMessage
+  } else {
+    let sender =
+      message.sender._id.toString() === loginUser._id.toString()
+        ? "You:"
+        : message.sender.firstName + ":"
+
+    chatBoxSender.textContent = sender
+
+    let latestMessage =
+      message.hasMediaContent == true
+        ? message.mediaContentType.charAt(0).toUpperCase() +
+          message.mediaContentType.slice(1)
+        : message.textContent
+
+    chatBoxLatestMessage.textContent = latestMessage
+  }
 
   let latestMessageTime = timeDifferenceFromNow(message.createdAt)
   chatBox.getElementsByClassName(
