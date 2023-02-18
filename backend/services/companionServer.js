@@ -32,7 +32,7 @@ const options = {
   },
   filePath: DATA_DIR,
   secret: "this-is-secret-change-it-later",
-  // debug: true,
+  debug: false,
   uploadUrls: ["http:localhost:5000/"],
   streamingUpload: true
 }
