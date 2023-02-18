@@ -43,21 +43,23 @@ exports.fetchMessage = async (req, res) => {
 
         await Promise.all(
           allMessage.map(async message => {
-            if (
-              message.sender.hasOwnProperty("profile") &&
-              message.sender.profile !== ""
-            ) {
-              message.sender.profile = await signedUrlForGetAwsS3Object(
-                message.sender.profile
-              )
-            }
-            if (
-              message.hasMediaContent &&
-              message.mediaContentType !== "youtube"
-            ) {
-              message.mediaContentPath = await signedUrlForGetAwsS3Object(
-                message.mediaContentPath
-              )
+            if (message.isInfoMessage === false) {
+              if (
+                message.sender.hasOwnProperty("profile") &&
+                message.sender.profile !== ""
+              ) {
+                message.sender.profile = await signedUrlForGetAwsS3Object(
+                  message.sender.profile
+                )
+              }
+              if (
+                message.hasMediaContent &&
+                message.mediaContentType !== "youtube"
+              ) {
+                message.mediaContentPath = await signedUrlForGetAwsS3Object(
+                  message.mediaContentPath
+                )
+              }
             }
           })
         )

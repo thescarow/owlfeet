@@ -54,6 +54,9 @@ exports.getChatPageWithAllChat = async (req, res) => {
               hasMediaContent: 1,
               mediaContentType: 1,
               textContent: 1,
+              isInfoMessage: 1,
+              infoMessageType: 1,
+              infoMessageContent: 1,
               createdAt: 1,
               updatedAt: 1
             })
@@ -70,6 +73,8 @@ exports.getChatPageWithAllChat = async (req, res) => {
             })
             .sort({ updatedAt: -1 })
             .lean()
+
+          console.log("latestMessage:", latestMessage)
 
           if (latestMessage) {
             chat.latestMessage = latestMessage

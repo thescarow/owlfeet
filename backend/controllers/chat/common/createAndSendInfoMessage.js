@@ -22,7 +22,7 @@ exports.createAndSendInfoMessage = async (
     reader: chat.currentChatMembers,
     isInfoMessage: true,
     infoMessageType: messageType,
-    infoMessage: messageContent
+    infoMessageContent: messageContent
   }
 
   const newInfoMessage = new Message(newInfoMessageData)
@@ -34,7 +34,8 @@ exports.createAndSendInfoMessage = async (
       reader: 1,
       isInfoMessage: 1,
       infoMessageType: 1,
-      infoMessage: 1
+      infoMessageContent: 1,
+      createdAt: 1
     })
     .populate({
       path: "chat",

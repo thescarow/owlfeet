@@ -51,7 +51,7 @@
 
 
                         <div class="chat-box__latest-message-box">
-                            <% if( chat.hasOwnProperty(latestMessage)){ %>
+                            <% if(chat.hasOwnProperty("latestMessage") && chat.latestMessage !=='' ){ %>
 
                                 <% if(chat.latestMessage.hasOwnProperty("isInfoMessage") &&
                                     chat.latestMessage.isInfoMessage===true){ %>
@@ -61,8 +61,11 @@
                                         <% if(chat.latestMessage.infoMessageType==='video-call' ){ %>
                                             <%- include("../partials/icons/videoCallBlankIcon.svg") -%>
                                                 <% } %>
+                                                    <% if(chat.latestMessage.infoMessageType==='new-group' ){ %>
+                                                        <%- include("../partials/icons/newGroupBlankIcon.svg") -%>
+                                                            <% } %>
 
-                                                    <%= chat.latestMessage.infoMessageContent %>
+                                                                <%= chat.latestMessage.infoMessageContent %>
 
                                     </div>
                                     <% } else { %>
@@ -97,7 +100,7 @@
                     <div class="chat-box__unseen-message-count">9+</div>
 
                     <div class="chat-box__latest-message-time">
-                        <%= chat.latestMessageTime ? chat.latestMessageTime: chat.chatCreatedTime -%>
+                        <%= chat.hasOwnProperty("latestMessageTime") ? chat.latestMessageTime: chat.chatCreatedTime -%>
                     </div>
                 </div>
 

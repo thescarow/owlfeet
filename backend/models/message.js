@@ -47,7 +47,7 @@ const messageSchema = new mongoose.Schema(
 
     infoMessageType: { type: String, default: infoMessageType.INFO },
 
-    infoMessage: { type: String, trim: true }
+    infoMessageContent: { type: String, trim: true }
   },
   { timestamps: true }
 )

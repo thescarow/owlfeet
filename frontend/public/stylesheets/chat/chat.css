@@ -254,7 +254,13 @@ svg {
     opacity: 0.8;
     display: inline-block;
 }
-
+.chat-box__latest-message svg{
+    width: 16px;
+    height: 16px;
+    margin-right: 0px;
+    transform: translate(2px, 2px);
+    fill: rgba(var(--rgba-first-color),0.7);
+}
 
 
 .chat-box__latest-message-time {
@@ -749,7 +755,7 @@ svg {
 .active-chat-info-message-box__content svg {
     width: 16px;
     height: 16px;
-    margin-right: 4px;
+    margin-right: 1px;
     transform: translate(0px, 3px);
     fill: rgba(var(--rgba-first-color),0.7);
 }

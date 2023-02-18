@@ -78,13 +78,17 @@ exports.createNewGroupChat = async (req, res) => {
               createdNewChat.createdAt
             )
 
-            createdNewChat.currentChatMembers.forEach(user => {
-              if (user._id.toString() !== req.user.id.toString()) {
+            for (let i = 0; i < createdNewChat.currentChatMembers.length; i++) {
+              if (
+                createdNewChat.currentChatMembers[i]._id.toString() !==
+                req.user.id.toString()
+              ) {
                 req.io
-                  .to(user._id.toString())
+                  .to(createdNewChat.currentChatMembers[i]._id.toString())
                   .emit("chat:create-new-group-chat", createdNewChat)
               }
-            })
+            }
+
             res.json({ isSuccess: true, chat: createdNewChat })
             createInfoMessage(createdNewChat, req)
           } else {
@@ -163,7 +167,7 @@ async function createInfoMessage(chat, req) {
   let user = await User.findById(req.user.id)
     .select({ firstName: 1, lastName: 1, username: 1 })
     .lean()
-  let messageContent = `"${user.firstName} ${user.lastName}" created "${chat.chatName}" group`
+  let messageContent = `*${user.firstName} ${user.lastName}* created *${chat.chatName}*  group`
   let messageType = infoMessageType.NEW_GROUP
   createAndSendInfoMessage(messageContent, messageType, chat, req)
 }
