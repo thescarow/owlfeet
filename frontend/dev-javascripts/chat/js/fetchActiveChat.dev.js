@@ -1,9 +1,10 @@
 import { createMainNotification } from "../../common/mainNotification.dev"
-let allChatSection = document.getElementById("allChatSection")
-let activeChatSection = document.getElementById("activeChatSection")
 
 // activeChatData is define in main layout as global object
 export function fetchActiveChat(chatId) {
+  let allChatSection = document.getElementById("allChatSection")
+  let activeChatSection = document.getElementById("activeChatSection")
+
   let activeChatId = activeChatSection.dataset.chatId
 
   if (activeChatId !== "" && activeChatId === chatId) {
