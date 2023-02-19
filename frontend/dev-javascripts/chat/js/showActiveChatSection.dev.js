@@ -74,24 +74,7 @@ export async function updateActiveChatSection(chat) {
   activeChatHeaderName.textContent = chat.chatName
   activeChatHeaderStatus.textContent = "Active Hai"
 
-  if (
-    chat.hasOwnProperty("canSendMessageToThisChat") &&
-    chat.canSendMessageToThisChat === false
-  ) {
-    activeChatInputContainer.classList.add(
-      "active-chat-input-container--disable"
-    )
-    activeChatInputContainer.classList.remove(
-      "active-chat-input-container--enable"
-    )
-  } else {
-    activeChatInputContainer.classList.add(
-      "active-chat-input-container--enable"
-    )
-    activeChatInputContainer.classList.remove(
-      "active-chat-input-container--disable"
-    )
-  }
+  onOffActiveChatInputContainer(chat)
 }
 
 export async function clearActiveChatMessageContainer() {
@@ -185,5 +168,28 @@ export async function createMessageSeenByModal() {
     `
 
     chatMainContainer.insertAdjacentElement("afterbegin", messageSeenByModal)
+  }
+}
+export async function onOffActiveChatInputContainer(chat) {
+  const activeChatInputContainer = document.getElementById(
+    "activeChatInputContainer"
+  )
+  if (
+    chat.hasOwnProperty("canSendMessageToThisChat") &&
+    chat.canSendMessageToThisChat === false
+  ) {
+    activeChatInputContainer.classList.add(
+      "active-chat-input-container--disable"
+    )
+    activeChatInputContainer.classList.remove(
+      "active-chat-input-container--enable"
+    )
+  } else {
+    activeChatInputContainer.classList.add(
+      "active-chat-input-container--enable"
+    )
+    activeChatInputContainer.classList.remove(
+      "active-chat-input-container--disable"
+    )
   }
 }

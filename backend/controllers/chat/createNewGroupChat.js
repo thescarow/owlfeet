@@ -167,7 +167,7 @@ async function createInfoMessage(chat, req) {
   let user = await User.findById(req.user.id)
     .select({ firstName: 1, lastName: 1, username: 1 })
     .lean()
-  let messageContent = `*${user.firstName} ${user.lastName}* created *${chat.chatName}*  group`
+  let messageContent = `${user.firstName} ${user.lastName} created *${chat.chatName}*  group`
   let messageType = infoMessageType.NEW_GROUP
   createAndSendInfoMessage(messageContent, messageType, chat, req)
 }
