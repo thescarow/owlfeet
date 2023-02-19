@@ -42,8 +42,7 @@ async function createPlyr(element, type) {
 }
 
 const weekDaysArray = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
-let firstMessageTimePointer = ""
-let lastMessageTimePointer = ""
+
 function getTimeString(date) {
   let dateObj = typeof date === "string" ? new Date(date) : date
 
@@ -118,8 +117,8 @@ export async function checkTimeAndCreateOldMessage(
 ) {
   if (allMessages.length > 0) {
     if (activeChatMessageContainer.children.length == 0) {
-      firstMessageTimePointer = allMessages[0].createdAt
       lastMessageTimePointer = allMessages[0].createdAt
+      firstMessageTimePointer = allMessages[0].createdAt
     }
     for (let i = 0; i < allMessages.length; i++) {
       if (
@@ -157,8 +156,8 @@ export async function checkTimeAndCreateOldMessage(
         "afterbegin"
       )
     } else {
-      firstMessageTimePointer = ""
       lastMessageTimePointer = ""
+      firstMessageTimePointer = ""
     }
   }
   activeChatMessageContainer.scrollTop =
@@ -170,11 +169,12 @@ export async function checkTimeAndCreateNewMessage(
   activeChatMessageContainer
 ) {
   if (activeChatMessageContainer.children.length == 0) {
-    firstMessageTimePointer = lastMessageTimePointer = message.createdAt
+    firstMessageTimePointer = message.createdAt
+    lastMessageTimePointer = message.createdAt
   }
   if (isMessageDateChanged(message.createdAt, firstMessageTimePointer)) {
     createDateMessage(
-      lastMessageTimePointer,
+      message.createdAt,
       activeChatMessageContainer,
       "beforeend"
     )
@@ -363,7 +363,6 @@ export function createInfoMessage(
       )
     }
     if (message.infoMessageType === "new-group") {
-      console.log("new  Group")
       infoMessageBoxContent.insertAdjacentHTML(
         "afterbegin",
         svg_newGroupBlankIcon

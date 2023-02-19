@@ -11,7 +11,7 @@ const {
   signedUrlForGetAwsS3Object
 } = require("../../services/awsS3")
 ///////
-
+const { selectMessageField } = require("./common/filterMessageField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 // router.post("/", getLoginUser, createMessage)
 
@@ -95,7 +95,9 @@ exports.createMessage = async (req, res) => {
                 lean: true
               }
             })
+            .select(selectMessageField)
             .lean()
+
           if (
             createdNewMessage.sender.hasOwnProperty("profile") &&
             createdNewMessage.sender.profile !== ""
@@ -134,7 +136,7 @@ exports.createMessage = async (req, res) => {
           }
 
           createdNewMessage.chat.currentChatMembers.forEach(userId => {
-            if (req.user.id != userId) {
+            if (req.user.id.toString() !== userId.toString()) {
               req.io
                 .to(userId.toString())
                 .emit("chat:new-message", createdNewMessage)
