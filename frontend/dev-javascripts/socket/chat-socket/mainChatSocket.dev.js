@@ -13,8 +13,10 @@ export function createMainChatSocket(socket) {
     updateAllChatSection(message)
 
     if (chatId !== "" && chatId === message.chat._id) {
-      let { createMessage } = await import("../../chat/js/message.dev")
-      createMessage(message, activeChatMessageContainer, "beforeend")
+      let { checkTimeAndCreateNewMessage } = await import(
+        "../../chat/js/message.dev"
+      )
+      checkTimeAndCreateNewMessage(message, activeChatMessageContainer)
     }
   })
   ////////////////////////////////////////////
