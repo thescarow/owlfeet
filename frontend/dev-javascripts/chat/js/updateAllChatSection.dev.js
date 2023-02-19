@@ -51,8 +51,6 @@ export function updateAllChatSection(message) {
 }
 
 export function createChatBox(chat) {
-  console.log("createdChatBox:", chat)
-
   let chatBox = document.createElement("div")
   chatBox.classList.add("chat-box")
   chatBox.dataset.chatId = chat._id

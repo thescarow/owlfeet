@@ -86,7 +86,7 @@ let groupChatInfoBtnContainerHtml = `
 <div class="chat-info-btn chat-info-btn--admin" id="chatInfoDeleteChatBtn">${svg_deleteBlankBtn} Delete Chat </div>
 
 
-<div class="chat-info-btn chat-info-btn--member">${svg_leaveGroupBtn} Leave Group </div>
+<div class="chat-info-btn chat-info-btn--member" id="chatInfoLeaveGroupChatBtn">${svg_leaveGroupBtn} Leave Group </div>
 
 <div class="chat-info-btn " id="chatInfoClearChatAllMessagesBtn">${svg_clearChat} Clear All Messages</div>
 
@@ -188,6 +188,14 @@ function initialiseEventForActiveChatInfo(activeChatInfoModal) {
       let { createDeleteChatModal } = await import("./deleteChatModal.dev")
       createDeleteChatModal(activeChatData)
     })
+  document
+    .getElementById("chatInfoLeaveGroupChatBtn")
+    .addEventListener("click", async () => {
+      let { createLeaveGroupChatModal } = await import(
+        "./leaveGroupChatModal.dev"
+      )
+      createLeaveGroupChatModal(activeChatData)
+    })
   /////////////////////////
   document
     .getElementById("closeActiveChatInfoModal")
@@ -254,86 +262,89 @@ export async function updateActiveChatInfoModal() {
     })
     /////////////
     // update active chat info member container count
-    activeChatInfoMemberContainer.getElementsByClassName(
-      "chat-info-member-container__count"
-    )[0].textContent = activeChatData.currentChatMembers.length
+    if (activeChatData.hasOwnProperty("currentChatMembers")) {
+      activeChatInfoMemberContainer.getElementsByClassName(
+        "chat-info-member-container__count"
+      )[0].textContent = activeChatData.currentChatMembers.length
 
-    activeChatData.currentChatMembers.forEach(user => {
-      let chatInfoMember = document.createElement("div")
-      chatInfoMember.classList.add("chat-info-member")
-      chatInfoMember.dataset.userId = user._id
-      chatInfoMember.dataset.username = user.username
-      chatInfoMember.insertAdjacentHTML(
-        "beforeend",
-        `<div class="chat-info-member__pic">
-          <img src="${user.profile}" alt="">
-       </div>
-     <div class="chat-info-member__column chat-info-member__column--data">
+      activeChatData.currentChatMembers.forEach(user => {
+        let chatInfoMember = document.createElement("div")
+        chatInfoMember.classList.add("chat-info-member")
+        chatInfoMember.dataset.userId = user._id
+        chatInfoMember.dataset.username = user.username
+        chatInfoMember.insertAdjacentHTML(
+          "beforeend",
+          `<div class="chat-info-member__pic">
+                           <img src="${user.profile}" alt="">
+                         </div>
+                       <div class="chat-info-member__column chat-info-member__column--data">
 
-     <div class="chat-info-member__row">
-    <div class="chat-info-member__fullname"></div>
-    <div class="chat-info-member__admin-tag">(admin)</div>
-    </div>
-    <div class="chat-info-member__username"></div>
-    </div>
-    <div class="chat-info-member__btn">
-${svg_infoBlankBtn}
-</div>`
-      )
-      activeChatInfoMemberContainer.insertAdjacentElement(
-        "beforeend",
+                       <div class="chat-info-member__row">
+                      <div class="chat-info-member__fullname"></div>
+                     <div class="chat-info-member__admin-tag">(admin)</div>
+                      </div>
+                     <div class="chat-info-member__username"></div>
+                      </div>
+                     <div class="chat-info-member__btn">
+                    ${svg_infoBlankBtn}
+                  </div>`
+        )
+        activeChatInfoMemberContainer.insertAdjacentElement(
+          "beforeend",
+          chatInfoMember
+        )
+
+        chatInfoMember.getElementsByClassName(
+          "chat-info-member__fullname"
+        )[0].textContent = user.firstName + " " + user.lastName
+
+        chatInfoMember.getElementsByClassName(
+          "chat-info-member__username"
+        )[0].textContent = "@" + user.username
+
+        ///////////
+        // attach event to active Chat Info modal members
         chatInfoMember
-      )
-
-      chatInfoMember.getElementsByClassName(
-        "chat-info-member__fullname"
-      )[0].textContent = user.firstName + " " + user.lastName
-
-      chatInfoMember.getElementsByClassName(
-        "chat-info-member__username"
-      )[0].textContent = "@" + user.username
-
-      ///////////
-      // attach event to active Chat Info modal members
-      chatInfoMember
-        .getElementsByClassName("chat-info-member__pic")[0]
-        .addEventListener("click", () => {
-          let username = chatInfoMember.dataset.username
-          location.replace(`/user/${username}`)
-        })
-      chatInfoMember
-        .getElementsByClassName("chat-info-member__fullname")[0]
-        .addEventListener("click", () => {
-          let username = chatInfoMember.dataset.username
-          location.replace(`/user/${username}`)
-        })
-      chatInfoMember
-        .getElementsByClassName("chat-info-member__btn")[0]
-        .addEventListener("click", () => {
-          activeChatInfoMemberContainer
-            .getElementsByClassName("chat-info-member-modal")[0]
-            .classList.remove("chat-info-member-modal--hide")
-        })
-    })
+          .getElementsByClassName("chat-info-member__pic")[0]
+          .addEventListener("click", () => {
+            let username = chatInfoMember.dataset.username
+            location.replace(`/user/${username}`)
+          })
+        chatInfoMember
+          .getElementsByClassName("chat-info-member__fullname")[0]
+          .addEventListener("click", () => {
+            let username = chatInfoMember.dataset.username
+            location.replace(`/user/${username}`)
+          })
+        chatInfoMember
+          .getElementsByClassName("chat-info-member__btn")[0]
+          .addEventListener("click", () => {
+            activeChatInfoMemberContainer
+              .getElementsByClassName("chat-info-member-modal")[0]
+              .classList.remove("chat-info-member-modal--hide")
+          })
+      })
+    }
 
     // update chat admin members tag
     if (activeChatData.isGroupChat) {
-      let checkLoginUserIsAdmin = false
-      activeChatData.groupChatAdmin.forEach(userId => {
-        activeChatInfoMemberContainer
-          .querySelector(`.chat-info-member[data-user-id = "${userId}"]`)
-          .classList.add("chat-info-member--admin")
-        if (userId.toString() === loginUser._id.toString()) {
-          checkLoginUserIsAdmin = true
+      if (activeChatData.hasOwnProperty("groupChatAdmin")) {
+        let checkLoginUserIsAdmin = false
+        activeChatData.groupChatAdmin.forEach(userId => {
+          activeChatInfoMemberContainer
+            .querySelector(`.chat-info-member[data-user-id = "${userId}"]`)
+            .classList.add("chat-info-member--admin")
+          if (userId.toString() === loginUser._id.toString()) {
+            checkLoginUserIsAdmin = true
+          }
+        })
+        if (checkLoginUserIsAdmin === true) {
+          activeChatInfoModal.classList.add("active-chat-info-modal--admin")
+        } else {
+          activeChatInfoModal.classList.add("active-chat-info-modal--member")
         }
-      })
-      if (checkLoginUserIsAdmin === true) {
-        activeChatInfoModal.classList.add("active-chat-info-modal--admin")
-      } else {
-        activeChatInfoModal.classList.add("active-chat-info-modal--member")
       }
     }
-
     ///update active chat info modal
     let chatInfoPic =
       activeChatInfoModal.getElementsByClassName("chat-info-pic")[0]
@@ -454,5 +465,22 @@ Choose a background for chat
       "afterbegin",
       changeChatAppearanceModal
     )
+  }
+}
+
+export async function removeChatInfoMember(chatId, memberId) {
+  if (activeChatData._id.toString() === chatId.toString()) {
+    let activeChatInfoModal = document.getElementById("activeChatInfoModal")
+    let activeChatInfoMemberContainer =
+      activeChatInfoModal.getElementsByClassName(
+        "chat-info-member-container"
+      )[0]
+    activeChatInfoMemberContainer
+      .querySelector(`.chat-info-member[data-user-id = "${memberId}"]`)
+      .remove()
+    let count = activeChatInfoMemberContainer.getElementsByClassName(
+      "chat-info-member-container__count"
+    )[0]
+    count.textContent = parseInt(count.textContent) - 1
   }
 }

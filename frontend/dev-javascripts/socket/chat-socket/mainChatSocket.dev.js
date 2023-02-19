@@ -78,4 +78,11 @@ export function createMainChatSocket(socket) {
     deleteChatBox(chatId)
     clearActiveChatMessageContainer()
   })
+
+  socket.on("chat:user-left-group-chat", async (chatId, userId) => {
+    let { removeChatInfoMember } = await import(
+      "../../chat/js/createActiveChatInfoModal.dev"
+    )
+    removeChatInfoMember(chatId, userId)
+  })
 }
