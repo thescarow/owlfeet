@@ -5,6 +5,10 @@ export async function showActiveChatSection(chat) {
   const activeChatMessageContainer = document.getElementById(
     "activeChatMessageContainer"
   )
+  activeChatMessageContainer.addEventListener("click", e => {
+    console.log("event:", e, "target:", e.target.tagName)
+  })
+
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
@@ -84,38 +88,6 @@ export async function clearActiveChatMessageContainer() {
   activeChatMessageContainer.innerHTML = ""
 }
 
-export async function createDeleteMessageModal() {
-  let chatMainContainer = document.getElementById("chatMainContainer")
-  if (chatMainContainer) {
-    let deleteMessageModal = document.createElement("div")
-    deleteMessageModal.classList.add(
-      "inner-modal",
-      "inner-modal--hide",
-      "inner-modal--delete-message"
-    )
-    deleteMessageModal.innerHTML = `
-    <div class="inner-modal-content inner-modal-content--delete-message">
-    
-    <div class="inner-modal-header">
-    <div class="inner-modal-header__title">
-    Do you want to delete message?
-    </div>
-    </div>
-    <div class="inner-modal-main">
-    <lable class="delete-message-for-all-container">
-    <input type="checkbox" class="delete-message-for-all-checkbox"> Delete Message For All
-    </lable>
-    </div>
-    <div class="inner-modal-btns-container">
-    <div class="inner-modal-btn ">Cancel</div>
-    <div class="inner-modal-btn inner-modal-btn--action">Delete</div>
-    </div>
-    `
-
-    chatMainContainer.insertAdjacentElement("afterbegin", deleteMessageModal)
-  }
-}
-
 export async function createMessageSeenByModal() {
   let chatMainContainer = document.getElementById("chatMainContainer")
   if (chatMainContainer) {
@@ -170,6 +142,7 @@ export async function createMessageSeenByModal() {
     chatMainContainer.insertAdjacentElement("afterbegin", messageSeenByModal)
   }
 }
+
 export async function onOffActiveChatInputContainer(chat) {
   const activeChatInputContainer = document.getElementById(
     "activeChatInputContainer"

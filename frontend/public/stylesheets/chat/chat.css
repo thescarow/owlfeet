@@ -254,12 +254,13 @@ svg {
     opacity: 0.8;
     display: inline-block;
 }
-.chat-box__latest-message svg{
+
+.chat-box__latest-message svg {
     width: 16px;
     height: 16px;
     margin-right: 0px;
     transform: translate(2px, 2px);
-    fill: rgba(var(--rgba-first-color),0.7);
+    fill: rgba(var(--rgba-first-color), 0.7);
 }
 
 
@@ -757,7 +758,7 @@ svg {
     height: 16px;
     margin-right: 1px;
     transform: translate(0px, 3px);
-    fill: rgba(var(--rgba-first-color),0.7);
+    fill: rgba(var(--rgba-first-color), 0.7);
 }
 
 /* active-chat-date-message-box  */
@@ -1262,8 +1263,8 @@ em-emoji-picker {
 }
 
 .inner-modal-content {
-    width: 80%;
     height: auto;
+    max-width: 80%;
     max-height: 65%;
     margin: 0 auto;
     margin-top: 88px;
@@ -1369,6 +1370,51 @@ em-emoji-picker {
     accent-color: rgba(var(--rgba-third-color), 1);
 
 }
+
+.inner-modal--message-option {
+    background: rgba(var(--rgba-fourth-color), 0.9);
+}
+
+.inner-modal-content--message-option {
+    width: fit-content;
+    background: rgba(var(--rgba-first-color), 1);
+}
+
+.inner-modal-options-container {
+    width: fit-content;
+    padding: 5px 25px 5px 14px;
+}
+
+.inner-modal-option {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 12px 0 0 0;
+    width: fit-content;
+    text-align: center;
+    color: rgba(var(--rgba-fourth-color), 1);
+}
+
+.inner-modal-option:last-child {
+    border-top: 1px solid rgba(var(--rgba-fourth-color), 0.1);
+    color: rgba(var(--rgba-third-color), 1);
+    font-size: 24px;
+    margin-top: 15px;
+    width: 100%;
+    display: block;
+}
+
+.inner-modal-option svg {
+    width: 25px;
+    height: 25px;
+    fill: rgba(var(--rgba-fourth-color), 1);
+    stroke: rgba(var(--rgba-fourth-color), 1);
+    margin-right: 15px;
+}
+
+
+
 
 /* message seen by modal  */
 .inner-modal--message-seen-by {

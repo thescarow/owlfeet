@@ -198,6 +198,9 @@ export function createUserMessage(
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-message-box")
   messageBox.setAttribute("data-message-id", message._id)
+  if (message.hasOwnProperty("sender")) {
+    messageBox.setAttribute("data-sender-id", message.sender._id)
+  }
 
   let messageBoxInnerHtml = `
         <div class="active-chat-message-box__content-box">
@@ -326,12 +329,16 @@ export function createUserMessage(
 
   activeChatMessageContainer.scrollTop =
     activeChatMessageContainer.scrollHeight + 1000
+  initialiseEventForUserMessage(messageBox, message)
+}
 
+async function initialiseEventForUserMessage(messageBox, message) {
   let activeChatMessageBoxBtn = messageBox.getElementsByClassName(
     "active-chat-message-box__btn"
   )[0]
-  activeChatMessageBoxBtn.addEventListener("click", () => {
-    // activeChatMessageInfoModal.classList.remove("chat-modal--hide")
+  activeChatMessageBoxBtn.addEventListener("click", async () => {
+    let { createMessageOptionModal } = await import("./messageOptionModal.dev")
+    createMessageOptionModal(message)
   })
 }
 
@@ -375,6 +382,7 @@ export function createInfoMessage(
     )
   }
 }
+
 export function createDateMessage(
   messageDate,
   activeChatMessageContainer,
