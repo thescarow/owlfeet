@@ -5,9 +5,6 @@ export async function showActiveChatSection(chat) {
   const activeChatMessageContainer = document.getElementById(
     "activeChatMessageContainer"
   )
-  activeChatMessageContainer.addEventListener("click", e => {
-    console.log("event:", e, "target:", e.target.tagName)
-  })
 
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"

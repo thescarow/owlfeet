@@ -196,44 +196,44 @@ export function createUserMessage(
   addPosition = "beforeend"
 ) {
   const messageBox = document.createElement("div")
-  messageBox.classList.add("active-chat-message-box")
+  messageBox.classList.add("active-chat-user-message-box")
   messageBox.setAttribute("data-message-id", message._id)
   if (message.hasOwnProperty("sender")) {
     messageBox.setAttribute("data-sender-id", message.sender._id)
   }
 
   let messageBoxInnerHtml = `
-        <div class="active-chat-message-box__content-box">
-           <div class="active-chat-message-box__content-info">
-               <div class="active-chat-message-box__content-time">${getTimeString(
+        <div class="active-chat-user-message-box__content-box">
+           <div class="active-chat-user-message-box__content-info">
+               <div class="active-chat-user-message-box__content-time">${getTimeString(
                  message.createdAt
                )}
                </div>
            </div>
        </div>
-       <div class="active-chat-message-box__btn">${svg_infoBlankBtn}
-       </div>
+       <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+</div>
         `
   messageBox.insertAdjacentHTML("beforeend", messageBoxInnerHtml)
 
   let messageContentBox = messageBox.getElementsByClassName(
-    "active-chat-message-box__content-box"
+    "active-chat-user-message-box__content-box"
   )[0]
   let messageContentInfo = messageBox.getElementsByClassName(
-    "active-chat-message-box__content-info"
+    "active-chat-user-message-box__content-info"
   )[0]
 
   if (message.hasMediaContent) {
     if (message.mediaContentType === "video") {
-      messageBox.classList.add("active-chat-message-box--video")
+      messageBox.classList.add("active-chat-user-message-box--video")
       messageContentBox.classList.add(
-        "active-chat-message-box__content-box--video"
+        "active-chat-user-message-box__content-box--video"
       )
       messageContentInfo.classList.add(
-        "active-chat-message-box__content-info--video"
+        "active-chat-user-message-box__content-info--video"
       )
       let video = document.createElement("video")
-      video.classList.add("active-chat-message-box__video-content")
+      video.classList.add("active-chat-user-message-box__video-content")
       let videoSource = document.createElement("source")
       videoSource.src = message.mediaContentPath
       //   videoSource.type = message.mediaContentMimeType.split(";")[0]
@@ -243,15 +243,15 @@ export function createUserMessage(
       createPlyr(video, "video")
     }
     if (message.mediaContentType === "audio") {
-      messageBox.classList.add("active-chat-message-box--audio")
+      messageBox.classList.add("active-chat-user-message-box--audio")
       messageContentBox.classList.add(
-        "active-chat-message-box__content-box--audio"
+        "active-chat-user-message-box__content-box--audio"
       )
       messageContentInfo.classList.add(
-        "active-chat-message-box__content-info--audio"
+        "active-chat-user-message-box__content-info--audio"
       )
       let audio = document.createElement("audio")
-      audio.classList.add("active-chat-message-box__audio-content")
+      audio.classList.add("active-chat-user-message-box__audio-content")
 
       let audioSource = document.createElement("source")
       audioSource.src = message.mediaContentPath
@@ -262,15 +262,15 @@ export function createUserMessage(
       createPlyr(audio, "audio")
     }
     if (message.mediaContentType === "youtube") {
-      messageBox.classList.add("active-chat-message-box--youtube")
+      messageBox.classList.add("active-chat-user-message-box--youtube")
       messageContentBox.classList.add(
-        "active-chat-message-box__content-box--youtube"
+        "active-chat-user-message-box__content-box--youtube"
       )
       messageContentInfo.classList.add(
-        "active-chat-message-box__content-info--youtube"
+        "active-chat-user-message-box__content-info--youtube"
       )
       let youtube = document.createElement("div")
-      youtube.classList.add("active-chat-message-box__youtube-content")
+      youtube.classList.add("active-chat-user-message-box__youtube-content")
 
       youtube.setAttribute("data-plyr-provider", "youtube")
       youtube.setAttribute("data-plyr-embed-id", message.mediaContentPath)
@@ -279,16 +279,16 @@ export function createUserMessage(
       createPlyr(youtube, "youtube")
     }
     if (message.mediaContentType === "image") {
-      messageBox.classList.add("active-chat-message-box--image")
+      messageBox.classList.add("active-chat-user-message-box--image")
       messageContentBox.classList.add(
-        "active-chat-message-box__content-box--image"
+        "active-chat-user-message-box__content-box--image"
       )
       messageContentInfo.classList.add(
-        "active-chat-message-box__content-info--image"
+        "active-chat-user-message-box__content-info--image"
       )
 
       let image = document.createElement("img")
-      image.classList.add("active-chat-message-box__image-content")
+      image.classList.add("active-chat-user-message-box__image-content")
 
       image.setAttribute("src", message.mediaContentPath)
       image.setAttribute("alt", "Image")
@@ -296,16 +296,16 @@ export function createUserMessage(
       messageContentBox.insertAdjacentElement("afterbegin", image)
     }
   } else {
-    messageBox.classList.add("active-chat-message-box--text")
+    messageBox.classList.add("active-chat-user-message-box--text")
     messageContentBox.classList.add(
-      "active-chat-message-box__content-box--text"
+      "active-chat-user-message-box__content-box--text"
     )
     messageContentInfo.classList.add(
-      "active-chat-message-box__content-info--text"
+      "active-chat-user-message-box__content-info--text"
     )
 
     let textMessage = document.createElement("div")
-    textMessage.classList.add("active-chat-message-box__text-content")
+    textMessage.classList.add("active-chat-user-message-box__text-content")
 
     textMessage.textContent = message.textContent
 
@@ -313,13 +313,13 @@ export function createUserMessage(
   }
 
   if (message.sender._id === loginUser._id) {
-    messageBox.classList.add("active-chat-message-box--right")
+    messageBox.classList.add("active-chat-user-message-box--right")
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
-      `<div class="active-chat-message-box__content-status-container ">
-               <div class="active-chat-message-box__content-status">${svg_messageTick}
+      `<div class="active-chat-user-message-box__content-status-container ">
+               <div class="active-chat-user-message-box__content-status">${svg_messageTick}
                 </div>
-               <div class="active-chat-message-box__content-status active-chat-message-box__content-status--second ">${svg_messageTick}
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--second ">${svg_messageTick}
                </div>
       </div>`
     )
@@ -329,17 +329,6 @@ export function createUserMessage(
 
   activeChatMessageContainer.scrollTop =
     activeChatMessageContainer.scrollHeight + 1000
-  initialiseEventForUserMessage(messageBox, message)
-}
-
-async function initialiseEventForUserMessage(messageBox, message) {
-  let activeChatMessageBoxBtn = messageBox.getElementsByClassName(
-    "active-chat-message-box__btn"
-  )[0]
-  activeChatMessageBoxBtn.addEventListener("click", async () => {
-    let { createMessageOptionModal } = await import("./messageOptionModal.dev")
-    createMessageOptionModal(message)
-  })
 }
 
 export function createInfoMessage(
@@ -401,3 +390,26 @@ export function createDateMessage(
 
   activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
 }
+
+let activeChatMessageContainer = document.getElementById(
+  "activeChatMessageContainer"
+)
+activeChatMessageContainer.addEventListener("click", async e => {
+  let userMessageBoxBtn = e.target.closest(`[data-message-box-btn ="user"]`)
+
+  if (
+    userMessageBoxBtn &&
+    activeChatMessageContainer.contains(userMessageBoxBtn)
+  ) {
+    let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
+    userMessageBox.classList.add("active-chat-user-message-box--selected")
+    let { createUserMessageOptionModal } = await import(
+      "./userMessageOptionModal.dev"
+    )
+
+    createUserMessageOptionModal(userMessageBox)
+  } else {
+    console.log("click on wrong place")
+    return
+  }
+})
