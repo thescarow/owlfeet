@@ -11,6 +11,7 @@ const messageSchema = new mongoose.Schema(
 
     deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
 
+    isDeletedForAll: { type: Boolean, default: false },
     ////
     sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 

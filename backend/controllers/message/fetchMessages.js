@@ -7,10 +7,13 @@ const Message = require("../../models/message")
 const Chat = require("../../models/chat")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////
-const { selectMessageField } = require("./common/filterMessageField")
-// router.get("/fetch-message/:chatId", getLoginUser, fetchMessage)
+const {
+  selectMessageField,
+  filterMessageFieldForDeletedForAll
+} = require("./common/filterMessageField")
+// router.get("/fetch-message/:chatId", getLoginUser, fetchMessages)
 
-exports.fetchMessage = async (req, res) => {
+exports.fetchMessages = async (req, res) => {
   try {
     if (req.user) {
       const chatId = req.params.chatId
@@ -19,7 +22,7 @@ exports.fetchMessage = async (req, res) => {
         allChatMembers: { $elemMatch: { $eq: req.user.id } }
       })
       if (chat) {
-        let allMessage = await Message.find({
+        let allMessages = await Message.find({
           chat: chat._id,
           reader: { $elemMatch: { $eq: req.user.id } },
           deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
@@ -42,7 +45,10 @@ exports.fetchMessage = async (req, res) => {
           .lean()
 
         await Promise.all(
-          allMessage.map(async message => {
+          allMessages.map(async message => {
+            if (message.isDeletedForAll === true) {
+              message = filterMessageFieldForDeletedForAll(message)
+            }
             if (message.isInfoMessage === false) {
               if (
                 message.sender.hasOwnProperty("profile") &&
@@ -64,8 +70,8 @@ exports.fetchMessage = async (req, res) => {
           })
         )
 
-        // console.log(allMessage)
-        res.json({ isSuccess: true, allMessage: allMessage })
+        // console.log(allMessages)
+        res.json({ isSuccess: true, allMessages: allMessages })
       } else {
         res.json({
           isSuccess: false,

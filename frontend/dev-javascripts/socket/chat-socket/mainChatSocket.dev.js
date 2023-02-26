@@ -87,4 +87,10 @@ export function createMainChatSocket(socket) {
     )
     removeChatInfoMember(chatId, userId)
   })
+  socket.on("chat:delete-message-for-all", async deletedMessage => {
+    let { convertUserMessageToDeletedMessageForAll } = await import(
+      "../../chat/js/message.dev"
+    )
+    convertUserMessageToDeletedMessageForAll(deletedMessage)
+  })
 }

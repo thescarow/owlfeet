@@ -1,7 +1,9 @@
 const { createMessage } = require("./createMessage")
-const { fetchMessage } = require("./fetchMessage")
+const { fetchMessages } = require("./fetchMessages")
+const { deleteMessage } = require("./deleteMessage")
 
 module.exports = {
   createMessage,
-  fetchMessage
+  fetchMessages,
+  deleteMessage
 }
