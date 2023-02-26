@@ -864,12 +864,17 @@ svg {
     width: 100%;
     max-width: var(--main-container-max-width);
     /* height: var(--active-chat-input-container-height); */
-
-    /* border: 1px solid var(--third-color); */
+    /* border: 1px solid green; */
 }
 
-.active-chat-input-container__input-box {
+.active-chat-input-container {
+    --input-send-btn-width: 35px;
+    --input-send-btn-height: 35px;
+}
+
+.active-chat-input-container__enable-box {
     width: 100%;
+    position: relative;
     display: none;
     flex-direction: row;
     justify-content: space-between;
@@ -878,9 +883,10 @@ svg {
     background-size: cover;
     background-attachment: fixed;
     background-color: var(--fourth-color);
+    /* border: 1px solid red; */
 }
 
-.active-chat-input-container--enable .active-chat-input-container__input-box {
+.active-chat-input-container--enable .active-chat-input-container__enable-box {
     display: flex;
 }
 
@@ -913,7 +919,10 @@ svg {
     height: auto;
     position: relative;
     /* border: 1px solid; */
+    display: none;
 }
+
+
 
 .active-chat-input-box__text {
     display: block;
@@ -923,7 +932,7 @@ svg {
     min-height: 40px;
     resize: none;
     border: 1px solid rgba(var(--rgba-first-color), 0.5);
-    border-radius: 10px 10px 10px 0px;
+    border-radius: 10px 10px 10px 10px;
     outline: none;
     padding: 7px 0 7px 34px;
     font-size: 18px;
@@ -950,6 +959,7 @@ svg {
     width: 100vw;
     height: 315px;
     border-radius: 5px;
+    z-index: 1;
     display: block;
 }
 
@@ -1026,11 +1036,12 @@ em-emoji-picker {
 .active-chat-send-box {
     padding: 5px;
     align-self: flex-end;
+    display: none;
 }
 
 .active-chat-send-box__btn {
-    width: 35px;
-    height: 35px;
+    width: var(--input-send-btn-width);
+    height: var(--input-send-btn-height);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1133,8 +1144,8 @@ em-emoji-picker {
 
 /*/////////////////////////////////////////////// */
 
-/* active-chat-attachment-btn-modal */
-.active-chat-attachment-btn-modal {
+/* active-chat-atachment-btn-modal */
+.active-chat-atachment-btn-modal {
     position: fixed;
     top: 0;
     left: 50%;
@@ -1152,11 +1163,11 @@ em-emoji-picker {
 
 
 
-.active-chat-attachment-btn-modal--hide {
+.active-chat-atachment-btn-modal--hide {
     display: none;
 }
 
-.active-chat-attachment-btn-modal-content {
+.active-chat-atachment-btn-modal-content {
     color: var(--third-color);
     background-color: rgba(var(--rgba-first-color), 1);
     width: auto;
@@ -1175,7 +1186,7 @@ em-emoji-picker {
     transition: all 0.5s;
 }
 
-.active-chat-attachment-btn-modal-content::-webkit-scrollbar {
+.active-chat-atachment-btn-modal-content::-webkit-scrollbar {
     /* WebKit */
     width: 0;
     height: 0;
@@ -1186,7 +1197,7 @@ em-emoji-picker {
 
 
 
-.attachment-btn-section {
+.atachment-btn-section {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1194,7 +1205,7 @@ em-emoji-picker {
     border-bottom: 1px solid rgba(var(--rgba-first-color), 0.1);
 }
 
-.attachment-btn-section__row {
+.atachment-btn-section__row {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -1202,24 +1213,24 @@ em-emoji-picker {
     padding: 0 12px 0 5px;
 }
 
-.attachment-btn-section__img {
+.atachment-btn-section__img {
     width: 40px;
     height: 40px;
     padding: 5px;
 }
 
-.attachment-btn-section__img svg {
+.atachment-btn-section__img svg {
     width: 100%;
     height: 100%;
     fill: var(--second-color);
 }
 
-.attachment-btn-section__title {
+.atachment-btn-section__title {
     font-size: 17px;
     font-weight: 800;
 }
 
-.attachment-btn-section__data {
+.atachment-btn-section__data {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -1239,11 +1250,11 @@ em-emoji-picker {
 
 
 
-.attachment-btn-section__data--hide {
+.atachment-btn-section__data--hide {
     display: none;
 }
 
-.attachment-btn-section__input {
+.atachment-btn-section__input {
     display: block;
     width: 100%;
     font-size: 16px;
@@ -1253,7 +1264,7 @@ em-emoji-picker {
     border-radius: 5px;
 }
 
-.attachment-btn-section__send {
+.atachment-btn-section__send {
     background-color: var(--third-color);
     color: var(--fourth-color);
     padding: 2px 5px;
@@ -1538,4 +1549,92 @@ em-emoji-picker {
     font-size: 20px;
     font-weight: 700;
     padding: 0 0 0 5px;
+}
+
+
+
+
+/* /////////////////////////// */
+.active-chat-input-attachment-box {
+    /* display: none; */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* border: 1px solid; */
+}
+
+.active-chat-input-attachment-box__btn {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    /* btn width + right padding + left Padding + 10px extra  */
+    right: calc(var(--input-send-btn-width) + 5px + 5px + 10px);
+    z-index: 1;
+    /* display: none; */
+}
+
+.active-chat-input-attachment-box__btn--selected {
+    right: 0;
+    margin-right: 10px;
+    position: relative;
+}
+
+.active-chat-input-attachment-box__btn svg {
+    width: 100%;
+    height: 100%;
+    fill: rgba(var(--rgba-first-color), 0.4);
+}
+
+.input-attachment-btn-container {
+    /* display: none; */
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.input-attachment-btn-box {}
+
+.input-attachment-btn-box__icon {display: flex;flex-direction: column;align-items: center;font-size: 16px;color: rgba(var(--rgba-first-color),1);font-weight: 800;justify-content: flex-start;}
+
+.input-attachment-btn-box__icon svg {
+    width: 30px;
+    height: 29px;
+    fill: rgba(var(--rgba-first-color), 1);
+}
+
+.input-attachment-btn-box__input-box {
+    /* display: none; */
+    position: absolute;
+    bottom: 110%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-attachment-btn-box__input-box--hide {}
+
+.input-attachment-btn-box__input {
+    flex-grow: 1;
+    font-size: 14px;
+    font-weight: 600;
+    outline: 0;
+    border-radius: 5px;
+    border: 1px solid rgba(var(--rgba-first-color),1);
+    padding: 5px 5px;
+}
+
+.input-attachment-btn-box__send-btn {
+    position: absolute;
+    right: 0;
+    padding: 2px 3px;
+    background: rgba(var(--rgba-first-color),1);
+    color: rgba(var(--rgba-third-color),1);
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0px 0 5px;
 }
