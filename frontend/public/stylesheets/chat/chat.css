@@ -521,8 +521,7 @@ svg {
     max-width: 85%;
 }
 
-
-
+.active-chat-user-message-box__content {}
 
 
 
@@ -537,7 +536,7 @@ svg {
     margin: 10px 0;
 }
 
-.active-chat-user-message-box__video-content {}
+.active-chat-user-message-box__content--video {}
 
 .active-chat-user-message-box--audio {
     margin: 5px 0 0 0;
@@ -566,7 +565,7 @@ svg {
     margin: 10px 0;
 }
 
-.active-chat-user-message-box__youtube-content {}
+.active-chat-user-message-box__content--youtube {}
 
 .active-chat-user-message-box--image {
     margin: 8px 0 0 0;
@@ -578,7 +577,7 @@ svg {
     width: 85%;
 }
 
-.active-chat-user-message-box__image-content {
+.active-chat-user-message-box__content--image {
     width: 100%;
     /* height: 100%; */
     border-radius: 10px;
@@ -605,7 +604,7 @@ svg {
     color: rgba(var(--rgba-fourth-color), 0.7);
 }
 
-.active-chat-user-message-box__text-content {
+.active-chat-user-message-box__content--text {
     display: inline-block;
     font-size: 17px;
     font-weight: 700;
@@ -737,6 +736,74 @@ svg {
 .active-chat-user-message-box__btn svg {
     fill: rgba(var(--rgba-first-color), 1);
 }
+
+/* active-chat-user-message-box--deleted-message */
+.active-chat-user-message-box--deleted-message {
+    margin: 4px 0 0 0;
+}
+
+.active-chat-user-message-box__content-box--deleted-message {
+    padding: 5px 8px 3px 8px;
+    border-radius: 15px 15px 15px 0px;
+    background: rgba(var(--rgba-second-color), 1);
+    color: rgba(var(--rgba-first-color), 1);
+    width: auto;
+    opacity: 0.5;
+}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__content-box--deleted-message {
+    padding: 5px 8px 3px 8px;
+    border-radius: 15px 15px 0px 15px;
+    background: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-fourth-color), 0.7);
+    width: auto;
+}
+
+.active-chat-user-message-box__content--deleted-message {
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* opacity: 0.6; */
+}
+
+
+
+.active-chat-user-message-box__content--deleted-message svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(var(--rgba-first-color), 0.8);
+    margin: 0 6px 0 0;
+}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__content--deleted-message svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(var(--rgba-fourth-color), 0.7);
+    margin: 0 6px 0 0;
+}
+
+.active-chat-user-message-box__content-info--deleted-message {
+    position: relative;
+    display: none;
+    bottom: -4px;
+    right: 0px;
+    float: right;
+    background: transparent;
+    color: rgba(var(--rgba-first-color), 0.4);
+    padding: 0 0;
+    margin-left: 10px;
+}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__content-info--deleted-message {}
+
+.active-chat-user-message-box__content-time--deleted-message {}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__content-time--deleted-message {}
+
+/* ////////////////////////// */
+
 
 
 /* active-chat-info-message-box  */

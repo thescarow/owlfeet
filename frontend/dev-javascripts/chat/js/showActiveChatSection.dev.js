@@ -18,7 +18,7 @@ export async function showActiveChatSection(chat) {
   /////////////////////
   const { checkTimeAndCreateOldMessage } = await import("./message.dev")
 
-  fetch(`/message/fetch-message/${chat._id}`)
+  fetch(`/message/fetch-messages/${chat._id}`)
     .then(response => {
       if (response.ok) {
         return response.json()
@@ -27,9 +27,9 @@ export async function showActiveChatSection(chat) {
     })
     .then(data => {
       if (data.isSuccess) {
-        console.log(data.allMessage)
+        console.log(data.allMessages)
         checkTimeAndCreateOldMessage(
-          data.allMessage,
+          data.allMessages,
           activeChatMessageContainer
         )
       } else {

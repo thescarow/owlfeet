@@ -35,11 +35,34 @@ const svg_messageCopyIconBlank = `<svg width="100" height="100" viewBox="0 0 100
 <path d="M25.0018 25.5328L25 65.625C25 73.9093 31.4471 80.6877 39.5977 81.2168L40.625 81.25L68.215 81.2544C66.9268 84.8933 63.4553 87.5 59.375 87.5H37.5C27.1447 87.5 18.75 79.1053 18.75 68.75V34.375C18.75 30.2924 21.3596 26.8193 25.0018 25.5328ZM71.875 12.5C77.0527 12.5 81.25 16.6973 81.25 21.875V65.625C81.25 70.8027 77.0527 75 71.875 75H40.625C35.4473 75 31.25 70.8027 31.25 65.625V21.875C31.25 16.6973 35.4473 12.5 40.625 12.5H71.875ZM71.875 18.75H40.625C38.8991 18.75 37.5 20.1491 37.5 21.875V65.625C37.5 67.3509 38.8991 68.75 40.625 68.75H71.875C73.6009 68.75 75 67.3509 75 65.625V21.875C75 20.1491 73.6009 18.75 71.875 18.75Z"  stroke-width="3"/>
 </svg>
 `
+
+let userMessageSenderOptions = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
+<div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
+<div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
+<div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="true">${svg_messageDeleteIconBlank}Delete</div>
+<div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
+<div class="inner-modal-option" data-user-message-option-btn="seenBy">${svg_messageSeenByIconBlank}Seen By</div>
+<div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+
+let userMessageOtherUserOptions = `<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
+<div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
+<div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
+<div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
+<div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
+<div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+
+let userMessageDeletedMessageOptions = `<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
+
+<div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
+<div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
+<div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
 import "../css/userMessageOptionModal.dev.css"
+import { unSelectUserMessage } from "./message.dev"
+
 export async function createUserMessageOptionModal(userMessageBox) {
   let senderId = userMessageBox.dataset.senderId
   let messageId = userMessageBox.dataset.messageId
-  console.log(senderId, messageId)
+
   let activeChatSection = document.getElementById("activeChatSection")
   if (activeChatSection) {
     let userMessageOptionModal = document.getElementById(
@@ -70,26 +93,22 @@ export async function createUserMessageOptionModal(userMessageBox) {
     }
     userMessageOptionModal.dataset.messageId = messageId
     userMessageOptionModal.dataset.senderId = senderId
-
-    if (senderId.toString() === loginUser._id.toString()) {
-      document.getElementById(
-        "userMessageOptionsContainer"
-      ).innerHTML = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
-      <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
-      <div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
-      <div class="inner-modal-option" data-user-message-option-btn="delete" >${svg_messageDeleteIconBlank}Delete</div>
-      <div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
-      <div class="inner-modal-option" data-user-message-option-btn="seenBy">${svg_messageSeenByIconBlank}Seen By</div>
-      <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+    let userMessageOptionsContainer = document.getElementById(
+      "userMessageOptionsContainer"
+    )
+    if (
+      userMessageBox.classList.contains(
+        "active-chat-user-message-box--deleted-message"
+      )
+    ) {
+      userMessageOptionsContainer.innerHTML = userMessageDeletedMessageOptions
     } else {
-      document.getElementById(
-        "userMessageOptionsContainer"
-      ).innerHTML = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
-      <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
-      <div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
-      <div class="inner-modal-option" data-user-message-option-btn="delete" >${svg_messageDeleteIconBlank}Delete</div>
-      <div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
-      <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+      if (senderId.toString() === loginUser._id.toString()) {
+        userMessageOptionsContainer.innerHTML = userMessageSenderOptions
+      }
+      if (senderId.toString() !== loginUser._id.toString()) {
+        userMessageOptionsContainer.innerHTML = userMessageOtherUserOptions
+      }
     }
   }
 }
@@ -110,17 +129,13 @@ async function initialiseEventForUserMessageOptionModal(
     ) {
       let messageId = userMessageOptionModal.dataset.messageId
       let senderId = userMessageOptionModal.dataset.senderId
-
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "delete") {
-        createMessageDeleteModal(messageId, senderId)
+        let enableForAll = userMessageOptionBtn.dataset.enableForAll
+        enableForAll = enableForAll && enableForAll === "true"
+        createMessageDeleteModal(messageId, enableForAll)
       }
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
-        document
-          .querySelector(
-            `.active-chat-user-message-box[data-message-id="${messageId}"`
-          )
-          .classList.remove("active-chat-user-message-box--selected")
-
+        unSelectUserMessage(messageId)
         userMessageOptionModal.classList.add("inner-modal--hide")
       }
     } else {
@@ -130,12 +145,20 @@ async function initialiseEventForUserMessageOptionModal(
 
   window.addEventListener("click", e => {
     if (e.target === userMessageOptionModal) {
+      let messageId = userMessageOptionModal.dataset.messageId
+      unSelectUserMessage(messageId)
       userMessageOptionModal.classList.add("inner-modal--hide")
     }
   })
 }
 
-async function createMessageDeleteModal(messageId, senderId) {
+async function createMessageDeleteModal(messageId, enableForAll = false) {
+  if (document.getElementById("userMessageOptionModal")) {
+    document
+      .getElementById("userMessageOptionModal")
+      .classList.add("inner-modal--hide")
+  }
+
   let activeChatSection = document.getElementById("activeChatSection")
   if (activeChatSection) {
     let deleteMessageModal = document.getElementById("deleteMessageModal")
@@ -164,7 +187,7 @@ async function createMessageDeleteModal(messageId, senderId) {
           </div>`
 
       activeChatSection.insertAdjacentElement("afterbegin", deleteMessageModal)
-      initialiseEventForDeleteChatModal(deleteMessageModal, messageId, senderId)
+      initialiseEventForDeleteChatModal(deleteMessageModal)
     } else {
       deleteMessageModal.classList.remove("inner-modal--hide")
     }
@@ -173,7 +196,7 @@ async function createMessageDeleteModal(messageId, senderId) {
       deleteMessageModal.getElementsByClassName("inner-modal-main")[0]
 
     innerModalMain.innerHTML = ""
-    if (senderId.toString() === loginUser._id.toString()) {
+    if (enableForAll) {
       innerModalMain.insertAdjacentHTML(
         "beforeend",
         ` <div class="inner-modal-main__info">
@@ -191,21 +214,32 @@ async function createMessageDeleteModal(messageId, senderId) {
             </div>`
       )
     }
+
+    deleteMessageModal.dataset.messageId = messageId
   }
 }
-async function initialiseEventForDeleteChatModal(
-  deleteMessageModal,
-  messageId
-) {
+async function initialiseEventForDeleteChatModal(deleteMessageModal) {
   document
     .getElementById("submitDeleteMessageRequestBtn")
     .addEventListener("click", () => {
-      console.log(messageId)
+      let messageId = deleteMessageModal.dataset.messageId
+      console.log("messageId:", messageId)
       let deleteMessageData = {}
 
       deleteMessageData.id = messageId
 
-      fetch("/chat/delete-user-message", {
+      deleteMessageData.forAll = false
+      let deleteMessageForAllInput = document.getElementById(
+        "deleteMessageForAllInput"
+      )
+      if (
+        deleteMessageForAllInput &&
+        deleteMessageForAllInput.checked === true
+      ) {
+        deleteMessageData.forAll = true
+      }
+
+      fetch("/message/delete-message", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json"
@@ -220,18 +254,18 @@ async function initialiseEventForDeleteChatModal(
         })
         .then(async data => {
           if (data.isSuccess) {
+            unSelectUserMessage(messageId)
             deleteMessageModal.classList.add("inner-modal--hide")
 
-            // let { clearActiveChatMessageContainer } = await import(
-            //   "./showActiveChatSection.dev"
-            // )
-            // let { showAllChatSection, deleteChatBox } = await import(
-            //   "./updateAllChatSection.dev"
-            // )
-
-            // showAllChatSection()
-            // deleteChatBox(data.deletedChatId)
-            // clearActiveChatMessageContainer()
+            if (data.isDeletedForAll) {
+              let { convertUserMessageToDeletedMessageForAll } = await import(
+                "./message.dev"
+              )
+              convertUserMessageToDeletedMessageForAll(data.deletedMessage)
+            } else {
+              let { deleteUserMessage } = await import("./message.dev")
+              deleteUserMessage(data.deletedMessageId)
+            }
           } else {
             createMainNotification(data.error, "error")
           }
@@ -248,10 +282,12 @@ async function initialiseEventForDeleteChatModal(
   document
     .getElementById("closeDeleteMessageModalBtn")
     .addEventListener("click", () => {
+      unSelectUserMessage(deleteMessageModal.dataset.messageId)
       deleteMessageModal.classList.add("inner-modal--hide")
     })
   window.addEventListener("click", e => {
     if (e.target === deleteMessageModal) {
+      unSelectUserMessage(deleteMessageModal.dataset.messageId)
       deleteMessageModal.classList.add("inner-modal--hide")
     }
   })

@@ -3,12 +3,14 @@ const router = Router()
 const { getLoginUser } = require("../middleware/auth.middleware")
 const {
   createMessage,
-  fetchMessage
+  fetchMessages,
+  deleteMessage
   //   fetchAllMessage,
   //   accessChatId
 } = require("../controllers/message")
 
 router.post("/", getLoginUser, createMessage)
-router.get("/fetch-message/:chatId", getLoginUser, fetchMessage)
+router.get("/fetch-messages/:chatId", getLoginUser, fetchMessages)
+router.post("/delete-message", getLoginUser, deleteMessage)
 
 module.exports = router

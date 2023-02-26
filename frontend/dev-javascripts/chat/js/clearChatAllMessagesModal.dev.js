@@ -75,7 +75,7 @@ async function initialiseEventForClearChatAllMessagesModal(
       ) {
         clearChatData.forAll = true
       }
-      console.log(clearChatData)
+
       fetch("/chat/clear-chat-all-messages", {
         method: "POST", // or 'PUT'
         headers: {
