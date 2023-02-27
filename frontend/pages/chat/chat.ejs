@@ -152,14 +152,15 @@
 
     </div>
 
-    <div class="active-chat-input-container " id="activeChatInputContainer">
+    <div class="active-chat-input-container" id="activeChatInputContainer">
 
 
         <div class="active-chat-input-container__enable-box">
 
             <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
 
-                <div class="input-attachment-btn-container">
+                <div class="input-attachment-btn-container input-attachment-btn-container--hide"
+                    id="activeChatInputAttachmentBtnContainer">
 
                     <div class="input-attachment-btn-box">
 
@@ -187,13 +188,17 @@
                     </div>
                 </div>
 
-                <div class="active-chat-input-attachment-box__btn active-chat-input-attachment-box__btn--selected"
-                    id="activeChatInputAttachmentBoxBtn">
+                <div class="active-chat-input-attachment-box__btn " id="activeChatInputAttachmentBoxBtn">
                     <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
                 </div>
 
             </div>
-            <div class="active-chat-input-box">
+
+
+
+
+
+            <div class="active-chat-input-box ">
                 <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
                     id="activeChatInputEmojiContainer">
                 </div>
@@ -207,7 +212,7 @@
                 </div>
 
             </div>
-            <div class="active-chat-send-box">
+            <div class="active-chat-send-box ">
 
                 <div class="active-chat-send-box__btn " id="activeChatInputSendBtn">
                     <%- include('../partials/icons/sendBtn.svg') -%>

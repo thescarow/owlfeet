@@ -41,25 +41,25 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   const activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
-  const activeChatInputRightBtnContainer = document.getElementById(
-    "activeChatInputRightBtnContainer"
+  const activeChatInputAttachmentBox = document.getElementById(
+    "activeChatInputAttachmentBox"
   )
 
   activeChatInputTextContent.addEventListener(
     "input",
     () => {
       if (activeChatInputTextContent.value === "") {
-        activeChatInputRightBtnContainer.classList.remove(
-          "active-chat-input-box__right-btn-container--hide"
+        activeChatInputAttachmentBox.classList.remove(
+          "active-chat-input-attachment-box--hide"
         )
       } else {
         if (
-          !activeChatInputRightBtnContainer.classList.contains(
-            "active-chat-input-box__right-btn-container--hide"
+          !activeChatInputAttachmentBox.classList.contains(
+            "active-chat-input-attachment-box--hide"
           )
         ) {
-          activeChatInputRightBtnContainer.classList.add(
-            "active-chat-input-box__right-btn-container--hide"
+          activeChatInputAttachmentBox.classList.add(
+            "active-chat-input-attachment-box--hide"
           )
         }
       }
@@ -303,58 +303,62 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         )
       })
   })
+
   // active chat input youtube send btn
-  const activeChatInputYoutubeContentSendBtn = document.getElementById(
-    "activeChatInputYoutubeContentSendBtn"
+  const activeChatInputAttachmentYoutubeContentSendBtn =
+    document.getElementById("activeChatInputAttachmentYoutubeContentSendBtn")
+  const activeChatInputAttachmentYoutubeContent = document.getElementById(
+    "activeChatInputAttachmentYoutubeContent"
   )
-  const activeChatInputYoutubeContent = document.getElementById(
-    "activeChatInputYoutubeContent"
-  )
-  activeChatInputYoutubeContentSendBtn.addEventListener("click", () => {
-    let userMessage = {}
+  activeChatInputAttachmentYoutubeContentSendBtn.addEventListener(
+    "click",
+    () => {
+      let userMessage = {}
 
-    if (activeChatInputYoutubeContent.value !== "") {
-      userMessage.chat = activeChatSection.dataset.chatId
-      userMessage.hasMediaContent = true
-      userMessage.mediaContentType = "youtube"
-      userMessage.mediaContentMimeType = "video/mp4"
-      userMessage.mediaContentPath = activeChatInputYoutubeContent.value
+      if (activeChatInputAttachmentYoutubeContent.value !== "") {
+        userMessage.chat = activeChatSection.dataset.chatId
+        userMessage.hasMediaContent = true
+        userMessage.mediaContentType = "youtube"
+        userMessage.mediaContentMimeType = "video/mp4"
+        userMessage.mediaContentPath =
+          activeChatInputAttachmentYoutubeContent.value
 
-      activeChatInputYoutubeContent.value = ""
-      fetch("/message", {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userMessage)
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json()
-          }
-          return Promise.reject(response)
+        activeChatInputAttachmentYoutubeContent.value = ""
+        fetch("/message", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userMessage)
         })
-        .then(data => {
-          if (data.isSuccess) {
-            checkTimeAndCreateNewMessage(
-              data.message,
-              activeChatMessageContainer
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+            return Promise.reject(response)
+          })
+          .then(data => {
+            if (data.isSuccess) {
+              checkTimeAndCreateNewMessage(
+                data.message,
+                activeChatMessageContainer
+              )
+              updateAllChatSection(data.message)
+              activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
+            } else {
+              createMainNotification(data.error, "error")
+            }
+          })
+          .catch(err => {
+            console.log(err)
+            createMainNotification(
+              "Server Error In Sending Message, Please Try Again",
+              "error"
             )
-            updateAllChatSection(data.message)
-            activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
-          } else {
-            createMainNotification(data.error, "error")
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          createMainNotification(
-            "Server Error In Sending Message, Please Try Again",
-            "error"
-          )
-        })
+          })
+      }
     }
-  })
+  )
 
   /////////////////////////////////////////////////////////////
   // active chat input send btn
