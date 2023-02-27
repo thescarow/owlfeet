@@ -1045,17 +1045,17 @@ em-emoji-picker {
 }
 
 /* active-chat-send-box  */
-.active-chat-send-box {
+.active-chat-input-send-box {
     padding: 5px;
     align-self: flex-end;
 
 }
 
-.active-chat-send-box--hide {
+.active-chat-input-send-box--hide {
     display: none;
 }
 
-.active-chat-send-box__btn {
+.active-chat-input-send-box__btn {
     width: var(--input-send-btn-width);
     height: var(--input-send-btn-height);
     display: flex;
@@ -1065,13 +1065,13 @@ em-emoji-picker {
     background-color: var(--first-color);
 }
 
-.active-chat-send-box__btn svg {
+.active-chat-input-send-box__btn svg {
     width: 60%;
     height: 60%;
     fill: var(--third-color);
 }
 
-.active-chat-send-box__btn--hide {
+.active-chat-input-send-box__btn--hide {
     display: none;
 }
 
