@@ -6,7 +6,6 @@
 
 
 
-
 <div class="chat-main-container" id="chatMainContainer">
 
 
@@ -26,7 +25,7 @@
             <% locals.allChat.forEach(chat=>{ -%>
 
 
-                < class="chat-box" data-chat-id='<%=chat._id-%>'>
+                <div class="chat-box" data-chat-id='<%=chat._id-%>'>
 
                     <div class="chat-box__column chat-box__column--img">
                         <div
@@ -102,148 +101,133 @@
                     <div class="chat-box__latest-message-time">
                         <%= chat.hasOwnProperty("latestMessageTime") ? chat.latestMessageTime: chat.chatCreatedTime -%>
                     </div>
-        </div>
+                </div>
 
 
-        <% }) -%>
-
-</div>
-
-
-
-
-</section>
-
-
-<section class="active-chat-section active-chat-section--hide" id="activeChatSection" data-chat-id="">
-
-    <div class="active-chat-header" id="activeChatHeader">
-        <div class="active-chat-header__left-btn-container">
-            <div class="active-chat-header__btn" id="ActiveChatToAllChatBtn">
-                <%- include("../partials/icons/backBtn.svg") _%>
-            </div>
-        </div>
-        <div class="active-chat-header__pic active-chat-header__pic--hide-img" id="activeChatHeaderPic">
-            <img src="" id="activeChatImg" alt="">
-            <%- include('../partials/icons/chatPic.svg') -%>
+                <% }) -%>
 
         </div>
-        <div class="active-chat-header__column active-chat-header__column--user-data" id="activeChatHeaderUserData">
-            <div class="active-chat-header__title" id="activeChatHeaderName">
-                Chat Name
+
+
+
+
+    </section>
+
+
+    <section class="active-chat-section active-chat-section--hide" id="activeChatSection" data-chat-id="">
+
+        <div class="active-chat-header" id="activeChatHeader">
+            <div class="active-chat-header__left-btn-container">
+                <div class="active-chat-header__btn" id="ActiveChatToAllChatBtn">
+                    <%- include("../partials/icons/backBtn.svg") _%>
+                </div>
             </div>
-            <div class="active-chat-header__chat-status" id="activeChatHeaderStatus">
-                Active
+            <div class="active-chat-header__pic active-chat-header__pic--hide-img" id="activeChatHeaderPic">
+                <img src="" id="activeChatImg" alt="">
+                <%- include('../partials/icons/chatPic.svg') -%>
+
+            </div>
+            <div class="active-chat-header__column active-chat-header__column--user-data" id="activeChatHeaderUserData">
+                <div class="active-chat-header__title" id="activeChatHeaderName">
+                    Chat Name
+                </div>
+                <div class="active-chat-header__chat-status" id="activeChatHeaderStatus">
+                    Active
+                </div>
+            </div>
+            <div class="active-chat-header__right-btn-container">
+                <div class="active-chat-header__btn" id="activeChatAudioCallBtn">
+                    <%- include('../partials/icons/audioCallBtn.svg') -%>
+                </div>
+
+                <div class="active-chat-header__btn" id="activeChatInfoBtn">
+                    <%- include('../partials/icons/infoBtn.svg') -%>
+                </div>
+
             </div>
         </div>
-        <div class="active-chat-header__right-btn-container">
-            <div class="active-chat-header__btn" id="activeChatAudioCallBtn">
-                <%- include('../partials/icons/audioCallBtn.svg') -%>
-            </div>
 
-            <div class="active-chat-header__btn" id="activeChatInfoBtn">
-                <%- include('../partials/icons/infoBtn.svg') -%>
-            </div>
+        <div class="active-chat-message-container" id="activeChatMessageContainer">
 
         </div>
-    </div>
 
-    <div class="active-chat-message-container" id="activeChatMessageContainer">
-
-    </div>
-
-    <div class="active-chat-input-container" id="activeChatInputContainer">
+        <div class="active-chat-input-container" id="activeChatInputContainer">
 
 
-        <div class="active-chat-input-container__enable-box">
+            <div class="active-chat-input-container__enable-box">
 
-            <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
+                <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
 
-                <div class="input-attachment-btn-container input-attachment-btn-container--hide"
-                    id="activeChatInputAttachmentBtnContainer">
+                    <div class="input-attachment-btn-container input-attachment-btn-container--hide"
+                        id="activeChatInputAttachmentBtnContainer">
 
-                    <div class="input-attachment-btn-box">
+                        <div class="input-attachment-btn-box">
 
-                        <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentYoutubeBtn">
-                            <%- include("../partials/icons/youtubeAttachmentIcon.svg") -%>
-                                Youtube
-                        </div>
-                        <div class="input-attachment-btn-box__input-box attachment-btn-box__input-box--hide"
-                            id="activeChatInputAttachmentYoutubeBtnInputBox">
-                            <input type="url" class="input-attachment-btn-box__input" placeholder="Youtube Url"
-                                id="activeChatInputAttachmentYoutubeContent">
-                            <div class="input-attachment-btn-box__send-btn"
-                                id="activeChatInputAttachmentYoutubeContentSendBtn">
-                                Send
+                            <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentYoutubeBtn">
+                                <%- include("../partials/icons/youtubeAttachmentIcon.svg") -%>
+                                    Youtube
+                            </div>
+                            <div class="input-attachment-btn-box__input-box attachment-btn-box__input-box--hide"
+                                id="activeChatInputAttachmentYoutubeBtnInputBox">
+                                <input type="url" class="input-attachment-btn-box__input" placeholder="Youtube Url"
+                                    id="activeChatInputAttachmentYoutubeContent">
+                                <div class="input-attachment-btn-box__send-btn"
+                                    id="activeChatInputAttachmentYoutubeContentSendBtn">
+                                    Send
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="input-attachment-btn-box">
+                        <div class="input-attachment-btn-box">
 
-                        <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentFileBtn">
-                            <%- include("../partials/icons/fileAttachmentBlankIcon.svg") -%>
-                                File
+                            <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentFileBtn">
+                                <%- include("../partials/icons/fileAttachmentBlankIcon.svg") -%>
+                                    File
+                            </div>
+
                         </div>
+                    </div>
 
+                    <div class="active-chat-input-attachment-box__btn" id="activeChatInputAttachmentBoxBtn">
+                        <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="active-chat-input-box" id="activeChatInputBox">
+                    <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
+                        id="activeChatInputEmojiContainer">
+                    </div>
+
+                    <textarea class="active-chat-input-box__text" rows="1" placeholder="Message..."
+                        id="activeChatInputTextContent"></textarea>
+                    <div class="active-chat-input-box__left-btn-container">
+                        <div class="active-chat-input-box__btn" id="activeChatInputEmojiBtn">
+                            <%- include('../partials/icons/emojiBtn.svg') -%>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="active-chat-input-send-box" id="activeChatInputSendBox">
+
+                    <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
+                        <%- include('../partials/icons/sendBtn.svg') -%>
                     </div>
                 </div>
 
-                <div class="active-chat-input-attachment-box__btn" id="activeChatInputAttachmentBoxBtn">
-                    <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
-                </div>
-
             </div>
-
-
-
-
-
-            <div class="active-chat-input-box" id="activeChatInputBox">
-                <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
-                    id="activeChatInputEmojiContainer">
-                </div>
-
-                <textarea class="active-chat-input-box__text" rows="1" placeholder="Message..."
-                    id="activeChatInputTextContent"></textarea>
-                <div class="active-chat-input-box__left-btn-container">
-                    <div class="active-chat-input-box__btn" id="activeChatInputEmojiBtn">
-                        <%- include('../partials/icons/emojiBtn.svg') -%>
-                    </div>
-                </div>
-
-            </div>
-            <div class="active-chat-input-send-box" id="activeChatInputSendBox">
-
-                <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
-                    <%- include('../partials/icons/sendBtn.svg') -%>
+            <div class="active-chat-input-container__disable-box">
+                <div class="active-chat-input-disable-title">
+                    You are not allowed to send message in this group.
                 </div>
             </div>
 
         </div>
-        <div class="active-chat-input-container__disable-box">
-            <div class="active-chat-input-disable-title">
-                You are not allowed to send message in this group.
-            </div>
-        </div>
 
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</section>
+    </section>
 
 
 </div>
