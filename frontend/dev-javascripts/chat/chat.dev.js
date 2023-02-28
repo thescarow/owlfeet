@@ -289,7 +289,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       .then(data => {
         if (data.isSuccess) {
           checkTimeAndCreateNewMessage(data.message, activeChatMessageContainer)
-          activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
+
           updateAllChatSection(data.message)
         } else {
           createMainNotification(data.error, "error")
@@ -439,6 +439,12 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   )
 
   activeChatInputAttachmentBoxBtn.addEventListener("click", () => {
+    console.log(
+      "clicked bro",
+      activeChatInputAttachmentBoxBtn.classList.contains(
+        "active-chat-input-attachment-box__btn--selected"
+      )
+    )
     if (
       activeChatInputAttachmentBoxBtn.classList.contains(
         "active-chat-input-attachment-box__btn--selected"
@@ -446,7 +452,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     ) {
       openActiveChatInputBox()
     } else {
-      openActivechatInputAttachmentBox
+      openActivechatInputAttachmentBox()
     }
   })
 
@@ -457,8 +463,9 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     "activeChatInputAttachmentYoutubeBtnInputBox"
   )
   activeChatInputAttachmentYoutubeBtn.addEventListener("click", () => {
+    console.log("clicked")
     activeChatInputAttachmentYoutubeBtnInputBox.classList.toggle(
-      "attachment-btn-box__input-box--hide"
+      "input-attachment-btn-box__input-box--hide"
     )
   })
 

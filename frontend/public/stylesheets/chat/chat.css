@@ -1146,7 +1146,7 @@ em-emoji-picker {
 }
 
 .input-attachment-btn-box__input-box {
-    /* display: none; */
+    display: inline-block;
     position: absolute;
     bottom: 110%;
     left: 0;
