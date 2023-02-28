@@ -439,12 +439,6 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   )
 
   activeChatInputAttachmentBoxBtn.addEventListener("click", () => {
-    console.log(
-      "clicked bro",
-      activeChatInputAttachmentBoxBtn.classList.contains(
-        "active-chat-input-attachment-box__btn--selected"
-      )
-    )
     if (
       activeChatInputAttachmentBoxBtn.classList.contains(
         "active-chat-input-attachment-box__btn--selected"
@@ -463,7 +457,6 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     "activeChatInputAttachmentYoutubeBtnInputBox"
   )
   activeChatInputAttachmentYoutubeBtn.addEventListener("click", () => {
-    console.log("clicked")
     activeChatInputAttachmentYoutubeBtnInputBox.classList.toggle(
       "input-attachment-btn-box__input-box--hide"
     )
