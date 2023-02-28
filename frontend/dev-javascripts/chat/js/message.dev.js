@@ -503,7 +503,6 @@ activeChatMessageContainer.addEventListener("click", async e => {
 
     createUserMessageOptionModal(userMessageBox)
   } else {
-    console.log("click on wrong place")
     return
   }
 })
