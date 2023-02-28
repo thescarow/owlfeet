@@ -289,7 +289,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       .then(data => {
         if (data.isSuccess) {
           checkTimeAndCreateNewMessage(data.message, activeChatMessageContainer)
-          activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
+
           updateAllChatSection(data.message)
         } else {
           createMainNotification(data.error, "error")
@@ -307,6 +307,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   // active chat input youtube send btn
   const activeChatInputAttachmentYoutubeContentSendBtn =
     document.getElementById("activeChatInputAttachmentYoutubeContentSendBtn")
+
   const activeChatInputAttachmentYoutubeContent = document.getElementById(
     "activeChatInputAttachmentYoutubeContent"
   )
@@ -344,7 +345,9 @@ const { createMainNotification } = require("../common/mainNotification.dev")
                 activeChatMessageContainer
               )
               updateAllChatSection(data.message)
-              activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
+              activeChatInputAttachmentYoutubeBtnInputBox.classList.add(
+                "attachment-btn-box__input-box--hide"
+              )
             } else {
               createMainNotification(data.error, "error")
             }
@@ -391,8 +394,8 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         })
         .then(data => {
           if (data.isSuccess) {
-            activeChatInputRightBtnContainer.classList.remove(
-              "active-chat-input-box__right-btn-container--hide"
+            activeChatInputAttachmentBox.classList.remove(
+              "active-chat-input-attachment-box--hide"
             )
             activeChatInputTextContent.style.height = "auto"
             activeChatInputTextContent.style.height =
@@ -428,46 +431,82 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   })
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // modals
 
-  // active chat attachment btn
+  // active-chat-input-attachment-box
 
-  const activeChatInputAttachmentBtn = document.getElementById(
-    "activeChatInputAttachmentBtn"
+  const activeChatInputAttachmentBoxBtn = document.getElementById(
+    "activeChatInputAttachmentBoxBtn"
   )
-  const activeChatAttachmentBtnModal = document.getElementById(
-    "activeChatAttachmentBtnModal"
-  )
-  activeChatInputAttachmentBtn.addEventListener("click", () => {
-    activeChatAttachmentBtnModal.classList.toggle("chat-modal--hide")
+
+  activeChatInputAttachmentBoxBtn.addEventListener("click", () => {
+    if (
+      activeChatInputAttachmentBoxBtn.classList.contains(
+        "active-chat-input-attachment-box__btn--selected"
+      )
+    ) {
+      openActiveChatInputBox()
+    } else {
+      openActivechatInputAttachmentBox()
+    }
   })
 
   const activeChatInputAttachmentYoutubeBtn = document.getElementById(
     "activeChatInputAttachmentYoutubeBtn"
   )
-  const activeChatInputAttachmentYoutubeBtnData = document.getElementById(
-    "activeChatInputAttachmentYoutubeBtnData"
+  const activeChatInputAttachmentYoutubeBtnInputBox = document.getElementById(
+    "activeChatInputAttachmentYoutubeBtnInputBox"
   )
   activeChatInputAttachmentYoutubeBtn.addEventListener("click", () => {
-    activeChatInputAttachmentYoutubeBtnData.classList.toggle(
-      "attachment-btn-section__data--hide"
+    activeChatInputAttachmentYoutubeBtnInputBox.classList.toggle(
+      "input-attachment-btn-box__input-box--hide"
     )
   })
-  //////////////////////////////////////////////
-  // active chat message info modal
-  const activeChatMessageInfoModal = document.getElementById(
-    "activeChatMessageInfoModal"
-  )
 
-  window.addEventListener("click", event => {
-    if (event.target === activeChatAttachmentBtnModal) {
-      activeChatAttachmentBtnModal.classList.add("chat-modal--hide")
-    }
+  function openActivechatInputAttachmentBox() {
+    document
+      .getElementById("activeChatInputAttachmentBoxBtn")
+      .classList.add("active-chat-input-attachment-box__btn--selected")
 
-    if (event.target === activeChatMessageInfoModal) {
-      activeChatMessageInfoModal.classList.add("chat-modal--hide")
-    }
-  })
+    const activeChatInputAttachmentBox = document.getElementById(
+      "activeChatInputAttachmentBox"
+    )
+    activeChatInputAttachmentBox.classList.add(
+      "active-chat-input-attachment-box--selected"
+    )
+    activeChatInputAttachmentBox.classList.remove(
+      "active-chat-input-attachment-box--hide"
+    )
+    document
+      .getElementById("activeChatInputAttachmentBtnContainer")
+      .classList.remove("input-attachment-btn-container--hide")
+    document
+      .getElementById("activeChatInputBox")
+      .classList.add("active-chat-input-box--hide")
+
+    document
+      .getElementById("activeChatInputSendBox")
+      .classList.add("active-chat-input-send-box--hide")
+  }
+  function openActiveChatInputBox() {
+    document
+      .getElementById("activeChatInputAttachmentBoxBtn")
+      .classList.remove("active-chat-input-attachment-box__btn--selected")
+    document
+      .getElementById("activeChatInputAttachmentBox")
+      .classList.remove("active-chat-input-attachment-box--selected")
+
+    document
+      .getElementById("activeChatInputAttachmentBtnContainer")
+      .classList.add("input-attachment-btn-container--hide")
+
+    document
+      .getElementById("activeChatInputBox")
+      .classList.remove("active-chat-input-box--hide")
+
+    document
+      .getElementById("activeChatInputSendBox")
+      .classList.remove("active-chat-input-send-box--hide")
+  }
 
   // initialize event to active chat
   ////////////////////
