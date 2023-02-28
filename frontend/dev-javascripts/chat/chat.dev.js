@@ -344,6 +344,9 @@ const { createMainNotification } = require("../common/mainNotification.dev")
                 data.message,
                 activeChatMessageContainer
               )
+              document
+                .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
+                .classList.add("input-attachment-btn-box__input-box--hide")
               updateAllChatSection(data.message)
               activeChatInputAttachmentYoutubeBtnInputBox.classList.add(
                 "attachment-btn-box__input-box--hide"
@@ -462,52 +465,6 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     )
   })
 
-  function openActivechatInputAttachmentBox() {
-    document
-      .getElementById("activeChatInputAttachmentBoxBtn")
-      .classList.add("active-chat-input-attachment-box__btn--selected")
-
-    const activeChatInputAttachmentBox = document.getElementById(
-      "activeChatInputAttachmentBox"
-    )
-    activeChatInputAttachmentBox.classList.add(
-      "active-chat-input-attachment-box--selected"
-    )
-    activeChatInputAttachmentBox.classList.remove(
-      "active-chat-input-attachment-box--hide"
-    )
-    document
-      .getElementById("activeChatInputAttachmentBtnContainer")
-      .classList.remove("input-attachment-btn-container--hide")
-    document
-      .getElementById("activeChatInputBox")
-      .classList.add("active-chat-input-box--hide")
-
-    document
-      .getElementById("activeChatInputSendBox")
-      .classList.add("active-chat-input-send-box--hide")
-  }
-  function openActiveChatInputBox() {
-    document
-      .getElementById("activeChatInputAttachmentBoxBtn")
-      .classList.remove("active-chat-input-attachment-box__btn--selected")
-    document
-      .getElementById("activeChatInputAttachmentBox")
-      .classList.remove("active-chat-input-attachment-box--selected")
-
-    document
-      .getElementById("activeChatInputAttachmentBtnContainer")
-      .classList.add("input-attachment-btn-container--hide")
-
-    document
-      .getElementById("activeChatInputBox")
-      .classList.remove("active-chat-input-box--hide")
-
-    document
-      .getElementById("activeChatInputSendBox")
-      .classList.remove("active-chat-input-send-box--hide")
-  }
-
   // initialize event to active chat
   ////////////////////
   ///////////////////
@@ -553,3 +510,52 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     createGroupChatFormModal()
   })
 })()
+
+export function openActivechatInputAttachmentBox() {
+  document
+    .getElementById("activeChatInputAttachmentBoxBtn")
+    .classList.add("active-chat-input-attachment-box__btn--selected")
+
+  const activeChatInputAttachmentBox = document.getElementById(
+    "activeChatInputAttachmentBox"
+  )
+  activeChatInputAttachmentBox.classList.add(
+    "active-chat-input-attachment-box--selected"
+  )
+  activeChatInputAttachmentBox.classList.remove(
+    "active-chat-input-attachment-box--hide"
+  )
+  document
+    .getElementById("activeChatInputAttachmentBtnContainer")
+    .classList.remove("input-attachment-btn-container--hide")
+  document
+    .getElementById("activeChatInputBox")
+    .classList.add("active-chat-input-box--hide")
+
+  document
+    .getElementById("activeChatInputSendBox")
+    .classList.add("active-chat-input-send-box--hide")
+  document
+    .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
+    .classList.add("input-attachment-btn-box__input-box--hide")
+}
+export function openActiveChatInputBox() {
+  document
+    .getElementById("activeChatInputAttachmentBoxBtn")
+    .classList.remove("active-chat-input-attachment-box__btn--selected")
+  document
+    .getElementById("activeChatInputAttachmentBox")
+    .classList.remove("active-chat-input-attachment-box--selected")
+
+  document
+    .getElementById("activeChatInputAttachmentBtnContainer")
+    .classList.add("input-attachment-btn-container--hide")
+
+  document
+    .getElementById("activeChatInputBox")
+    .classList.remove("active-chat-input-box--hide")
+
+  document
+    .getElementById("activeChatInputSendBox")
+    .classList.remove("active-chat-input-send-box--hide")
+}
