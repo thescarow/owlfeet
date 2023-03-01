@@ -12,7 +12,8 @@ export async function showActiveChatSection(chat) {
 
   activeChatInputTextContent.value = ""
   activeChatMessageContainer.innerHTML = ""
-
+  let { openActiveChatInputBox } = await import("../chat.dev.js")
+  openActiveChatInputBox()
   updateActiveChatSection(chat)
 
   /////////////////////
