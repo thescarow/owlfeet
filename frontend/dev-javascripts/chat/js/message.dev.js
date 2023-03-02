@@ -211,7 +211,9 @@ export function createUserMessage(
       message.isDeletedForAll === false)
   ) {
     let messageBoxInnerHtml = `
+        
         <div class="active-chat-user-message-box__content-box">
+      
            <div class="active-chat-user-message-box__content-info">
                <div class="active-chat-user-message-box__content-time">${getTimeString(
                  message.createdAt
@@ -334,6 +336,19 @@ export function createUserMessage(
 
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
     }
+
+    messageContentBox.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="active-chat-user-message-reply-box">
+    <div class="active-chat-user-message-reply-box__user-name">User1
+    </div>
+   <div class="active-chat-user-message-reply-box__user-message">Hello how are you ?
+  </div>
+</div>`
+    )
+    messageContentBox.classList.add(
+      "active-chat-user-message-box__content-box--reply"
+    )
   } else {
     messageBox.classList.add("active-chat-user-message-box--deleted-message")
 
@@ -367,6 +382,7 @@ export function createUserMessage(
       </div>`
     )
   }
+
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
   activeChatMessageContainer.scrollTop =
