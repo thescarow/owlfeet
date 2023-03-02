@@ -154,69 +154,85 @@
         <div class="active-chat-input-container" id="activeChatInputContainer">
 
 
-            <div class="active-chat-input-container__enable-box">
+            <div class="active-chat-input-container__enable-box active-chat-input-container__enable-box--reply"
+                id="activeChatInputContainerEnableBox">
 
-                <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
 
-                    <div class="input-attachment-btn-container input-attachment-btn-container--hide"
-                        id="activeChatInputAttachmentBtnContainer">
+                <div class="active-chat-input-reply-box active-chat-input-reply-box--hide" id="activeChatInputReplyBox">
 
-                        <div class="input-attachment-btn-box">
+                    <div class="active-chat-input-reply-box__user-name" id="activeChatInputReplyUserName">
+                        User1
+                    </div>
+                    <div class="active-chat-input-reply-box__user-message" id="activeChatInputReplyUserMessage">Hello
+                        how are you ?
+                    </div>
+                    <div class="active-chat-input-reply-box__close-btn">
+                        X
+                    </div>
+                </div>
 
-                            <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentYoutubeBtn">
-                                <%- include("../partials/icons/youtubeAttachmentIcon.svg") -%>
-                                    Youtube
-                            </div>
-                            <div class="input-attachment-btn-box__input-box input-attachment-btn-box__input-box--hide"
-                                id="activeChatInputAttachmentYoutubeBtnInputBox">
-                                <input type="url" class="input-attachment-btn-box__input" placeholder="Youtube Url"
-                                    id="activeChatInputAttachmentYoutubeContent">
-                                <div class="input-attachment-btn-box__send-btn"
-                                    id="activeChatInputAttachmentYoutubeContentSendBtn">
-                                    Send
+
+                <div class="active-chat-input-main">
+                    <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
+
+                        <div class="input-attachment-btn-container input-attachment-btn-container--hide"
+                            id="activeChatInputAttachmentBtnContainer">
+
+                            <div class="input-attachment-btn-box">
+
+                                <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentYoutubeBtn">
+                                    <%- include("../partials/icons/youtubeAttachmentIcon.svg") -%>
+                                        Youtube
+                                </div>
+                                <div class="input-attachment-btn-box__input-box input-attachment-btn-box__input-box--hide"
+                                    id="activeChatInputAttachmentYoutubeBtnInputBox">
+                                    <input type="url" class="input-attachment-btn-box__input" placeholder="Youtube Url"
+                                        id="activeChatInputAttachmentYoutubeContent">
+                                    <div class="input-attachment-btn-box__send-btn"
+                                        id="activeChatInputAttachmentYoutubeContentSendBtn">
+                                        Send
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="input-attachment-btn-box">
+                            <div class="input-attachment-btn-box">
 
-                            <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentFileBtn">
-                                <%- include("../partials/icons/fileAttachmentBlankIcon.svg") -%>
-                                    File
+                                <div class="input-attachment-btn-box__icon" id="activeChatInputAttachmentFileBtn">
+                                    <%- include("../partials/icons/fileAttachmentBlankIcon.svg") -%>
+                                        File
+                                </div>
+
                             </div>
+                        </div>
 
+                        <div class="active-chat-input-attachment-box__btn" id="activeChatInputAttachmentBoxBtn">
+                            <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
+                        </div>
+
+                    </div>
+
+                    <div class="active-chat-input-box" id="activeChatInputBox">
+                        <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
+                            id="activeChatInputEmojiContainer">
+                        </div>
+
+                        <textarea class="active-chat-input-box__text" rows="1" placeholder="Message..."
+                            id="activeChatInputTextContent"></textarea>
+                        <div class="active-chat-input-box__left-btn-container">
+                            <div class="active-chat-input-box__btn" id="activeChatInputEmojiBtn">
+                                <%- include('../partials/icons/emojiBtn.svg') -%>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="active-chat-input-send-box" id="activeChatInputSendBox">
+
+                        <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
+                            <%- include('../partials/icons/sendBtn.svg') -%>
                         </div>
                     </div>
-
-                    <div class="active-chat-input-attachment-box__btn" id="activeChatInputAttachmentBoxBtn">
-                        <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
-                    </div>
-
                 </div>
 
-
-
-
-
-                <div class="active-chat-input-box" id="activeChatInputBox">
-                    <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
-                        id="activeChatInputEmojiContainer">
-                    </div>
-
-                    <textarea class="active-chat-input-box__text" rows="1" placeholder="Message..."
-                        id="activeChatInputTextContent"></textarea>
-                    <div class="active-chat-input-box__left-btn-container">
-                        <div class="active-chat-input-box__btn" id="activeChatInputEmojiBtn">
-                            <%- include('../partials/icons/emojiBtn.svg') -%>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="active-chat-input-send-box" id="activeChatInputSendBox">
-
-                    <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
-                        <%- include('../partials/icons/sendBtn.svg') -%>
-                    </div>
-                </div>
 
             </div>
             <div class="active-chat-input-container__disable-box">

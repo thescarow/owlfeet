@@ -134,6 +134,11 @@ async function initialiseEventForUserMessageOptionModal(
         enableForAll = enableForAll && enableForAll === "true"
         createMessageDeleteModal(messageId, enableForAll)
       }
+
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "reply") {
+        createMessageReplyModal(messageId)
+      }
+
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
         unSelectUserMessage(messageId)
         userMessageOptionModal.classList.add("inner-modal--hide")
@@ -292,3 +297,5 @@ async function initialiseEventForDeleteChatModal(deleteMessageModal) {
     }
   })
 }
+
+async function createMessageReplyModal(messageId) {}

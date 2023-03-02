@@ -37,7 +37,9 @@ const { createMainNotification } = require("../common/mainNotification.dev")
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // active chat input container
-
+  const activeChatInputContainer = document.getElementById(
+    "activeChatInputContainer"
+  )
   const activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
@@ -66,23 +68,16 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       activeChatInputTextContent.style.height = "auto"
       activeChatInputTextContent.style.height =
         activeChatInputTextContent.scrollHeight + "px"
-      activeChatInputTextContent.style.paddingTop = 6 + "px"
-      activeChatInputTextContent.style.paddingBottom = 6 + "px"
-
-      // because 40px is min height of textarea
-      if (
-        parseInt(activeChatInputTextContent.style.height.slice(0, -2)) <= 40
-      ) {
-        activeChatMessageContainer.style.paddingBottom = "60px"
-      } else {
-        activeChatMessageContainer.style.paddingBottom =
-          activeChatInputTextContent.clientHeight + 10 + "px"
-      }
-      activeChatMessageContainer.scrollTop =
-        activeChatMessageContainer.scrollHeight + 1000
+      adjustMessageContainerBottomPadding()
     },
     false
   )
+  function adjustMessageContainerBottomPadding() {
+    activeChatMessageContainer.style.paddingBottom =
+      activeChatInputContainer.clientHeight + 5 + "px"
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight + 1000
+  }
 
   ///////////////////////////////////////////////////
 
