@@ -134,6 +134,14 @@ async function initialiseEventForUserMessageOptionModal(
         enableForAll = enableForAll && enableForAll === "true"
         createMessageDeleteModal(messageId, enableForAll)
       }
+
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "reply") {
+        let { openReplyMessageBox } = await import("../js/replyMessageBox.dev")
+        userMessageOptionModal.classList.add("inner-modal--hide")
+        unSelectUserMessage(messageId)
+        openReplyMessageBox(messageId)
+      }
+
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
         unSelectUserMessage(messageId)
         userMessageOptionModal.classList.add("inner-modal--hide")

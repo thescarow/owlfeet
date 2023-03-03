@@ -506,17 +506,13 @@ ul#settingOptions li:last-child {
 
 @keyframes settingActionContentMotion {
     0% {
-        transform: translateY(-100%) scale(0.5);
+        transform: translateY(-100%);
     }
 
-    90% {
-        transform: translateY(10%) scale(1.1);
-
-    }
+   
 
     100% {
-        transform: translateY(0%) scale(1);
-
+        transform: translateY(0%);
     }
 }
 

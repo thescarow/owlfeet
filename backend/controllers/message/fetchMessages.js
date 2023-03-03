@@ -40,6 +40,24 @@ exports.fetchMessages = async (req, res) => {
               lean: true
             }
           })
+          .populate({
+            path: "repliedTo",
+            select: {
+              hasMediaContent: 1,
+              mediaContentType: 1,
+              textContent: 1,
+              sender: 1,
+              reader: 1
+            },
+            populate: {
+              path: "sender",
+              select: { username: 1, firstName: 1, lastName: 1 }
+            },
+
+            options: {
+              lean: true
+            }
+          })
           .select(selectMessageField)
           .sort({ createdAt: -1 })
           .lean()

@@ -190,10 +190,10 @@
 }
 
 .add-user-searched-user__btn {
-    width: 24px;
+        width: 24px;
     height: 24px;
     position: absolute;
-    right: 16px;
+    right: 34px;
 }
 
 .add-user-searched-user__btn svg {
