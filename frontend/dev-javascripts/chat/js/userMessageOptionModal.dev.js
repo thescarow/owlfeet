@@ -136,7 +136,10 @@ async function initialiseEventForUserMessageOptionModal(
       }
 
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "reply") {
-        createMessageReplyModal(messageId)
+        let { openReplyMessageBox } = await import("../js/replyMessageBox.dev")
+        userMessageOptionModal.classList.add("inner-modal--hide")
+        unSelectUserMessage(messageId)
+        openReplyMessageBox(messageId)
       }
 
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
@@ -297,5 +300,3 @@ async function initialiseEventForDeleteChatModal(deleteMessageModal) {
     }
   })
 }
-
-async function createMessageReplyModal(messageId) {}

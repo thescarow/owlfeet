@@ -528,13 +528,25 @@ svg {
     background: linear-gradient(45deg, rgba(var(--rgba-fourth-color), 1), rgba(var(--rgba-first-color), 0.4));
 }
 
-.active-chat-user-message-reply-box__user-name {
+.active-chat-user-message-reply-box__user {
     font-size: 15px;
     font-weight: 800;
     color: rgba(var(--rgba-first-color), 1);
 }
 
 .active-chat-user-message-reply-box__user-message {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(var(--rgba-first-color), 1);
+}
+
+.active-chat-user-message-reply-box__user-message svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(var(--rgba-first-color), 1);
+}
+
+.active-chat-user-message-reply-box__user-message span {
     font-size: 13px;
     font-weight: 600;
     color: rgba(var(--rgba-first-color), 1);
@@ -549,7 +561,7 @@ svg {
 .active-chat-user-message-box--right .active-chat-user-message-box__content-box--reply {
     background: rgba(var(--rgba-first-color), 1);
     border-top: 2px solid rgba(var(--rgba-first-color), 1);
-    border-radius: 15px 0px 15px 15px;
+    border-radius: 15px 15px 0px 15px;
     padding: 5px 8px 3px 8px;
 }
 
@@ -949,7 +961,7 @@ svg {
 .active-chat-input-reply-box {
     width: 93%;
     position: relative;
-    padding: 2px 5px;
+    padding: 2px 8px;
     margin: 4px 0px 7px 0;
     border-left: 5px solid rgba(var(--rgba-third-color), 1);
     border-top: 2px solid rgba(var(--rgba-fourth-color), 0.7);
@@ -959,7 +971,11 @@ svg {
     /* display: none; */
 }
 
-.active-chat-input-reply-box__user-name {
+.active-chat-input-reply-box--hide {
+    display: none;
+}
+
+.active-chat-input-reply-box__user {
     font-size: 15px;
     font-weight: 800;
     color: rgba(var(--rgba-first-color), 1);
@@ -968,6 +984,22 @@ svg {
 .active-chat-input-reply-box__user-message {
     font-size: 13px;
     font-weight: 600;
+    color: rgba(var(--rgba-first-color), 1);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.active-chat-input-reply-box__user-message svg {
+    width: 16px;
+    height: 16px;
+    fill: rgba(var(--rgba-first-color), 1);
+    margin: 0 3px 0 0px;
+}
+
+.active-chat-input-reply-box__user-message span {
+    font-size: 13px;
+    font-weight: 800;
     color: rgba(var(--rgba-first-color), 1);
 }
 
