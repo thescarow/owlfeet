@@ -71,6 +71,28 @@ exports.createMessage = async (req, res) => {
               })
             }
           }
+
+          if (userMessage.repliedTo !== "") {
+            let userRepliedMessage = await Message.findById(
+              userMessage.repliedTo
+            )
+              .select({ chat: 1 })
+              .lean()
+            if (
+              userRepliedMessage &&
+              userRepliedMessage.chat.toString() === messageChat._id.toString()
+            ) {
+              newMessageData.isRepliedMessage = true
+              newMessageData.repliedTo = userRepliedMessage._id
+            } else {
+              return res.json({
+                isSuccess: false,
+                error: "You Can Not Replied To This Message"
+              })
+            }
+          } else {
+            newMessageData.isRepliedMessage = false
+          }
           const newMessage = new Message(newMessageData)
 
           await newMessage.save()
@@ -91,6 +113,24 @@ exports.createMessage = async (req, res) => {
 
                 currentChatMembers: 1
               },
+              options: {
+                lean: true
+              }
+            })
+            .populate({
+              path: "repliedTo",
+              select: {
+                hasMediaContent: 1,
+                mediaContentType: 1,
+                textContent: 1,
+                sender: 1,
+                reader: 1
+              },
+              populate: {
+                path: "sender",
+                select: { username: 1, firstName: 1, lastName: 1 }
+              },
+
               options: {
                 lean: true
               }

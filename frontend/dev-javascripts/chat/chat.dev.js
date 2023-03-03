@@ -138,6 +138,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   // input message creation
+  let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev.js")
   // ///////////////////////////////////////////////////////////// /////////////////////////////////////////////////////
   const { checkTimeAndCreateNewMessage } = await import("./js/message.dev")
   const { updateAllChatSection } = await import("./js/updateAllChatSection.dev")
@@ -268,6 +269,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     userMessage.mediaContentType = file.type.split("/")[0]
     userMessage.mediaContentMimeType = file.type
     userMessage.mediaContentPath = file.s3Multipart.key
+    userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
     fetch("/message", {
       method: "POST", // or 'PUT'
       headers: {
@@ -284,7 +286,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       .then(data => {
         if (data.isSuccess) {
           checkTimeAndCreateNewMessage(data.message, activeChatMessageContainer)
-
+          closeReplyMessageBox()
           updateAllChatSection(data.message)
         } else {
           createMainNotification(data.error, "error")
@@ -318,6 +320,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         userMessage.mediaContentMimeType = "video/mp4"
         userMessage.mediaContentPath =
           activeChatInputAttachmentYoutubeContent.value
+        userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
 
         activeChatInputAttachmentYoutubeContent.value = ""
         fetch("/message", {
@@ -339,6 +342,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
                 data.message,
                 activeChatMessageContainer
               )
+              closeReplyMessageBox()
               document
                 .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
                 .classList.add("input-attachment-btn-box__input-box--hide")
@@ -376,6 +380,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       userMessage.chat = activeChatSection.dataset.chatId
       userMessage.hasMediaContent = false
       userMessage.textContent = activeChatInputTextContent.value.trim()
+      userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
       activeChatInputTextContent.value = ""
       fetch("/message", {
         method: "POST", // or 'PUT'
@@ -411,6 +416,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
               data.message,
               activeChatMessageContainer
             )
+            closeReplyMessageBox()
             updateAllChatSection(data.message)
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight + 1000
@@ -554,3 +560,10 @@ export function openActiveChatInputBox() {
     .getElementById("activeChatInputSendBox")
     .classList.remove("active-chat-input-send-box--hide")
 }
+
+document
+  .getElementById("activeChatInputReplyBoxCloseBtn")
+  .addEventListener("click", async () => {
+    let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
+    closeReplyMessageBox()
+  })
