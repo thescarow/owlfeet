@@ -1,3 +1,5 @@
+import { createMainNotification } from "../../common/mainNotification.dev.js"
+
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
 

@@ -210,7 +210,8 @@ export async function checkTimeAndCreateNewMessage(
 export function createUserMessage(
   message,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "beforeend",
+  isUserChanged = true
 ) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -429,6 +430,26 @@ export function createUserMessage(
     )
   }
 
+  if (
+    isUserChanged === true &&
+    message.sender._id.toString() !== loginUser._id.toString()
+  ) {
+    let messageContentBox = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-box"
+    )[0]
+    messageContentBox.insertAdjacentHTML(
+      "afterbegin",
+      `<div class="active-chat-user-message-box__user-box">
+      </div>`
+    )
+    messageContentBox.getElementsByClassName(
+      "active-chat-user-message-box__user-box"
+    )[0].textContent = message.sender.firstName + " " + message.sender.lastName
+    messageContentBox.classList.add(
+      "active-chat-user-message-box__content-box--has-user-box"
+    )
+    messageBox.classList.add("active-chat-user-message-box--has-user-box")
+  }
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
   activeChatMessageContainer.scrollTop =
