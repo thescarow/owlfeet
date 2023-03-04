@@ -596,32 +596,6 @@ svg {
     max-width: 85%;
 }
 
-.active-chat-user-message-box__content-box--has-user-box {
-    background: rgba(var(--rgba-second-color), 1);
-    border-radius: 15px 15px 15px 0px;
-    padding: 5px 8px 3px 8px;
-}
-
-.active-chat-user-message-box--right .active-chat-user-message-box__content-box--has-user-box {
-    background: rgba(var(--rgba-first-color), 1);
-    border-top: 2px solid rgba(var(--rgba-first-color), 1);
-    border-radius: 15px 15px 0px 15px;
-    padding: 5px 8px 3px 8px;
-}
-
-.active-chat-user-message-box__user-box {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.6px;
-    margin: 0px 0 0 0px;
-    color: rgba(var(--rgba-first-color), 1);
-    /* display: none; */
-}
-
-.active-chat-user-message-box--right .active-chat-user-message-box__user-box {
-    color: rgba(var(--rgba-fourth-color), 1);
-}
-
 .active-chat-user-message-box__content {}
 
 
