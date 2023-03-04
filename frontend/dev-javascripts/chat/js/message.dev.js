@@ -179,8 +179,6 @@ export async function checkTimeAndCreateOldMessage(
       firstMessageTimePointer = ""
     }
   }
-  activeChatMessageContainer.scrollTop =
-    activeChatMessageContainer.scrollHeight + 1000
 }
 
 export async function checkTimeAndCreateNewMessage(
@@ -392,8 +390,10 @@ export function createUserMessage(
         </div>`
       )
       messageContentBox.classList.add(
-        "active-chat-user-message-box__content-box--reply"
+        "active-chat-user-message-box__content-box--replied-message"
       )
+      messageBox.classList.add("active-chat-user-message-box--replied-message")
+      messageBox.dataset.repliedMessageId = message.repliedTo._id
     }
   } else {
     messageBox.classList.add("active-chat-user-message-box--deleted-message")
@@ -551,19 +551,53 @@ let activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
 activeChatMessageContainer.addEventListener("click", async e => {
-  let userMessageBoxBtn = e.target.closest(`[data-message-box-btn ="user"]`)
+  let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
+  let userMessageBoxBtn = e.target.closest(
+    `.active-chat-user-message-box__btn[data-message-box-btn ="user"]`
+  )
+  let userMessageContentBox = e.target.closest(
+    `.active-chat-user-message-box__content-box`
+  )
 
   if (
     userMessageBoxBtn &&
     activeChatMessageContainer.contains(userMessageBoxBtn)
   ) {
-    let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
     userMessageBox.classList.add("active-chat-user-message-box--selected")
     let { createUserMessageOptionModal } = await import(
       "./userMessageOptionModal.dev"
     )
 
     createUserMessageOptionModal(userMessageBox)
+  } else if (
+    userMessageContentBox &&
+    activeChatMessageContainer.contains(userMessageContentBox)
+  ) {
+    if (
+      userMessageBox.classList.contains(
+        "active-chat-user-message-box--replied-message"
+      )
+    ) {
+      let repliedMessageId = userMessageBox.dataset.repliedMessageId
+      let repliedUserMessageBox = document.querySelector(
+        `.active-chat-user-message-box[data-message-id="${repliedMessageId}"]`
+      )
+      if (repliedUserMessageBox) {
+        repliedUserMessageBox.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest"
+        })
+        repliedUserMessageBox.classList.add(
+          "active-chat-user-message-box--highlight"
+        )
+        setTimeout(function () {
+          repliedUserMessageBox.classList.remove(
+            "active-chat-user-message-box--highlight"
+          )
+        }, 1000)
+      }
+    }
   } else {
     return
   }
