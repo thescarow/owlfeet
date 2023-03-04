@@ -33,6 +33,12 @@ export async function showActiveChatSection(chat) {
           data.allMessages,
           activeChatMessageContainer
         )
+
+        activeChatMessageContainer.lastElementChild.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest"
+        })
       } else {
         createMainNotification(data.error, "error")
       }
