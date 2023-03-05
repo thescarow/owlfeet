@@ -134,21 +134,22 @@ export async function checkTimeAndCreateOldMessage(
   allMessages,
   activeChatMessageContainer
 ) {
+  let isUserChanged
   if (allMessages.length > 0) {
     if (activeChatMessageContainer.children.length == 0) {
-      lastMessageTimePointer = allMessages[0].createdAt
-      firstMessageTimePointer = allMessages[0].createdAt
+      TOP_MESSAGE_TIME_POINTER = allMessages[0].createdAt
+      BOTTOM_MESSAGE_TIME_POINTER = allMessages[0].createdAt
     }
     for (let i = 0; i < allMessages.length; i++) {
       if (
-        isMessageDateChanged(allMessages[i].createdAt, lastMessageTimePointer)
+        isMessageDateChanged(allMessages[i].createdAt, TOP_MESSAGE_TIME_POINTER)
       ) {
         createDateMessage(
-          lastMessageTimePointer,
+          TOP_MESSAGE_TIME_POINTER,
           activeChatMessageContainer,
           "afterbegin"
         )
-        lastMessageTimePointer = allMessages[i].createdAt
+        TOP_MESSAGE_TIME_POINTER = allMessages[i].createdAt
       }
       if (
         allMessages[i].hasOwnProperty("isInfoMessage") &&
@@ -160,23 +161,48 @@ export async function checkTimeAndCreateOldMessage(
           "afterbegin"
         )
       } else {
+        isUserChanged = false
+        if (
+          !activeChatMessageContainer.getElementsByClassName(
+            "active-chat-user-message-box"
+          )[0]
+        ) {
+          BOTTOM_MESSAGE_USER_POINTER = allMessages[i].sender
+        }
+        if (i + 1 < allMessages.length) {
+          if (
+            allMessages[i + 1].hasOwnProperty("isInfoMessage") &&
+            allMessages[i + 1].isInfoMessage === true
+          ) {
+            isUserChanged = true
+          } else if (
+            allMessages[i].sender._id.toString() !==
+            allMessages[i + 1].sender._id.toString()
+          ) {
+            isUserChanged = true
+          }
+        } else {
+          isUserChanged = true
+        }
+
         createUserMessage(
           allMessages[i],
           activeChatMessageContainer,
-          "afterbegin"
+          "afterbegin",
+          isUserChanged
         )
       }
     }
   } else {
-    if (lastMessageTimePointer !== "") {
+    if (TOP_MESSAGE_TIME_POINTER !== "") {
       createDateMessage(
-        lastMessageTimePointer,
+        TOP_MESSAGE_TIME_POINTER,
         activeChatMessageContainer,
         "afterbegin"
       )
     } else {
-      lastMessageTimePointer = ""
-      firstMessageTimePointer = ""
+      TOP_MESSAGE_TIME_POINTER = ""
+      BOTTOM_MESSAGE_TIME_POINTER = ""
     }
   }
 }
@@ -185,17 +211,18 @@ export async function checkTimeAndCreateNewMessage(
   message,
   activeChatMessageContainer
 ) {
+  let isUserChanged
   if (activeChatMessageContainer.children.length == 0) {
-    firstMessageTimePointer = message.createdAt
-    lastMessageTimePointer = message.createdAt
+    BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
+    TOP_MESSAGE_TIME_POINTER = message.createdAt
   }
-  if (isMessageDateChanged(message.createdAt, firstMessageTimePointer)) {
+  if (isMessageDateChanged(message.createdAt, BOTTOM_MESSAGE_TIME_POINTER)) {
     createDateMessage(
       message.createdAt,
       activeChatMessageContainer,
       "beforeend"
     )
-    firstMessageTimePointer = message.createdAt
+    BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
   }
   if (
     message.hasOwnProperty("isInfoMessage") &&
@@ -203,7 +230,28 @@ export async function checkTimeAndCreateNewMessage(
   ) {
     createInfoMessage(message, activeChatMessageContainer, "beforeend")
   } else {
-    createUserMessage(message, activeChatMessageContainer, "beforeend")
+    isUserChanged = false
+    if (
+      !activeChatMessageContainer.getElementsByClassName(
+        "active-chat-user-message-box"
+      )[0]
+    ) {
+      isUserChanged = true
+    } else {
+      if (
+        BOTTOM_MESSAGE_USER_POINTER._id.toString() !==
+        message.sender._id.toString()
+      ) {
+        isUserChanged = true
+      }
+    }
+    createUserMessage(
+      message,
+      activeChatMessageContainer,
+      "beforeend",
+      isUserChanged
+    )
+    if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = message.sender
   }
 }
 
