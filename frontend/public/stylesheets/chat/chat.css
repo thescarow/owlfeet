@@ -596,6 +596,32 @@ svg {
     max-width: 85%;
 }
 
+.active-chat-user-message-box--has-user-box {}
+
+.active-chat-user-message-box__content-box--has-user-box {
+    background: rgba(var(--rgba-second-color), 1);
+    border-radius: 15px 15px 15px 0px;
+    padding: 5px 8px 3px 8px;
+}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__content-box--has-user-box {
+    background: rgba(var(--rgba-first-color), 1);
+    border-top: 2px solid rgba(var(--rgba-first-color), 1);
+    border-radius: 15px 15px 0px 15px;
+    padding: 5px 8px 3px 8px;
+}
+
+.active-chat-user-message-box__user-box {
+    font-size: 14px;
+    font-weight: 800;
+    color: rgba(var(--rgba-first-color), 0.8);
+    /* display: none; */
+}
+
+.active-chat-user-message-box--right .active-chat-user-message-box__user-box {
+    color: rgba(var(--rgba-fourth-color), 0.9);
+}
+
 .active-chat-user-message-box__content {}
 
 
