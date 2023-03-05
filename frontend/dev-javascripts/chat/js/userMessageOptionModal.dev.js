@@ -141,6 +141,12 @@ async function initialiseEventForUserMessageOptionModal(
         unSelectUserMessage(messageId)
         openReplyMessageBox(messageId)
       }
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "copy") {
+        let { copyUserMessage } = await import("./copyMessage.dev")
+        userMessageOptionModal.classList.add("inner-modal--hide")
+        unSelectUserMessage(messageId)
+        copyUserMessage(messageId)
+      }
 
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
         unSelectUserMessage(messageId)

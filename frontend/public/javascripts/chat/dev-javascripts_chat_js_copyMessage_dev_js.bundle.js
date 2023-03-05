@@ -1,0 +1,22 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+(self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["dev-javascripts_chat_js_copyMessage_dev_js"],{
+
+/***/ "./dev-javascripts/chat/js/copyMessage.dev.js":
+/*!****************************************************!*\
+  !*** ./dev-javascripts/chat/js/copyMessage.dev.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"copyUserMessage\": () => (/* binding */ copyUserMessage)\n/* harmony export */ });\n/* harmony import */ var _common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../common/mainNotification.dev */ \"./dev-javascripts/common/mainNotification.dev.js\");\n\nfunction copyUserMessage(messageId) {\n  let userMessageBox = document.querySelector(`.active-chat-user-message-box[data-message-id=\"${messageId}\"]`);\n\n  if (userMessageBox.classList.contains(\"active-chat-user-message-box--text\")) {\n    let copiedText = userMessageBox.getElementsByClassName(\"active-chat-user-message-box__content--text\")[0].textContent;\n    navigator.clipboard.writeText(copiedText).then(() => {\n      (0,_common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__.createMainNotification)(\"Copied !!!\", \"success\");\n    }, e => {\n      (0,_common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__.createMainNotification)(e.message, \"error\");\n    });\n  }\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9kZXYtamF2YXNjcmlwdHMvY2hhdC9qcy9jb3B5TWVzc2FnZS5kZXYuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQTtBQUVPLFNBQVNDLGVBQVQsQ0FBeUJDLFNBQXpCLEVBQW9DO0VBQ3pDLElBQUlDLGNBQWMsR0FBR0MsUUFBUSxDQUFDQyxhQUFULENBQ2xCLGtEQUFpREgsU0FBVSxJQUR6QyxDQUFyQjs7RUFHQSxJQUFJQyxjQUFjLENBQUNHLFNBQWYsQ0FBeUJDLFFBQXpCLENBQWtDLG9DQUFsQyxDQUFKLEVBQTZFO0lBQzNFLElBQUlDLFVBQVUsR0FBR0wsY0FBYyxDQUFDTSxzQkFBZixDQUNmLDZDQURlLEVBRWYsQ0FGZSxFQUVaQyxXQUZMO0lBSUFDLFNBQVMsQ0FBQ0MsU0FBVixDQUFvQkMsU0FBcEIsQ0FBOEJMLFVBQTlCLEVBQTBDTSxJQUExQyxDQUNFLE1BQU07TUFDSmQsb0ZBQXNCLENBQUMsWUFBRCxFQUFlLFNBQWYsQ0FBdEI7SUFDRCxDQUhILEVBSUVlLENBQUMsSUFBSTtNQUNIZixvRkFBc0IsQ0FBQ2UsQ0FBQyxDQUFDQyxPQUFILEVBQVksT0FBWixDQUF0QjtJQUNELENBTkg7RUFRRDtBQUNGIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vZnJvbnRlbmQvLi9kZXYtamF2YXNjcmlwdHMvY2hhdC9qcy9jb3B5TWVzc2FnZS5kZXYuanM/MjMwMSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBjcmVhdGVNYWluTm90aWZpY2F0aW9uIH0gZnJvbSBcIi4uLy4uL2NvbW1vbi9tYWluTm90aWZpY2F0aW9uLmRldlwiXHJcblxyXG5leHBvcnQgZnVuY3Rpb24gY29weVVzZXJNZXNzYWdlKG1lc3NhZ2VJZCkge1xyXG4gIGxldCB1c2VyTWVzc2FnZUJveCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXHJcbiAgICBgLmFjdGl2ZS1jaGF0LXVzZXItbWVzc2FnZS1ib3hbZGF0YS1tZXNzYWdlLWlkPVwiJHttZXNzYWdlSWR9XCJdYFxyXG4gIClcclxuICBpZiAodXNlck1lc3NhZ2VCb3guY2xhc3NMaXN0LmNvbnRhaW5zKFwiYWN0aXZlLWNoYXQtdXNlci1tZXNzYWdlLWJveC0tdGV4dFwiKSkge1xyXG4gICAgbGV0IGNvcGllZFRleHQgPSB1c2VyTWVzc2FnZUJveC5nZXRFbGVtZW50c0J5Q2xhc3NOYW1lKFxyXG4gICAgICBcImFjdGl2ZS1jaGF0LXVzZXItbWVzc2FnZS1ib3hfX2NvbnRlbnQtLXRleHRcIlxyXG4gICAgKVswXS50ZXh0Q29udGVudFxyXG5cclxuICAgIG5hdmlnYXRvci5jbGlwYm9hcmQud3JpdGVUZXh0KGNvcGllZFRleHQpLnRoZW4oXHJcbiAgICAgICgpID0+IHtcclxuICAgICAgICBjcmVhdGVNYWluTm90aWZpY2F0aW9uKFwiQ29waWVkICEhIVwiLCBcInN1Y2Nlc3NcIilcclxuICAgICAgfSxcclxuICAgICAgZSA9PiB7XHJcbiAgICAgICAgY3JlYXRlTWFpbk5vdGlmaWNhdGlvbihlLm1lc3NhZ2UsIFwiZXJyb3JcIilcclxuICAgICAgfVxyXG4gICAgKVxyXG4gIH1cclxufVxyXG4iXSwibmFtZXMiOlsiY3JlYXRlTWFpbk5vdGlmaWNhdGlvbiIsImNvcHlVc2VyTWVzc2FnZSIsIm1lc3NhZ2VJZCIsInVzZXJNZXNzYWdlQm94IiwiZG9jdW1lbnQiLCJxdWVyeVNlbGVjdG9yIiwiY2xhc3NMaXN0IiwiY29udGFpbnMiLCJjb3BpZWRUZXh0IiwiZ2V0RWxlbWVudHNCeUNsYXNzTmFtZSIsInRleHRDb250ZW50IiwibmF2aWdhdG9yIiwiY2xpcGJvYXJkIiwid3JpdGVUZXh0IiwidGhlbiIsImUiLCJtZXNzYWdlIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./dev-javascripts/chat/js/copyMessage.dev.js\n");
+
+/***/ })
+
+}]);
