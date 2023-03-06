@@ -3,6 +3,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
 ;(async function () {
   const allChatSection = document.getElementById("allChatSection")
   const activeChatSection = document.getElementById("activeChatSection")
+
   async function checkChatState() {
     // console.log(location)
     // console.log(history)
@@ -72,12 +73,6 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     },
     false
   )
-  function adjustMessageContainerBottomPadding() {
-    activeChatMessageContainer.style.paddingBottom =
-      activeChatInputContainer.clientHeight + 5 + "px"
-    activeChatMessageContainer.scrollTop =
-      activeChatMessageContainer.scrollHeight + 1000
-  }
 
   ///////////////////////////////////////////////////
 
@@ -539,6 +534,7 @@ export function openActivechatInputAttachmentBox() {
   document
     .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
     .classList.add("input-attachment-btn-box__input-box--hide")
+  adjustMessageContainerBottomPadding()
 }
 export function openActiveChatInputBox() {
   document
@@ -559,6 +555,14 @@ export function openActiveChatInputBox() {
   document
     .getElementById("activeChatInputSendBox")
     .classList.remove("active-chat-input-send-box--hide")
+  adjustMessageContainerBottomPadding()
+}
+
+export function adjustMessageContainerBottomPadding() {
+  activeChatMessageContainer.style.paddingBottom =
+    activeChatInputContainer.clientHeight + 5 + "px"
+  activeChatMessageContainer.scrollTop =
+    activeChatMessageContainer.scrollHeight + 1000
 }
 
 document

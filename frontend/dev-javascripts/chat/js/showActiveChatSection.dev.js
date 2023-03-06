@@ -1,8 +1,8 @@
 import { createMainNotification } from "../../common/mainNotification.dev.js"
+import { adjustMessageContainerBottomPadding } from "../chat.dev"
 
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
-
 export async function showActiveChatSection(chat) {
   const activeChatMessageContainer = document.getElementById(
     "activeChatMessageContainer"
@@ -35,12 +35,12 @@ export async function showActiveChatSection(chat) {
           data.allMessages,
           activeChatMessageContainer
         )
-
-        activeChatMessageContainer.lastElementChild.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "nearest"
-        })
+        if (activeChatMessageContainer.lastElementChild)
+          activeChatMessageContainer.lastElementChild.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest"
+          })
       } else {
         createMainNotification(data.error, "error")
       }
@@ -55,9 +55,12 @@ export async function showActiveChatSection(chat) {
 
   allChatSection.classList.add("all-chat-section--hide")
   activeChatSection.classList.remove("active-chat-section--hide")
+  adjustMessageContainerBottomPadding()
 }
 
 export async function updateActiveChatSection(chat) {
+  let { closeReplyMessageBox } = await import("./replyMessageBox.dev.js")
+  closeReplyMessageBox()
   activeChatSection.dataset.chatId = chat._id
   const activeChatHeader = document.getElementById("activeChatHeader")
   const activeChatHeaderPic = document.getElementById("activeChatHeaderPic")

@@ -212,7 +212,7 @@ export async function checkTimeAndCreateNewMessage(
   activeChatMessageContainer
 ) {
   let isUserChanged
-  if (activeChatMessageContainer.children.length == 0) {
+  if (activeChatMessageContainer.children.length === 0) {
     BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
     TOP_MESSAGE_TIME_POINTER = message.createdAt
   }
@@ -398,12 +398,43 @@ export function createUserMessage(
         "active-chat-user-message-box__content--text"
       )
 
-      textMessage.textContent = message.textContent
+      // textMessage.textContent = message.textContent
+      ////////////////////////////////////////////////////////////////////
+      const regex = /(https?:\/\/[^\s]+|mailto:[^\s]+)/gi
 
+      const result = message.textContent.replace(
+        regex,
+        '<a href="$&" target="_blank" rel="noopener noreferrer">$&</a>'
+      )
+
+      textMessage.innerHTML = result
+
+      ////////////////////////////////////////////////////////////////////
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
     }
     if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
       let repliedMessageContent, repliedMessageUser
+
+      messageContentBox.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="active-chat-user-message-reply-box">
+            <div class="active-chat-user-message-reply-box__user">
+            </div>
+           <div class="active-chat-user-message-reply-box__user-message">
+          </div>
+        </div>`
+      )
+
+      repliedMessageUser =
+        message.repliedTo.sender._id.toString() === loginUser._id.toString()
+          ? "You"
+          : message.repliedTo.sender.firstName +
+            " " +
+            message.repliedTo.sender.firstName
+
+      messageContentBox.getElementsByClassName(
+        "active-chat-user-message-reply-box__user"
+      )[0].textContent = repliedMessageUser
 
       if (message.repliedTo.hasMediaContent) {
         if (message.repliedTo.mediaContentType === "video") {
@@ -418,26 +449,16 @@ export function createUserMessage(
         if (message.repliedTo.mediaContentType === "youtube") {
           repliedMessageContent = `${youtubeIcon} <span>Youtube</span>`
         }
+        messageContentBox.getElementsByClassName(
+          "active-chat-user-message-reply-box__user-message"
+        )[0].innerHTML = repliedMessageContent
       } else {
         repliedMessageContent = message.repliedTo.textContent
+        messageContentBox.getElementsByClassName(
+          "active-chat-user-message-reply-box__user-message"
+        )[0].textContent = repliedMessageContent
       }
 
-      repliedMessageUser =
-        message.repliedTo.sender._id.toString() === loginUser._id.toString()
-          ? "You"
-          : message.repliedTo.sender.firstName +
-            " " +
-            message.repliedTo.sender.firstName
-
-      messageContentBox.insertAdjacentHTML(
-        "afterbegin",
-        `<div class="active-chat-user-message-reply-box">
-            <div class="active-chat-user-message-reply-box__user">${repliedMessageUser}
-            </div>
-           <div class="active-chat-user-message-reply-box__user-message">${repliedMessageContent}
-          </div>
-        </div>`
-      )
       messageContentBox.classList.add(
         "active-chat-user-message-box__content-box--replied-message"
       )
