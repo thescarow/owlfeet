@@ -559,7 +559,11 @@ svg {
     color: rgba(var(--rgba-first-color), 1);
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-height: 55px;
+    overflow: hidden;
 }
 
 .active-chat-user-message-reply-box__user-message svg {
@@ -710,8 +714,13 @@ svg {
     display: inline-block;
     font-size: 17px;
     font-weight: 700;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
+.active-chat-user-message-box__content--text a {
+    /* color: blue; */
+}
 
 
 
@@ -1037,7 +1046,11 @@ svg {
     color: rgba(var(--rgba-first-color), 1);
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-height: 55px;
+    overflow: hidden;
 }
 
 .active-chat-input-reply-box__user-message svg {
