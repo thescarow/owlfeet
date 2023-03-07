@@ -59,15 +59,14 @@ exports.getProfilePageByUsername = async (req, res) => {
       } else {
         filterOtherUserField(user)
       }
-      if (user.profile != "") {
+      if (user.hasOwnProperty("profile") && user.profile !== "") {
         user.profileUrl = await signedUrlForGetAwsS3Object(user.profile)
-      } else {
-        user.profileUrl = ""
       }
       filterUserFollowListToLength(user)
 
       res.render("./user/profile.ejs", {
         profileUser: user,
+        profileUsername: user.username,
         isOwner: isOwner,
         isLogin: isLogin,
         pageName: "profile"

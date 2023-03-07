@@ -13,17 +13,25 @@
 </head>
 
 <body>
-  <script> let pageName = '<%= locals.pageName-%>'
+  <script>
+
+    let pageName = '<%= locals.pageName-%>'
+
     let isLogin = '<%= locals.isLogin -%>'
     isLogin = isLogin === "true"
 
-    let loginUser = '<%- JSON.stringify(locals.loginUser) -%>'
-    if (loginUser !== '') {
-      loginUser = JSON.parse(loginUser)
-    }
+    let isOwner = '<%= locals.isOwner-%>'
+    isOwner = isOwner === "true"
+
+    let loginUser = {}
+
+    let profileUser = {}
+
 
     let activeChatData = {}
     let allChatData = {}
+
+
     let allChat = '<%- JSON.stringify(locals.allChat) -%>'
     if (allChat !== '') {
       allChat = JSON.parse(allChat)
@@ -36,18 +44,70 @@
 
 
 
-    let isOwner = '<%= locals.isOwner-%>'
-    isOwner = isOwner === "true"
-    let profileUser = '<%- JSON.stringify(locals.profileUser)  _%>'
-    if (profileUser !== '') {
-      profileUser = JSON.parse(profileUser)
-    }
-
-
     let BOTTOM_MESSAGE_TIME_POINTER = ""
     let TOP_MESSAGE_TIME_POINTER = ""
     let BOTTOM_MESSAGE_USER_POINTER
 
+
+      ; (async function () {
+
+        loginUser = await publicGetLoginUserData()
+
+        if (pageName === 'profile') {
+          let profileUsername = '<%= locals.profileUsername _%>'
+          if (profileUsername)
+            profileUser = await publicGetProfileUserData(profileUsername)
+        }
+
+      })()
+
+
+
+
+
+
+
+    async function publicGetLoginUserData() {
+      try {
+        let loginUser = {}
+        let response = await fetch(`/user/data/login-user`)
+        if (!response.ok) {
+          throw Promise.reject(response)
+        }
+        let data = await response.json()
+        if (data.isSuccess) {
+          loginUser = data.loginUser
+        }
+        return loginUser
+      } catch (e) {
+        console.log("Error In Fetching Login User, Please Refresh Your Page:", e)
+        return loginUser
+      }
+    }
+    async function publicGetProfileUserData(username) {
+      try {
+
+        let profileUser = {}
+        let response = await fetch(`/user/data/profile-user`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: username }),
+        })
+        if (!response.ok) {
+          throw Promise.reject(response)
+        }
+        let data = await response.json()
+        if (data.isSuccess) {
+          profileUser = data.profileUser
+        }
+        return profileUser
+      } catch (e) {
+        console.log("Error In Fetching Profile User, Please Refresh Your Page:", e)
+        return profileUser
+      }
+    }
   </script>
 
   <%- include('../partials/mainNavigation.ejs') _%>

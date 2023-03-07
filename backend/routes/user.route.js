@@ -2,12 +2,17 @@ const express = require("express")
 const router = express.Router()
 const {
   getProfilePageByUsername,
-  fetchFollowingUsers
+  fetchFollowingUsers,
+  getLoginUserData,
+  getProfileUserData
 } = require("../controllers/user")
 const { getLoginUser } = require("../middleware/auth.middleware")
 
 // /user/
 router.get("/fetch-following-users", getLoginUser, fetchFollowingUsers)
+
+router.get("/data/login-user", getLoginUser, getLoginUserData)
+router.post("/data/profile-user", getLoginUser, getProfileUserData)
 
 router.get("/:username", getLoginUser, getProfilePageByUsername)
 
