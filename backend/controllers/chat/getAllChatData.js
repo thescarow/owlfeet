@@ -14,31 +14,29 @@ const {
   timeDifferenceFromNow
 } = require("../../common/calculateTimeDifference")
 
-const { selectLoginUserForClientField } = require("../../common/userData")
-//////////////////
-const { filterChatFieldForNonMember } = require("./common/filterChatField")
+// const {
+//   selectBasicInfoUserField
+// } = require("../../common/filter-field/filterUserField")
+const {
+  filterChatFieldForNonMember,
+  selectSafeChatField
+} = require("../../common/filter-field/filterChatField")
+const {
+  selectLatestMessageField
+} = require("../../common/filter-field/filterMessageField")
+
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
-//@description     Render profile Page by username
-//@route           GET /chat
-//@access          Accessing login User
-exports.getChatPageWithAllChat = async (req, res) => {
+exports.getAllChatData = async (req, res) => {
   try {
     if (req.user) {
-      let loginUser = await User.findById(req.user.id)
-        .select(selectLoginUserForClientField)
-        .lean()
-
-      if (loginUser.hasOwnProperty("profile") && loginUser.profile != "") {
-        loginUser.profile = await signedUrlForGetAwsS3Object(loginUser.profile)
-      }
       let allChat = await Chat.find({
         allChatMembers: {
           $elemMatch: { $eq: req.user.id }
         },
         isDeleted: false
       })
-        .select({ allChatMembers: 0 })
+        .select(selectSafeChatField)
         .sort({ updatedAt: -1 })
         .lean()
 
@@ -49,17 +47,7 @@ exports.getChatPageWithAllChat = async (req, res) => {
             reader: { $elemMatch: { $eq: req.user.id } },
             deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
           })
-            .select({
-              sender: 1,
-              hasMediaContent: 1,
-              mediaContentType: 1,
-              textContent: 1,
-              isInfoMessage: 1,
-              infoMessageType: 1,
-              infoMessageContent: 1,
-              createdAt: 1,
-              updatedAt: 1
-            })
+            .select(selectLatestMessageField)
             .populate({
               path: "sender",
               select: {
@@ -119,7 +107,8 @@ exports.getChatPageWithAllChat = async (req, res) => {
               )
             }
 
-            chat.chatName = chatOtherMember.firstName
+            chat.chatName =
+              chatOtherMember.firstName + " " + chatOtherMember.lastName
             chat.chatDescription = chatOtherMember.bio
 
             if (!(await checkInFollowing(req.user.id, chatOtherMemberId))) {
@@ -137,26 +126,26 @@ exports.getChatPageWithAllChat = async (req, res) => {
         }
       })
 
-      res.render("./chat/chat.ejs", {
-        pageName: "chat",
-        isLogin: true,
-        loginUser: loginUser,
-        allChat: allChat
+      let allChatData = {}
+
+      allChat.forEach(chat => {
+        allChatData[chat._id] = chat
       })
+      res.json({ isSuccess: true, allChatData: allChatData })
     } else {
-      res.render("./chat/chat.ejs", {
-        pageName: "chat",
-        isLogin: false
+      res.json({
+        isSuccess: false,
+        error: "You Are Not Logged In, Please Log In First"
       })
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Get Chat Page With All Chat:"),
+      errorLog("Server Error In Getting All Chat Data:"),
       mainErrorLog(err)
     )
-    res.render("./error/commonServerError", {
-      errorTitle: "Server Error",
-      errorMessage: "please try again or go to Home Page"
+    res.json({
+      isSuccess: false,
+      error: "Server Error In Getting All Chat Data"
     })
   }
 }

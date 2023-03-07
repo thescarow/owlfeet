@@ -4,19 +4,15 @@ const { userRole, userPrivacy } = require("./common/userRoleNPrivacy")
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: true,
-      trim: true,
-      index: {
-        unique: true,
-        partialFilterExpression: { username: { $type: "string" } }
-      }
-    },
     role: {
       type: String,
       required: true,
       default: userRole.VERIFIED
+    },
+
+    privacy: {
+      type: String,
+      default: userPrivacy.PUBLIC
     },
 
     firstName: {
@@ -31,30 +27,27 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: ""
     },
-    privacy: {
+
+    username: {
       type: String,
-      default: userPrivacy.PUBLIC
+      required: true,
+      trim: true,
+      index: {
+        unique: true,
+        partialFilterExpression: { username: { $type: "string" } }
+      }
     },
+
+    profile: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+
     gender: {
       type: String,
       trim: true,
       default: "male"
-    },
-
-    password: {
-      type: String,
-      required: true,
-      trim: true
-    },
-
-    followers: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-      default: []
-    },
-
-    followings: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-      default: []
     },
 
     location: {
@@ -82,24 +75,34 @@ const userSchema = new mongoose.Schema(
       }
     },
 
+    password: {
+      type: String,
+      required: true,
+      trim: true
+    },
+
     email: {
       type: String,
       trim: true,
       lowercase: true,
       default: ""
     },
+
     isEmailVerified: {
       type: Boolean,
       required: true,
       default: false
     },
 
-    profile: {
-      type: String,
-      trim: true,
-      default: ""
-    }
+    followers: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      default: []
+    },
 
+    followings: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+      default: []
+    }
     // savedNews: {
     //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: "News" }],
     //   default: []
