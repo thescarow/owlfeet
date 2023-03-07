@@ -14,8 +14,12 @@
 
 <body>
   <script>
-
     let pageName = '<%= locals.pageName-%>'
+
+    let BOTTOM_MESSAGE_TIME_POINTER = ""
+    let TOP_MESSAGE_TIME_POINTER = ""
+    let BOTTOM_MESSAGE_USER_POINTER
+
 
     let isLogin = '<%= locals.isLogin -%>'
     isLogin = isLogin === "true"
@@ -32,21 +36,11 @@
     let allChatData = {}
 
 
-    let allChat = '<%- JSON.stringify(locals.allChat) -%>'
-    if (allChat !== '') {
-      allChat = JSON.parse(allChat)
-
-      allChat.forEach(chat => {
-        allChatData[chat._id] = chat
-      })
-
-    }
 
 
 
-    let BOTTOM_MESSAGE_TIME_POINTER = ""
-    let TOP_MESSAGE_TIME_POINTER = ""
-    let BOTTOM_MESSAGE_USER_POINTER
+
+
 
 
       ; (async function () {
@@ -59,9 +53,11 @@
             profileUser = await publicGetProfileUserData(profileUsername)
         }
 
+        if (pageName === 'chat') {
+          allChatData = await publicGetAllChatData()
+        }
+
       })()
-
-
 
 
 
@@ -106,6 +102,23 @@
       } catch (e) {
         console.log("Error In Fetching Profile User, Please Refresh Your Page:", e)
         return profileUser
+      }
+    }
+    async function publicGetAllChatData() {
+      try {
+        let allChatData = {}
+        let response = await fetch(`/chat/data/all-chat`)
+        if (!response.ok) {
+          throw Promise.reject(response)
+        }
+        let data = await response.json()
+        if (data.isSuccess) {
+          allChatData = data.allChatData
+        }
+        return allChatData
+      } catch (e) {
+        console.log("Error In Fetching All Chat Data, Please Refresh Your Page:", e)
+        return allChatData
       }
     }
   </script>

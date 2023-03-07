@@ -9,7 +9,8 @@ const {
   editGroupChat,
   clearChatAllMessages,
   deleteChat,
-  leaveGroupChat
+  leaveGroupChat,
+  getAllChatData
 } = require("../controllers/chat")
 
 router.get("/", getLoginUser, getChatPageWithAllChat)
@@ -20,5 +21,6 @@ router.post("/edit-group-chat", getLoginUser, editGroupChat)
 router.post("/clear-chat-all-messages", getLoginUser, clearChatAllMessages)
 router.post("/delete-chat", getLoginUser, deleteChat)
 router.post("/leave-group-chat", getLoginUser, leaveGroupChat)
+router.get("/data/all-chat", getLoginUser, getAllChatData)
 
 module.exports = router

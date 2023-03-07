@@ -120,7 +120,7 @@ exports.selectSafeUserField = {
   //   isEmailVerified: 1,
 }
 
-exports.selectLoginUserForClientField = {
+exports.selectBasicInfoUserField = {
   _id: 1,
   role: 1,
   privacy: 1,

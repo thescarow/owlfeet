@@ -6,6 +6,7 @@ const { editGroupChat } = require("./editGroupChat")
 const { clearChatAllMessages } = require("./clearChatAllMessages")
 const { deleteChat } = require("./deleteChat")
 const { leaveGroupChat } = require("./leaveGroupChat")
+const { getAllChatData } = require("./getAllChatData")
 
 module.exports = {
   getChatPageWithAllChat,
@@ -15,5 +16,6 @@ module.exports = {
   editGroupChat,
   clearChatAllMessages,
   deleteChat,
-  leaveGroupChat
+  leaveGroupChat,
+  getAllChatData
 }
