@@ -95,7 +95,9 @@ exports.getAllChatData = async (req, res) => {
                 firstName: 1,
                 lastName: 1,
                 bio: 1,
-                profile: 1
+                profile: 1,
+                isActive: 1,
+                lastActive: 1
               })
               .lean()
             if (
@@ -106,7 +108,8 @@ exports.getAllChatData = async (req, res) => {
                 chatOtherMember.profile
               )
             }
-
+            chat.isUserActive = chatOtherMember.isActive
+            chat.userLastActive = chatOtherMember.lastActive
             chat.chatName =
               chatOtherMember.firstName + " " + chatOtherMember.lastName
             chat.chatDescription = chatOtherMember.bio

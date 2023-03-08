@@ -32,7 +32,9 @@ exports.fetchChatWithId = async (req, res) => {
             username: 1,
             firstName: 1,
             lastName: 1,
-            bio: 1
+            bio: 1,
+            isActive: 1,
+            lastActive: 1
           },
           options: {
             lean: true
@@ -100,6 +102,8 @@ exports.fetchChatWithId = async (req, res) => {
               chatOtherMember.profile
             )
           }
+          chat.isUserActive = chatOtherMember.isActive
+          chat.userLastActive = chatOtherMember.lastActive
 
           chat.chatName = chatOtherMember.firstName
           chat.chatDescription = chatOtherMember.bio

@@ -7,7 +7,9 @@ const listUserField = {
   lastName: 1,
   username: 1,
   profile: 1,
-  gender: 1
+  gender: 1,
+  isActive: 1
+  // lastActive:1,
   //   location: 1,
   //   bio: 1,
   //   birthday: 1,
@@ -32,6 +34,8 @@ const otherUserField = {
   bio: 1,
   followers: 1,
   followings: 1
+  // isActive: 1,
+  // lastActive:1,
   //   birthday: 1,
   //   mobile: 1,
   //   password: 1,
@@ -53,7 +57,9 @@ exports.selectLoginUserField = {
   bio: 1,
   birthday: 1,
   followers: 1,
-  followings: 1
+  followings: 1,
+  isActive: 1,
+  lastActive: 1
   //   mobile: 1,
   //   password: 1,
   //   email: 1,
@@ -68,7 +74,9 @@ exports.selectListUserField = {
   lastName: 1,
   username: 1,
   profile: 1,
-  gender: 1
+  gender: 1,
+  isActive: 1
+  // lastActive:1,
   //   location: 1,
   //   bio: 1,
   //   birthday: 1,
@@ -88,7 +96,9 @@ exports.selectMessageUserField = {
   lastName: 1,
   username: 1,
   profile: 1,
-  gender: 1
+  gender: 1,
+  isActive: 1
+  // lastActive:1,
   //   location: 1,
   //   bio: 1,
   //   birthday: 1,
@@ -113,7 +123,9 @@ exports.selectSafeUserField = {
   bio: 1,
   birthday: 1,
   followers: 1,
-  followings: 1
+  followings: 1,
+  isActive: 1,
+  lastActive: 1
   //   mobile: 1,
   //   password: 1,
   //   email: 1,
@@ -130,6 +142,8 @@ exports.selectBasicInfoUserField = {
   profile: 1,
   gender: 1,
   bio: 1
+  // isActive: 1
+  // lastActive:1,
   //   location: 1,
   //   birthday: 1,
   //   followers: 1,

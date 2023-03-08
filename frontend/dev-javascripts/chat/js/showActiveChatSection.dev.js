@@ -1,3 +1,4 @@
+import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev.js"
 import { createMainNotification } from "../../common/mainNotification.dev.js"
 import { adjustMessageContainerBottomPadding } from "../chat.dev"
 
@@ -85,7 +86,19 @@ export async function updateActiveChatSection(chat) {
     activeChatHeaderPic.classList.remove("active-chat-header__pic--hide-svg")
   }
   activeChatHeaderName.textContent = chat.chatName
-  activeChatHeaderStatus.textContent = "Active Hai"
+  if (chat.isUserActive) {
+    activeChatHeaderStatus.classList.remove(
+      "active-chat-header__chat-status--hide"
+    )
+    activeChatHeaderStatus.textContent = "Active"
+  } else {
+    activeChatHeaderStatus.classList.remove(
+      "active-chat-header__chat-status--hide"
+    )
+    activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
+      chat.userLastActive
+    )} ago`
+  }
 
   onOffActiveChatInputContainer(chat)
 }
