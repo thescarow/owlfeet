@@ -400,14 +400,10 @@ export function createUserMessage(
 
       // textMessage.textContent = message.textContent
       ////////////////////////////////////////////////////////////////////
-      const regex = /(https?:\/\/[^\s]+|mailto:[^\s]+)/gi
-
-      const result = message.textContent.replace(
-        regex,
-        '<a href="$&" target="_blank" rel="noopener noreferrer">$&</a>'
+      textMessage.insertAdjacentHTML(
+        "beforeend",
+        insertLinksToString(message.textContent)
       )
-
-      textMessage.innerHTML = result
 
       ////////////////////////////////////////////////////////////////////
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
@@ -523,6 +519,45 @@ export function createUserMessage(
 
   activeChatMessageContainer.scrollTop =
     activeChatMessageContainer.scrollHeight + 1000
+}
+
+function insertLinksToString(str) {
+  const regexForUrl =
+    /(?:https?:\/\/)(?:www\.)?[^\s]+|(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/g
+
+  const allUrls = str.match(regexForUrl)
+  if (allUrls === null) {
+    return str
+  }
+  allUrls.forEach(url => {
+    url.startsWith("http") ? url : `http://${url}`
+  })
+
+  console.log("allUrls:", allUrls)
+  let textNodes = []
+  let i = 0
+  let arr = str.split(regexForUrl)
+  console.log("arr:", arr)
+  arr.forEach(text => {
+    textNodes.push(document.createTextNode(text))
+    if (i < allUrls.length) {
+      const link = document.createElement("a")
+      link.href = allUrls[i]
+      link.target = "_blank"
+      link.setAttribute("rel", "noopener noreferrer")
+      link.textContent = allUrls[i]
+      textNodes.push(link)
+      i++
+    }
+  })
+
+  const container = document.createElement("div")
+  textNodes.forEach(node => {
+    container.appendChild(node)
+  })
+  console.log("container", container)
+
+  return container.innerHTML
 }
 
 export function createInfoMessage(
