@@ -12,8 +12,19 @@ import { io } from "socket.io-client"
     console.log("client disconnect:", reason)
   })
 
+  socket.prependAny((eventName, ...args) => {
+    console.log(
+      "socket event:",
+      "_____eventName:",
+      eventName,
+      "____args:",
+      args
+    )
+  })
   //////////////////////////////////////////////////
-
+  let { createUserSocket } = await import("./user-socket")
+  createUserSocket(socket)
+  ///////////////////////////////////////
   if (pageName && pageName === "home") {
     let { createHomeSocket } = await import("./homeSocket.dev.js")
     createHomeSocket(socket)

@@ -32,7 +32,9 @@
                             class='chat-box__pic <%=(chat.chatPic && chat.chatPic !=="")?"chat-box__pic--hide-svg":"chat-box__pic--hide-img" %> '>
                             <img src="<%=chat.chatPic -%>" alt="chat img">
                             <%- include('../partials/icons/chatPic.svg')-%>
+                                <div class="chat-box__active-user-status">
 
+                                </div>
                         </div>
 
                     </div>
@@ -129,10 +131,10 @@
             </div>
             <div class="active-chat-header__column active-chat-header__column--user-data" id="activeChatHeaderUserData">
                 <div class="active-chat-header__title" id="activeChatHeaderName">
-                    Chat Name
+
                 </div>
                 <div class="active-chat-header__chat-status" id="activeChatHeaderStatus">
-                    Active
+
                 </div>
             </div>
             <div class="active-chat-header__right-btn-container">

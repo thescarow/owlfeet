@@ -59,6 +59,8 @@ export function createChatBox(chat) {
              <div class="chat-box__pic chat-box__pic--hide-img">
                <img src='' alt="chat img">
               ${svg_chatPic}
+              <div class="chat-box__user-active-status">
+              </div>
             </div>
   </div>
   <div class="chat-box__column chat-box__column--data">

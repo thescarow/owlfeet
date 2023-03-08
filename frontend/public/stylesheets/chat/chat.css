@@ -163,6 +163,7 @@ svg {
     border: 1px solid rgba(var(--rgba-first-color), 0.1);
     border-radius: 50%;
     margin: 0px 0 0 0px;
+    position: relative;
 }
 
 
@@ -190,6 +191,24 @@ svg {
 
 .chat-box__pic--hide-svg svg {
     display: none;
+}
+
+.chat-box__active-user-status {
+    display: inline-block;
+    transition: all 1s;
+    width: 13px;
+    height: 13px;
+    background: rgba(var(--rgba-second-color), 1);
+    position: absolute;
+    bottom: 3px;
+    right: 2px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--rgba-first-color), 0.1);
+    opacity: 0;
+}
+
+.chat-box--active-user .chat-box__active-user-status {
+    opacity: 1;
 }
 
 .chat-box__icon {
@@ -400,10 +419,16 @@ svg {
 }
 
 .active-chat-header__chat-status {
-    font-size: 16px;
-    font-weight: 500;
-    opacity: 0.6;
+    font-size: 14px;
+    font-weight: 600;
     white-space: nowrap;
+    opacity: 1;
+    transition: all 1s;
+    color: rgba(var(--rgba-fourth-color),0.5);
+}
+
+.active-chat-header__chat-status--hide {
+    opacity: 0;
 }
 
 .active-chat-header__right-btn-container {
@@ -719,7 +744,7 @@ svg {
 }
 
 .active-chat-user-message-box__content--text a {
-    color: rgba(var(--rgba-third-color),1);
+    color: rgba(var(--rgba-third-color), 1);
 }
 
 .active-chat-user-message-box--right .active-chat-user-message-box__content-box--text a {}

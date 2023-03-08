@@ -102,6 +102,13 @@ const userSchema = new mongoose.Schema(
     followings: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       default: []
+    },
+    isActive: {
+      type: Boolean,
+      default: false
+    },
+    lastActive: {
+      type: Date
     }
     // savedNews: {
     //   type: [{ type: mongoose.Schema.Types.ObjectId, ref: "News" }],
