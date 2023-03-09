@@ -2,7 +2,9 @@ export async function createUserSocket(socket) {
   console.log("insideUserSocket")
 
   if (pageName && pageName === "chat") {
-    let { createUserChatSocket } = await import("./userChatSocket")
-    createUserChatSocket(socket)
+    let { createUserActiveStatusSocket } = await import(
+      "./userActiveStatusSocket"
+    )
+    createUserActiveStatusSocket(socket)
   }
 }

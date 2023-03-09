@@ -101,6 +101,11 @@ export async function updateActiveChatSection(chat) {
         chat.userLastActive
       )} ago`
     }
+  } else {
+    activeChatHeaderStatus.classList.remove(
+      "active-chat-header__chat-status--hide"
+    )
+    activeChatHeaderStatus.textContent = ""
   }
 
   onOffActiveChatInputContainer(chat)
