@@ -86,18 +86,21 @@ export async function updateActiveChatSection(chat) {
     activeChatHeaderPic.classList.remove("active-chat-header__pic--hide-svg")
   }
   activeChatHeaderName.textContent = chat.chatName
-  if (chat.isUserActive) {
-    activeChatHeaderStatus.classList.remove(
-      "active-chat-header__chat-status--hide"
-    )
-    activeChatHeaderStatus.textContent = "Active"
-  } else {
-    activeChatHeaderStatus.classList.remove(
-      "active-chat-header__chat-status--hide"
-    )
-    activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
-      chat.userLastActive
-    )} ago`
+  if (!chat.isGroupChat) {
+    if (chat.isUserActive) {
+      activeChatHeaderStatus.classList.remove(
+        "active-chat-header__chat-status--hide"
+      )
+      activeChatHeaderStatus.textContent = "Active"
+    } else {
+      activeChatHeaderStatus.classList.remove(
+        "active-chat-header__chat-status--hide"
+      )
+
+      activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
+        chat.userLastActive
+      )} ago`
+    }
   }
 
   onOffActiveChatInputContainer(chat)
