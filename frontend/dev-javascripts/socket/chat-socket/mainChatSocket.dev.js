@@ -5,6 +5,70 @@ export function createMainChatSocket(socket) {
   )
   let activeChatSection = document.getElementById("activeChatSection")
 
+  //send chat:message-typing event
+  let isUserTyping = false
+  let lastActiveChatId = activeChatSection.dataset.chatId.toString()
+  let activeChatInputTextContent = document.getElementById(
+    "activeChatInputTextContent"
+  )
+
+  activeChatInputTextContent.addEventListener("input", () => {
+    if (activeChatSection.dataset.chatId !== "") {
+      if (
+        lastActiveChatId !== "" &&
+        lastActiveChatId !== activeChatSection.dataset.chatId
+      ) {
+        let eventData = {
+          chatId: lastActiveChatId,
+          loginUserId: loginUser._id.toString()
+        }
+        socket.emit("chat:message-stop-typing", eventData)
+        lastActiveChatId = activeChatSection.dataset.chatId.toString()
+      }
+
+      lastActiveChatId = activeChatSection.dataset.chatId.toString()
+
+      let eventData = {
+        chatId: activeChatSection.dataset.chatId.toString()
+      }
+      const inputValue = activeChatInputTextContent.value.trim()
+      if (inputValue && !isUserTyping) {
+        isUserTyping = true
+        socket.emit("chat:message-start-typing", eventData)
+      } else if (!inputValue && isUserTyping) {
+        isUserTyping = false
+        socket.emit("chat:message-stop-typing", eventData)
+      }
+    }
+  })
+  let activeChatHeaderStatus = document.getElementById("activeChatHeaderStatus")
+
+  socket.on("chat:message-start-typing", async data => {
+    if (
+      activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+    ) {
+      activeChatHeaderStatus.innerHTML = `${data.user.firstName} typing<span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span>`
+    }
+    activeChatHeaderStatus.classList.remove(
+      "active-chat-header__chat-status--hide"
+    )
+  })
+  socket.on("chat:message-stop-typing", async data => {
+    if (
+      activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+    ) {
+      if (data.isGroupChat) {
+        activeChatHeaderStatus.textContent = ""
+      } else {
+        activeChatHeaderStatus.textContent = "Active"
+      }
+      activeChatHeaderStatus.classList.remove(
+        "active-chat-header__chat-status--hide"
+      )
+    }
+  })
+  /////////////////////////////////////////////////////
+  // event listeners
   socket.on("chat:new-message", async message => {
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(

@@ -1,8 +1,8 @@
 const { createMainNotification } = require("../common/mainNotification.dev")
 
-const allChatSection = document.getElementById("allChatSection")
-const activeChatSection = document.getElementById("activeChatSection")
 ;(async function () {
+  const allChatSection = document.getElementById("allChatSection")
+  const activeChatSection = document.getElementById("activeChatSection")
   async function checkChatState() {
     // console.log(location)
     // console.log(history)
@@ -570,32 +570,3 @@ document
     let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
     closeReplyMessageBox()
   })
-
-// const input = document.querySelector("#input-message")
-// let isTyping = false
-
-// input.addEventListener("input", () => {
-//   const inputValue = input.value.trim()
-//   if (inputValue && !isTyping) {
-//     isTyping = true
-//     socket.emit("typing")
-//   } else if (!inputValue && isTyping) {
-//     isTyping = false
-//     socket.emit("stop typing")
-//   }
-// })
-
-// const input = document.querySelector('#input-message');
-// let typingTimer;
-// const typingInterval = 1000; // Time in milliseconds before emitting the "stop typing" event
-
-// input.addEventListener('keydown', () => {
-//   clearTimeout(typingTimer);
-//   if (!typingTimer) {
-//     socket.emit('typing');
-//   }
-//   typingTimer = setTimeout(() => {
-//     socket.emit('stop typing');
-//     typingTimer = null;
-//   }, typingInterval);
-// });

@@ -1,6 +1,6 @@
 // import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev"
 
-export function createUserChatSocket(socket) {
+export function createUserActiveStatusSocket(socket) {
   let activeChatSection = document.getElementById("activeChatSection")
   let activeChatHeaderStatus = document.getElementById("activeChatHeaderStatus")
   ////////////////////////////////////////////

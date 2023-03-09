@@ -1,31 +1,39 @@
 const User = require("../../models/user")
 const Chat = require("../../models/chat")
-const {
-  selectLoginUserField
-} = require("../../common/filter-field/filterUserField")
+// const {
+//   selectLoginUserField
+// } = require("../../common/filter-field/filterUserField")
 exports.userHandler = async (io, socket) => {
   if (socket.loginUser) {
-    let loginUser = await User.findById(socket.loginUser.id).select(
-      selectLoginUserField
-    )
+    let loginUser = await User.findById(socket.loginUser.id).select({
+      isActive: 1,
+      lastActive: 1
+    })
     loginUser.isActive = true
     await loginUser.save()
-    sendUserActiveEventToOneToOneChatUser(socket, loginUser, "user:online")
+    sendUserActiveEventToOneToOneChatUser(io, socket, loginUser, "user:online")
   }
 
   socket.on("disconnecting", async () => {
     if (socket.loginUser) {
-      let loginUser = await User.findById(socket.loginUser.id).select(
-        "selectLoginUserField"
-      )
+      let loginUser = await User.findById(socket.loginUser.id).select({
+        isActive: 1,
+        lastActive: 1
+      })
       loginUser.isActive = false
       loginUser.lastActive = Date.now()
       await loginUser.save()
-      sendUserActiveEventToOneToOneChatUser(socket, loginUser, "user:offline")
+      sendUserActiveEventToOneToOneChatUser(
+        io,
+        socket,
+        loginUser,
+        "user:offline"
+      )
     }
   })
 }
 async function sendUserActiveEventToOneToOneChatUser(
+  io,
   socket,
   loginUser,
   eventName
@@ -42,8 +50,10 @@ async function sendUserActiveEventToOneToOneChatUser(
       userId => userId.toString() !== loginUser._id.toString()
     )
 
-    socket
-      .to(otherUserId.toString())
-      .emit(eventName, loginUser._id.toString(), chat._id.toString())
+    io.to(otherUserId.toString()).emit(
+      eventName,
+      loginUser._id.toString(),
+      chat._id.toString()
+    )
   })
 }

@@ -2,7 +2,7 @@ const { Server } = require("socket.io")
 const cookie = require("cookie")
 const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
-// const chatHandler = require("./chatHandler")
+const { chatHandler } = require("./chat/chatHandler.socket")
 const { userHandler } = require("./user/userHandler.socket")
 exports.createSocketIOInstance = httpServer => {
   const io = new Server(httpServer, {
@@ -41,6 +41,7 @@ exports.createSocketIOInstance = httpServer => {
   io.on("connection", socket => {
     // socket handlers
     userHandler(io, socket)
+    chatHandler(io, socket)
     /////////////////////////////////
     console.log(socket.rooms)
     socket.prependAny((eventName, ...args) => {
