@@ -116,12 +116,6 @@ export function createChatBox(chat) {
     }
   }
 
-  // attach event to this chat box
-  chatBox.addEventListener("click", async () => {
-    let { fetchActiveChat } = await import("./fetchActiveChat.dev")
-    fetchActiveChat(chat._id)
-  })
-
   return chatBox
 }
 
@@ -215,5 +209,19 @@ export function deleteChatBox(chatId) {
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${chatId.toString()}"]`
   )
-  chatBox.remove()
+  chatBox.parentNode.removeChild(chatBox)
 }
+
+allChatChatBoxContainer.addEventListener("click", async e => {
+  let chatBox = e.target.closest(`.chat-box`)
+
+  if (chatBox && allChatChatBoxContainer.contains(chatBox)) {
+    let chatId = chatBox.dataset.chatId
+    if (chatId) {
+      let { fetchActiveChat } = await import("./fetchActiveChat.dev")
+      fetchActiveChat(chatId)
+    }
+  } else {
+    return
+  }
+})

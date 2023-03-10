@@ -11,7 +11,9 @@ const {
   signedUrlForGetAwsS3Object
 } = require("../../services/awsS3")
 ///////
-const { selectMessageField } = require("./common/filterMessageField")
+const {
+  selectSafeMessageField
+} = require("../../common/filter-field/filterMessageField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 // router.post("/", getLoginUser, createMessage)
 
@@ -135,7 +137,7 @@ exports.createMessage = async (req, res) => {
                 lean: true
               }
             })
-            .select(selectMessageField)
+            .select(selectSafeMessageField)
             .lean()
 
           if (

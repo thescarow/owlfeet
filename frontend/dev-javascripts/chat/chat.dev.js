@@ -21,14 +21,6 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   document.addEventListener("DOMContentLoaded", checkChatState)
   window.addEventListener("popstate", checkChatState)
 
-  const allChatBox = [...document.getElementsByClassName("chat-box")]
-  allChatBox.forEach(chatBox => {
-    chatBox.addEventListener("click", async () => {
-      let chatId = chatBox.dataset.chatId
-      let { fetchActiveChat } = await import("./js/fetchActiveChat.dev")
-      fetchActiveChat(chatId)
-    })
-  })
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // active chat message container
   const activeChatMessageContainer = document.getElementById(
