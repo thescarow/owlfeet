@@ -12,11 +12,14 @@ export function createMainChatSocket(socket) {
     if (
       activeChatSection.dataset.chatId.toString() === data.chatId.toString()
     ) {
-      activeChatHeaderStatus.innerHTML = `${data.user.firstName} typing<span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span>`
+      activeChatHeaderStatus.innerHTML = `${
+        data.isGroupChat ? data.user.firstName : ""
+      } typing<span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span><span class="active-chat-header__typing-effect">.</span>`
+
+      activeChatHeaderStatus.classList.remove(
+        "active-chat-header__chat-status--hide"
+      )
     }
-    activeChatHeaderStatus.classList.remove(
-      "active-chat-header__chat-status--hide"
-    )
   })
   socket.on("chat:message-stop-typing", async data => {
     if (
