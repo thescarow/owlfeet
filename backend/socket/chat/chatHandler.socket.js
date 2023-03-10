@@ -11,7 +11,6 @@ exports.chatHandler = async (io, socket) => {
         .select({ currentChatMembers: 1, isGroupChat: 1 })
         .lean()
       if (chat) {
-        console.log("chat:", chat)
         let user = await User.findById(socket.loginUser.id)
           .select({
             firstName: 1,

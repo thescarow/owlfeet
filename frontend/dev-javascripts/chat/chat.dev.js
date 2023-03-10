@@ -381,6 +381,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
           "../socket/indexSocket.dev"
         )
         sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
+        isUserTyping = false
       }
 
       fetch("/message", {
@@ -481,6 +482,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         "../socket/indexSocket.dev"
       )
       sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
+      isUserTyping = false
     }
   })
 
@@ -590,8 +592,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
 let activeChatInputTextContent = document.getElementById(
   "activeChatInputTextContent"
 )
-
-activeChatInputTextContent.addEventListener("keydown", async () => {
+activeChatInputTextContent.addEventListener("input", async e => {
   if (activeChatSection.dataset.chatId !== "") {
     if (
       lastActiveChatId !== "" &&
@@ -601,6 +602,7 @@ activeChatInputTextContent.addEventListener("keydown", async () => {
         "../socket/indexSocket.dev"
       )
       sendChatMessageStopTypingSocket(lastActiveChatId)
+      isUserTyping = false
       lastActiveChatId = activeChatSection.dataset.chatId.toString()
     }
 
@@ -608,18 +610,21 @@ activeChatInputTextContent.addEventListener("keydown", async () => {
     let chatId = activeChatSection.dataset.chatId.toString()
 
     const inputValue = activeChatInputTextContent.value.trim()
+
     if (inputValue && !isUserTyping) {
       isUserTyping = true
       let { sendChatMessageStartTypingSocket } = await import(
         "../socket/indexSocket.dev"
       )
       sendChatMessageStartTypingSocket(chatId)
+      console.log("called typing start")
     } else if (!inputValue && isUserTyping) {
       isUserTyping = false
       let { sendChatMessageStopTypingSocket } = await import(
         "../socket/indexSocket.dev"
       )
       sendChatMessageStopTypingSocket(chatId)
+      console.log("called typing Stop")
     }
   }
 })
