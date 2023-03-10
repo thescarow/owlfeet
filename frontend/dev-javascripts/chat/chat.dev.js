@@ -617,14 +617,12 @@ activeChatInputTextContent.addEventListener("input", async e => {
         "../socket/indexSocket.dev"
       )
       sendChatMessageStartTypingSocket(chatId)
-      console.log("called typing start")
     } else if (!inputValue && isUserTyping) {
       isUserTyping = false
       let { sendChatMessageStopTypingSocket } = await import(
         "../socket/indexSocket.dev"
       )
       sendChatMessageStopTypingSocket(chatId)
-      console.log("called typing Stop")
     }
   }
 })
