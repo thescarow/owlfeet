@@ -365,7 +365,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   const activeChatInputSendBtn = document.getElementById(
     "activeChatInputSendBtn"
   )
-  activeChatInputSendBtn.addEventListener("click", () => {
+  activeChatInputSendBtn.addEventListener("click", async () => {
     let userMessage = {}
     if (
       activeChatInputTextContent.value.trim() !== "" &&
@@ -376,6 +376,13 @@ const { createMainNotification } = require("../common/mainNotification.dev")
       userMessage.textContent = activeChatInputTextContent.value.trim()
       userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
       activeChatInputTextContent.value = ""
+      if (activeChatSection.dataset.chatId !== "") {
+        let { sendChatMessageStopTypingSocket } = await import(
+          "../socket/indexSocket.dev"
+        )
+        sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
+      }
+
       fetch("/message", {
         method: "POST", // or 'PUT'
         headers: {
@@ -467,8 +474,14 @@ const { createMainNotification } = require("../common/mainNotification.dev")
   const ActiveChatToAllChatBtn = document.getElementById(
     "ActiveChatToAllChatBtn"
   )
-  ActiveChatToAllChatBtn.addEventListener("click", () => {
+  ActiveChatToAllChatBtn.addEventListener("click", async () => {
     location.hash = ""
+    if (activeChatSection.dataset.chatId !== "") {
+      let { sendChatMessageStopTypingSocket } = await import(
+        "../socket/indexSocket.dev"
+      )
+      sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
+    }
   })
 
   //active chat header pic and active chat header name
@@ -570,3 +583,43 @@ document
     let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
     closeReplyMessageBox()
   })
+
+//send chat:message-typing event
+let isUserTyping = false
+let lastActiveChatId = activeChatSection.dataset.chatId.toString()
+let activeChatInputTextContent = document.getElementById(
+  "activeChatInputTextContent"
+)
+
+activeChatInputTextContent.addEventListener("keydown", async () => {
+  if (activeChatSection.dataset.chatId !== "") {
+    if (
+      lastActiveChatId !== "" &&
+      lastActiveChatId !== activeChatSection.dataset.chatId
+    ) {
+      let { sendChatMessageStopTypingSocket } = await import(
+        "../socket/indexSocket.dev"
+      )
+      sendChatMessageStopTypingSocket(lastActiveChatId)
+      lastActiveChatId = activeChatSection.dataset.chatId.toString()
+    }
+
+    lastActiveChatId = activeChatSection.dataset.chatId.toString()
+    let chatId = activeChatSection.dataset.chatId.toString()
+
+    const inputValue = activeChatInputTextContent.value.trim()
+    if (inputValue && !isUserTyping) {
+      isUserTyping = true
+      let { sendChatMessageStartTypingSocket } = await import(
+        "../socket/indexSocket.dev"
+      )
+      sendChatMessageStartTypingSocket(chatId)
+    } else if (!inputValue && isUserTyping) {
+      isUserTyping = false
+      let { sendChatMessageStopTypingSocket } = await import(
+        "../socket/indexSocket.dev"
+      )
+      sendChatMessageStopTypingSocket(chatId)
+    }
+  }
+})
