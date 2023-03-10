@@ -1,46 +1,11 @@
 export function createMainChatSocket(socket) {
   console.log("inside chatSocket")
+  let activeChatSection = document.getElementById("activeChatSection")
+
   let activeChatMessageContainer = document.getElementById(
     "activeChatMessageContainer"
   )
-  let activeChatSection = document.getElementById("activeChatSection")
 
-  //send chat:message-typing event
-  let isUserTyping = false
-  let lastActiveChatId = activeChatSection.dataset.chatId.toString()
-  let activeChatInputTextContent = document.getElementById(
-    "activeChatInputTextContent"
-  )
-
-  activeChatInputTextContent.addEventListener("input", () => {
-    if (activeChatSection.dataset.chatId !== "") {
-      if (
-        lastActiveChatId !== "" &&
-        lastActiveChatId !== activeChatSection.dataset.chatId
-      ) {
-        let eventData = {
-          chatId: lastActiveChatId,
-          loginUserId: loginUser._id.toString()
-        }
-        socket.emit("chat:message-stop-typing", eventData)
-        lastActiveChatId = activeChatSection.dataset.chatId.toString()
-      }
-
-      lastActiveChatId = activeChatSection.dataset.chatId.toString()
-
-      let eventData = {
-        chatId: activeChatSection.dataset.chatId.toString()
-      }
-      const inputValue = activeChatInputTextContent.value.trim()
-      if (inputValue && !isUserTyping) {
-        isUserTyping = true
-        socket.emit("chat:message-start-typing", eventData)
-      } else if (!inputValue && isUserTyping) {
-        isUserTyping = false
-        socket.emit("chat:message-stop-typing", eventData)
-      }
-    }
-  })
   let activeChatHeaderStatus = document.getElementById("activeChatHeaderStatus")
 
   socket.on("chat:message-start-typing", async data => {
@@ -67,8 +32,7 @@ export function createMainChatSocket(socket) {
       )
     }
   })
-  /////////////////////////////////////////////////////
-  // event listeners
+
   socket.on("chat:new-message", async message => {
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(

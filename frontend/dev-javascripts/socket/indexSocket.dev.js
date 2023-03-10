@@ -1,7 +1,7 @@
 import { io } from "socket.io-client"
-;(async function () {
-  var socket = io()
+const socket = io()
 
+;(async function () {
   socket.on("connect", () => {
     console.log("client connected")
   })
@@ -22,9 +22,9 @@ import { io } from "socket.io-client"
     )
   })
   //////////////////////////////////////////////////
+  //  define socket handler here
   let { createUserSocket } = await import("./user-socket")
   createUserSocket(socket)
-  ///////////////////////////////////////
   if (pageName && pageName === "home") {
     let { createHomeSocket } = await import("./homeSocket.dev.js")
     createHomeSocket(socket)
@@ -51,3 +51,16 @@ import { io } from "socket.io-client"
     createMainChatSocket(socket)
   }
 })()
+
+export function sendChatMessageStartTypingSocket(chatId) {
+  let eventData = {
+    chatId: chatId.toString()
+  }
+  socket.emit("chat:message-start-typing", eventData)
+}
+export function sendChatMessageStopTypingSocket(chatId) {
+  let eventData = {
+    chatId: chatId.toString()
+  }
+  socket.emit("chat:message-stop-typing", eventData)
+}
