@@ -33,13 +33,13 @@ exports.selectSafeMessageField = {
   isInfoMessage: 1,
   infoMessageType: 1,
   infoMessageContent: 1,
-  createdAt: 1,
   seenBy: 1,
   hasMediaContent: 1,
   mediaContentType: 1,
   mediaContentMimeType: 1,
   mediaContentPath: 1,
-  textContent: 1
+  textContent: 1,
+  createdAt: 1
   // deletedFor: 1,
   //   updatedAt: 1
 }
@@ -76,10 +76,10 @@ exports.selectLatestMessageField = {
   infoMessageType: 1,
   infoMessageContent: 1,
   createdAt: 1,
-  updatedAt: 1
+  updatedAt: 1,
+  isDeletedForAll: 1
 
   //   reader: 1,
-  //   isDeletedForAll: 1,
   //   isRepliedMessage: 1,
   //   repliedTo: 1,
   //   seenBy: 1,
