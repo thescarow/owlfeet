@@ -70,28 +70,25 @@ let svg_viewUserProfile = `<svg width="100" height="100" viewBox="0 0 100 100"  
 
 import "../css/activeChatInfoModal.dev.css"
 
-let userChatInfoBtnContainerHtml = `
-<div class="chat-info-btn">${svg_deleteBlankBtn} Delete Chat </div>
+let userChatInfoBtns = `
+<div class="chat-info-btn" data-chat-info-btn="clear-chat-all-messages">${svg_clearChat} Clear All Messages</div>
 
-<div class="chat-info-btn">${svg_clearChat} Clear All Messages</div>
+<div class="chat-info-btn" data-chat-info-btn="change-chat-appearance">${svg_changeAppearance} Change Chat Appearance</div>
 
-<div class="chat-info-btn ">${svg_changeAppearance} Change Chat Appearance</div>
-
-<div class="chat-info-btn">${svg_shareBlankBtn} Share User Profile</div>
+<div class="chat-info-btn" data-chat-info-btn="share-user-profile">${svg_shareBlankBtn} Share User Profile</div>
 `
 
-let groupChatInfoBtnContainerHtml = `
-<div class="chat-info-btn chat-info-btn--admin" id="chatInfoEditGroupChatBtn">${svg_editGroup} Edit Chat </div>
+let groupChatInfoMemberBtns = `<div class="chat-info-btn" data-chat-info-btn="leave-group-chat">${svg_leaveGroupBtn} Leave Group </div>
 
-<div class="chat-info-btn chat-info-btn--admin" id="chatInfoDeleteChatBtn">${svg_deleteBlankBtn} Delete Chat </div>
+<div class="chat-info-btn" data-chat-info-btn="clear-chat-all-messages">${svg_clearChat} Clear All Messages</div>`
 
+let groupChatInfoAdminBtns = `<div class="chat-info-btn" data-chat-info-btn="edit-group-chat">${svg_editGroup} Edit Chat </div>
 
-<div class="chat-info-btn chat-info-btn--member" id="chatInfoLeaveGroupChatBtn">${svg_leaveGroupBtn} Leave Group </div>
+<div class="chat-info-btn" data-chat-info-btn="delete-chat">${svg_deleteBlankBtn} Delete Chat </div>
 
-<div class="chat-info-btn " id="chatInfoClearChatAllMessagesBtn">${svg_clearChat} Clear All Messages</div>
+<div class="chat-info-btn" data-chat-info-btn="clear-chat-all-messages">${svg_clearChat} Clear All Messages</div>
 
-<div class="chat-info-btn chat-info-btn--admin">${svg_changeAppearance} Change Chat Appearance</div>
-`
+<div class="chat-info-btn" data-chat-info-btn="change-chat-appearance">${svg_changeAppearance} Change Chat Appearance</div>`
 
 export async function createActiveChatInfoModal(chatId) {
   const activeChatSection = document.getElementById("activeChatSection")
@@ -103,38 +100,26 @@ export async function createActiveChatInfoModal(chatId) {
       activeChatInfoModal.classList.add("chat-modal", "active-chat-info-modal")
       activeChatInfoModal.setAttribute("id", "activeChatInfoModal")
 
-      let activeChatInfoModalHtml = `<div class="chat-modal-content chat-modal-content--chat-info">
-     <div class="chat-info-header">
-      <div class="chat-info-header__title">
-          Chat Info
-      </div>
-      <div class="chat-info-header__btn-container">
-         
-
-          <div class="chat-info-header__btn chat-info-header__btn--close-modal" id="closeActiveChatInfoModal">
-              ${svg_closeBtn}
+      let activeChatInfoModalHtml = `
+    <div class="chat-modal-content chat-modal-content--chat-info">
+           <div class="chat-info-header">
+                 <div class="chat-info-header__title">Chat Info
+                 </div>
+                <div class="chat-info-header__btn-container">
+                   <div class="chat-info-header__btn chat-info-header__btn--close-modal" id="closeActiveChatInfoModal">${svg_closeBtn}</div>
+                </div>
           </div>
-      </div>
-       </div>
-      <div class="chat-info-pic chat-info-pic--hide-img">
-      <img src=""
-          alt="chat image">
-          ${svg_chatPic}
 
-        </div>
-      <div class="chat-info-name">
+          <div class="chat-info-pic chat-info-pic--hide-img">
+                     <img src="" alt="chat image"> ${svg_chatPic}
+          </div>
 
+          <div class="chat-info-name"></div>
+          <div class="chat-info-desc"></div>
+          
+          <div class="chat-info-btn-container">
+          
          </div>
-         <div class="chat-info-desc">
-
-     </div>
-        <div class="chat-info-btn-container">
-      ${
-        activeChatData.isGroupChat
-          ? groupChatInfoBtnContainerHtml
-          : userChatInfoBtnContainerHtml
-      }
-     </div>
   
 
 
@@ -164,38 +149,79 @@ export async function createActiveChatInfoModal(chatId) {
 }
 // initialise Event to Active Chat Info Modal
 function initialiseEventForActiveChatInfo(activeChatInfoModal) {
-  document
-    .getElementById("chatInfoEditGroupChatBtn")
-    .addEventListener("click", async () => {
-      let { createGroupChatFormModal, updateGroupChatFormModalData } =
-        await import("./createGroupChatFormModal.dev")
+  let chatInfoBtnContainer = activeChatInfoModal.getElementsByClassName(
+    "chat-info-btn-container"
+  )[0]
 
-      createGroupChatFormModal("edit")
-      updateGroupChatFormModalData(activeChatData)
-    })
-  document
-    .getElementById("chatInfoClearChatAllMessagesBtn")
-    .addEventListener("click", async () => {
-      let { createClearChatAllMessagesModal } = await import(
-        "./clearChatAllMessagesModal.dev"
-      )
-      createClearChatAllMessagesModal(activeChatData)
-    })
+  chatInfoBtnContainer.addEventListener("click", async e => {
+    let chatInfoBtn = e.target.closest(`[data-chat-info-btn]`)
 
-  document
-    .getElementById("chatInfoDeleteChatBtn")
-    .addEventListener("click", async () => {
-      let { createDeleteChatModal } = await import("./deleteChatModal.dev")
-      createDeleteChatModal(activeChatData)
-    })
-  document
-    .getElementById("chatInfoLeaveGroupChatBtn")
-    .addEventListener("click", async () => {
-      let { createLeaveGroupChatModal } = await import(
-        "./leaveGroupChatModal.dev"
-      )
-      createLeaveGroupChatModal(activeChatData)
-    })
+    if (chatInfoBtn && chatInfoBtnContainer.contains(chatInfoBtn)) {
+      let chatId = activeChatInfoModal.dataset.chatId
+
+      if (chatInfoBtn.dataset.chatInfoBtn === "edit-group-chat") {
+        let { createGroupChatFormModal, updateGroupChatFormModalData } =
+          await import("./createGroupChatFormModal.dev")
+        createGroupChatFormModal("edit")
+        updateGroupChatFormModalData(activeChatData)
+      }
+
+      if (chatInfoBtn.dataset.chatInfoBtn === "clear-chat-all-messages") {
+        let { createClearChatAllMessagesModal } = await import(
+          "./clearChatAllMessagesModal.dev"
+        )
+        createClearChatAllMessagesModal(activeChatData)
+      }
+
+      if (chatInfoBtn.dataset.chatInfoBtn === "delete-chat") {
+        let { createDeleteChatModal } = await import("./deleteChatModal.dev")
+        createDeleteChatModal(activeChatData)
+      }
+
+      if (chatInfoBtn.dataset.chatInfoBtn === "leave-group-chat") {
+        let { createLeaveGroupChatModal } = await import(
+          "./leaveGroupChatModal.dev"
+        )
+        createLeaveGroupChatModal(activeChatData)
+      }
+    } else {
+      return
+    }
+  })
+  /////////////////////////////
+  let chatInfoMemberContainer = activeChatInfoModal.getElementsByClassName(
+    "chat-info-member-container"
+  )[0]
+
+  chatInfoMemberContainer.addEventListener("click", async e => {
+    let chatInfoMember = e.target.closest(`.chat-info-member`)
+    let chatInfoMemberPic = e.target.closest(`.chat-info-member__pic`)
+    let chatInfoMemberFullname = e.target.closest(`.chat-info-member__fullname`)
+    let chatInfoMemberBtn = e.target.closest(`.chat-info-member__btn`)
+
+    if (
+      chatInfoMemberPic &&
+      chatInfoMemberContainer.contains(chatInfoMemberPic)
+    ) {
+      let username = chatInfoMember.dataset.username
+      location.assign(`/user/${username}`)
+    }
+    if (
+      chatInfoMemberFullname &&
+      chatInfoMemberContainer.contains(chatInfoMemberFullname)
+    ) {
+      let username = chatInfoMember.dataset.username
+      location.assign(`/user/${username}`)
+    }
+    if (
+      chatInfoMemberBtn &&
+      chatInfoMemberContainer.contains(chatInfoMemberBtn)
+    ) {
+      chatInfoMemberContainer
+        .getElementsByClassName("chat-info-member-modal")[0]
+        .classList.remove("chat-info-member-modal--hide")
+    }
+  })
   /////////////////////////
   document
     .getElementById("closeActiveChatInfoModal")
@@ -226,7 +252,7 @@ export async function updateActiveChatInfoModal() {
       <div class="chat-info-member-modal chat-info-member-modal--hide">
       <div class="chat-info-member-modal-content"> 
       
-      <div class="chat-info-member-modal-content__option ">
+      <div class="chat-info-member-modal-content__option">
       ${svg_viewUserProfile} View Profile
       </div>
       <div class="chat-info-member-modal-content__option chat-info-member-modal-content__option--admin-modal">
@@ -275,19 +301,24 @@ export async function updateActiveChatInfoModal() {
         chatInfoMember.insertAdjacentHTML(
           "beforeend",
           `<div class="chat-info-member__pic">
-                           <img src="${user.profile}" alt="">
-                         </div>
-                       <div class="chat-info-member__column chat-info-member__column--data">
+                 <img src="${user.profile}" alt="">
+          </div>
 
-                       <div class="chat-info-member__row">
-                      <div class="chat-info-member__fullname"></div>
-                     <div class="chat-info-member__admin-tag">(admin)</div>
-                      </div>
-                     <div class="chat-info-member__username"></div>
-                      </div>
-                     <div class="chat-info-member__btn">
+          <div class="chat-info-member__column chat-info-member__column--data">
+
+             <div class="chat-info-member__row">
+               <div class="chat-info-member__fullname"></div>
+               <div class="chat-info-member__admin-tag">(admin)</div>
+             </div>
+
+            <div class="chat-info-member__username">
+            </div>
+
+         </div>
+
+         <div class="chat-info-member__btn">
                     ${svg_infoBlankBtn}
-                  </div>`
+        </div>`
         )
         activeChatInfoMemberContainer.insertAdjacentElement(
           "beforeend",
@@ -301,51 +332,38 @@ export async function updateActiveChatInfoModal() {
         chatInfoMember.getElementsByClassName(
           "chat-info-member__username"
         )[0].textContent = "@" + user.username
-
-        ///////////
-        // attach event to active Chat Info modal members
-        chatInfoMember
-          .getElementsByClassName("chat-info-member__pic")[0]
-          .addEventListener("click", () => {
-            let username = chatInfoMember.dataset.username
-            location.replace(`/user/${username}`)
-          })
-        chatInfoMember
-          .getElementsByClassName("chat-info-member__fullname")[0]
-          .addEventListener("click", () => {
-            let username = chatInfoMember.dataset.username
-            location.replace(`/user/${username}`)
-          })
-        chatInfoMember
-          .getElementsByClassName("chat-info-member__btn")[0]
-          .addEventListener("click", () => {
-            activeChatInfoMemberContainer
-              .getElementsByClassName("chat-info-member-modal")[0]
-              .classList.remove("chat-info-member-modal--hide")
-          })
       })
     }
 
-    // update chat admin members tag
+    // update chat info members admin tag and chat info btns
     if (activeChatData.isGroupChat) {
       if (activeChatData.hasOwnProperty("groupChatAdmin")) {
-        let checkLoginUserIsAdmin = false
+        let isLoginUserIsAdmin = false
         activeChatData.groupChatAdmin.forEach(userId => {
           activeChatInfoMemberContainer
             .querySelector(`.chat-info-member[data-user-id = "${userId}"]`)
             .classList.add("chat-info-member--admin")
           if (userId.toString() === loginUser._id.toString()) {
-            checkLoginUserIsAdmin = true
+            isLoginUserIsAdmin = true
           }
         })
-        if (checkLoginUserIsAdmin === true) {
-          activeChatInfoModal.classList.add("active-chat-info-modal--admin")
+        if (isLoginUserIsAdmin) {
+          activeChatInfoModal.getElementsByClassName(
+            "chat-info-btn-container"
+          )[0].innerHTML = groupChatInfoAdminBtns
         } else {
-          activeChatInfoModal.classList.add("active-chat-info-modal--member")
+          activeChatInfoModal.getElementsByClassName(
+            "chat-info-btn-container"
+          )[0].innerHTML = groupChatInfoMemberBtns
         }
       }
+    } else {
+      activeChatInfoModal.getElementsByClassName(
+        "chat-info-btn-container"
+      )[0].innerHTML = userChatInfoBtns
     }
-    ///update active chat info modal
+
+    ///update active chat info pic
     let chatInfoPic =
       activeChatInfoModal.getElementsByClassName("chat-info-pic")[0]
 
