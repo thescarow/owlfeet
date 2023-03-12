@@ -6,7 +6,6 @@ let svg_searchBtn = `<svg width="102" height="102" viewBox="0 0 102 102" xmlns="
 <path d="M82.2194 83.7185L101 101"   stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
 
-import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/addUserModal.dev.css"
 let allAddedUser = []
 // we store value of alreadyAddedUser array to allAddedUser array so that we can not destroy the alreadyAddedUser array refrence so when we click cancel it will not change anything
@@ -111,7 +110,11 @@ export async function createAddUserModal(
   }
 }
 
-function fetchSearchedUserInAddUserModal(addUserModal, userInput, userCount) {
+async function fetchSearchedUserInAddUserModal(
+  addUserModal,
+  userInput,
+  userCount
+) {
   fetch(
     `/user/fetch-following-users?userInput=${userInput}&userCount=${userCount}`
   )
@@ -121,15 +124,21 @@ function fetchSearchedUserInAddUserModal(addUserModal, userInput, userCount) {
       }
       return Promise.reject(response)
     })
-    .then(data => {
+    .then(async data => {
       if (data.isSuccess) {
         updateSearchedUserContainer(addUserModal, data.users)
       } else {
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
         createMainNotification(data.error, "error")
       }
     })
-    .catch(err => {
+    .catch(async err => {
       console.log(err)
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
       createMainNotification(
         "Server Error,Please Check Your Search Input",
         "error"

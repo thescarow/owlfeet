@@ -14,9 +14,13 @@ const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 ////////
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////////////
-const { filterChatFieldForNonMember } = require("./common/filterChatField")
-// router.post("/:chatId", getLoginUser, fetchChatWithid)
-exports.fetchChatWithId = async (req, res) => {
+
+const {
+  filterChatFieldForNonMember,
+  selectSafeChatField
+} = require("../../common/filter-field/filterChatField")
+// router.get("/:chatId", getLoginUser, fetchChatWithid)
+exports.getChatDataById = async (req, res) => {
   try {
     if (req.user) {
       const chatId = req.params.chatId
@@ -25,6 +29,7 @@ exports.fetchChatWithId = async (req, res) => {
         allChatMembers: { $elemMatch: { $eq: req.user.id } },
         isDeleted: false
       })
+        .select(selectSafeChatField)
         .populate({
           path: "currentChatMembers",
           select: {
@@ -138,7 +143,7 @@ exports.fetchChatWithId = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Fetching Chat With Id:"),
+      errorLog("Server Error In Fetching Chat By Id:"),
       mainErrorLog(err)
     )
     res.status(500).json({

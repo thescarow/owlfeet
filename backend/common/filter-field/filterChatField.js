@@ -6,7 +6,7 @@ let chatFieldForNonMember = {
   createdAt: 1
   //   groupChatAdmin: 1,
   //   currentChatMembers: 1,
-  //   allChatMembers: 1,
+  //   allChatMembers:1
   //   isDeleted: 1
 }
 
@@ -31,4 +31,15 @@ exports.selectSafeChatField = {
   createdAt: 1,
   isDeleted: 1
   //   allChatMembers: 1,
+}
+exports.selectChatBoxField = {
+  isGroupChat: 1,
+  chatPic: 1,
+  chatName: 1,
+  createdAt: 1,
+  chatDescription: 1,
+  currentChatMembers: 1
+  // groupChatAdmin: 1,
+  // isDeleted: 1
+  // allChatMembers: 1,
 }

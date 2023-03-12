@@ -1,4 +1,3 @@
-import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/leaveGroupChatModal.dev.css"
 
 export async function createLeaveGroupChatModal(chatData) {
@@ -84,11 +83,18 @@ async function initialiseEventForLeaveGroupChatModal(leaveGroupChatModal) {
               updateActiveChatInfoModal()
             }
           } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
             createMainNotification(data.error, "error")
           }
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err)
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
+
           createMainNotification(
             "Server Error In Leaving Group Chat, Please Try Again",
             "error"

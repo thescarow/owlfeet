@@ -1,4 +1,3 @@
-import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/deleteChatModal.dev.css"
 
 export async function createDeleteChatModal(chatData) {
@@ -83,11 +82,17 @@ async function initialiseEventForDeleteChatModal(deleteChatModal) {
             deleteChatBox(data.deletedChatId)
             clearActiveChatMessageContainer()
           } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
             createMainNotification(data.error, "error")
           }
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err)
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification(
             "Server Error In Deleting Chat, Please Try Again",
             "error"

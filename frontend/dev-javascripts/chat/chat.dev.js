@@ -1,5 +1,3 @@
-const { createMainNotification } = require("../common/mainNotification.dev")
-
 ;(async function () {
   const allChatSection = document.getElementById("allChatSection")
   const activeChatSection = document.getElementById("activeChatSection")
@@ -113,7 +111,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
     dynamicWidth: true
   }
 
-  new Picker(emojiPickerOptions)
+  let emojiPicker = new Picker(emojiPickerOptions)
 
   activeChatInputEmojiBtn.addEventListener("click", () => {
     activeChatInputEmojiContainer.classList.toggle(
@@ -269,17 +267,23 @@ const { createMainNotification } = require("../common/mainNotification.dev")
         }
         return Promise.reject(response)
       })
-      .then(data => {
+      .then(async data => {
         if (data.isSuccess) {
           checkTimeAndCreateNewMessage(data.message, activeChatMessageContainer)
           closeReplyMessageBox()
           updateAllChatSection(data.message)
         } else {
+          let { createMainNotification } = await import(
+            "../common/mainNotification.dev"
+          )
           createMainNotification(data.error, "error")
         }
       })
-      .catch(err => {
+      .catch(async err => {
         console.log(err)
+        let { createMainNotification } = await import(
+          "../common/mainNotification.dev"
+        )
         createMainNotification(
           "Server Error In Sending Message, Please Try Again",
           "error"
@@ -322,7 +326,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
             }
             return Promise.reject(response)
           })
-          .then(data => {
+          .then(async data => {
             if (data.isSuccess) {
               checkTimeAndCreateNewMessage(
                 data.message,
@@ -337,11 +341,17 @@ const { createMainNotification } = require("../common/mainNotification.dev")
                 "attachment-btn-box__input-box--hide"
               )
             } else {
+              let { createMainNotification } = await import(
+                "../common/mainNotification.dev"
+              )
               createMainNotification(data.error, "error")
             }
           })
-          .catch(err => {
+          .catch(async err => {
             console.log(err)
+            let { createMainNotification } = await import(
+              "../common/mainNotification.dev"
+            )
             createMainNotification(
               "Server Error In Sending Message, Please Try Again",
               "error"
@@ -389,7 +399,7 @@ const { createMainNotification } = require("../common/mainNotification.dev")
           }
           return Promise.reject(response)
         })
-        .then(data => {
+        .then(async data => {
           if (data.isSuccess) {
             activeChatInputAttachmentBox.classList.remove(
               "active-chat-input-attachment-box--hide"
@@ -415,11 +425,17 @@ const { createMainNotification } = require("../common/mainNotification.dev")
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight + 1000
           } else {
+            let { createMainNotification } = await import(
+              "../common/mainNotification.dev"
+            )
             createMainNotification(data.error, "error")
           }
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err)
+          let { createMainNotification } = await import(
+            "../common/mainNotification.dev"
+          )
           createMainNotification(
             "Server Error In Sending Message, Please Try Again",
             "error"

@@ -7,7 +7,7 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-(self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["dev-javascripts_common_mainNotification_dev_js-_81c91"],{
+(self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || []).push([["dev-javascripts_common_mainNotification_dev_js"],{
 
 /***/ "./dev-javascripts/common/mainNotification.dev.js":
 /*!********************************************************!*\

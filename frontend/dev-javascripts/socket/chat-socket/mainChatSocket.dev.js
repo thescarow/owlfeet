@@ -43,7 +43,10 @@ export function createMainChatSocket(socket) {
     )
     updateAllChatSection(message)
 
-    if (chatId !== "" && chatId === message.chat._id) {
+    if (
+      chatId.toString() !== "" &&
+      chatId.toString() === message.chat.toString()
+    ) {
       let { checkTimeAndCreateNewMessage } = await import(
         "../../chat/js/message.dev"
       )

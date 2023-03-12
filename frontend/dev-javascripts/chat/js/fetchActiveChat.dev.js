@@ -1,7 +1,5 @@
-import { createMainNotification } from "../../common/mainNotification.dev"
-
 // activeChatData is define in main layout as global object
-export function fetchActiveChat(chatId) {
+export async function fetchActiveChat(chatId) {
   let allChatSection = document.getElementById("allChatSection")
   let activeChatSection = document.getElementById("activeChatSection")
 
@@ -13,7 +11,7 @@ export function fetchActiveChat(chatId) {
     allChatSection.classList.add("all-chat-section--hide")
     activeChatSection.classList.remove("active-chat-section--hide")
   } else {
-    fetch(`/chat/${chatId}`)
+    fetch(`/chat/data/chat/${chatId}`)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -34,15 +32,21 @@ export function fetchActiveChat(chatId) {
           document.title = "Chats"
           allChatSection.classList.remove("all-chat-section--hide")
           activeChatSection.classList.add("active-chat-section--hide")
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification(data.error, "error")
         }
       })
-      .catch(err => {
+      .catch(async err => {
         console.log("error in fetch Active Chat:", err)
         history.replaceState({}, "", "/chat")
         document.title = "Chats"
         allChatSection.classList.remove("all-chat-section--hide")
         activeChatSection.classList.add("active-chat-section--hide")
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
         createMainNotification(
           "Server Error Or May be You Are Accessing Wrong Chat.",
           "info"

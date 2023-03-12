@@ -51,7 +51,10 @@ exports.createMessage = async (req, res) => {
           newMessageData.reader = messageChat.currentChatMembers
 
           if (userMessage.hasMediaContent) {
-            if (userMessage.mediaContentType && userMessage.mediaContentPath) {
+            if (
+              userMessage.hasOwnProperty("mediaContentType") &&
+              userMessage.hasOwnProperty("mediaContentPath")
+            ) {
               newMessageData.hasMediaContent = true
               newMessageData.mediaContentType = userMessage.mediaContentType
               newMessageData.mediaContentMimeType =
@@ -64,7 +67,7 @@ exports.createMessage = async (req, res) => {
               })
             }
           } else {
-            if (userMessage.textContent) {
+            if (userMessage.hasOwnProperty("textContent")) {
               newMessageData.textContent = userMessage.textContent
             } else {
               return res.json({
@@ -107,19 +110,6 @@ exports.createMessage = async (req, res) => {
               }
             })
             .populate({
-              path: "chat",
-              select: {
-                isGroupChat: 1,
-                chatName: 1,
-                chatPic: 1,
-
-                currentChatMembers: 1
-              },
-              options: {
-                lean: true
-              }
-            })
-            .populate({
               path: "repliedTo",
               select: {
                 hasMediaContent: 1,
@@ -148,24 +138,6 @@ exports.createMessage = async (req, res) => {
               createdNewMessage.sender.profile
             )
           }
-          if (createdNewMessage.chat.isGroupChat) {
-            if (
-              createdNewMessage.chat.hasOwnProperty("chatPic") &&
-              createdNewMessage.chat.chatPic !== ""
-            ) {
-              createdNewMessage.chat.chatPic = await signedUrlForGetAwsS3Object(
-                createdNewMessage.chat.chatPic
-              )
-            }
-          } else {
-            if (
-              createdNewMessage.sender.hasOwnProperty("profile") &&
-              createdNewMessage.sender.profile !== ""
-            ) {
-              createdNewMessage.chat.chatPic = createdNewMessage.sender.profile
-            }
-            createdNewMessage.chat.chatName = createdNewMessage.sender.firstName
-          }
 
           if (
             createdNewMessage.hasMediaContent &&
@@ -177,14 +149,6 @@ exports.createMessage = async (req, res) => {
               )
           }
 
-          createdNewMessage.chat.currentChatMembers.forEach(userId => {
-            if (req.user.id.toString() !== userId.toString()) {
-              req.io
-                .to(userId.toString())
-                .emit("chat:new-message", createdNewMessage)
-            }
-          })
-          // console.log(createdNewMessage)
           res.json({
             isSuccess: true,
             message: createdNewMessage
@@ -222,4 +186,16 @@ exports.createMessage = async (req, res) => {
       error: "Server Error In Sending Message, Please Send It Again"
     })
   }
+}
+
+async function attachSocketForCreatingNewMessage(
+  req,
+  messageChat,
+  createdNewMessage
+) {
+  messageChat.currentChatMembers.forEach(userId => {
+    if (req.user.id.toString() !== userId.toString()) {
+      req.io.to(userId.toString()).emit("chat:new-message", createdNewMessage)
+    }
+  })
 }

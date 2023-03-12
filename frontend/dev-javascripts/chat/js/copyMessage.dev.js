@@ -1,5 +1,3 @@
-import { createMainNotification } from "../../common/mainNotification.dev"
-
 export function copyUserMessage(messageId) {
   let userMessageBox = document.querySelector(
     `.active-chat-user-message-box[data-message-id="${messageId}"]`
@@ -40,10 +38,16 @@ export function copyUserMessage(messageId) {
   }
   console.log(copiedText)
   navigator.clipboard.writeText(copiedText).then(
-    () => {
+    async () => {
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
       createMainNotification("Copied !!!", "success")
     },
-    e => {
+    async e => {
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
       createMainNotification(e.message, "error")
     }
   )

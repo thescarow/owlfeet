@@ -1,7 +1,3 @@
-import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev.js"
-import { createMainNotification } from "../../common/mainNotification.dev.js"
-import { adjustMessageContainerBottomPadding } from "../chat.dev"
-
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
 export async function showActiveChatSection(chat) {
@@ -29,7 +25,7 @@ export async function showActiveChatSection(chat) {
       }
       return Promise.reject(response)
     })
-    .then(data => {
+    .then(async data => {
       if (data.isSuccess) {
         console.log(data.allMessages)
         checkTimeAndCreateOldMessage(
@@ -43,11 +39,17 @@ export async function showActiveChatSection(chat) {
             inline: "nearest"
           })
       } else {
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
         createMainNotification(data.error, "error")
       }
     })
-    .catch(err => {
+    .catch(async err => {
       console.log(err)
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
       createMainNotification(
         "Server Error In Accessing Messages, Please Refresh Your Page",
         "error"
@@ -56,6 +58,7 @@ export async function showActiveChatSection(chat) {
 
   allChatSection.classList.add("all-chat-section--hide")
   activeChatSection.classList.remove("active-chat-section--hide")
+  let { adjustMessageContainerBottomPadding } = await import("../chat.dev")
   adjustMessageContainerBottomPadding()
 }
 
@@ -93,6 +96,9 @@ export async function updateActiveChatSection(chat) {
       )
       activeChatHeaderStatus.textContent = "Active"
     } else {
+      let { timeDifferenceFromNow } = await import(
+        "../../common/calculateTimeDifference.dev"
+      )
       activeChatHeaderStatus.classList.remove(
         "active-chat-header__chat-status--hide"
       )

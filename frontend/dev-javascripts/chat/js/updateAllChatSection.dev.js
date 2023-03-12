@@ -35,7 +35,9 @@ let svg_youtubeIcon = `<svg width="100" height="68" viewBox="0 0 100 68"  xmlns=
 <path d="M99.977 23.9653C100.202 17.6732 98.7797 11.4282 95.8432 5.81006C93.8509 3.50481 91.0858 1.94914 88.03 1.4141C75.3903 0.304237 62.6984 -0.150661 50.0085 0.0513592C37.3649 -0.15983 24.7186 0.280389 12.1233 1.37015C9.63317 1.80849 7.32871 2.9388 5.49115 4.62315C1.40282 8.27179 0.948564 14.514 0.494306 19.7892C-0.164769 29.2737 -0.164769 38.7904 0.494306 48.2749C0.625724 51.244 1.08254 54.1911 1.85708 57.0668C2.4048 59.2871 3.51296 61.3412 5.08232 63.0453C6.93237 64.8189 9.2905 66.0135 11.8508 66.4742C21.6442 67.644 31.5121 68.1288 41.3776 67.9248C57.2766 68.1446 71.2224 67.9248 87.712 66.694C90.3351 66.2616 92.7597 65.0655 94.6621 63.2651C95.9339 62.0339 96.8838 60.5269 97.4331 58.8692C99.0577 54.0451 99.8556 48.9964 99.7953 43.923C99.977 41.4612 99.977 26.6029 99.977 23.9653ZM39.7423 46.5605V19.3496L66.6344 33.021C59.0937 37.0653 49.1454 41.6371 39.7423 46.5605Z" />
 </svg>
 `
-import { timeDifferenceFromNow } from "../../common/calculateTimeDifference.dev"
+let svg_deletedMessageBlankIcon = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M50 0C22.4304 0 0 22.4304 0 50C0 77.5696 22.4304 100 50 100C77.5696 100 100 77.5696 100 50C100 22.4304 77.5696 0 50 0ZM12.5 50C12.5 41.9136 15.0986 34.4372 19.4679 28.3058L71.6942 80.5321C65.5628 84.9014 58.0864 87.5 50 87.5C29.3213 87.5 12.5 70.6787 12.5 50ZM80.5319 71.6942L28.3056 19.4679C34.437 15.0986 41.9134 12.5 49.9998 12.5C70.6785 12.5 87.4998 29.3213 87.4998 50C87.4998 58.0864 84.9012 65.5628 80.5319 71.6942Z" />
+</svg>`
 
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
@@ -47,15 +49,30 @@ export function showAllChatSection() {
   activeChatSection.classList.add("active-chat-section--hide")
 }
 
-export function updateAllChatSection(message) {
+export async function updateAllChatSection(message) {
   let chatBox = allChatChatBoxContainer.querySelector(
-    `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
+    `.chat-box[data-chat-id = "${message.chat.toString()}"]`
   )
 
   if (!chatBox) {
-    chatBox = createChatBox(message.chat)
+    try {
+      let response = await fetch(`/chat/data/chat-box/${message.chat}`)
+      if (!response.ok) {
+        throw Promise.reject(response)
+      }
+      let data = await response.json()
+      if (data.isSuccess) {
+        chatBox = await createChatBox(data.chat)
+      } else {
+        console.log(data.error)
+      }
+    } catch (e) {
+      console.log(
+        "Error In Fetching Chat Box Data, Please Refresh Your Page:",
+        e
+      )
+    }
   }
-
   updateChatBoxLatestMessage(chatBox, message)
 
   // this will shift the chat box to first position
@@ -65,7 +82,7 @@ export function updateAllChatSection(message) {
   )
 }
 
-export function createChatBox(chat) {
+export async function createChatBox(chat) {
   let chatBox = document.createElement("div")
   chatBox.classList.add("chat-box")
   chatBox.dataset.chatId = chat._id
@@ -105,9 +122,6 @@ export function createChatBox(chat) {
     allChatChatBoxContainer.firstChild
   )
 
-  chatBox.getElementsByClassName("chat-box__name")[0].textContent =
-    chat.chatName
-
   let chatBoxPic = chatBox.getElementsByClassName("chat-box__pic")[0]
   if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
     chatBoxPic.querySelector("img").src = chat.chatPic
@@ -124,7 +138,10 @@ export function createChatBox(chat) {
   if (chat.hasOwnProperty("latestMessage") && chat.latestMessage !== "") {
     updateChatBoxLatestMessage(chatBox, chat.latestMessage)
   } else {
-    if (chat.chatCreatedTime) {
+    let { timeDifferenceFromNow } = await import(
+      "../../common/calculateTimeDifference.dev"
+    )
+    if (chat.hasOwnProperty("chatCreatedTime")) {
       chatBox.getElementsByClassName(
         "chat-box__latest-message-time"
       )[0].textContent = timeDifferenceFromNow(chat.chatCreatedTime)
@@ -134,52 +151,80 @@ export function createChatBox(chat) {
   return chatBox
 }
 
-export function updateChatBoxLatestMessage(chatBox, message) {
+export async function updateChatBoxLatestMessage(chatBox, message = null) {
   let chatBoxLatestMessage = chatBox.getElementsByClassName(
     "chat-box__latest-message"
   )[0]
   let chatBoxSender = chatBox.getElementsByClassName("chat-box__sender")[0]
-
-  if (
-    message.hasOwnProperty("isInfoMessage") &&
-    message.isInfoMessage === true
-  ) {
-    chatBoxSender.textContent = ""
-    chatBoxLatestMessage.textContent = message.infoMessageContent
-
-    if (message.infoMessageType === "video-call") {
-      chatBoxLatestMessage.insertAdjacentHTML(
-        "afterbegin",
-        svg_videoCallBlankIcon
-      )
-    }
-    if (message.infoMessageType === "new-group") {
-      chatBoxLatestMessage.insertAdjacentHTML(
-        "afterbegin",
-        svg_newGroupBlankIcon
-      )
-    }
-  } else {
-    let sender =
-      message.sender._id.toString() === loginUser._id.toString()
-        ? "You:"
-        : message.sender.firstName + ":"
-
-    chatBoxSender.textContent = sender
-
-    let latestMessage =
-      message.hasMediaContent == true
-        ? message.mediaContentType.charAt(0).toUpperCase() +
-          message.mediaContentType.slice(1)
-        : message.textContent
-
-    chatBoxLatestMessage.textContent = latestMessage
-  }
-
-  let latestMessageTime = timeDifferenceFromNow(message.createdAt)
-  chatBox.getElementsByClassName(
+  let latestMessageTime = chatBox.getElementsByClassName(
     "chat-box__latest-message-time"
-  )[0].textContent = latestMessageTime
+  )[0]
+
+  if (message !== null) {
+    if (
+      message.hasOwnProperty("isInfoMessage") &&
+      message.isInfoMessage === true
+    ) {
+      chatBoxSender.textContent = ""
+      chatBoxLatestMessage.textContent = message.infoMessageContent
+
+      if (message.infoMessageType === "video-call") {
+        chatBoxLatestMessage.insertAdjacentHTML(
+          "afterbegin",
+          svg_videoCallBlankIcon
+        )
+      }
+      if (message.infoMessageType === "new-group") {
+        chatBoxLatestMessage.insertAdjacentHTML(
+          "afterbegin",
+          svg_newGroupBlankIcon
+        )
+      }
+    } else {
+      let sender =
+        message.sender._id.toString() === loginUser._id.toString()
+          ? "You:"
+          : message.sender.firstName + ":"
+
+      chatBoxSender.textContent = sender
+
+      if (
+        message.hasOwnProperty("isDeletedForAll") &&
+        message.isDeletedForAll === true
+      ) {
+        chatBoxLatestMessage.innerHTML = `${svg_deletedMessageBlankIcon} This Message Has Been Deleted.`
+      } else {
+        if (
+          message.hasOwnProperty("hasMediaContent") &&
+          message.hasMediaContent === true
+        ) {
+          if (message.mediaContentType === "video") {
+            chatBoxLatestMessage.innerHTML = `${svg_videoIcon} Video`
+          }
+          if (message.mediaContentType === "audio") {
+            chatBoxLatestMessage.innerHTML = `${svg_audioIcon} Audio`
+          }
+          if (message.mediaContentType === "image") {
+            chatBoxLatestMessage.innerHTML = `${svg_imageIcon} Image`
+          }
+          if (message.mediaContentType === "youtube") {
+            chatBoxLatestMessage.innerHTML = `${svg_youtubeIcon} Youtube`
+          }
+        } else {
+          chatBoxLatestMessage.textContent = message.textContent
+        }
+      }
+    }
+    let { timeDifferenceFromNow } = await import(
+      "../../common/calculateTimeDifference.dev"
+    )
+
+    latestMessageTime.textContent = timeDifferenceFromNow(message.createdAt)
+  } else {
+    chatBoxLatestMessage.textContent = ""
+    chatBoxSender.textContent = ""
+    latestMessageTime.textContent = ""
+  }
 }
 
 export function updateChatBox(chat) {
@@ -202,7 +247,6 @@ export function updateChatBox(chat) {
   }
 }
 export function clearChatBoxLatestMessage(chatId) {
-  console.log("called")
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${chatId.toString()}"]`
   )
@@ -216,7 +260,6 @@ export function clearChatBoxLatestMessage(chatId) {
     chatBox.getElementsByClassName(
       "chat-box__latest-message-time"
     )[0].textContent = ""
-    console.log("inside chatBox")
   }
 }
 

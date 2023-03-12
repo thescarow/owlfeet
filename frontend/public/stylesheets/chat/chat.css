@@ -276,9 +276,9 @@ svg {
 }
 
 .chat-box__latest-message svg {
-    width: 16px;
-    height: 16px;
-    margin-right: 0px;
+    width: 20px;
+    height: 17px;
+    margin-right: 1px;
     transform: translate(2px, 2px);
     fill: rgba(var(--rgba-first-color), 0.7);
 }

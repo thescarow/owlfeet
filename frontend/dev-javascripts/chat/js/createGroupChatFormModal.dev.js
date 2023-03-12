@@ -7,7 +7,6 @@ let svg_addUserBtn = `<svg width="102" height="102" viewBox="0 0 102 102"  xmlns
 `
 
 import "../css/groupChatFormModal.dev.css"
-import { createMainNotification } from "../../common/mainNotification.dev"
 
 import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
@@ -100,7 +99,7 @@ export async function createGroupChatFormModal(modalType = "new") {
 
     document
       .getElementById("submitGroupChatDataBtn")
-      .addEventListener("click", () => {
+      .addEventListener("click", async () => {
         if (
           groupChatFormData.chatUsers.length >= 2 &&
           groupChatFormData.chatUsers.length <= 10
@@ -152,11 +151,17 @@ export async function createGroupChatFormModal(modalType = "new") {
                     )
                     createChatBox(data.chat)
                   } else {
+                    let { createMainNotification } = await import(
+                      "../../common/mainNotification.dev"
+                    )
                     createMainNotification(data.error, "error")
                   }
                 })
-                .catch(err => {
+                .catch(async err => {
                   console.log(err)
+                  let { createMainNotification } = await import(
+                    "../../common/mainNotification.dev"
+                  )
                   createMainNotification(
                     "Server Error In Creating New Group Chat, Please Check Your Input",
                     "error"
@@ -197,11 +202,17 @@ export async function createGroupChatFormModal(modalType = "new") {
 
                     groupChatFormModal.classList.add("chat-modal--hide")
                   } else {
+                    let { createMainNotification } = await import(
+                      "../../common/mainNotification.dev"
+                    )
                     createMainNotification(data.error, "error")
                   }
                 })
-                .catch(err => {
+                .catch(async err => {
                   console.log(err)
+                  let { createMainNotification } = await import(
+                    "../../common/mainNotification.dev"
+                  )
                   createMainNotification(
                     "Server Error In Editing Group Chat, Please Check Your Input",
                     "error"
@@ -209,14 +220,23 @@ export async function createGroupChatFormModal(modalType = "new") {
                 })
             }
           } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
             createMainNotification("Please Fill Your Group Name Field", "error")
           }
         } else if (groupChatFormData.chatUsers.length > 10) {
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification(
             "Sorry,You Can Only Select Up To 10 Members",
             "error"
           )
         } else {
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification("Please Select Atleast 2 Members", "error")
         }
       })

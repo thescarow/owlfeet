@@ -1,4 +1,3 @@
-import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/clearChatAllMessagesModal.dev.css"
 
 export async function createClearChatAllMessagesModal(chatData) {
@@ -98,11 +97,17 @@ async function initialiseEventForClearChatAllMessagesModal(
             )
             clearActiveChatMessageContainer()
           } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
             createMainNotification(data.error, "error")
           }
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err)
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification(
             "Server Error In Clearing All Messages, Please Try Again",
             "error"
