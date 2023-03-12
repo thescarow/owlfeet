@@ -8,9 +8,10 @@ const Chat = require("../../models/chat")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////
 const {
-  selectMessageField,
+  selectSafeMessageField,
   filterMessageFieldForDeletedForAll
-} = require("./common/filterMessageField")
+} = require("../../common/filter-field/filterMessageField")
+
 // router.get("/fetch-message/:chatId", getLoginUser, fetchMessages)
 
 exports.fetchMessages = async (req, res) => {
@@ -58,7 +59,7 @@ exports.fetchMessages = async (req, res) => {
               lean: true
             }
           })
-          .select(selectMessageField)
+          .select(selectSafeMessageField)
           .sort({ createdAt: -1 })
           .lean()
 

@@ -991,7 +991,7 @@ svg {
     padding: 4px 8px;
     border-radius: 10px;
     background: rgba(var(--rgba-first-color), 0.2);
-    color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-first-color), 0.8);
 }
 
 .active-chat-info-message-box__content svg {

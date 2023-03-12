@@ -17,6 +17,10 @@ const {
 const { selectLoginUserForClientField } = require("../../common/userData")
 //////////////////
 const { filterChatFieldForNonMember } = require("./common/filterChatField")
+const {
+  selectLatestMessageField,
+  filterMessageFieldForDeletedForAll
+} = require("../../common/filter-field/filterMessageField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 //@description     Render profile Page by username
@@ -49,17 +53,7 @@ exports.getChatPageWithAllChat = async (req, res) => {
             reader: { $elemMatch: { $eq: req.user.id } },
             deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
           })
-            .select({
-              sender: 1,
-              hasMediaContent: 1,
-              mediaContentType: 1,
-              textContent: 1,
-              isInfoMessage: 1,
-              infoMessageType: 1,
-              infoMessageContent: 1,
-              createdAt: 1,
-              updatedAt: 1
-            })
+            .select(selectLatestMessageField)
             .populate({
               path: "sender",
               select: {
@@ -75,6 +69,9 @@ exports.getChatPageWithAllChat = async (req, res) => {
             .lean()
 
           if (latestMessage) {
+            if (latestMessage.isDeletedForAll === true) {
+              latestMessage = filterMessageFieldForDeletedForAll(latestMessage)
+            }
             chat.latestMessage = latestMessage
             chat.latestMessageTime = timeDifferenceFromNow(
               latestMessage.createdAt

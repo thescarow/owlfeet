@@ -6,15 +6,15 @@ const mainErrorLog = chalk.white.bgYellow.bold
 const Message = require("../../models/message")
 const Chat = require("../../models/chat")
 //////////////////////
-const {
-  deleteAwsS3Object,
-  signedUrlForGetAwsS3Object
-} = require("../../services/awsS3")
+// const {
+//   deleteAwsS3Object,
+//   signedUrlForGetAwsS3Object
+// } = require("../../services/awsS3")
 ///////
 const {
   selectDeletedForAllMessageField
-} = require("./common/filterMessageField")
-const { checkInFollowing } = require("../../common/checkUserFollowStatus")
+} = require("../../common/filter-field/filterMessageField")
+// const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 // router.post("/delete-user-message", getLoginUser, deleteUserMessage)
 
