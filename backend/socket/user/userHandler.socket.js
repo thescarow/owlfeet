@@ -50,10 +50,10 @@ async function sendUserActiveEventToOneToOneChatUser(
       userId => userId.toString() !== loginUser._id.toString()
     )
 
-    io.to(otherUserId.toString()).emit(
-      eventName,
-      loginUser._id.toString(),
-      chat._id.toString()
-    )
+    let eventData = {
+      userId: loginUser._id.toString(),
+      chatId: chat._id.toString()
+    }
+    io.to(otherUserId.toString()).emit(eventName, eventData)
   })
 }

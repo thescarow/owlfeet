@@ -148,7 +148,7 @@ exports.createMessage = async (req, res) => {
                 createdNewMessage.mediaContentPath
               )
           }
-
+          attachSocketForCreatingNewMessage(req, messageChat, createdNewMessage)
           res.json({
             isSuccess: true,
             message: createdNewMessage
@@ -193,6 +193,7 @@ async function attachSocketForCreatingNewMessage(
   messageChat,
   createdNewMessage
 ) {
+  console.log("socket new message sent")
   messageChat.currentChatMembers.forEach(userId => {
     if (req.user.id.toString() !== userId.toString()) {
       req.io.to(userId.toString()).emit("chat:new-message", createdNewMessage)

@@ -17,7 +17,7 @@ exports.chatHandler = async (io, socket) => {
             lastName: 1
           })
           .lean()
-        let data = {
+        let eventData = {
           user: user,
           chatId: chat._id.toString(),
           isGroupChat: chat.isGroupChat
@@ -25,7 +25,10 @@ exports.chatHandler = async (io, socket) => {
 
         chat.currentChatMembers.forEach(userId => {
           if (userId.toString() !== socket.loginUser.id.toString()) {
-            io.to(userId.toString()).emit("chat:message-start-typing", data)
+            io.to(userId.toString()).emit(
+              "chat:message-start-typing",
+              eventData
+            )
           }
         })
       }
@@ -40,15 +43,14 @@ exports.chatHandler = async (io, socket) => {
         .select({ currentChatMembers: 1, isGroupChat: 1 })
         .lean()
       if (chat) {
-        console.log("chat:", chat)
-        let data = {
+        let eventData = {
           chatId: chat._id.toString(),
           isGroupChat: chat.isGroupChat
         }
 
         chat.currentChatMembers.forEach(userId => {
           if (userId.toString() !== socket.loginUser.id.toString()) {
-            io.to(userId.toString()).emit("chat:message-stop-typing", data)
+            io.to(userId.toString()).emit("chat:message-stop-typing", eventData)
           }
         })
       }

@@ -4,25 +4,33 @@ export function createUserActiveStatusSocket(socket) {
   let activeChatSection = document.getElementById("activeChatSection")
   let activeChatHeaderStatus = document.getElementById("activeChatHeaderStatus")
   ////////////////////////////////////////////
-  socket.on("user:online", async (userId, chatId) => {
-    console.log("user online:", userId)
+  socket.on("user:online", async data => {
+    console.log("user online:", data.userId)
 
-    let chatBox = document.querySelector(`.chat-box[data-chat-id="${chatId}"]`)
+    let chatBox = document.querySelector(
+      `.chat-box[data-chat-id="${data.chatId}"]`
+    )
     if (chatBox) chatBox.classList.add("chat-box--active-user")
 
-    if (activeChatSection.dataset.chatId.toString() === chatId.toString()) {
+    if (
+      activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+    ) {
       activeChatHeaderStatus.classList.remove(
         "active-chat-header__chat-status--hide"
       )
       activeChatHeaderStatus.textContent = "Active"
     }
   })
-  socket.on("user:offline", async (userId, chatId) => {
-    console.log("user offline:", userId)
-    let chatBox = document.querySelector(`.chat-box[data-chat-id="${chatId}"]`)
+  socket.on("user:offline", async data => {
+    console.log("user offline:", data.userId)
+    let chatBox = document.querySelector(
+      `.chat-box[data-chat-id="${data.chatId}"]`
+    )
     if (chatBox) chatBox.classList.remove("chat-box--active-user")
 
-    if (activeChatSection.dataset.chatId.toString() === chatId.toString()) {
+    if (
+      activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+    ) {
       activeChatHeaderStatus.classList.add(
         "active-chat-header__chat-status--hide"
       )
@@ -31,7 +39,7 @@ export function createUserActiveStatusSocket(socket) {
         activeChatHeaderStatus.classList.remove(
           "active-chat-header__chat-status--hide"
         )
-      }, 5000)
+      }, 4000)
     }
   })
 }

@@ -37,6 +37,7 @@ export function createMainChatSocket(socket) {
   })
 
   socket.on("chat:new-message", async message => {
+    socket.emit("called message socket bhaiya", 3, 3, 3, 3)
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(
       "../../chat/js/updateAllChatSection.dev"
