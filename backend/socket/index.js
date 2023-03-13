@@ -43,7 +43,7 @@ exports.createSocketIOInstance = httpServer => {
     userHandler(io, socket)
     chatHandler(io, socket)
     /////////////////////////////////
-    console.log(socket.rooms)
+    console.log("All Rooms:", socket.rooms)
     socket.prependAny((eventName, ...args) => {
       console.log(
         "socket event:",

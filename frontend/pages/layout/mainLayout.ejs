@@ -13,9 +13,11 @@
 </head>
 
 <body>
-  <script>
-    let pageName = '<%= locals.pageName-%>'
 
+  <script>
+    let isInitModule = false
+    let socket
+    let pageName = '<%= locals.pageName-%>'
     let BOTTOM_MESSAGE_TIME_POINTER = ""
     let TOP_MESSAGE_TIME_POINTER = ""
     let BOTTOM_MESSAGE_USER_POINTER
@@ -126,10 +128,10 @@
   <%- include('../partials/mainNavigation.ejs') _%>
     <%- body %>
 
-
+      <!-- <script src="/javascripts/layout/mainLayout.bundle.js" defer></script> -->
       <script src="/javascripts/socket/indexSocket.bundle.js" defer></script>
 
-      <!-- <script src="/javascripts/layout/mainLayout.bundle.js" defer></script> -->
+
 
       <%- script %>
 </body>
