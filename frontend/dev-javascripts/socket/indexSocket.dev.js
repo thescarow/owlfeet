@@ -1,9 +1,7 @@
 ;(async function () {
-  if (!isInitModule) {
-    console.log("init isInitModule:", isInitModule, "socket:", socket)
+  if (!IS_INIT_SOCKET_MODULE) {
     let { io } = await import("socket.io-client")
-    socket = io()
-    console.log("checking socket:", socket)
+    socket = io() // socket is define in mainLayout File
     socket.on("connect", () => {
       console.log("client connected")
     })
@@ -27,60 +25,25 @@
     })
     //////////////////////////////////////////////////
     //  define socket handler here
-    let { createUserSocket } = await import("./user-socket")
+    let { createUserSocket } = await import("./event-handler/user-socket")
     createUserSocket(socket)
+
     if (pageName && pageName === "home") {
-      let { createHomeSocket } = await import("./homeSocket.dev.js")
+      let { createHomeSocket } = await import("./event-handler/home-socket")
       createHomeSocket(socket)
     }
+
     if (pageName && pageName === "profile") {
-      if (isLogin && isLogin === true) {
-        let { createProfileSocket } = await import(
-          "./profile-socket/mainProfile.dev.js"
-        )
-        createProfileSocket(socket)
-      }
-      if (isOwner === false) {
-        let { createUpdateForAllSocket } = await import(
-          "./profile-socket/updateForAllSocket.dev.js"
-        )
-        createUpdateForAllSocket(socket)
-      }
+      let { createProfileSocket } = await import(
+        "./event-handler/profile-socket"
+      )
+      createProfileSocket(socket)
     }
 
     if (pageName && pageName === "chat") {
-      let { createMainChatSocket } = await import(
-        "./chat-socket/mainChatSocket.dev.js"
-      )
-      createMainChatSocket(socket)
+      let { createChatSocket } = await import("./event-handler/chat-socket")
+      createChatSocket(socket)
     }
-    isInitModule = true
+    IS_INIT_SOCKET_MODULE = true
   }
-  console.log(
-    "init outside block isInitModule:",
-    isInitModule,
-    "socket:",
-    socket
-  )
 })()
-console.log(
-  "init outside function isInitModule:",
-  isInitModule,
-  "socket:",
-  socket
-)
-export function sendChatMessageStartTypingSocket(chatId) {
-  console.log("start isInitModule:", isInitModule, "socket:", socket)
-
-  let eventData = {
-    chatId: chatId.toString()
-  }
-  // socket.emit("chat:message-start-typing", eventData)
-}
-export function sendChatMessageStopTypingSocket(chatId) {
-  console.log("stop isInitModule:", isInitModule, "socket:", socket)
-  let eventData = {
-    chatId: chatId.toString()
-  }
-  // socket.emit("chat:message-stop-typing", eventData)
-}

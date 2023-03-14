@@ -3,7 +3,7 @@ export async function createUserSocket(socket) {
 
   if (pageName && pageName === "chat") {
     let { createUserActiveStatusSocket } = await import(
-      "./userActiveStatusSocket"
+      "./userActiveStatusSocket.dev"
     )
     createUserActiveStatusSocket(socket)
   }
