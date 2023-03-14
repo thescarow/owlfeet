@@ -9,7 +9,7 @@ const expressSession = require("express-session")
 const expressLayouts = require("express-ejs-layouts")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
-
+const compression = require("compression")
 const { companion, companionApp } = require("./services/companionServer") //fetching companion package and companion app
 const { connectDB } = require("./config/database")
 const { registerRoutes } = require("./routes")
@@ -54,6 +54,8 @@ app.use(
     credentials: true
   })
 )
+// Enable gzip compression for all responses
+app.use(compression({ level: 6 }))
 app.use((req, res, next) => {
   req.io = io
   next()
