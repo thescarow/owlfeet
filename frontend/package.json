@@ -5,6 +5,7 @@
   "main": "webpack.config.js",
   "scripts": {
     "devWebpack": "webpack --mode development --devtool eval-source-map",
+    "watchWebpack": "webpack --mode development --devtool eval-source-map --watch",
     "prodWebpack": "webpack --mode production"
   },
   "keywords": [],
