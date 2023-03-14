@@ -15,7 +15,9 @@
 <body>
 
   <script>
-    let isInitModule = false
+    let IS_INIT_SOCKET_MODULE = false
+    let IS_INIT_CHAT_MODULE = false
+    let IS_INIT_MAIN_LAYOUT_MODULE = false
     let socket
     let pageName = '<%= locals.pageName-%>'
     let BOTTOM_MESSAGE_TIME_POINTER = ""
@@ -31,104 +33,18 @@
 
     let loginUser = {}
 
+    let PROFILE_USERNAME = "<%= locals.profileUsername _%>"
     let profileUser = {}
-
 
     let activeChatData = {}
     let allChatData = {}
 
-
-
-
-
-
-
-
-
-      ; (async function () {
-
-        loginUser = await publicGetLoginUserData()
-
-        if (pageName === 'profile') {
-          let profileUsername = '<%= locals.profileUsername _%>'
-          if (profileUsername)
-            profileUser = await publicGetProfileUserData(profileUsername)
-        }
-
-        if (pageName === 'chat') {
-          allChatData = await publicGetAllChatData()
-        }
-
-      })()
-
-
-
-
-
-    async function publicGetLoginUserData() {
-      try {
-        let loginUser = {}
-        let response = await fetch(`/user/data/login-user`)
-        if (!response.ok) {
-          throw Promise.reject(response)
-        }
-        let data = await response.json()
-        if (data.isSuccess) {
-          loginUser = data.loginUser
-        }
-        return loginUser
-      } catch (e) {
-        console.log("Error In Fetching Login User, Please Refresh Your Page:", e)
-        return loginUser
-      }
-    }
-    async function publicGetProfileUserData(username) {
-      try {
-
-        let profileUser = {}
-        let response = await fetch(`/user/data/profile-user`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: username }),
-        })
-        if (!response.ok) {
-          throw Promise.reject(response)
-        }
-        let data = await response.json()
-        if (data.isSuccess) {
-          profileUser = data.profileUser
-        }
-        return profileUser
-      } catch (e) {
-        console.log("Error In Fetching Profile User, Please Refresh Your Page:", e)
-        return profileUser
-      }
-    }
-    async function publicGetAllChatData() {
-      try {
-        let allChatData = {}
-        let response = await fetch(`/chat/data/all-chat`)
-        if (!response.ok) {
-          throw Promise.reject(response)
-        }
-        let data = await response.json()
-        if (data.isSuccess) {
-          allChatData = data.allChatData
-        }
-        return allChatData
-      } catch (e) {
-        console.log("Error In Fetching All Chat Data, Please Refresh Your Page:", e)
-        return allChatData
-      }
-    }
   </script>
 
   <%- include('../partials/mainNavigation.ejs') _%>
     <%- body %>
 
-      <!-- <script src="/javascripts/mainLayout.bundle.js" defer></script> -->
+      <script src="/javascripts/mainLayout.bundle.js" defer></script>
       <script src="/javascripts/indexSocket.bundle.js" defer></script>
 
 

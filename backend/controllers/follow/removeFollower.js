@@ -9,6 +9,8 @@ const {
   selectListUserField,
   selectSafeUserField
 } = require("../../common/userData")
+
+const { userFollowStatus } = require("../../common/userFollowStatus")
 ///////
 const { checkInFollower } = require("../../common/checkUserFollowStatus")
 
@@ -24,16 +26,23 @@ exports.removeFollower = async (req, res) => {
         )
         if (await checkInFollower(req.user.id, userId)) {
           ownerUser.followers = ownerUser.followers.filter(id => {
-            return id != userId
+            return id.toString() !== userId.toString()
           })
           user.followings = user.followings.filter(id => {
-            return id != req.user.id
+            return id.toString() !== req.user.id.toString()
           })
 
           await ownerUser.save()
           await user.save()
           ////////////////////////////////////////////////
           req.io.to(user._id.toString()).emit("remove-following", ownerUser._id)
+          req.io
+            .to(user._id.toString())
+            .emit(
+              "change-user-follow-status",
+              ownerUser._id,
+              userFollowStatus.SEND_FOLLOW_REQUEST
+            )
           //update owner user follower list and  other user following list
           req.io.emit("update-follower-for-all", req.user.id, -1)
           req.io.emit("update-following-for-all", user._id, -1)

@@ -1,5 +1,6 @@
-export function createMainChatSocket(socket) {
-  console.log("inside chatSocket")
+export async function createChatSocket(socket) {
+  console.log("insideChatSocket")
+
   let activeChatSection = document.getElementById("activeChatSection")
 
   let activeChatMessageContainer = document.getElementById(
@@ -40,7 +41,7 @@ export function createMainChatSocket(socket) {
     socket.emit("called message socket bhaiya", 3, 3, 3, 3)
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
 
@@ -49,7 +50,7 @@ export function createMainChatSocket(socket) {
       chatId.toString() === message.chat.toString()
     ) {
       let { checkTimeAndCreateNewMessage } = await import(
-        "../../chat/js/message.dev"
+        "../../../chat/js/message.dev"
       )
       checkTimeAndCreateNewMessage(message, activeChatMessageContainer)
     }
@@ -58,12 +59,12 @@ export function createMainChatSocket(socket) {
   socket.on("chat:new-info-message", async message => {
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
 
     if (chatId !== "" && chatId === message.chat._id) {
-      let { createInfoMessage } = await import("../../chat/js/message.dev")
+      let { createInfoMessage } = await import("../../../chat/js/message.dev")
       createInfoMessage(message, activeChatMessageContainer, "beforeend")
     }
   })
@@ -72,7 +73,7 @@ export function createMainChatSocket(socket) {
   socket.on("chat:create-new-group-chat", async chat => {
     console.log("created-new-group-chat")
     let { createChatBox } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
     createChatBox(chat)
   })
@@ -80,13 +81,13 @@ export function createMainChatSocket(socket) {
     console.log("edit-group-chat")
     activeChatData = { ...chat }
     let { updateActiveChatInfoModal } = await import(
-      "../../chat/js/createActiveChatInfoModal.dev"
+      "../../../chat/js/createActiveChatInfoModal.dev"
     )
     let { updateActiveChatSection } = await import(
-      "../../chat/js/showActiveChatSection.dev"
+      "../../../chat/js/showActiveChatSection.dev"
     )
     let { updateChatBox } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
 
     updateActiveChatInfoModal()
@@ -95,20 +96,20 @@ export function createMainChatSocket(socket) {
   })
   socket.on("chat:clear-chat-all-messages", async chatId => {
     let { clearActiveChatMessageContainer } = await import(
-      "../../chat/js/showActiveChatSection.dev"
+      "../../../chat/js/showActiveChatSection.dev"
     )
     let { clearChatBoxLatestMessage } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
     clearActiveChatMessageContainer()
     clearChatBoxLatestMessage(chatId)
   })
   socket.on("chat:delete-chat", async chatId => {
     let { clearActiveChatMessageContainer } = await import(
-      "../../chat/js/showActiveChatSection.dev"
+      "../../../chat/js/showActiveChatSection.dev"
     )
     let { showAllChatSection, deleteChatBox } = await import(
-      "../../chat/js/updateAllChatSection.dev"
+      "../../../chat/js/updateAllChatSection.dev"
     )
 
     showAllChatSection()
@@ -118,13 +119,13 @@ export function createMainChatSocket(socket) {
 
   socket.on("chat:user-left-group-chat", async (chatId, userId) => {
     let { removeChatInfoMember } = await import(
-      "../../chat/js/createActiveChatInfoModal.dev"
+      "../../../chat/js/createActiveChatInfoModal.dev"
     )
     removeChatInfoMember(chatId, userId)
   })
   socket.on("chat:delete-message-for-all", async deletedMessage => {
     let { convertUserMessageToDeletedMessageForAll } = await import(
-      "../../chat/js/message.dev"
+      "../../../chat/js/message.dev"
     )
     convertUserMessageToDeletedMessageForAll(deletedMessage)
   })

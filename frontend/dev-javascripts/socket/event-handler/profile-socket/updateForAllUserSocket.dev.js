@@ -1,4 +1,4 @@
-export async function createUpdateForAllSocket(socket) {
+export async function createUpdateForAllUserSocket(socket) {
   socket.on("update-follower-for-all", (userId, data) => {
     if (profileUser._id == userId) {
       let profileUserFollowerCount = document.getElementById(
