@@ -377,7 +377,10 @@ export function createUserMessage(
           "active-chat-user-message-box__content",
           "active-chat-user-message-box__content--image"
         )
-
+        image.onload = () => {
+          activeChatMessageContainer.scrollTop =
+            activeChatMessageContainer.scrollHeight
+        }
         image.setAttribute("src", message.mediaContentPath)
         image.setAttribute("alt", "Image")
 
@@ -517,8 +520,7 @@ export function createUserMessage(
   }
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
-  activeChatMessageContainer.scrollTop =
-    activeChatMessageContainer.scrollHeight + 1000
+  activeChatMessageContainer.scrollTop = activeChatMessageContainer.scrollHeight
 }
 
 function insertLinksToString(str) {

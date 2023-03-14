@@ -32,12 +32,12 @@ export async function showActiveChatSection(chat) {
           data.allMessages,
           activeChatMessageContainer
         )
-        if (activeChatMessageContainer.lastElementChild)
-          activeChatMessageContainer.lastElementChild.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest"
-          })
+        // if (activeChatMessageContainer.lastElementChild)
+        //   activeChatMessageContainer.lastElementChild.scrollIntoView({
+        //     behavior: "smooth",
+        //     block: "center",
+        //     inline: "nearest"
+        //   })
       } else {
         let { createMainNotification } = await import(
           "../../common/mainNotification.dev"
