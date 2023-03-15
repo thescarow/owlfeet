@@ -4,7 +4,8 @@ const {
   getProfilePageByUsername,
   fetchFollowingUsers,
   getLoginUserData,
-  getProfileUserData
+  getProfileUserData,
+  checkLoginStatus
 } = require("../controllers/user")
 const { getLoginUser } = require("../middleware/auth.middleware")
 
@@ -14,6 +15,7 @@ router.get("/fetch-following-users", getLoginUser, fetchFollowingUsers)
 router.get("/data/login-user", getLoginUser, getLoginUserData)
 router.post("/data/profile-user", getLoginUser, getProfileUserData)
 
+router.get("/check/login-status", getLoginUser, checkLoginStatus)
 router.get("/:username", getLoginUser, getProfilePageByUsername)
 
 module.exports = router

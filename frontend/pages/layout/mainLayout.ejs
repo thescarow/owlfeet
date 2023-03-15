@@ -25,8 +25,7 @@
     let BOTTOM_MESSAGE_USER_POINTER
 
 
-    let isLogin = '<%= locals.isLogin -%>'
-    isLogin = isLogin === "true"
+    let isLogin
 
     let isOwner = '<%= locals.isOwner-%>'
     isOwner = isOwner === "true"
@@ -46,7 +45,6 @@
 
       <script src="/javascripts/mainLayout.bundle.js" defer></script>
       <script src="/javascripts/indexSocket.bundle.js" defer></script>
-
 
 
       <%- script %>
