@@ -19,6 +19,10 @@ const {
   filterChatFieldForNonMember,
   selectSafeChatField
 } = require("../../common/filter-field/filterChatField")
+const {
+  filterMessageFieldForDeletedForAll,
+  selectLatestMessageField
+} = require("../../common/filter-field/filterMessageField")
 // router.get("/:chatId", getLoginUser, fetchChatWithid)
 exports.getChatDataById = async (req, res) => {
   try {
@@ -53,14 +57,7 @@ exports.getChatDataById = async (req, res) => {
           reader: { $elemMatch: { $eq: req.user.id } },
           deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
         })
-          .select({
-            sender: 1,
-            hasMediaContent: 1,
-            mediaContentType: 1,
-            textContent: 1,
-            createdAt: 1,
-            updatedAt: 1
-          })
+          .select(selectLatestMessageField)
           .populate({
             path: "sender",
             select: {
@@ -77,6 +74,9 @@ exports.getChatDataById = async (req, res) => {
           .lean()
 
         if (latestMessage) {
+          if (latestMessage.isDeletedForAll === true) {
+            latestMessage = filterMessageFieldForDeletedForAll(latestMessage)
+          }
           chat.latestMessage = latestMessage
           chat.latestMessageTime = timeDifferenceFromNow(
             latestMessage.updatedAt

@@ -635,7 +635,7 @@ export function createDateMessage(
   activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
 }
 
-export function convertUserMessageToDeletedMessageForAll(message) {
+export function convertUserMessageToDeletedForAllMessage(message) {
   let userMessageBox = document.querySelector(
     `.active-chat-user-message-box[data-message-id="${message._id}"]`
   )
@@ -645,7 +645,7 @@ export function convertUserMessageToDeletedMessageForAll(message) {
     userMessageBox.className = `active-chat-user-message-box active-chat-user-message-box--deleted-message`
     userMessageBox.innerHTML = `<div class="active-chat-user-message-box__content-box active-chat-user-message-box__content-box--deleted-message">
     <div class="active-chat-user-message-box__content active-chat-user-message-box__content--deleted-message">
-   ${svg_deletedMessageBlankIcon} This Message has been deleted
+   ${svg_deletedMessageBlankIcon} This Message has been deleted.
     </div>
     <div class="active-chat-user-message-box__content-info active-chat-user-message-box__content-info--deleted-message">
         <div class="active-chat-user-message-box__content-time active-chat-user-message-box__content-time--deleted-message">${getTimeString(

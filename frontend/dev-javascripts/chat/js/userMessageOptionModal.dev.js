@@ -268,17 +268,23 @@ async function initialiseEventForDeleteChatModal(deleteMessageModal) {
         })
         .then(async data => {
           if (data.isSuccess) {
+            let { updateChatBoxLatestMessage } = await import(
+              "./updateAllChatSection.dev"
+            )
+
             unSelectUserMessage(messageId)
             deleteMessageModal.classList.add("inner-modal--hide")
 
             if (data.isDeletedForAll) {
-              let { convertUserMessageToDeletedMessageForAll } = await import(
+              let { convertUserMessageToDeletedForAllMessage } = await import(
                 "./message.dev"
               )
-              convertUserMessageToDeletedMessageForAll(data.deletedMessage)
+              convertUserMessageToDeletedForAllMessage(data.deletedMessage)
+              updateChatBoxLatestMessage(data.deletedForAllMessage)
             } else {
               let { deleteUserMessage } = await import("./message.dev")
               deleteUserMessage(data.deletedMessageId)
+              updateChatBoxLatestMessage(data.latestMessageBasic)
             }
           } else {
             createMainNotification(data.error, "error")

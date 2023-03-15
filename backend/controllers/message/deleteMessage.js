@@ -12,7 +12,9 @@ const Chat = require("../../models/chat")
 // } = require("../../services/awsS3")
 ///////
 const {
-  selectDeletedForAllMessageField
+  selectDeletedForAllMessageField,
+  filterMessageFieldForDeletedForAll,
+  selectLatestMessageField
 } = require("../../common/filter-field/filterMessageField")
 // const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
@@ -41,10 +43,35 @@ exports.deleteMessage = async (req, res) => {
           if (deleteMessageData.forAll === false) {
             message.deletedFor.push(req.user.id)
             await message.save()
+            let latestMessageBasic = await Message.findOne({
+              chat: message._id,
+              reader: { $elemMatch: { $eq: req.user.id } },
+              deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
+            })
+              .select(selectLatestMessageField)
+              .populate({
+                path: "sender",
+                select: {
+                  firstName: 1,
+                  lastName: 1,
+                  username: 1
+                },
+                options: {
+                  lean: true
+                }
+              })
+              .sort({ updatedAt: -1 })
+              .lean()
+            if (latestMessageBasic.isDeletedForAll === true) {
+              latestMessageBasic =
+                filterMessageFieldForDeletedForAll(latestMessageBasic)
+            }
+
             res.json({
               isSuccess: true,
               isDeletedForAll: false,
-              deletedMessageId: message._id
+              deletedMessageId: message._id,
+              latestMessageBasic: latestMessageBasic
             })
           } else if (deleteMessageData.forAll === true) {
             if (
@@ -56,14 +83,14 @@ exports.deleteMessage = async (req, res) => {
               if (message.isDeletedForAll === false) {
                 message.isDeletedForAll = true
                 await message.save()
-                let deletedMessage = await Message.findById(message._id)
+                let deletedForAllMessage = await Message.findById(message._id)
                   .select(selectDeletedForAllMessageField)
                   .lean()
-                attachSocketForDeletedForAllMessage(req, deletedMessage)
+                attachSocketForDeletedForAllMessage(req, deletedForAllMessage)
                 res.json({
                   isSuccess: true,
                   isDeletedForAll: true,
-                  deletedMessage: deletedMessage
+                  deletedForAllMessage: deletedForAllMessage
                 })
               } else {
                 res.json({
@@ -111,12 +138,15 @@ exports.deleteMessage = async (req, res) => {
   }
 }
 
-async function attachSocketForDeletedForAllMessage(req, deletedMessage) {
-  deletedMessage.reader.forEach(userId => {
+async function attachSocketForDeletedForAllMessage(req, deletedForAllMessage) {
+  let eventData = {
+    deletedForAllMessage: deletedForAllMessage
+  }
+  deletedForAllMessage.reader.forEach(userId => {
     if (userId.toString() !== req.user.id.toString()) {
       req.io
         .to(userId.toString())
-        .emit("chat:delete-message-for-all", deletedMessage)
+        .emit("chat:delete-message-for-all", eventData)
     }
   })
 }
