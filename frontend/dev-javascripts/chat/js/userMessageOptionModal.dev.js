@@ -201,7 +201,7 @@ async function createMessageDeleteModal(messageId, enableForAll = false) {
           </div>`
 
       activeChatSection.insertAdjacentElement("afterbegin", deleteMessageModal)
-      initialiseEventForDeleteChatModal(deleteMessageModal)
+      initialiseEventForDeleteMessageModal(deleteMessageModal)
     } else {
       deleteMessageModal.classList.remove("inner-modal--hide")
     }
@@ -232,10 +232,12 @@ async function createMessageDeleteModal(messageId, enableForAll = false) {
     deleteMessageModal.dataset.messageId = messageId
   }
 }
-async function initialiseEventForDeleteChatModal(deleteMessageModal) {
+async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
   document
     .getElementById("submitDeleteMessageRequestBtn")
     .addEventListener("click", () => {
+      deleteMessageModal.classList.add("inner-modal--hide")
+
       let messageId = deleteMessageModal.dataset.messageId
       console.log("messageId:", messageId)
       let deleteMessageData = {}
@@ -268,30 +270,39 @@ async function initialiseEventForDeleteChatModal(deleteMessageModal) {
         })
         .then(async data => {
           if (data.isSuccess) {
-            let { updateChatBoxLatestMessage } = await import(
-              "./updateAllChatSection.dev"
-            )
-
-            unSelectUserMessage(messageId)
-            deleteMessageModal.classList.add("inner-modal--hide")
+            console.log("deletedMessgeData:", data)
 
             if (data.isDeletedForAll) {
+              unSelectUserMessage(messageId)
+
               let { convertUserMessageToDeletedForAllMessage } = await import(
                 "./message.dev"
               )
-              convertUserMessageToDeletedForAllMessage(data.deletedMessage)
-              updateChatBoxLatestMessage(data.deletedForAllMessage)
+              convertUserMessageToDeletedForAllMessage(
+                data.deletedForAllMessage
+              )
             } else {
               let { deleteUserMessage } = await import("./message.dev")
               deleteUserMessage(data.deletedMessageId)
-              updateChatBoxLatestMessage(data.latestMessageBasic)
+            }
+            if (data.isLatestMessageChanged) {
+              let { updateChatBoxLatestMessage } = await import(
+                "./updateAllChatSection.dev"
+              )
+              updateChatBoxLatestMessage(data.latestMessage)
             }
           } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
             createMainNotification(data.error, "error")
           }
         })
-        .catch(err => {
+        .catch(async err => {
           console.log(err)
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
           createMainNotification(
             "Server Error In Deleting Message, Please Try Again",
             "error"

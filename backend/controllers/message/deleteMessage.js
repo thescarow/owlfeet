@@ -39,92 +39,133 @@ exports.deleteMessage = async (req, res) => {
             lean: true
           }
         })
+
         if (message) {
-          if (deleteMessageData.forAll === false) {
+          let isDeletedForAll = false
+          let deletedForAllMessage
+          let prevLatestMessage = await Message.findOne({
+            chat: message.chat,
+            reader: { $elemMatch: { $eq: req.user.id } },
+            deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
+          })
+            .select({ _id: 1 })
+            .sort({ createdAt: -1 })
+            .lean()
+          let isLatestMessageChanged = false
+
+          if (
+            deleteMessageData.hasOwnProperty("forAll") &&
+            deleteMessageData.forAll === false
+          ) {
             message.deletedFor.push(req.user.id)
             await message.save()
-            let latestMessageBasic = await Message.findOne({
-              chat: message._id,
-              reader: { $elemMatch: { $eq: req.user.id } },
-              deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
-            })
-              .select(selectLatestMessageField)
-              .populate({
-                path: "sender",
-                select: {
-                  firstName: 1,
-                  lastName: 1,
-                  username: 1
-                },
-                options: {
-                  lean: true
-                }
-              })
-              .sort({ updatedAt: -1 })
-              .lean()
-            if (latestMessageBasic.isDeletedForAll === true) {
-              latestMessageBasic =
-                filterMessageFieldForDeletedForAll(latestMessageBasic)
+            if (prevLatestMessage._id.toString() === message._id.toString()) {
+              isLatestMessageChanged = true
             }
-
-            res.json({
-              isSuccess: true,
-              isDeletedForAll: false,
-              deletedMessageId: message._id,
-              latestMessageBasic: latestMessageBasic
-            })
-          } else if (deleteMessageData.forAll === true) {
-            if (
-              req.user.id.toString() === message.sender.toString() ||
-              message.chat.groupChatAdmin.some(
-                userId => userId.toString() === req.user.id.toString()
-              )
-            ) {
-              if (message.isDeletedForAll === false) {
+          } else if (
+            deleteMessageData.hasOwnProperty("forAll") &&
+            deleteMessageData.forAll === true
+          ) {
+            if (message.isDeletedForAll === false) {
+              if (
+                req.user.id.toString() === message.sender.toString() ||
+                message.chat.groupChatAdmin.some(
+                  userId => userId.toString() === req.user.id.toString()
+                )
+              ) {
                 message.isDeletedForAll = true
                 await message.save()
-                let deletedForAllMessage = await Message.findById(message._id)
+                isDeletedForAll = true
+
+                deletedForAllMessage = await Message.findById(message._id)
                   .select(selectDeletedForAllMessageField)
+                  .populate({
+                    path: "sender",
+                    select: { firstName: 1, lastName: 1, username: 1 },
+                    options: {
+                      lean: true
+                    }
+                  })
                   .lean()
-                attachSocketForDeletedForAllMessage(req, deletedForAllMessage)
-                res.json({
-                  isSuccess: true,
-                  isDeletedForAll: true,
-                  deletedForAllMessage: deletedForAllMessage
-                })
               } else {
-                res.json({
+                return res.json({
                   isSuccess: false,
-                  error: "This Message Is Already Deleted For All"
+                  error:
+                    "You Are Not authorized To Delete This Messages For All"
                 })
               }
             } else {
-              res.json({
+              return res.json({
                 isSuccess: false,
-                error: "You Are Not authorized To Delete This Messages For All"
+                error: "This Message Is Already Deleted For All"
               })
             }
           } else {
-            res.json({
+            return res.json({
               isSuccess: false,
               error: "Send All Required Fields With Request"
             })
           }
-        } else {
+          let latestMessage = await Message.findOne({
+            chat: message.chat,
+            reader: { $elemMatch: { $eq: req.user.id } },
+            deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
+          })
+            .select(selectLatestMessageField)
+            .populate({
+              path: "sender",
+              select: { firstName: 1, lastName: 1, username: 1 },
+              options: {
+                lean: true
+              }
+            })
+            .sort({ createdAt: -1 })
+            .lean()
+          console.log("latest Message: ", latestMessage)
+          if (latestMessage) {
+            if (latestMessage.isDeletedForAll === true) {
+              latestMessage = filterMessageFieldForDeletedForAll(latestMessage)
+            }
+
+            if (
+              isDeletedForAll === true &&
+              latestMessage._id.toString() === message._id.toString()
+            ) {
+              isLatestMessageChanged = true
+            }
+          }
+
           res.json({
+            isSuccess: true,
+            isDeletedForAll: isDeletedForAll,
+            deletedForAllMessage: isDeletedForAll ? deletedForAllMessage : {},
+            deletedMessageId: message._id,
+            isLatestMessageChanged: isLatestMessageChanged,
+            latestMessage: isLatestMessageChanged ? latestMessage : {}
+          })
+
+          attachSocketForDeleteMessage(
+            req,
+            isDeletedForAll,
+            deletedForAllMessage,
+            isLatestMessageChanged,
+            latestMessage
+          )
+        } else {
+          return res.json({
             isSuccess: false,
             error:
               "This Message Is Not Exist For You Or You Are Not authorized To Delete This Message"
           })
         }
       } else {
-        res.json({
+        return res.json({
           isSuccess: false,
           error: "Send All Required Fields With Request"
         })
       }
     } else {
-      res.json({
+      return res.json({
         isSuccess: false,
         error: "You Are Not Logged In, Please Log In First"
       })
@@ -138,15 +179,26 @@ exports.deleteMessage = async (req, res) => {
   }
 }
 
-async function attachSocketForDeletedForAllMessage(req, deletedForAllMessage) {
-  let eventData = {
-    deletedForAllMessage: deletedForAllMessage
-  }
-  deletedForAllMessage.reader.forEach(userId => {
-    if (userId.toString() !== req.user.id.toString()) {
-      req.io
-        .to(userId.toString())
-        .emit("chat:delete-message-for-all", eventData)
+async function attachSocketForDeleteMessage(
+  req,
+  isDeletedForAll,
+  deletedForAllMessage,
+  isLatestMessageChanged,
+  latestMessage
+) {
+  if (isDeletedForAll) {
+    let eventData = {
+      deletedForAllMessage: deletedForAllMessage,
+      isLatestMessageChanged: true,
+      latestMessage: isLatestMessageChanged ? latestMessage : {}
     }
-  })
+
+    deletedForAllMessage.reader.forEach(userId => {
+      if (userId.toString() !== req.user.id.toString()) {
+        req.io
+          .to(userId.toString())
+          .emit("chat:delete-message-for-all", eventData)
+      }
+    })
+  }
 }

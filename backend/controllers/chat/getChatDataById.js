@@ -70,7 +70,7 @@ exports.getChatDataById = async (req, res) => {
               lean: true
             }
           })
-          .sort({ updatedAt: -1 })
+          .sort({ createdAt: -1 })
           .lean()
 
         if (latestMessage) {
@@ -79,7 +79,7 @@ exports.getChatDataById = async (req, res) => {
           }
           chat.latestMessage = latestMessage
           chat.latestMessageTime = timeDifferenceFromNow(
-            latestMessage.updatedAt
+            latestMessage.createdAt
           )
         } else {
           chat.chatCreatedTime = timeDifferenceFromNow(chat.createdAt)
@@ -143,12 +143,12 @@ exports.getChatDataById = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Fetching Chat By Id:"),
+      errorLog("Server Error In Getting Chat Data By Id:"),
       mainErrorLog(err)
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server Error In Accessing Chat, Please Try Again"
+      error: "Server Error In Accessing Chat Data, Please Try Again"
     })
   }
 }

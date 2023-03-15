@@ -482,7 +482,7 @@ export function createUserMessage(
 
     messageBox.innerHTML = `<div class="active-chat-user-message-box__content-box active-chat-user-message-box__content-box--deleted-message">
     <div class="active-chat-user-message-box__content active-chat-user-message-box__content--deleted-message">
-   ${svg_deletedMessageBlankIcon} This Message has been deleted
+   ${svg_deletedMessageBlankIcon}<span>This Message has been deleted.</span>
     </div>
     <div class="active-chat-user-message-box__content-info active-chat-user-message-box__content-info--deleted-message">
         <div class="active-chat-user-message-box__content-time active-chat-user-message-box__content-time--deleted-message">${getTimeString(
@@ -645,7 +645,7 @@ export function convertUserMessageToDeletedForAllMessage(message) {
     userMessageBox.className = `active-chat-user-message-box active-chat-user-message-box--deleted-message`
     userMessageBox.innerHTML = `<div class="active-chat-user-message-box__content-box active-chat-user-message-box__content-box--deleted-message">
     <div class="active-chat-user-message-box__content active-chat-user-message-box__content--deleted-message">
-   ${svg_deletedMessageBlankIcon} This Message has been deleted.
+   ${svg_deletedMessageBlankIcon}  <span>This Message has been deleted.</span>
     </div>
     <div class="active-chat-user-message-box__content-info active-chat-user-message-box__content-info--deleted-message">
         <div class="active-chat-user-message-box__content-time active-chat-user-message-box__content-time--deleted-message">${getTimeString(
@@ -657,7 +657,7 @@ export function convertUserMessageToDeletedForAllMessage(message) {
   <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
   </div>`
 
-    if (message.sender.toString() === loginUser._id.toString()) {
+    if (message.sender._id.toString() === loginUser._id.toString()) {
       userMessageBox.classList.add("active-chat-user-message-box--right")
     }
   }

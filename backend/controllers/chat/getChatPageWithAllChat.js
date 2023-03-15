@@ -65,7 +65,7 @@ exports.getChatPageWithAllChat = async (req, res) => {
                 lean: true
               }
             })
-            .sort({ updatedAt: -1 })
+            .sort({ createdAt: -1 })
             .lean()
 
           if (latestMessage) {

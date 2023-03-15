@@ -84,7 +84,7 @@ exports.getChatBoxDataById = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Fetching Chat Box By Id:"),
+      errorLog("Server Error In Getting Chat Box Data By Id:"),
       mainErrorLog(err)
     )
     res.status(500).json({

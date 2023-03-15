@@ -127,10 +127,12 @@ export async function createChatSocket(socket) {
     let { convertUserMessageToDeletedForAllMessage } = await import(
       "../../../chat/js/message.dev"
     )
-    let { updateChatBoxLatestMessage } = await import(
-      "../../../chat/js/updateAllChatSection.dev"
-    )
-    updateChatBoxLatestMessage(data.deletedForAllMessage)
     convertUserMessageToDeletedForAllMessage(data.deletedForAllMessage)
+    if (data.isLatestMessageChanged) {
+      let { updateChatBoxLatestMessage } = await import(
+        "../../../chat/js/updateAllChatSection.dev"
+      )
+      updateChatBoxLatestMessage(data.latestMessage)
+    }
   })
 }

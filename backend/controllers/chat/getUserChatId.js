@@ -87,12 +87,12 @@ exports.getUserChatId = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Accessing Chat Id:"),
+      errorLog("Server Error In Getting User Chat Id:"),
       mainErrorLog(err)
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server Error In Accessing Chat Here, Please Try Again"
+      error: "Server Error In Accessing Chat , Please Try Again"
     })
   }
 }

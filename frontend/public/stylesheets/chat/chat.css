@@ -952,15 +952,22 @@ svg {
 }
 
 .active-chat-user-message-box__content--deleted-message {
-    font-size: 15px;
-    font-weight: 700;
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
+    color: rgba(var(--rgba-first-color), 0.8);
     /* opacity: 0.6; */
 }
 
+.active-chat-user-message-box--right .active-chat-user-message-box__content--deleted-message {
+    color: rgba(var(--rgba-fourth-color), 0.6);
+}
 
+.active-chat-user-message-box__content--deleted-message span {
+    font-size: 15px;
+    font-weight: 700;
+    /* opacity: 0.6; */
+}
 
 .active-chat-user-message-box__content--deleted-message svg {
     width: 20px;
@@ -970,25 +977,25 @@ svg {
 }
 
 .active-chat-user-message-box--right .active-chat-user-message-box__content--deleted-message svg {
-    width: 20px;
-    height: 20px;
-    fill: rgba(var(--rgba-fourth-color), 0.7);
+    fill: rgba(var(--rgba-fourth-color), 0.6);
     margin: 0 6px 0 0;
 }
 
 .active-chat-user-message-box__content-info--deleted-message {
     position: relative;
-    display: none;
+    /* display: none; */
     bottom: -4px;
     right: 0px;
     float: right;
     background: transparent;
-    color: rgba(var(--rgba-first-color), 0.4);
+    color: rgba(var(--rgba-first-color), 0.7);
     padding: 0 0;
     margin-left: 10px;
 }
 
-.active-chat-user-message-box--right .active-chat-user-message-box__content-info--deleted-message {}
+.active-chat-user-message-box--right .active-chat-user-message-box__content-info--deleted-message {
+    color: rgba(var(--rgba-fourth-color),0.5);
+}
 
 .active-chat-user-message-box__content-time--deleted-message {}
 

@@ -1,5 +1,3 @@
-import { off } from "../../../../backend/models/chat"
-
 let svg_group = `<svg width="102" height="83" viewBox="0 0 102 83"  xmlns="http://www.w3.org/2000/svg">
 <path d="M1 64V77.5C1 79.9853 3.03509 82 5.54545 82H69.1818C71.6923 82 73.7273 79.9853 73.7273 77.5V64C73.7273 54.059 65.5868 46 55.5455 46H19.1818C9.14027 46 1 54.059 1 64ZM82.745 78.9031C82.5841 80.4475 83.6873 82 85.2559 82H96.4545C98.9645 82 101 79.9853 101 77.5V64C101 54.059 92.8595 46 82.8182 46H78.4155C77.4332 46 76.8941 47.1687 77.4786 47.9503C80.8341 52.4368 82.8182 57.9889 82.8182 64V77.5C82.8182 77.9739 82.7932 78.4419 82.745 78.9031ZM55.5455 19C55.5455 28.9411 47.405 37 37.3636 37C27.3221 37 19.1818 28.9411 19.1818 19C19.1818 9.05887 27.3221 1 37.3636 1C47.405 1 55.5455 9.05887 55.5455 19ZM61.6859 36.7642C60.1368 36.514 59.6091 34.7018 60.4464 33.3878C63.1009 29.2226 64.6368 24.2889 64.6368 19C64.6368 13.7111 63.1009 8.77735 60.4464 4.6122C59.6091 3.29829 60.1368 1.48618 61.6859 1.23589C62.6464 1.08068 63.6323 1 64.6368 1C74.6786 1 82.8186 9.05887 82.8186 19C82.8186 28.9411 74.6786 37 64.6368 37C63.6323 37 62.6464 36.9195 61.6859 36.7642Z"  />
 </svg>
@@ -154,6 +152,7 @@ export async function createChatBox(chat) {
 }
 
 export async function updateChatBoxLatestMessage(message = null) {
+  console.log("latest message:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${message.chat.toString()}"]`
   )
@@ -198,7 +197,7 @@ export async function updateChatBoxLatestMessage(message = null) {
           message.hasOwnProperty("isDeletedForAll") &&
           message.isDeletedForAll === true
         ) {
-          chatBoxLatestMessage.innerHTML = `${svg_deletedMessageBlankIcon} This Message Has Been Deleted.`
+          chatBoxLatestMessage.innerHTML = `${svg_deletedMessageBlankIcon} <span>This Message Has Been Deleted.</span>`
         } else {
           if (
             message.hasOwnProperty("hasMediaContent") &&
