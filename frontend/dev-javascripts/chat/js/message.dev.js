@@ -435,27 +435,40 @@ export function createUserMessage(
         "active-chat-user-message-reply-box__user"
       )[0].textContent = repliedMessageUser
 
-      if (message.repliedTo.hasMediaContent) {
-        if (message.repliedTo.mediaContentType === "video") {
-          repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
-        }
-        if (message.repliedTo.mediaContentType === "audio") {
-          repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
-        }
-        if (message.repliedTo.mediaContentType === "image") {
-          repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
-        }
-        if (message.repliedTo.mediaContentType === "youtube") {
-          repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
-        }
+      if (
+        message.repliedTo.hasOwnProperty("isDeletedForAll") &&
+        message.repliedTo.isDeletedForAll === true
+      ) {
+        repliedMessageContent = `${svg_deletedMessageBlankIcon} <span>This Message has been deleted.</span>`
         messageContentBox.getElementsByClassName(
           "active-chat-user-message-reply-box__user-message"
         )[0].innerHTML = repliedMessageContent
+        messageContentBox
+          .getElementsByClassName("active-chat-user-message-reply-box")[0]
+          .classList.add("active-chat-user-message-reply-box--deleted-message")
       } else {
-        repliedMessageContent = message.repliedTo.textContent
-        messageContentBox.getElementsByClassName(
-          "active-chat-user-message-reply-box__user-message"
-        )[0].textContent = repliedMessageContent
+        if (message.repliedTo.hasMediaContent) {
+          if (message.repliedTo.mediaContentType === "video") {
+            repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+          }
+          if (message.repliedTo.mediaContentType === "audio") {
+            repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
+          }
+          if (message.repliedTo.mediaContentType === "image") {
+            repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
+          }
+          if (message.repliedTo.mediaContentType === "youtube") {
+            repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
+          }
+          messageContentBox.getElementsByClassName(
+            "active-chat-user-message-reply-box__user-message"
+          )[0].innerHTML = repliedMessageContent
+        } else {
+          repliedMessageContent = message.repliedTo.textContent
+          messageContentBox.getElementsByClassName(
+            "active-chat-user-message-reply-box__user-message"
+          )[0].textContent = repliedMessageContent
+        }
       }
 
       messageContentBox.classList.add(

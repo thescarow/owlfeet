@@ -601,6 +601,8 @@ svg {
     background: linear-gradient(45deg, rgba(var(--rgba-fourth-color), 1), rgba(var(--rgba-first-color), 0.4));
 }
 
+.active-chat-user-message-reply-box--deleted-message {}
+
 .active-chat-user-message-reply-box__user {
     font-size: 15px;
     font-weight: 800;
@@ -620,11 +622,33 @@ svg {
     overflow: hidden;
 }
 
+.active-chat-user-message-reply-box--deleted-message .active-chat-user-message-reply-box__user-message {
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: rgba(var(--rgba-first-color), 0.7);
+}
+
 .active-chat-user-message-reply-box__user-message svg {
     width: 20px;
     height: 20px;
     fill: rgba(var(--rgba-first-color), 1);
     margin: 0 3px 0 0;
+}
+
+.active-chat-user-message-reply-box--deleted-message .active-chat-user-message-reply-box__user-message svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(var(--rgba-first-color), 0.7);
+    margin: 0 6px 0 0;
+}
+
+.active-chat-user-message-reply-box--deleted-message .active-chat-user-message-reply-box__user-message span {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(var(--rgba-first-color), 0.7);
 }
 
 .active-chat-user-message-reply-box__user-message span {
@@ -1091,6 +1115,7 @@ svg {
     display: none;
 }
 
+
 .active-chat-input-reply-box__user {
     font-size: 15px;
     font-weight: 800;
@@ -1108,6 +1133,23 @@ svg {
     word-break: break-word;
     max-height: 55px;
     overflow: hidden;
+}
+
+.active-chat-input-reply-box--deleted-message {}
+
+.active-chat-input-reply-box--deleted-message .active-chat-input-reply-box__user-message {}
+
+.active-chat-input-reply-box--deleted-message .active-chat-input-reply-box__user-message span {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(var(--rgba-first-color), 0.6);
+}
+
+.active-chat-input-reply-box--deleted-message .active-chat-input-reply-box__user-message svg {
+    width: 17px;
+    height: 17px;
+    fill: rgba(var(--rgba-first-color), 0.6);
+    margin: 0 4px 0 0;
 }
 
 .active-chat-input-reply-box__user-message svg {

@@ -12,7 +12,9 @@ const {
 } = require("../../services/awsS3")
 ///////
 const {
-  selectSafeMessageField
+  selectSafeMessageField,
+  selectRepliedToMessageField,
+  filterMessageFieldForDeletedForAll
 } = require("../../common/filter-field/filterMessageField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 // router.post("/", getLoginUser, createMessage)
@@ -111,13 +113,7 @@ exports.createMessage = async (req, res) => {
             })
             .populate({
               path: "repliedTo",
-              select: {
-                hasMediaContent: 1,
-                mediaContentType: 1,
-                textContent: 1,
-                sender: 1,
-                reader: 1
-              },
+              select: selectRepliedToMessageField,
               populate: {
                 path: "sender",
                 select: { username: 1, firstName: 1, lastName: 1 }
@@ -129,6 +125,15 @@ exports.createMessage = async (req, res) => {
             })
             .select(selectSafeMessageField)
             .lean()
+
+          if (
+            createdNewMessage.isRepliedMessage === true &&
+            createdNewMessage.repliedTo.isDeletedForAll === true
+          ) {
+            createdNewMessage.repliedTo = filterMessageFieldForDeletedForAll(
+              createdNewMessage.repliedTo
+            )
+          }
 
           if (
             createdNewMessage.sender.hasOwnProperty("profile") &&

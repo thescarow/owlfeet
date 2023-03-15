@@ -1,4 +1,5 @@
 let chatFieldForNonMember = {
+  _id: 1,
   isGroupChat: 1,
   chatPic: 1,
   chatName: 1,
@@ -22,6 +23,7 @@ exports.filterChatFieldForNonMember = chat => {
 }
 
 exports.selectSafeChatField = {
+  _id: 1,
   isGroupChat: 1,
   groupChatAdmin: 1,
   currentChatMembers: 1,
@@ -33,6 +35,7 @@ exports.selectSafeChatField = {
   //   allChatMembers: 1,
 }
 exports.selectChatBoxField = {
+  _id: 1,
   isGroupChat: 1,
   chatPic: 1,
   chatName: 1,
