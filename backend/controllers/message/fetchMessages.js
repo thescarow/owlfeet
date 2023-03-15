@@ -9,7 +9,8 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////
 const {
   selectSafeMessageField,
-  filterMessageFieldForDeletedForAll
+  filterMessageFieldForDeletedForAll,
+  selectRepliedToMessageField
 } = require("../../common/filter-field/filterMessageField")
 
 // router.get("/fetch-message/:chatId", getLoginUser, fetchMessages)
@@ -43,13 +44,7 @@ exports.fetchMessages = async (req, res) => {
           })
           .populate({
             path: "repliedTo",
-            select: {
-              hasMediaContent: 1,
-              mediaContentType: 1,
-              textContent: 1,
-              sender: 1,
-              reader: 1
-            },
+            select: selectRepliedToMessageField,
             populate: {
               path: "sender",
               select: { username: 1, firstName: 1, lastName: 1 }
@@ -65,6 +60,14 @@ exports.fetchMessages = async (req, res) => {
 
         await Promise.all(
           allMessages.map(async message => {
+            if (
+              message.isRepliedMessage === true &&
+              message.repliedTo.isDeletedForAll === true
+            ) {
+              message.repliedTo = filterMessageFieldForDeletedForAll(
+                message.repliedTo
+              )
+            }
             if (message.isDeletedForAll === true) {
               message = filterMessageFieldForDeletedForAll(message)
             }

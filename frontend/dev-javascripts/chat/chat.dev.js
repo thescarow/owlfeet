@@ -2,6 +2,7 @@
   if (!IS_INIT_CHAT_MODULE) {
     const allChatSection = document.getElementById("allChatSection")
     const activeChatSection = document.getElementById("activeChatSection")
+
     async function checkChatState() {
       // console.log(location)
       // console.log(history)
@@ -538,7 +539,7 @@
       )
       createGroupChatFormModal()
     })
-
+    initialiseEventForChatModule()
     IS_INIT_CHAT_MODULE = true
   }
 })()
@@ -601,52 +602,54 @@ export function adjustMessageContainerBottomPadding() {
     activeChatMessageContainer.scrollHeight + 1000
 }
 
-document
-  .getElementById("activeChatInputReplyBoxCloseBtn")
-  .addEventListener("click", async () => {
-    let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
-    closeReplyMessageBox()
-  })
+function initialiseEventForChatModule() {
+  document
+    .getElementById("activeChatInputReplyBoxCloseBtn")
+    .addEventListener("click", async () => {
+      let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
+      closeReplyMessageBox()
+    })
 
-//send chat:message-typing event
-let isUserTyping = false
-let lastActiveChatId = activeChatSection.dataset.chatId.toString()
-let activeChatInputTextContent = document.getElementById(
-  "activeChatInputTextContent"
-)
-activeChatInputTextContent.addEventListener("input", async e => {
-  if (activeChatSection.dataset.chatId !== "") {
-    if (
-      lastActiveChatId !== "" &&
-      lastActiveChatId !== activeChatSection.dataset.chatId
-    ) {
-      let { sendChatMessageStopTypingSocket } = await import(
-        "../socket/event-emitter/chat-socket"
-      )
-      sendChatMessageStopTypingSocket(lastActiveChatId)
-      isUserTyping = false
+  //send chat:message-typing event
+  let isUserTyping = false
+  let lastActiveChatId = activeChatSection.dataset.chatId.toString()
+  let activeChatInputTextContent = document.getElementById(
+    "activeChatInputTextContent"
+  )
+  activeChatInputTextContent.addEventListener("input", async e => {
+    if (activeChatSection.dataset.chatId !== "") {
+      if (
+        lastActiveChatId !== "" &&
+        lastActiveChatId !== activeChatSection.dataset.chatId
+      ) {
+        let { sendChatMessageStopTypingSocket } = await import(
+          "../socket/event-emitter/chat-socket"
+        )
+        sendChatMessageStopTypingSocket(lastActiveChatId)
+        isUserTyping = false
+        lastActiveChatId = activeChatSection.dataset.chatId.toString()
+      }
+
       lastActiveChatId = activeChatSection.dataset.chatId.toString()
+      let chatId = activeChatSection.dataset.chatId.toString()
+
+      const inputValue = activeChatInputTextContent.value.trim()
+
+      if (inputValue && !isUserTyping) {
+        isUserTyping = true
+        let { sendChatMessageStartTypingSocket } = await import(
+          "../socket/event-emitter/chat-socket"
+        )
+        sendChatMessageStartTypingSocket(chatId)
+        console.log("called typing start")
+      } else if (!inputValue && isUserTyping) {
+        isUserTyping = false
+        let { sendChatMessageStopTypingSocket } = await import(
+          "../socket/event-emitter/chat-socket"
+        )
+        sendChatMessageStopTypingSocket(chatId)
+        console.log("called typing Stop")
+      }
     }
-
-    lastActiveChatId = activeChatSection.dataset.chatId.toString()
-    let chatId = activeChatSection.dataset.chatId.toString()
-
-    const inputValue = activeChatInputTextContent.value.trim()
-
-    if (inputValue && !isUserTyping) {
-      isUserTyping = true
-      let { sendChatMessageStartTypingSocket } = await import(
-        "../socket/event-emitter/chat-socket"
-      )
-      sendChatMessageStartTypingSocket(chatId)
-      console.log("called typing start")
-    } else if (!inputValue && isUserTyping) {
-      isUserTyping = false
-      let { sendChatMessageStopTypingSocket } = await import(
-        "../socket/event-emitter/chat-socket"
-      )
-      sendChatMessageStopTypingSocket(chatId)
-      console.log("called typing Stop")
-    }
-  }
-})
+  })
+}
