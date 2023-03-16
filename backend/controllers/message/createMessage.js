@@ -36,7 +36,7 @@ exports.createMessage = async (req, res) => {
         if (messageChat) {
           if (!messageChat.isGroupChat) {
             let otherUserId = messageChat.currentChatMembers.find(
-              userId => userId != req.user.id
+              userId => userId.toString() != req.user.id.toString()
             )
 
             if (!checkInFollowing(req.user.id, otherUserId)) {
@@ -100,10 +100,10 @@ exports.createMessage = async (req, res) => {
           } else {
             newMessageData.isRepliedMessage = false
           }
-          const newMessage = new Message(newMessageData)
+          let newMessageDocument = new Message(newMessageData)
 
-          await newMessage.save()
-          let createdNewMessage = await Message.findById(newMessage._id)
+          newMessageDocument = await newMessageDocument.save()
+          let createdNewMessage = await Message.findById(newMessageDocument._id)
             .populate({
               path: "sender",
               select: { username: 1, firstName: 1, lastName: 1, profile: 1 },
@@ -153,7 +153,12 @@ exports.createMessage = async (req, res) => {
                 createdNewMessage.mediaContentPath
               )
           }
-          attachSocketForCreatingNewMessage(req, messageChat, createdNewMessage)
+          attachSocketForCreatingNewMessage(
+            req,
+            messageChat,
+            newMessageDocument,
+            createdNewMessage
+          )
           res.json({
             isSuccess: true,
             message: createdNewMessage
@@ -196,12 +201,18 @@ exports.createMessage = async (req, res) => {
 async function attachSocketForCreatingNewMessage(
   req,
   messageChat,
+  newMessageDocument,
   createdNewMessage
 ) {
-  console.log("socket new message sent")
   messageChat.currentChatMembers.forEach(userId => {
     if (req.user.id.toString() !== userId.toString()) {
       req.io.to(userId.toString()).emit("chat:new-message", createdNewMessage)
     }
+  })
+  newMessageDocument.isDelivered = true
+  await newMessageDocument.save()
+  req.io.to(req.user.id.toString()).emit("chat:message-delivered", {
+    messageId: newMessageDocument._id,
+    chatId: newMessageDocument.chat
   })
 }

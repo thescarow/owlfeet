@@ -902,7 +902,7 @@ svg {
 
 .active-chat-user-message-box__content-status--second {
     position: absolute;
-    right: -4px;
+    right: -5px;
     top: 0;
     transform: rotate(-3deg) translate(0px, 2.3px);
     opacity: 0;

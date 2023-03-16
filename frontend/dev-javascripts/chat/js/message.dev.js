@@ -512,12 +512,9 @@ export function createUserMessage(
     let contentStatusContainer = messageContentInfo.getElementsByClassName(
       "active-chat-user-message-box__content-status-container"
     )[0]
-    if (
-      message.hasOwnProperty("isDelivered") &&
-      message.isDelivered === false
-    ) {
+    if (message.hasOwnProperty("isDelivered") && message.isDelivered === true) {
       contentStatusContainer.classList.add(
-        "active-chat-user-message-box__content-status-container--deliverd"
+        "active-chat-user-message-box__content-status-container--delivered"
       )
     } else if (
       message.hasOwnProperty("seenBy") &&
@@ -772,3 +769,21 @@ activeChatMessageContainer.addEventListener("dblclick", async e => {
     return
   }
 })
+
+export function changeUserMessageStatusToDelivered(messageId) {
+  setTimeout(() => {
+    let userMessageBox = document.querySelector(
+      `.active-chat-user-message-box[data-message-id="${messageId}"]`
+    )
+
+    if (userMessageBox) {
+      userMessageBox
+        .getElementsByClassName(
+          "active-chat-user-message-box__content-status-container"
+        )[0]
+        .classList.add(
+          "active-chat-user-message-box__content-status-container--delivered"
+        )
+    }
+  }, 500)
+}

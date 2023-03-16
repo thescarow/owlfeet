@@ -134,4 +134,14 @@ export async function createChatSocket(socket) {
       updateChatBoxLatestMessage(data.latestMessage)
     }
   })
+  socket.on("chat:message-delivered", async data => {
+    if (
+      data.chatId.toString() === activeChatSection.dataset.chatId.toString()
+    ) {
+      let { changeUserMessageStatusToDelivered } = await import(
+        "../../../chat/js/message.dev"
+      )
+      changeUserMessageStatusToDelivered(data.messageId)
+    }
+  })
 }

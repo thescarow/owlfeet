@@ -44,7 +44,8 @@ exports.editGroupChat = async (req, res) => {
             })
           )
           setOfChatUserIds.add(req.user.id)
-          groupChatData.chatUserIds.push(req.user.id)
+          groupChatData.chatUserIds = [...setOfChatUserIds]
+          // groupChatData.chatUserIds.push(req.user.id)
 
           if (allMembersInFollowingList) {
             let newCurrentMembers,
