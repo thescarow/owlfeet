@@ -19,6 +19,10 @@ const {
   filterChatFieldForNonMember,
   selectSafeChatField
 } = require("../../common/filter-field/filterChatField")
+const {
+  filterMessageFieldForDeletedForAll,
+  selectLatestMessageField
+} = require("../../common/filter-field/filterMessageField")
 // router.get("/:chatId", getLoginUser, fetchChatWithid)
 exports.getChatDataById = async (req, res) => {
   try {
@@ -53,14 +57,7 @@ exports.getChatDataById = async (req, res) => {
           reader: { $elemMatch: { $eq: req.user.id } },
           deletedFor: { $not: { $elemMatch: { $eq: req.user.id } } }
         })
-          .select({
-            sender: 1,
-            hasMediaContent: 1,
-            mediaContentType: 1,
-            textContent: 1,
-            createdAt: 1,
-            updatedAt: 1
-          })
+          .select(selectLatestMessageField)
           .populate({
             path: "sender",
             select: {
@@ -73,13 +70,16 @@ exports.getChatDataById = async (req, res) => {
               lean: true
             }
           })
-          .sort({ updatedAt: -1 })
+          .sort({ createdAt: -1 })
           .lean()
 
         if (latestMessage) {
+          if (latestMessage.isDeletedForAll === true) {
+            latestMessage = filterMessageFieldForDeletedForAll(latestMessage)
+          }
           chat.latestMessage = latestMessage
           chat.latestMessageTime = timeDifferenceFromNow(
-            latestMessage.updatedAt
+            latestMessage.createdAt
           )
         } else {
           chat.chatCreatedTime = timeDifferenceFromNow(chat.createdAt)
@@ -143,12 +143,12 @@ exports.getChatDataById = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Fetching Chat By Id:"),
+      errorLog("Server Error In Getting Chat Data By Id:"),
       mainErrorLog(err)
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server Error In Accessing Chat, Please Try Again"
+      error: "Server Error In Accessing Chat Data, Please Try Again"
     })
   }
 }

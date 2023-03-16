@@ -73,7 +73,7 @@ export async function updateAllChatSection(message) {
       )
     }
   }
-  updateChatBoxLatestMessage(chatBox, message)
+  updateChatBoxLatestMessage(message)
 
   // this will shift the chat box to first position
   allChatChatBoxContainer.insertBefore(
@@ -136,7 +136,7 @@ export async function createChatBox(chat) {
     chat.chatName
 
   if (chat.hasOwnProperty("latestMessage") && chat.latestMessage !== "") {
-    updateChatBoxLatestMessage(chatBox, chat.latestMessage)
+    updateChatBoxLatestMessage(chat.latestMessage)
   } else {
     let { timeDifferenceFromNow } = await import(
       "../../common/calculateTimeDifference.dev"
@@ -151,79 +151,85 @@ export async function createChatBox(chat) {
   return chatBox
 }
 
-export async function updateChatBoxLatestMessage(chatBox, message = null) {
-  let chatBoxLatestMessage = chatBox.getElementsByClassName(
-    "chat-box__latest-message"
-  )[0]
-  let chatBoxSender = chatBox.getElementsByClassName("chat-box__sender")[0]
-  let latestMessageTime = chatBox.getElementsByClassName(
-    "chat-box__latest-message-time"
-  )[0]
+export async function updateChatBoxLatestMessage(message = null) {
+  console.log("latest message:", message)
+  let chatBox = allChatChatBoxContainer.querySelector(
+    `.chat-box[data-chat-id = "${message.chat.toString()}"]`
+  )
+  if (chatBox) {
+    let chatBoxLatestMessage = chatBox.getElementsByClassName(
+      "chat-box__latest-message"
+    )[0]
+    let chatBoxSender = chatBox.getElementsByClassName("chat-box__sender")[0]
+    let latestMessageTime = chatBox.getElementsByClassName(
+      "chat-box__latest-message-time"
+    )[0]
 
-  if (message !== null) {
-    if (
-      message.hasOwnProperty("isInfoMessage") &&
-      message.isInfoMessage === true
-    ) {
-      chatBoxSender.textContent = ""
-      chatBoxLatestMessage.textContent = message.infoMessageContent
-
-      if (message.infoMessageType === "video-call") {
-        chatBoxLatestMessage.insertAdjacentHTML(
-          "afterbegin",
-          svg_videoCallBlankIcon
-        )
-      }
-      if (message.infoMessageType === "new-group") {
-        chatBoxLatestMessage.insertAdjacentHTML(
-          "afterbegin",
-          svg_newGroupBlankIcon
-        )
-      }
-    } else {
-      let sender =
-        message.sender._id.toString() === loginUser._id.toString()
-          ? "You:"
-          : message.sender.firstName + ":"
-
-      chatBoxSender.textContent = sender
-
+    if (message !== null) {
       if (
-        message.hasOwnProperty("isDeletedForAll") &&
-        message.isDeletedForAll === true
+        message.hasOwnProperty("isInfoMessage") &&
+        message.isInfoMessage === true
       ) {
-        chatBoxLatestMessage.innerHTML = `${svg_deletedMessageBlankIcon} This Message Has Been Deleted.`
+        chatBoxSender.textContent = ""
+        chatBoxLatestMessage.textContent = message.infoMessageContent
+
+        if (message.infoMessageType === "video-call") {
+          chatBoxLatestMessage.insertAdjacentHTML(
+            "afterbegin",
+            svg_videoCallBlankIcon
+          )
+        }
+        if (message.infoMessageType === "new-group") {
+          chatBoxLatestMessage.insertAdjacentHTML(
+            "afterbegin",
+            svg_newGroupBlankIcon
+          )
+        }
       } else {
+        let sender =
+          message.sender._id.toString() === loginUser._id.toString()
+            ? "You:"
+            : message.sender.firstName + ":"
+
+        chatBoxSender.textContent = sender
+
         if (
-          message.hasOwnProperty("hasMediaContent") &&
-          message.hasMediaContent === true
+          message.hasOwnProperty("isDeletedForAll") &&
+          message.isDeletedForAll === true
         ) {
-          if (message.mediaContentType === "video") {
-            chatBoxLatestMessage.innerHTML = `${svg_videoIcon} Video`
-          }
-          if (message.mediaContentType === "audio") {
-            chatBoxLatestMessage.innerHTML = `${svg_audioIcon} Audio`
-          }
-          if (message.mediaContentType === "image") {
-            chatBoxLatestMessage.innerHTML = `${svg_imageIcon} Image`
-          }
-          if (message.mediaContentType === "youtube") {
-            chatBoxLatestMessage.innerHTML = `${svg_youtubeIcon} Youtube`
-          }
+          chatBoxLatestMessage.innerHTML = `${svg_deletedMessageBlankIcon} <span>This Message Has Been Deleted.</span>`
         } else {
-          chatBoxLatestMessage.textContent = message.textContent
+          if (
+            message.hasOwnProperty("hasMediaContent") &&
+            message.hasMediaContent === true
+          ) {
+            if (message.mediaContentType === "video") {
+              chatBoxLatestMessage.innerHTML = `${svg_videoIcon} Video`
+            }
+            if (message.mediaContentType === "audio") {
+              chatBoxLatestMessage.innerHTML = `${svg_audioIcon} Audio`
+            }
+            if (message.mediaContentType === "image") {
+              chatBoxLatestMessage.innerHTML = `${svg_imageIcon} Image`
+            }
+            if (message.mediaContentType === "youtube") {
+              chatBoxLatestMessage.innerHTML = `${svg_youtubeIcon} Youtube`
+            }
+          } else {
+            chatBoxLatestMessage.textContent = message.textContent
+          }
         }
       }
-    }
-    let { timeDifferenceFromNow } = await import(
-      "../../common/calculateTimeDifference.dev"
-    )
+      let { timeDifferenceFromNow } = await import(
+        "../../common/calculateTimeDifference.dev"
+      )
 
-    latestMessageTime.textContent = timeDifferenceFromNow(message.createdAt)
-  } else {
-    chatBoxLatestMessage.textContent = ""
-    chatBoxSender.textContent = ""
-    latestMessageTime.textContent = ""
+      latestMessageTime.textContent = timeDifferenceFromNow(message.createdAt)
+    } else {
+      chatBoxLatestMessage.textContent = ""
+      chatBoxSender.textContent = ""
+      latestMessageTime.textContent = ""
+    }
   }
 }
 
@@ -231,19 +237,20 @@ export function updateChatBox(chat) {
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${chat._id.toString()}"]`
   )
+  if (chatBox) {
+    chatBox.getElementsByClassName("chat-box__name")[0].textContent =
+      chat.chatName
 
-  chatBox.getElementsByClassName("chat-box__name")[0].textContent =
-    chat.chatName
+    let chatBoxPic = chatBox.getElementsByClassName("chat-box__pic")[0]
 
-  let chatBoxPic = chatBox.getElementsByClassName("chat-box__pic")[0]
-
-  if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
-    chatBoxPic.querySelector("img").src = chat.chatPic
-    chatBoxPic.classList.remove("chat-box__pic--hide-img")
-    chatBoxPic.classList.add("chat-box__pic--hide-svg")
-  } else {
-    chatBoxPic.classList.add("chat-box__pic--hide-img")
-    chatBoxPic.classList.remove("chat-box__pic--hide-svg")
+    if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
+      chatBoxPic.querySelector("img").src = chat.chatPic
+      chatBoxPic.classList.remove("chat-box__pic--hide-img")
+      chatBoxPic.classList.add("chat-box__pic--hide-svg")
+    } else {
+      chatBoxPic.classList.add("chat-box__pic--hide-img")
+      chatBoxPic.classList.remove("chat-box__pic--hide-svg")
+    }
   }
 }
 export function clearChatBoxLatestMessage(chatId) {

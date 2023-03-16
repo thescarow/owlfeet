@@ -32,6 +32,10 @@ export async function showActiveChatSection(chat) {
           data.allMessages,
           activeChatMessageContainer
         )
+        let { adjustMessageContainerBottomPadding } = await import(
+          "../chat.dev"
+        )
+        adjustMessageContainerBottomPadding()
         // if (activeChatMessageContainer.lastElementChild)
         //   activeChatMessageContainer.lastElementChild.scrollIntoView({
         //     behavior: "smooth",
@@ -58,8 +62,6 @@ export async function showActiveChatSection(chat) {
 
   allChatSection.classList.add("all-chat-section--hide")
   activeChatSection.classList.remove("active-chat-section--hide")
-  let { adjustMessageContainerBottomPadding } = await import("../chat.dev")
-  adjustMessageContainerBottomPadding()
 }
 
 export async function updateActiveChatSection(chat) {

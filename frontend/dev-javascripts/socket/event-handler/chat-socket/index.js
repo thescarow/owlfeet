@@ -123,10 +123,16 @@ export async function createChatSocket(socket) {
     )
     removeChatInfoMember(chatId, userId)
   })
-  socket.on("chat:delete-message-for-all", async deletedMessage => {
-    let { convertUserMessageToDeletedMessageForAll } = await import(
+  socket.on("chat:delete-message-for-all", async data => {
+    let { convertUserMessageToDeletedForAllMessage } = await import(
       "../../../chat/js/message.dev"
     )
-    convertUserMessageToDeletedMessageForAll(deletedMessage)
+    convertUserMessageToDeletedForAllMessage(data.deletedForAllMessage)
+    if (data.isLatestMessageChanged) {
+      let { updateChatBoxLatestMessage } = await import(
+        "../../../chat/js/updateAllChatSection.dev"
+      )
+      updateChatBoxLatestMessage(data.latestMessage)
+    }
   })
 }

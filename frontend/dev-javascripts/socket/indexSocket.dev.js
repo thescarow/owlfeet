@@ -16,7 +16,6 @@
       console.log(
         "socketId:",
         socket.id,
-        "socket event:",
         "_____eventName:",
         eventName,
         "____args:",

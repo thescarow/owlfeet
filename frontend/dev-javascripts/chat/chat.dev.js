@@ -1,8 +1,17 @@
+const allChatSection = document.getElementById("allChatSection")
+const activeChatSection = document.getElementById("activeChatSection")
+const activeChatMessageContainer = document.getElementById(
+  "activeChatMessageContainer"
+)
+let activeChatInputTextContent = document.getElementById(
+  "activeChatInputTextContent"
+)
+
+let isUserTyping = false
+let lastActiveChatId = activeChatSection.dataset.chatId.toString()
+
 ;(async function () {
   if (!IS_INIT_CHAT_MODULE) {
-    const allChatSection = document.getElementById("allChatSection")
-    const activeChatSection = document.getElementById("activeChatSection")
-
     async function checkChatState() {
       // console.log(location)
       // console.log(history)
@@ -23,9 +32,6 @@
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // active chat message container
-    const activeChatMessageContainer = document.getElementById(
-      "activeChatMessageContainer"
-    )
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // active chat input container
@@ -611,11 +617,7 @@ function initialiseEventForChatModule() {
     })
 
   //send chat:message-typing event
-  let isUserTyping = false
-  let lastActiveChatId = activeChatSection.dataset.chatId.toString()
-  let activeChatInputTextContent = document.getElementById(
-    "activeChatInputTextContent"
-  )
+
   activeChatInputTextContent.addEventListener("input", async e => {
     if (activeChatSection.dataset.chatId !== "") {
       if (
@@ -641,14 +643,12 @@ function initialiseEventForChatModule() {
           "../socket/event-emitter/chat-socket"
         )
         sendChatMessageStartTypingSocket(chatId)
-        console.log("called typing start")
       } else if (!inputValue && isUserTyping) {
         isUserTyping = false
         let { sendChatMessageStopTypingSocket } = await import(
           "../socket/event-emitter/chat-socket"
         )
         sendChatMessageStopTypingSocket(chatId)
-        console.log("called typing Stop")
       }
     }
   })
