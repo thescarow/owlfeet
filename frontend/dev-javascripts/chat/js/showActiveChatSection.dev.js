@@ -1,10 +1,9 @@
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
+const activeChatMessageContainer = document.getElementById(
+  "activeChatMessageContainer"
+)
 export async function showActiveChatSection(chat) {
-  const activeChatMessageContainer = document.getElementById(
-    "activeChatMessageContainer"
-  )
-
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
@@ -27,6 +26,7 @@ export async function showActiveChatSection(chat) {
     })
     .then(async data => {
       if (data.isSuccess) {
+        activeChatMessageContainer.innerHTML = ""
         console.log(data.allMessages)
         checkTimeAndCreateOldMessage(
           data.allMessages,

@@ -7,6 +7,7 @@ let activeChatInputTextContent = document.getElementById(
   "activeChatInputTextContent"
 )
 
+let allChatChatBoxContainer = document.getElementById("allChatChatBoxContainer")
 let isUserTyping = false
 let lastActiveChatId = activeChatSection.dataset.chatId.toString()
 
@@ -650,6 +651,20 @@ function initialiseEventForChatModule() {
         )
         sendChatMessageStopTypingSocket(chatId)
       }
+    }
+  })
+
+  allChatChatBoxContainer.addEventListener("click", async e => {
+    let chatBox = e.target.closest(`.chat-box`)
+
+    if (chatBox && allChatChatBoxContainer.contains(chatBox)) {
+      let chatId = chatBox.dataset.chatId
+      if (chatId) {
+        let { fetchActiveChat } = await import("./js/fetchActiveChat.dev")
+        fetchActiveChat(chatId)
+      }
+    } else {
+      return
     }
   })
 }

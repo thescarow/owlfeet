@@ -502,13 +502,31 @@ export function createUserMessage(
     messageBox.classList.add("active-chat-user-message-box--right")
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
-      `<div class="active-chat-user-message-box__content-status-container ">
+      `<div class="active-chat-user-message-box__content-status-container">
                <div class="active-chat-user-message-box__content-status">${svg_messageTick}
                 </div>
                <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--second ">${svg_messageTick}
                </div>
       </div>`
     )
+    let contentStatusContainer = messageContentInfo.getElementsByClassName(
+      "active-chat-user-message-box__content-status-container"
+    )[0]
+    if (
+      message.hasOwnProperty("isDelivered") &&
+      message.isDelivered === false
+    ) {
+      contentStatusContainer.classList.add(
+        "active-chat-user-message-box__content-status-container--deliverd"
+      )
+    } else if (
+      message.hasOwnProperty("seenBy") &&
+      message.seenBy.length === message.reader.length
+    ) {
+      contentStatusContainer.classList.add(
+        "active-chat-user-message-box__content-status-container--seen"
+      )
+    }
   }
 
   if (

@@ -3,6 +3,8 @@ let deletedForAllMessageField = {
   chat: 1,
   sender: 1,
   reader: 1,
+  isDelivered: 1,
+  seenBy: 1,
   isDeletedForAll: 1,
   ////
   isRepliedMessage: 1,
@@ -12,7 +14,6 @@ let deletedForAllMessageField = {
   infoMessageType: 1,
   infoMessageContent: 1,
   createdAt: 1
-  //   seenBy: 1,
   //   deletedFor: 1,
   //   hasMediaContent: 1,
   //   mediaContentType: 1,
@@ -27,6 +28,8 @@ exports.selectSafeMessageField = {
   chat: 1,
   sender: 1,
   reader: 1,
+  isDelivered: 1,
+  seenBy: 1,
   isDeletedForAll: 1,
   ////
   isRepliedMessage: 1,
@@ -35,7 +38,6 @@ exports.selectSafeMessageField = {
   isInfoMessage: 1,
   infoMessageType: 1,
   infoMessageContent: 1,
-  seenBy: 1,
   hasMediaContent: 1,
   mediaContentType: 1,
   mediaContentMimeType: 1,
@@ -52,13 +54,15 @@ exports.selectRepliedToMessageField = {
   reader: 1,
   isDeletedForAll: 1,
   ////
+  // isDelivered: 1,
+  // seenBy: 1,
   // isRepliedMessage: 1,
   // repliedTo: 1,
   ////
   // isInfoMessage: 1,
   // infoMessageType: 1,
   // infoMessageContent: 1,
-  // seenBy: 1,
+
   hasMediaContent: 1,
   mediaContentType: 1,
   // mediaContentMimeType: 1,
@@ -73,6 +77,8 @@ exports.selectDeletedForAllMessageField = {
   chat: 1,
   sender: 1,
   reader: 1,
+  isDelivered: 1,
+  seenBy: 1,
   isDeletedForAll: 1,
   ////
   isRepliedMessage: 1,
@@ -82,7 +88,7 @@ exports.selectDeletedForAllMessageField = {
   infoMessageType: 1,
   infoMessageContent: 1,
   createdAt: 1
-  //   seenBy: 1,
+
   //   deletedFor: 1,
   //   hasMediaContent: 1,
   //   mediaContentType: 1,
@@ -95,6 +101,8 @@ exports.selectLatestMessageField = {
   _id: 1,
   chat: 1,
   sender: 1,
+  isDelivered: 1,
+  seenBy: 1,
   hasMediaContent: 1,
   mediaContentType: 1,
   textContent: 1,
@@ -108,7 +116,6 @@ exports.selectLatestMessageField = {
   //   reader: 1,
   //   isRepliedMessage: 1,
   //   repliedTo: 1,
-  //   seenBy: 1,
   //   deletedFor: 1,
   //   mediaContentMimeType: 1,
   //   mediaContentPath: 1,

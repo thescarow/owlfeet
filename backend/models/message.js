@@ -9,6 +9,8 @@ const messageSchema = new mongoose.Schema(
 
     seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
+    isDelivered: { type: Boolean, default: false },
+
     deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
 
     isDeletedForAll: { type: Boolean, default: false },

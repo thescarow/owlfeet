@@ -276,17 +276,3 @@ export function deleteChatBox(chatId) {
   )
   chatBox.remove()
 }
-
-allChatChatBoxContainer.addEventListener("click", async e => {
-  let chatBox = e.target.closest(`.chat-box`)
-
-  if (chatBox && allChatChatBoxContainer.contains(chatBox)) {
-    let chatId = chatBox.dataset.chatId
-    if (chatId) {
-      let { fetchActiveChat } = await import("./fetchActiveChat.dev")
-      fetchActiveChat(chatId)
-    }
-  } else {
-    return
-  }
-})
