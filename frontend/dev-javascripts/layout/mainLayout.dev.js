@@ -1,6 +1,9 @@
 ;(async function () {
   if (!IS_INIT_MAIN_LAYOUT_MODULE) {
-    updateGlobalLoginUserData()
+    await updateGlobalIsLogin()
+    if (isLogin) {
+      await updateGlobalLoginUserData()
+    }
 
     if (pageName === "profile") {
       if (PROFILE_USERNAME) updateGlobalProfileUserData(PROFILE_USERNAME)
@@ -14,36 +17,28 @@
 })()
 
 export async function updateGlobalLoginUserData() {
-  fetch(`/user/data/login-user`)
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      }
-      return Promise.reject(response)
-    })
-    .then(async data => {
-      if (data.isSuccess) {
-        loginUser = data.loginUser
-      } else {
-        let { createMainNotification } = await import(
-          "../common/mainNotification.dev"
-        )
-        createMainNotification(
-          "Server Error In Fetching Login User Data, Please Refresh Your Page",
-          "error"
-        )
-      }
-    })
-    .catch(async err => {
-      console.error(err)
+  try {
+    let response = await fetch(`/user/data/login-user`)
+    if (!response.ok)
+      throw Error(
+        "Server Error In Accessing Login User, Please Refresh Your Page"
+      )
+    let data = await response.json()
+    if (data.isSuccess) {
+      loginUser = data.loginUser
+    } else {
       let { createMainNotification } = await import(
         "../common/mainNotification.dev"
       )
-      createMainNotification(
-        "Server Error In Fetching Login User Data, Please Refresh Your Page",
-        "error"
-      )
-    })
+      createMainNotification(data.error, "error")
+    }
+  } catch (e) {
+    console.error(e)
+    createMainNotification(
+      "Server Error In Fetching Login User Data, Please Refresh Your Page",
+      "error"
+    )
+  }
 }
 export async function updateGlobalProfileUserData(username) {
   fetch(`/user/data/profile-user`, {
@@ -114,4 +109,18 @@ export async function updateGlobalAllChatData() {
         "error"
       )
     })
+}
+export async function updateGlobalIsLogin() {
+  try {
+    let response = await fetch(`/user/check/login-status`)
+    if (!response.ok) throw Error("server error")
+    let data = await response.json()
+    if (data.isLogin) {
+      isLogin = true
+    } else {
+      isLogin = false
+    }
+  } catch (e) {
+    console.error(e)
+  }
 }
