@@ -255,7 +255,7 @@ export async function checkTimeAndCreateNewMessage(
   }
 }
 
-export function createUserMessage(
+export async function createUserMessage(
   message,
   activeChatMessageContainer,
   addPosition = "beforeend",
@@ -516,12 +516,14 @@ export function createUserMessage(
       contentStatusContainer.classList.add(
         "active-chat-user-message-box__content-status-container--delivered"
       )
-    } else if (
+    }
+    if (
       message.hasOwnProperty("seenBy") &&
+      message.hasOwnProperty("reader") &&
       message.seenBy.length === message.reader.length
     ) {
       contentStatusContainer.classList.add(
-        "active-chat-user-message-box__content-status-container--seen"
+        "active-chat-user-message-box__content-status-container--seen-by-all"
       )
     }
   }
@@ -548,6 +550,14 @@ export function createUserMessage(
   }
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
+  if (
+    message.hasOwnProperty("seenBy") &&
+    message.hasOwnProperty("reader") &&
+    message.seenBy.length !== message.reader.length &&
+    message.sender._id.toString() !== loginUser._id.toString()
+  ) {
+    USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
+  }
   activeChatMessageContainer.scrollTop = activeChatMessageContainer.scrollHeight
 }
 
@@ -783,6 +793,23 @@ export function changeUserMessageStatusToDelivered(messageId) {
         )[0]
         .classList.add(
           "active-chat-user-message-box__content-status-container--delivered"
+        )
+    }
+  }, 500)
+}
+export function changeUserMessageStatusToSeenByAll(messageId) {
+  setTimeout(() => {
+    let userMessageBox = document.querySelector(
+      `.active-chat-user-message-box[data-message-id="${messageId}"]`
+    )
+
+    if (userMessageBox) {
+      userMessageBox
+        .getElementsByClassName(
+          "active-chat-user-message-box__content-status-container"
+        )[0]
+        .classList.add(
+          "active-chat-user-message-box__content-status-container--seen-by-all"
         )
     }
   }, 500)

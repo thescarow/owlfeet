@@ -10,7 +10,6 @@ let activeChatInputTextContent = document.getElementById(
 let allChatChatBoxContainer = document.getElementById("allChatChatBoxContainer")
 let isUserTyping = false
 let lastActiveChatId = activeChatSection.dataset.chatId.toString()
-
 ;(async function () {
   if (!IS_INIT_CHAT_MODULE) {
     async function checkChatState() {
@@ -546,7 +545,9 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
       )
       createGroupChatFormModal()
     })
+
     initialiseEventForChatModule()
+
     IS_INIT_CHAT_MODULE = true
   }
 })()

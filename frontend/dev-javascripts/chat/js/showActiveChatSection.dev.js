@@ -13,6 +13,10 @@ export async function showActiveChatSection(chat) {
   let { openActiveChatInputBox } = await import("../chat.dev.js")
   openActiveChatInputBox()
   updateActiveChatSection(chat)
+  if (USER_MESSAGE_BOX_OBSERVER !== undefined) {
+    USER_MESSAGE_BOX_OBSERVER.disconnect()
+  }
+  initializeUserMessageBoxObserver()
 
   /////////////////////
   const { checkTimeAndCreateOldMessage } = await import("./message.dev")
@@ -36,12 +40,12 @@ export async function showActiveChatSection(chat) {
           "../chat.dev"
         )
         adjustMessageContainerBottomPadding()
-        // if (activeChatMessageContainer.lastElementChild)
-        //   activeChatMessageContainer.lastElementChild.scrollIntoView({
-        //     behavior: "smooth",
-        //     block: "center",
-        //     inline: "nearest"
-        //   })
+        if (activeChatMessageContainer.lastElementChild)
+          activeChatMessageContainer.lastElementChild.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest"
+          })
       } else {
         let { createMainNotification } = await import(
           "../../common/mainNotification.dev"
@@ -104,10 +108,13 @@ export async function updateActiveChatSection(chat) {
       activeChatHeaderStatus.classList.remove(
         "active-chat-header__chat-status--hide"
       )
-
-      activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
-        chat.userLastActive
-      )} ago`
+      if (chat.hasOwnProperty("userLastActive")) {
+        activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
+          chat.userLastActive
+        )} ago`
+      } else {
+        activeChatHeaderStatus.textContent = ""
+      }
     }
   } else {
     activeChatHeaderStatus.classList.remove(
@@ -203,4 +210,19 @@ export async function onOffActiveChatInputContainer(chat) {
       "active-chat-input-container--disable"
     )
   }
+}
+
+function initializeUserMessageBoxObserver() {
+  USER_MESSAGE_BOX_OBSERVER = new IntersectionObserver(
+    async (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting === true) {
+          let messageId = entry.target.dataset.messageId
+          socket.emit("chat:message-seen", { messageId: messageId })
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.5, root: activeChatMessageContainer }
+  )
 }

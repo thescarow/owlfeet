@@ -1,5 +1,6 @@
 const User = require("../../models/user")
 const Chat = require("../../models/chat")
+const Message = require("../../models/message")
 
 exports.chatHandler = async (io, socket) => {
   socket.on("chat:message-start-typing", async data => {
@@ -53,6 +54,29 @@ exports.chatHandler = async (io, socket) => {
             io.to(userId.toString()).emit("chat:message-stop-typing", eventData)
           }
         })
+      }
+    }
+  })
+  socket.on("chat:message-seen", async data => {
+    if (socket.loginUser) {
+      let message = await Message.findOne({
+        _id: data.messageId,
+        reader: { $elemMatch: { $eq: socket.loginUser.id } }
+      })
+      if (message) {
+        let userExist = message.seenBy.find(userId => {
+          return userId.toString() === socket.loginUser.id.toString()
+        })
+        if (userExist !== true) {
+          message.seenBy.push(socket.loginUser.id)
+          await message.save()
+          if (message.seenBy.length === message.reader.length) {
+            io.to(message.sender.toString()).emit("chat:message-seen-by-all", {
+              messageId: message._id,
+              chatId: message.chat
+            })
+          }
+        }
       }
     }
   })

@@ -51,6 +51,7 @@ exports.createMessage = async (req, res) => {
           newMessageData.chat = messageChat._id
           newMessageData.sender = req.user.id
           newMessageData.reader = messageChat.currentChatMembers
+          newMessageData.seenBy = [req.user.id]
 
           if (userMessage.hasMediaContent) {
             if (

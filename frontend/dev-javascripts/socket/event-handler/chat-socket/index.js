@@ -144,4 +144,14 @@ export async function createChatSocket(socket) {
       changeUserMessageStatusToDelivered(data.messageId)
     }
   })
+  socket.on("chat:message-seen-by-all", async data => {
+    if (
+      data.chatId.toString() === activeChatSection.dataset.chatId.toString()
+    ) {
+      let { changeUserMessageStatusToSeenByAll } = await import(
+        "../../../chat/js/message.dev"
+      )
+      changeUserMessageStatusToSeenByAll(data.messageId)
+    }
+  })
 }
