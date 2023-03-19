@@ -516,15 +516,25 @@ export async function createUserMessage(
       contentStatusContainer.classList.add(
         "active-chat-user-message-box__content-status-container--delivered"
       )
-    }
-    if (
-      message.hasOwnProperty("seenBy") &&
-      message.hasOwnProperty("reader") &&
-      message.seenBy.length === message.reader.length
-    ) {
-      contentStatusContainer.classList.add(
-        "active-chat-user-message-box__content-status-container--seen-by-all"
-      )
+      if (
+        message.hasOwnProperty("seenBy") &&
+        message.hasOwnProperty("reader")
+      ) {
+        let svgs = [
+          ...messageBox.querySelectorAll(
+            ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
+          )
+        ]
+        let color = generateColorForUserMessageStatus(
+          message.seenBy.length,
+          message.reader.length
+        )
+        svgs.forEach(svg => {
+          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+          svg.style.strokeWidth = `1px`
+          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        })
+      }
     }
   }
 
@@ -813,4 +823,58 @@ export function changeUserMessageStatusToSeenByAll(messageId) {
         )
     }
   }, 500)
+}
+export function changeUserMessageStatusWithMessageSeenByCount(
+  messageId,
+  messageSeenByCount,
+  messageReaderCount
+) {
+  let userMessageBox = document.querySelector(
+    `.active-chat-user-message-box[data-message-id="${messageId}"]`
+  )
+  console.log("userMessageBox:", userMessageBox, "messageId:", messageId)
+  if (userMessageBox) {
+    let svgs = [
+      ...userMessageBox.querySelectorAll(
+        ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
+      )
+    ]
+    console.log(svgs)
+    let color = generateColorForUserMessageStatus(
+      messageSeenByCount,
+      messageReaderCount
+    )
+    svgs.forEach(svg => {
+      svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
+      svg.style.strokeWidth = `1px`
+      svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
+    })
+  }
+}
+function generateColorForUserMessageStatus(seenByCount, readerCount) {
+  if (seenByCount === 1) {
+    return { r: 255, g: 255, b: 255 }
+  } else {
+    let percent = seenByCount / readerCount
+    let firstColor = { r: 255, g: 255, b: 255 }
+    let secondColor = { r: 8, g: 175, b: 124 }
+    let thirdColor = { r: 236, g: 179, b: 101 }
+
+    let resultColor
+
+    if (percent < 0.5) {
+      let subPercent = percent / 0.5
+      resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
+    } else {
+      var subPercent = (percent - 0.5) / 0.5
+      resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
+    }
+    return resultColor
+  }
+}
+function getColorWithPercentage(color1, color2, percent) {
+  let r = Math.round(color1.r + (color2.r - color1.r) * percent)
+  let g = Math.round(color1.g + (color2.g - color1.g) * percent)
+  let b = Math.round(color1.b + (color2.b - color1.b) * percent)
+  return { r, g, b }
 }

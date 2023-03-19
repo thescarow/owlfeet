@@ -218,7 +218,9 @@ function initializeUserMessageBoxObserver() {
       entries.forEach(entry => {
         if (entry.isIntersecting === true) {
           let messageId = entry.target.dataset.messageId
-          socket.emit("chat:message-seen", { messageId: messageId })
+          socket.emit("chat:update-message-seen-by-list", {
+            messageId: messageId
+          })
           observer.unobserve(entry.target)
         }
       })

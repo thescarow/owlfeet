@@ -915,16 +915,7 @@ svg {
     opacity: 1;
 }
 
-.active-chat-user-message-box__content-status-container--seen-by-all .active-chat-user-message-box__content-status svg {
-    /* fill: hsl(162, 91%, 100%,0.5); */
-    fill: rgba(var(--rgba-third-color), 1);
-    stroke-width: 1px;
-    stroke: rgba(var(--rgba-third-color), 1);
-}
 
-.active-chat-user-message-box__content-status-container--seen-by-all .active-chat-user-message-box__content-status--second {
-    opacity: 1;
-}
 
 
 
