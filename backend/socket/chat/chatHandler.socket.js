@@ -59,7 +59,6 @@ exports.chatHandler = async (io, socket) => {
     }
   })
   socket.on("chat:update-message-seen-by-list", async data => {
-    console.log("socket.loginUser:", socket.loginUser.username)
     if (socket.loginUser) {
       let message = await Message.findOne({
         _id: data.messageId,
@@ -74,6 +73,9 @@ exports.chatHandler = async (io, socket) => {
           message.seenBy = Array.from(new Set(message.seenBy))
 
           await message.save()
+          let updatedMessage = await Message.findById(message._id)
+            .select({ _id: 1, seenBy: 1, reader: 1, sender: 1, chat: 1 })
+            .lean()
           let pushedUser = await User.findById(socket.loginUser.id)
             .select({ firstName: 1, lastName: 1, username: 1, profile: 1 })
             .lean()
@@ -85,14 +87,13 @@ exports.chatHandler = async (io, socket) => {
               pushedUser.profile
             )
           }
-          console.log(socket.loginUser.username, "called")
-          io.to(message.sender.toString()).emit(
+          io.to(updatedMessage.sender.toString()).emit(
             "chat:update-message-seen-by-list",
             {
-              messageId: message._id.toString(),
-              chatId: message.chat.toString(),
-              messageSeenByCount: message.seenBy.length,
-              messageReaderCount: message.reader.length,
+              messageId: updatedMessage._id.toString(),
+              chatId: updatedMessage.chat.toString(),
+              messageSeenByCount: updatedMessage.seenBy.length,
+              messageReaderCount: updatedMessage.reader.length,
               pushedUser: pushedUser
             }
           )

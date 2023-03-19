@@ -516,25 +516,24 @@ export async function createUserMessage(
       contentStatusContainer.classList.add(
         "active-chat-user-message-box__content-status-container--delivered"
       )
-      if (
-        message.hasOwnProperty("seenBy") &&
-        message.hasOwnProperty("reader")
-      ) {
-        let svgs = [
-          ...messageBox.querySelectorAll(
-            ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
-          )
-        ]
-        let color = generateColorForUserMessageStatus(
-          message.seenBy.length,
-          message.reader.length
+    }
+
+    if (message.hasOwnProperty("seenBy") && message.hasOwnProperty("reader")) {
+      let svgs = [
+        ...messageBox.querySelectorAll(
+          ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
         )
-        svgs.forEach(svg => {
-          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
-          svg.style.strokeWidth = `1px`
-          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
-        })
-      }
+      ]
+      let color = generateColorForUserMessageStatus(
+        message.seenBy.length,
+        message.reader.length
+      )
+      svgs.forEach(svg => {
+        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        svg.style.strokeWidth = `1px`
+        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+      })
+      messageBox.dataset.messageSeenByCount = message.seenBy.length
     }
   }
 
@@ -834,21 +833,24 @@ export function changeUserMessageStatusWithMessageSeenByCount(
   )
   console.log("userMessageBox:", userMessageBox, "messageId:", messageId)
   if (userMessageBox) {
-    let svgs = [
-      ...userMessageBox.querySelectorAll(
-        ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
+    if (messageSeenByCount > userMessageBox.dataset.messageSeenByCount) {
+      let svgs = [
+        ...userMessageBox.querySelectorAll(
+          ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
+        )
+      ]
+      console.log(svgs)
+      let color = generateColorForUserMessageStatus(
+        messageSeenByCount,
+        messageReaderCount
       )
-    ]
-    console.log(svgs)
-    let color = generateColorForUserMessageStatus(
-      messageSeenByCount,
-      messageReaderCount
-    )
-    svgs.forEach(svg => {
-      svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
-      svg.style.strokeWidth = `1px`
-      svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
-    })
+      svgs.forEach(svg => {
+        svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
+        svg.style.strokeWidth = `1px`
+        svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
+      })
+      userMessageBox.dataset.messageSeenByCount = messageSeenByCount
+    }
   }
 }
 function generateColorForUserMessageStatus(seenByCount, readerCount) {

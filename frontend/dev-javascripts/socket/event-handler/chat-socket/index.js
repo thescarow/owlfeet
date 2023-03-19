@@ -145,8 +145,6 @@ export async function createChatSocket(socket) {
     }
   })
   socket.on("chat:update-message-seen-by-list", async data => {
-    console.log("called")
-    console.log(data.messageSeenByCount, "----", data.messageReaderCount)
     if (
       data.chatId.toString() === activeChatSection.dataset.chatId.toString()
     ) {

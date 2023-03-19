@@ -154,16 +154,17 @@ exports.createMessage = async (req, res) => {
                 createdNewMessage.mediaContentPath
               )
           }
+
+          res.json({
+            isSuccess: true,
+            message: createdNewMessage
+          })
           attachSocketForCreatingNewMessage(
             req,
             messageChat,
             newMessageDocument,
             createdNewMessage
           )
-          res.json({
-            isSuccess: true,
-            message: createdNewMessage
-          })
         } else {
           if (
             userMessage.hasMediaContent &&
