@@ -51,7 +51,9 @@ exports.createMessage = async (req, res) => {
           newMessageData.chat = messageChat._id
           newMessageData.sender = req.user.id
           newMessageData.reader = messageChat.currentChatMembers
-          newMessageData.seenBy = [req.user.id]
+          newMessageData.seenStatus = [
+            { seenBy: req.user.id, seenTime: Date.now() }
+          ]
 
           if (userMessage.hasMediaContent) {
             if (
@@ -211,7 +213,8 @@ async function attachSocketForCreatingNewMessage(
       req.io.to(userId.toString()).emit("chat:new-message", createdNewMessage)
     }
   })
-  newMessageDocument.isDelivered = true
+  newMessageDocument.deliveryStatus.isDelivered = true
+  newMessageDocument.deliveryStatus.deliveredTime = Date.now()
   await newMessageDocument.save()
   req.io.to(req.user.id.toString()).emit("chat:message-delivered", {
     messageId: newMessageDocument._id,

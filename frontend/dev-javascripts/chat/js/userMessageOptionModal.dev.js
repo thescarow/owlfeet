@@ -323,3 +323,71 @@ async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
     }
   })
 }
+
+// async function createMessageInfoModal(messageId){
+//   if (document.getElementById("userMessageOptionModal")) {
+//     document
+//       .getElementById("userMessageOptionModal")
+//       .classList.add("inner-modal--hide")
+//   }
+
+//   let activeChatSection = document.getElementById("activeChatSection")
+//   if (activeChatSection) {
+//     let deleteMessageModal = document.getElementById("deleteMessageModal")
+//     if (!deleteMessageModal) {
+//       deleteMessageModal = document.createElement("div")
+//       deleteMessageModal.classList.add(
+//         "inner-modal",
+//         "inner-modal--delete-message"
+//       )
+//       deleteMessageModal.setAttribute("id", "deleteMessageModal")
+
+//       deleteMessageModal.innerHTML = `
+//           <div class="inner-modal-content inner-modal-content--delete-message">
+
+//           <div class="inner-modal-header">
+//           <div class="inner-modal-header__title">
+//           Do you want to delete Message ?
+//           </div>
+//           </div>
+//           <div class="inner-modal-main">
+
+//           </div>
+//           <div class="inner-modal-btns-container">
+//           <div class="inner-modal-btn" id="closeDeleteMessageModalBtn">Cancel</div>
+//           <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteMessageRequestBtn">Delete</div>
+//           </div>`
+
+//       activeChatSection.insertAdjacentElement("afterbegin", deleteMessageModal)
+//       initialiseEventForDeleteMessageModal(deleteMessageModal)
+//     } else {
+//       deleteMessageModal.classList.remove("inner-modal--hide")
+//     }
+
+//     let innerModalMain =
+//       deleteMessageModal.getElementsByClassName("inner-modal-main")[0]
+
+//     innerModalMain.innerHTML = ""
+//     if (enableForAll) {
+//       innerModalMain.insertAdjacentHTML(
+//         "beforeend",
+//         ` <div class="inner-modal-main__info">
+//           After deleting message for all, message will be deleted from all the member's chat.
+//         </div>
+//         <lable class="for-all-input-container">
+//            <input type="checkbox" class="for-all-input-container__checkbox" id="deleteMessageForAllInput">Delete Messages For All
+//      </lable>`
+//       )
+//     } else {
+//       innerModalMain.insertAdjacentHTML(
+//         "beforeend",
+//         ` <div class="inner-modal-main__info">
+//               After deleting message, message will be deleted from your chat permanently.
+//             </div>`
+//       )
+//     }
+
+//     deleteMessageModal.dataset.messageId = messageId
+//   }
+
+// }

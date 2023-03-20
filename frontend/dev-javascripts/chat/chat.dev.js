@@ -668,4 +668,73 @@ function initialiseEventForChatModule() {
       return
     }
   })
+
+  let activeChatMessageContainer = document.getElementById(
+    "activeChatMessageContainer"
+  )
+  activeChatMessageContainer.addEventListener("click", async e => {
+    console.log("activeChatMessageContainer click")
+    let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
+    let userMessageBoxBtn = e.target.closest(
+      `.active-chat-user-message-box__btn[data-message-box-btn ="user"]`
+    )
+    let userMessageContentBox = e.target.closest(
+      `.active-chat-user-message-box__content-box`
+    )
+
+    if (
+      userMessageBoxBtn &&
+      activeChatMessageContainer.contains(userMessageBoxBtn)
+    ) {
+      userMessageBox.classList.add("active-chat-user-message-box--selected")
+      let { createUserMessageOptionModal } = await import(
+        "./js/userMessageOptionModal.dev"
+      )
+
+      createUserMessageOptionModal(userMessageBox)
+    } else if (
+      userMessageContentBox &&
+      activeChatMessageContainer.contains(userMessageContentBox)
+    ) {
+      if (
+        userMessageBox.classList.contains(
+          "active-chat-user-message-box--replied-message"
+        )
+      ) {
+        let repliedMessageId = userMessageBox.dataset.repliedMessageId
+        let repliedUserMessageBox = document.querySelector(
+          `.active-chat-user-message-box[data-message-id="${repliedMessageId}"]`
+        )
+        if (repliedUserMessageBox) {
+          repliedUserMessageBox.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest"
+          })
+          repliedUserMessageBox.classList.add(
+            "active-chat-user-message-box--highlight"
+          )
+          setTimeout(function () {
+            repliedUserMessageBox.classList.remove(
+              "active-chat-user-message-box--highlight"
+            )
+          }, 1000)
+        }
+      }
+    } else {
+      return
+    }
+  })
+  activeChatMessageContainer.addEventListener("dblclick", async e => {
+    let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
+
+    if (userMessageBox && activeChatMessageContainer.contains(userMessageBox)) {
+      let messageId = userMessageBox.dataset.messageId
+      let { openReplyMessageBox } = await import("./js/replyMessageBox.dev.js")
+
+      openReplyMessageBox(messageId)
+    } else {
+      return
+    }
+  })
 }

@@ -512,20 +512,26 @@ export async function createUserMessage(
     let contentStatusContainer = messageContentInfo.getElementsByClassName(
       "active-chat-user-message-box__content-status-container"
     )[0]
-    if (message.hasOwnProperty("isDelivered") && message.isDelivered === true) {
+    if (
+      message.hasOwnProperty("deliveryStatus") &&
+      message.deliveryStatus.isDelivered === true
+    ) {
       contentStatusContainer.classList.add(
         "active-chat-user-message-box__content-status-container--delivered"
       )
     }
 
-    if (message.hasOwnProperty("seenBy") && message.hasOwnProperty("reader")) {
+    if (
+      message.hasOwnProperty("seenStatus") &&
+      message.hasOwnProperty("reader")
+    ) {
       let svgs = [
         ...messageBox.querySelectorAll(
           ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
         )
       ]
       let color = generateColorForUserMessageStatus(
-        message.seenBy.length,
+        message.seenStatus.length,
         message.reader.length
       )
       svgs.forEach(svg => {
@@ -533,7 +539,7 @@ export async function createUserMessage(
         svg.style.strokeWidth = `1px`
         svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
       })
-      messageBox.dataset.messageSeenByCount = message.seenBy.length
+      messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
     }
   }
 
@@ -560,9 +566,9 @@ export async function createUserMessage(
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
   if (
-    message.hasOwnProperty("seenBy") &&
+    message.hasOwnProperty("seenStatus") &&
     message.hasOwnProperty("reader") &&
-    message.seenBy.length !== message.reader.length &&
+    message.seenStatus.length !== message.reader.length &&
     message.sender._id.toString() !== loginUser._id.toString()
   ) {
     USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
@@ -720,75 +726,6 @@ export function unSelectUserMessage(messageId) {
     userMessageBox.classList.remove("active-chat-user-message-box--selected")
 }
 
-//////////////////////////////////////////////
-let activeChatMessageContainer = document.getElementById(
-  "activeChatMessageContainer"
-)
-activeChatMessageContainer.addEventListener("click", async e => {
-  let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
-  let userMessageBoxBtn = e.target.closest(
-    `.active-chat-user-message-box__btn[data-message-box-btn ="user"]`
-  )
-  let userMessageContentBox = e.target.closest(
-    `.active-chat-user-message-box__content-box`
-  )
-
-  if (
-    userMessageBoxBtn &&
-    activeChatMessageContainer.contains(userMessageBoxBtn)
-  ) {
-    userMessageBox.classList.add("active-chat-user-message-box--selected")
-    let { createUserMessageOptionModal } = await import(
-      "./userMessageOptionModal.dev"
-    )
-
-    createUserMessageOptionModal(userMessageBox)
-  } else if (
-    userMessageContentBox &&
-    activeChatMessageContainer.contains(userMessageContentBox)
-  ) {
-    if (
-      userMessageBox.classList.contains(
-        "active-chat-user-message-box--replied-message"
-      )
-    ) {
-      let repliedMessageId = userMessageBox.dataset.repliedMessageId
-      let repliedUserMessageBox = document.querySelector(
-        `.active-chat-user-message-box[data-message-id="${repliedMessageId}"]`
-      )
-      if (repliedUserMessageBox) {
-        repliedUserMessageBox.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "nearest"
-        })
-        repliedUserMessageBox.classList.add(
-          "active-chat-user-message-box--highlight"
-        )
-        setTimeout(function () {
-          repliedUserMessageBox.classList.remove(
-            "active-chat-user-message-box--highlight"
-          )
-        }, 1000)
-      }
-    }
-  } else {
-    return
-  }
-})
-activeChatMessageContainer.addEventListener("dblclick", async e => {
-  let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
-
-  if (userMessageBox && activeChatMessageContainer.contains(userMessageBox)) {
-    let messageId = userMessageBox.dataset.messageId
-    let { openReplyMessageBox } = await import("./replyMessageBox.dev.js")
-
-    openReplyMessageBox(messageId)
-  } else {
-    return
-  }
-})
-
 export function changeUserMessageStatusToDelivered(messageId) {
   setTimeout(() => {
     let userMessageBox = document.querySelector(
@@ -806,26 +743,10 @@ export function changeUserMessageStatusToDelivered(messageId) {
     }
   }, 500)
 }
-export function changeUserMessageStatusToSeenByAll(messageId) {
-  setTimeout(() => {
-    let userMessageBox = document.querySelector(
-      `.active-chat-user-message-box[data-message-id="${messageId}"]`
-    )
 
-    if (userMessageBox) {
-      userMessageBox
-        .getElementsByClassName(
-          "active-chat-user-message-box__content-status-container"
-        )[0]
-        .classList.add(
-          "active-chat-user-message-box__content-status-container--seen-by-all"
-        )
-    }
-  }, 500)
-}
-export function changeUserMessageStatusWithMessageSeenByCount(
+export function changeUserMessageStatusWithMessageSeenStatusCount(
   messageId,
-  messageSeenByCount,
+  messageSeenStatusCount,
   messageReaderCount
 ) {
   let userMessageBox = document.querySelector(
@@ -833,7 +754,9 @@ export function changeUserMessageStatusWithMessageSeenByCount(
   )
   console.log("userMessageBox:", userMessageBox, "messageId:", messageId)
   if (userMessageBox) {
-    if (messageSeenByCount > userMessageBox.dataset.messageSeenByCount) {
+    if (
+      messageSeenStatusCount > userMessageBox.dataset.messageSeenStatusCount
+    ) {
       let svgs = [
         ...userMessageBox.querySelectorAll(
           ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
@@ -841,7 +764,7 @@ export function changeUserMessageStatusWithMessageSeenByCount(
       ]
       console.log(svgs)
       let color = generateColorForUserMessageStatus(
-        messageSeenByCount,
+        messageSeenStatusCount,
         messageReaderCount
       )
       svgs.forEach(svg => {
@@ -849,15 +772,15 @@ export function changeUserMessageStatusWithMessageSeenByCount(
         svg.style.strokeWidth = `1px`
         svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
       })
-      userMessageBox.dataset.messageSeenByCount = messageSeenByCount
+      userMessageBox.dataset.messageSeenStatusCount = messageSeenStatusCount
     }
   }
 }
-function generateColorForUserMessageStatus(seenByCount, readerCount) {
-  if (seenByCount === 1) {
+function generateColorForUserMessageStatus(seenStatusCount, readerCount) {
+  if (seenStatusCount === 1) {
     return { r: 255, g: 255, b: 255 }
   } else {
-    let percent = seenByCount / readerCount
+    let percent = seenStatusCount / readerCount
     let firstColor = { r: 255, g: 255, b: 255 }
     let secondColor = { r: 8, g: 175, b: 124 }
     let thirdColor = { r: 236, g: 179, b: 101 }

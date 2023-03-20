@@ -58,23 +58,27 @@ exports.chatHandler = async (io, socket) => {
       }
     }
   })
-  socket.on("chat:update-message-seen-by-list", async data => {
+  socket.on("chat:update-message-seen-status", async data => {
+    console.log("called")
     if (socket.loginUser) {
       let message = await Message.findOne({
         _id: data.messageId,
         reader: { $elemMatch: { $eq: socket.loginUser.id } }
-      }).select({ _id: 1, seenBy: 1, reader: 1, sender: 1, chat: 1 })
+      }).select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
+      console.log("seen message:", message)
       if (message) {
-        let userExist = message.seenBy.find(userId => {
-          return userId.toString() === socket.loginUser.id.toString()
+        let userExist = message.seenStatus.find(entry => {
+          return entry.seenBy.toString() === socket.loginUser.id.toString()
         })
         if (!userExist) {
-          message.seenBy.push(socket.loginUser.id)
-          message.seenBy = Array.from(new Set(message.seenBy))
+          message.seenStatus.push({
+            seenBy: socket.loginUser.id,
+            seenTime: Date.now()
+          })
 
           await message.save()
           let updatedMessage = await Message.findById(message._id)
-            .select({ _id: 1, seenBy: 1, reader: 1, sender: 1, chat: 1 })
+            .select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
             .lean()
           let pushedUser = await User.findById(socket.loginUser.id)
             .select({ firstName: 1, lastName: 1, username: 1, profile: 1 })
@@ -88,13 +92,14 @@ exports.chatHandler = async (io, socket) => {
             )
           }
           io.to(updatedMessage.sender.toString()).emit(
-            "chat:update-message-seen-by-list",
+            "chat:update-message-seen-status",
             {
               messageId: updatedMessage._id.toString(),
               chatId: updatedMessage.chat.toString(),
-              messageSeenByCount: updatedMessage.seenBy.length,
+              messageSeenStatusCount: updatedMessage.seenStatus.length,
               messageReaderCount: updatedMessage.reader.length,
-              pushedUser: pushedUser
+              pushedUser: pushedUser,
+              pushedUserTime: Date.now()
             }
           )
         }

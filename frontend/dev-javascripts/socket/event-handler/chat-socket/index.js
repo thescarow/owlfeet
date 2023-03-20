@@ -144,16 +144,16 @@ export async function createChatSocket(socket) {
       changeUserMessageStatusToDelivered(data.messageId)
     }
   })
-  socket.on("chat:update-message-seen-by-list", async data => {
+  socket.on("chat:update-message-seen-status", async data => {
     if (
       data.chatId.toString() === activeChatSection.dataset.chatId.toString()
     ) {
-      let { changeUserMessageStatusWithMessageSeenByCount } = await import(
+      let { changeUserMessageStatusWithMessageSeenStatusCount } = await import(
         "../../../chat/js/message.dev"
       )
-      changeUserMessageStatusWithMessageSeenByCount(
+      changeUserMessageStatusWithMessageSeenStatusCount(
         data.messageId,
-        data.messageSeenByCount,
+        data.messageSeenStatusCount,
         data.messageReaderCount
       )
     }
