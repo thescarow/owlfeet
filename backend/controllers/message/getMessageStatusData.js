@@ -56,6 +56,15 @@ exports.getMessageStatusData = async (req, res) => {
             }
           })
         )
+
+        message.seenStatus.sort((a, b) => {
+          let aTime = new Date(a.seenTime)
+          aTime = aTime.getTime()
+          let bTime = new Date(b.seenTime)
+          bTime = bTime.getTime()
+          return aTime - bTime
+        })
+
         res.json({ isSuccess: true, message: message })
       } else {
         res.json({
