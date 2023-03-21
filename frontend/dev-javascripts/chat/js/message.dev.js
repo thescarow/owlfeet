@@ -764,8 +764,8 @@ export function changeUserMessageStatusWithMessageSeenStatusCount(
       ]
       console.log(svgs)
       let color = generateColorForUserMessageStatus(
-        messageSeenStatusCount,
-        messageReaderCount
+        messageSeenStatusCount - 1,
+        messageReaderCount - 1
       )
       svgs.forEach(svg => {
         svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
@@ -776,28 +776,27 @@ export function changeUserMessageStatusWithMessageSeenStatusCount(
     }
   }
 }
-function generateColorForUserMessageStatus(seenStatusCount, readerCount) {
-  if (seenStatusCount === 1) {
-    return { r: 255, g: 255, b: 255 }
+export function generateColorForUserMessageStatus(
+  seenStatusCountExceptMe,
+  readerCountExceptMe
+) {
+  let percent = seenStatusCountExceptMe / readerCountExceptMe
+  let firstColor = { r: 255, g: 255, b: 255 }
+  let secondColor = { r: 8, g: 175, b: 124 }
+  let thirdColor = { r: 236, g: 179, b: 101 }
+
+  let resultColor
+
+  if (percent < 0.5) {
+    let subPercent = percent / 0.5
+    resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
   } else {
-    let percent = seenStatusCount / readerCount
-    let firstColor = { r: 255, g: 255, b: 255 }
-    let secondColor = { r: 8, g: 175, b: 124 }
-    let thirdColor = { r: 236, g: 179, b: 101 }
-
-    let resultColor
-
-    if (percent < 0.5) {
-      let subPercent = percent / 0.5
-      resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
-    } else {
-      var subPercent = (percent - 0.5) / 0.5
-      resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
-    }
-    return resultColor
+    var subPercent = (percent - 0.5) / 0.5
+    resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
   }
+  return resultColor
 }
-function getColorWithPercentage(color1, color2, percent) {
+export function getColorWithPercentage(color1, color2, percent) {
   let r = Math.round(color1.r + (color2.r - color1.r) * percent)
   let g = Math.round(color1.g + (color2.g - color1.g) * percent)
   let b = Math.round(color1.b + (color2.b - color1.b) * percent)

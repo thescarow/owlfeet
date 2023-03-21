@@ -35,6 +35,10 @@ const svg_messageCopyIconBlank = `<svg width="100" height="100" viewBox="0 0 100
 <path d="M25.0018 25.5328L25 65.625C25 73.9093 31.4471 80.6877 39.5977 81.2168L40.625 81.25L68.215 81.2544C66.9268 84.8933 63.4553 87.5 59.375 87.5H37.5C27.1447 87.5 18.75 79.1053 18.75 68.75V34.375C18.75 30.2924 21.3596 26.8193 25.0018 25.5328ZM71.875 12.5C77.0527 12.5 81.25 16.6973 81.25 21.875V65.625C81.25 70.8027 77.0527 75 71.875 75H40.625C35.4473 75 31.25 70.8027 31.25 65.625V21.875C31.25 16.6973 35.4473 12.5 40.625 12.5H71.875ZM71.875 18.75H40.625C38.8991 18.75 37.5 20.1491 37.5 21.875V65.625C37.5 67.3509 38.8991 68.75 40.625 68.75H71.875C73.6009 68.75 75 67.3509 75 65.625V21.875C75 20.1491 73.6009 18.75 71.875 18.75Z"  stroke-width="3"/>
 </svg>
 `
+const svg_messageDoubleTick = `<svg width="99" height="60" viewBox="0 0 99 60"  xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M96.9561 7.77492C98.5903 5.91613 98.3709 3.12825 96.4661 1.54808C94.5612 -0.032131 91.6919 0.193778 90.0577 2.05257L51.1691 46.2841L47.2994 43.075C45.3941 41.4949 42.5253 41.7211 40.8911 43.5802C39.2571 45.4393 39.4769 48.2268 41.3821 49.8069L48.7009 55.8764C50.6062 57.4561 53.475 57.2303 55.1092 55.3716L96.9561 7.77492ZM69.7675 9.91481C71.4017 8.05602 71.1823 5.26819 69.2774 3.68793C67.3725 2.10771 64.5032 2.33354 62.869 4.19228L23.979 48.4236L7.91635 35.0991C6.01137 33.519 3.14224 33.7448 1.50789 35.6035C-0.126417 37.4622 0.0930049 40.2502 1.99795 41.8303L21.5099 58.016C22.4247 58.7747 23.6138 59.148 24.8156 59.0534C26.0174 58.9589 27.1335 58.4041 27.9183 57.5116L69.7675 9.91481Z" />
+</svg>
+`
 
 let userMessageSenderOptions = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
 <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
@@ -56,6 +60,7 @@ let userMessageDeletedMessageOptions = `<div class="inner-modal-option" data-use
 <div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
 <div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
 <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+import { getTimeStringFromDate } from "../../common/getTimeStringFromDate.dev"
 import "../css/userMessageOptionModal.dev.css"
 import { unSelectUserMessage } from "./message.dev"
 
@@ -147,6 +152,11 @@ async function initialiseEventForUserMessageOptionModal(
         unSelectUserMessage(messageId)
         copyUserMessage(messageId)
       }
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "info") {
+        import("../css/messageInfoModal.dev.css")
+        unSelectUserMessage(messageId)
+        createMessageInfoModal(messageId)
+      }
 
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
         unSelectUserMessage(messageId)
@@ -198,6 +208,7 @@ async function createMessageDeleteModal(messageId, enableForAll = false) {
           <div class="inner-modal-btns-container">
           <div class="inner-modal-btn" id="closeDeleteMessageModalBtn">Cancel</div>
           <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteMessageRequestBtn">Delete</div>
+          </div>
           </div>`
 
       activeChatSection.insertAdjacentElement("afterbegin", deleteMessageModal)
@@ -324,70 +335,319 @@ async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
   })
 }
 
-// async function createMessageInfoModal(messageId){
-//   if (document.getElementById("userMessageOptionModal")) {
-//     document
-//       .getElementById("userMessageOptionModal")
-//       .classList.add("inner-modal--hide")
-//   }
+async function createMessageInfoModal(messageId) {
+  if (document.getElementById("userMessageOptionModal")) {
+    document
+      .getElementById("userMessageOptionModal")
+      .classList.add("inner-modal--hide")
+  }
 
-//   let activeChatSection = document.getElementById("activeChatSection")
-//   if (activeChatSection) {
-//     let deleteMessageModal = document.getElementById("deleteMessageModal")
-//     if (!deleteMessageModal) {
-//       deleteMessageModal = document.createElement("div")
-//       deleteMessageModal.classList.add(
-//         "inner-modal",
-//         "inner-modal--delete-message"
-//       )
-//       deleteMessageModal.setAttribute("id", "deleteMessageModal")
+  let activeChatSection = document.getElementById("activeChatSection")
+  if (activeChatSection) {
+    let messageInfoModal = document.getElementById("messageInfoModal")
+    if (!messageInfoModal) {
+      messageInfoModal = document.createElement("div")
+      messageInfoModal.classList.add("inner-modal", "inner-modal--message-info")
+      messageInfoModal.setAttribute("id", "messageInfoModal")
 
-//       deleteMessageModal.innerHTML = `
-//           <div class="inner-modal-content inner-modal-content--delete-message">
+      messageInfoModal.dataset.messageId = messageId
 
-//           <div class="inner-modal-header">
-//           <div class="inner-modal-header__title">
-//           Do you want to delete Message ?
-//           </div>
-//           </div>
-//           <div class="inner-modal-main">
+      messageInfoModal.innerHTML = `
+          <div class="inner-modal-content inner-modal-content--message-info">
 
-//           </div>
-//           <div class="inner-modal-btns-container">
-//           <div class="inner-modal-btn" id="closeDeleteMessageModalBtn">Cancel</div>
-//           <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteMessageRequestBtn">Delete</div>
-//           </div>`
+             <div class="inner-modal-header inner-modal-header--message-info">
+                    <div class="inner-modal-header__title inner-modal-header__title--message-info"> Message Info
+                   </div>
+             </div>
 
-//       activeChatSection.insertAdjacentElement("afterbegin", deleteMessageModal)
-//       initialiseEventForDeleteMessageModal(deleteMessageModal)
-//     } else {
-//       deleteMessageModal.classList.remove("inner-modal--hide")
-//     }
 
-//     let innerModalMain =
-//       deleteMessageModal.getElementsByClassName("inner-modal-main")[0]
+             <div class="inner-modal-main">
+                <div class="message-info-delivery-status-box message-info-delivery-status-box--delivered" id="messageInfoDeliveryStatusBox">
+                    <div class="message-info-delivery-status-box__icon">
+                        ${svg_messageDoubleTick}
+                    </div>
+                    <div class="message-info-delivery-status-box__row">
+                        <div class="message-info-delivery-status-box__title">Delivered</div>
+                        <div class="message-info-delivery-status-box__time" id="messageInfoDeliveryStatusTime"></div>
+                    </div>  
+                </div>
 
-//     innerModalMain.innerHTML = ""
-//     if (enableForAll) {
-//       innerModalMain.insertAdjacentHTML(
-//         "beforeend",
-//         ` <div class="inner-modal-main__info">
-//           After deleting message for all, message will be deleted from all the member's chat.
-//         </div>
-//         <lable class="for-all-input-container">
-//            <input type="checkbox" class="for-all-input-container__checkbox" id="deleteMessageForAllInput">Delete Messages For All
-//      </lable>`
-//       )
-//     } else {
-//       innerModalMain.insertAdjacentHTML(
-//         "beforeend",
-//         ` <div class="inner-modal-main__info">
-//               After deleting message, message will be deleted from your chat permanently.
-//             </div>`
-//       )
-//     }
 
-//     deleteMessageModal.dataset.messageId = messageId
-//   }
 
-// }
+
+
+
+                <div class="message-info-seen-status-box message-info-seen-status-box--seen" id="messageInfoSeenStatusBox" data-seen-user-count="0">
+                   <div class="message-info-seen-status-box__icon" id="messageInfoSeenStatusBoxIcon">
+                         ${svg_messageDoubleTick}
+                   </div>
+                   <div class="message-info-seen-status-box__title">
+                         Seen
+                   </div>
+                  <div class="message-info-seen-status-indicator" >
+                        <div class="message-info-seen-status-indicator__user-count" id="messageInfoSeenStatusIndicatorUserCount">
+                        </div>
+                       <div class="message-info-seen-status-indicator__bar" id="messageInfoSeenStatusIndicatorBar">
+                      <div class="message-info-seen-status-indicator__point" id="messageInfoSeenStatusIndicatorPoint">
+                     </div>
+                      </div>
+                      <div class="message-info-seen-status-indicator__total-count" id="messageInfoSeenStatusIndicatorTotalCount">
+                      </div>
+                  </div>
+
+                   <div class="message-info-seen-status-user-container" id="messageInfoSeenStatusUserContainer">
+                       
+
+                   </div>
+            </div>
+      </div>
+</div>`
+
+      activeChatSection.insertAdjacentElement("beforeend", messageInfoModal)
+      updateMessageInfoStatus(messageInfoModal, messageId)
+      initialiseEventForMessageInfoModal(messageInfoModal)
+    } else {
+      messageInfoModal.classList.remove("inner-modal--hide")
+    }
+  }
+
+  if (messageInfoModal.dataset.messageId !== messageId) {
+    updateMessageInfoStatus(messageInfoModal, messageId)
+  }
+}
+function initialiseEventForMessageInfoModal(messageInfoModal) {
+  window.addEventListener("click", e => {
+    if (e.target === messageInfoModal) {
+      messageInfoModal.classList.add("inner-modal--hide")
+    }
+  })
+}
+
+function updateMessageInfoStatus(messageInfoModal, messageId) {
+  const messageInfoDeliveryStatusBox = document.getElementById(
+    "messageInfoDeliveryStatusBox"
+  )
+  const messageInfoDeliveryStatusTime = document.getElementById(
+    "messageInfoDeliveryStatusTime"
+  )
+  const messageInfoSeenStatusBox = document.getElementById(
+    "messageInfoSeenStatusBox"
+  )
+  const messageInfoSeenStatusUserContainer = document.getElementById(
+    "messageInfoSeenStatusUserContainer"
+  )
+
+  let messageInfoSeenStatusIndicatorPoint = document.getElementById(
+    "messageInfoSeenStatusIndicatorPoint"
+  )
+
+  let messageInfoSeenStatusIndicatorUserCount = document.getElementById(
+    "messageInfoSeenStatusIndicatorUserCount"
+  )
+
+  let messageInfoSeenStatusIndicatorTotalCount = document.getElementById(
+    "messageInfoSeenStatusIndicatorTotalCount"
+  )
+  let messageInfoSeenStatusBoxIcon = messageInfoSeenStatusBox.querySelector(
+    ".message-info-seen-status-box__icon svg"
+  )
+
+  messageInfoModal.dataset.messageId = messageId
+
+  messageInfoDeliveryStatusBox.classList.remove(
+    "message-info-delivery-status-box--delivered"
+  )
+  messageInfoDeliveryStatusTime.textContent = ""
+
+  messageInfoSeenStatusBox.classList.remove(
+    "message-info-seen-status-box--seen"
+  )
+  messageInfoSeenStatusIndicatorUserCount.textContent = 0
+  messageInfoSeenStatusIndicatorTotalCount.textContent = 0
+  messageInfoSeenStatusUserContainer.innerHTML = ""
+  messageInfoSeenStatusIndicatorPoint.style.left = 0 + "px"
+  messageInfoSeenStatusBoxIcon.style.fill = "rgba(var(--rgba-fourth-color),0.4)"
+  messageInfoSeenStatusBoxIcon.style.strokeWidth = `1px`
+  messageInfoSeenStatusBoxIcon.style.stroke = `rgba(var(--rgba-fourth-color),0.4)`
+
+  fetch(`/message/data/status/${messageId}`)
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      }
+      return Promise.reject(response)
+    })
+    .then(async data => {
+      if (data.isSuccess) {
+        if (
+          data.message.hasOwnProperty("deliveryStatus") &&
+          data.message.deliveryStatus.isDelivered === true
+        ) {
+          updateMessageInfoDeliveryStatus(
+            data.message._id.toString(),
+            data.message.deliveryStatus.deliveredTime
+          )
+        }
+        if (
+          data.message.hasOwnProperty("seenStatus") &&
+          data.message.seenStatus.length
+        ) {
+          messageInfoSeenStatusIndicatorTotalCount.textContent =
+            data.message.readerCount - 1
+
+          data.message.seenStatus.forEach(entry => {
+            addUserToMessageInfoSeenStatus(
+              data.message._id.toString(),
+              entry.seenBy,
+              entry.seenTime
+            )
+          })
+        }
+      } else {
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
+        createMainNotification(data.error, "error")
+      }
+    })
+    .catch(async err => {
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
+      createMainNotification(
+        "Server Error In Accessing Message Status, Please try again",
+        "info"
+      )
+    })
+}
+
+export async function addUserToMessageInfoSeenStatus(
+  messageId,
+  user,
+  userTime
+) {
+  console.log("userTime: ", userTime)
+  if (user._id.toString() !== loginUser._id.toString()) {
+    let messageInfoModal = document.getElementById("messageInfoModal")
+    if (messageInfoModal && messageInfoModal.dataset.messageId === messageId) {
+      const messageInfoSeenStatusUserContainer = document.getElementById(
+        "messageInfoSeenStatusUserContainer"
+      )
+      if (messageInfoSeenStatusUserContainer) {
+        let messageInfoSeenStatusUser =
+          messageInfoSeenStatusUserContainer.querySelector(
+            `.message-info-seen-status-user[data-user-id="${user._id.toString()}"]`
+          )
+        if (!messageInfoSeenStatusUser) {
+          messageInfoSeenStatusUser = document.createElement("div")
+          messageInfoSeenStatusUser.classList.add(
+            "message-info-seen-status-user"
+          )
+          messageInfoSeenStatusUser.dataset.userId = user._id.toString()
+          messageInfoSeenStatusUser.innerHTML = `
+      <div class="message-info-seen-status-user__left-box">
+           <div class="message-info-seen-status-user__pic">
+                <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="">
+           </div>
+          <div class="message-info-seen-status-user__name">
+          
+          </div>
+     </div>
+     <div class="message-info-seen-status-user__time">
+      01/01/1975 00:00
+     </div>`
+
+          if (user.hasOwnProperty("profile") && user.profile !== "") {
+            messageInfoSeenStatusUser.querySelector(
+              ".message-info-seen-status-user__pic img"
+            ).src = user.profile
+          }
+          messageInfoSeenStatusUser.getElementsByClassName(
+            "message-info-seen-status-user__name"
+          )[0].textContent = user.firstName + " " + user.lastName
+          messageInfoSeenStatusUser.getElementsByClassName(
+            "message-info-seen-status-user__time"
+          )[0].textContent = getTimeStringFromDate(userTime)
+
+          messageInfoSeenStatusUserContainer.insertAdjacentElement(
+            "afterbegin",
+            messageInfoSeenStatusUser
+          )
+          let messageInfoSeenStatusBox = document.getElementById(
+            "messageInfoSeenStatusBox"
+          )
+          let messageInfoSeenStatusBoxIcon =
+            messageInfoSeenStatusBox.querySelector(
+              ".message-info-seen-status-box__icon svg"
+            )
+
+          let messageInfoSeenStatusIndicatorPoint = document.getElementById(
+            "messageInfoSeenStatusIndicatorPoint"
+          )
+
+          let messageInfoSeenStatusIndicatorUserCount = document.getElementById(
+            "messageInfoSeenStatusIndicatorUserCount"
+          )
+
+          let messageInfoSeenStatusIndicatorTotalCount =
+            document.getElementById("messageInfoSeenStatusIndicatorTotalCount")
+
+          let seenUserCount =
+            parseInt(messageInfoSeenStatusIndicatorUserCount.textContent) + 1
+          let totalUserCount = parseInt(
+            messageInfoSeenStatusIndicatorTotalCount.textContent
+          )
+          let userPercent = seenUserCount / totalUserCount
+          messageInfoSeenStatusIndicatorUserCount.textContent = seenUserCount
+          if (userPercent > 0.9) {
+            let pointWidth = getComputedStyle(
+              messageInfoSeenStatusIndicatorPoint
+            ).width
+            console.log(pointWidth)
+            messageInfoSeenStatusIndicatorPoint.style.left =
+              "calc(" +
+              userPercent * 100 +
+              "%" +
+              " " +
+              "-" +
+              " " +
+              pointWidth +
+              ")"
+          } else {
+            messageInfoSeenStatusIndicatorPoint.style.left =
+              userPercent * 100 + "%"
+          }
+
+          messageInfoSeenStatusBox.classList.add(
+            "message-info-seen-status-box--seen"
+          )
+          messageInfoSeenStatusBox.dataset.seenUserCount = seenUserCount
+          let { generateColorForUserMessageStatus } = await import(
+            "./message.dev"
+          )
+          let color = generateColorForUserMessageStatus(
+            seenUserCount,
+            totalUserCount
+          )
+          console.log("color", color)
+          messageInfoSeenStatusBoxIcon.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
+          messageInfoSeenStatusBoxIcon.style.strokeWidth = `1px`
+          messageInfoSeenStatusBoxIcon.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
+        }
+      }
+    }
+  }
+}
+export async function updateMessageInfoDeliveryStatus(
+  messageId,
+  deliveredTime
+) {
+  let messageInfoModal = document.getElementById("messageInfoModal")
+  if (messageInfoModal && messageInfoModal.dataset.messageId === messageId) {
+    document
+      .getElementById("messageInfoDeliveryStatusBox")
+      .classList.add("message-info-delivery-status-box--delivered")
+    document.getElementById("messageInfoDeliveryStatusTime").textContent =
+      getTimeStringFromDate(deliveredTime)
+  }
+}

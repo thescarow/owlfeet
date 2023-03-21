@@ -59,7 +59,6 @@ exports.chatHandler = async (io, socket) => {
     }
   })
   socket.on("chat:update-message-seen-status", async data => {
-    console.log("called")
     if (socket.loginUser) {
       let message = await Message.findOne({
         _id: data.messageId,

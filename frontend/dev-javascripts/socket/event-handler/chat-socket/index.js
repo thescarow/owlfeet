@@ -142,6 +142,10 @@ export async function createChatSocket(socket) {
         "../../../chat/js/message.dev"
       )
       changeUserMessageStatusToDelivered(data.messageId)
+      let { updateMessageInfoDeliveryStatus } = await import(
+        "../../../chat/js/userMessageOptionModal.dev"
+      )
+      updateMessageInfoDeliveryStatus(data.messageId, data.deliveredTime)
     }
   })
   socket.on("chat:update-message-seen-status", async data => {
@@ -155,6 +159,14 @@ export async function createChatSocket(socket) {
         data.messageId,
         data.messageSeenStatusCount,
         data.messageReaderCount
+      )
+      let { addUserToMessageInfoSeenStatus } = await import(
+        "../../../chat/js/userMessageOptionModal.dev"
+      )
+      addUserToMessageInfoSeenStatus(
+        data.messageId,
+        data.pushedUser,
+        data.pushedUserTime
       )
     }
   })

@@ -130,7 +130,8 @@ async function attachSocketForFetchingMessage(req, chat) {
         await message.save()
         req.io.to(message.sender.toString()).emit("chat:message-delivered", {
           messageId: message._id,
-          chatId: chat._id
+          chatId: chat._id,
+          deliveredTime: message.deliveryStatus.deliveredTime
         })
       }
     })

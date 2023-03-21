@@ -218,6 +218,7 @@ async function attachSocketForCreatingNewMessage(
   await newMessageDocument.save()
   req.io.to(req.user.id.toString()).emit("chat:message-delivered", {
     messageId: newMessageDocument._id,
-    chatId: newMessageDocument.chat
+    chatId: newMessageDocument.chat,
+    deliveredTime: Date.now()
   })
 }
