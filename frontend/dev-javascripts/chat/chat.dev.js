@@ -283,7 +283,8 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
           if (data.isSuccess) {
             checkTimeAndCreateNewMessage(
               data.message,
-              activeChatMessageContainer
+              activeChatMessageContainer,
+              true
             )
             closeReplyMessageBox()
             updateAllChatSection(data.message)
@@ -345,7 +346,8 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
               if (data.isSuccess) {
                 checkTimeAndCreateNewMessage(
                   data.message,
-                  activeChatMessageContainer
+                  activeChatMessageContainer,
+                  true
                 )
                 closeReplyMessageBox()
                 document
@@ -434,12 +436,13 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
               }
               checkTimeAndCreateNewMessage(
                 data.message,
-                activeChatMessageContainer
+                activeChatMessageContainer,
+                true
               )
               closeReplyMessageBox()
               updateAllChatSection(data.message)
               activeChatMessageContainer.scrollTop =
-                activeChatMessageContainer.scrollHeight + 1000
+                activeChatMessageContainer.scrollHeight
             } else {
               let { createMainNotification } = await import(
                 "../common/mainNotification.dev"
@@ -490,60 +493,6 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
       activeChatInputAttachmentYoutubeBtnInputBox.classList.toggle(
         "input-attachment-btn-box__input-box--hide"
       )
-    })
-
-    // initialize event to active chat
-    ////////////////////
-    ///////////////////
-    // active chat to all chat btn
-    const ActiveChatToAllChatBtn = document.getElementById(
-      "ActiveChatToAllChatBtn"
-    )
-    ActiveChatToAllChatBtn.addEventListener("click", async () => {
-      location.hash = ""
-      if (activeChatSection.dataset.chatId !== "") {
-        let { sendChatMessageStopTypingSocket } = await import(
-          "../socket/event-emitter/chat-socket"
-        )
-        sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
-        isUserTyping = false
-      }
-    })
-
-    //active chat header pic and active chat header name
-    let activeChatHeaderPic = document.getElementById("activeChatHeaderPic")
-
-    activeChatHeaderPic.addEventListener("click", async () => {
-      let activeChatId = activeChatSection.dataset.chatId
-      if (activeChatId != "") {
-        let { createActiveChatInfoModal } = await import(
-          "./js/createActiveChatInfoModal.dev.js"
-        )
-        createActiveChatInfoModal(activeChatId)
-      }
-    })
-    let activeChatHeaderName = document.getElementById("activeChatHeaderName")
-    activeChatHeaderName.addEventListener("click", async () => {
-      let activeChatId = activeChatSection.dataset.chatId
-      if (activeChatId != "") {
-        let { createActiveChatInfoModal } = await import(
-          "./js/createActiveChatInfoModal.dev.js"
-        )
-        createActiveChatInfoModal(activeChatId)
-      }
-    })
-
-    ////////////////////
-    // create new group chat btn
-    // group chat form Modal and assign event to btn
-    const createNewGroupChatBtn = document.getElementById(
-      "createNewGroupChatBtn"
-    )
-    createNewGroupChatBtn.addEventListener("click", async () => {
-      let { createGroupChatFormModal } = await import(
-        "./js/createGroupChatFormModal.dev"
-      )
-      createGroupChatFormModal()
     })
 
     initialiseEventForChatModule()
@@ -606,11 +555,61 @@ export function openActiveChatInputBox() {
 export function adjustMessageContainerBottomPadding() {
   activeChatMessageContainer.style.paddingBottom =
     activeChatInputContainer.clientHeight + 5 + "px"
-  activeChatMessageContainer.scrollTop =
-    activeChatMessageContainer.scrollHeight + 1000
+  activeChatMessageContainer.scrollTop = activeChatMessageContainer.scrollHeight
 }
 
 function initialiseEventForChatModule() {
+  // initialize event to active chat
+
+  // active chat to all chat btn
+  const ActiveChatToAllChatBtn = document.getElementById(
+    "ActiveChatToAllChatBtn"
+  )
+  ActiveChatToAllChatBtn.addEventListener("click", async () => {
+    location.hash = ""
+    if (activeChatSection.dataset.chatId !== "") {
+      let { sendChatMessageStopTypingSocket } = await import(
+        "../socket/event-emitter/chat-socket"
+      )
+      sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
+      isUserTyping = false
+    }
+  })
+
+  //active chat header pic and active chat header name
+  let activeChatHeaderPic = document.getElementById("activeChatHeaderPic")
+
+  activeChatHeaderPic.addEventListener("click", async () => {
+    let activeChatId = activeChatSection.dataset.chatId
+    if (activeChatId != "") {
+      let { createActiveChatInfoModal } = await import(
+        "./js/createActiveChatInfoModal.dev.js"
+      )
+      createActiveChatInfoModal(activeChatId)
+    }
+  })
+  let activeChatHeaderName = document.getElementById("activeChatHeaderName")
+  activeChatHeaderName.addEventListener("click", async () => {
+    let activeChatId = activeChatSection.dataset.chatId
+    if (activeChatId != "") {
+      let { createActiveChatInfoModal } = await import(
+        "./js/createActiveChatInfoModal.dev.js"
+      )
+      createActiveChatInfoModal(activeChatId)
+    }
+  })
+
+  ////////////////////
+  // create new group chat btn
+  // group chat form Modal and assign event to btn
+  const createNewGroupChatBtn = document.getElementById("createNewGroupChatBtn")
+  createNewGroupChatBtn.addEventListener("click", async () => {
+    let { createGroupChatFormModal } = await import(
+      "./js/createGroupChatFormModal.dev"
+    )
+    createGroupChatFormModal()
+  })
+
   document
     .getElementById("activeChatInputReplyBoxCloseBtn")
     .addEventListener("click", async () => {
@@ -619,7 +618,6 @@ function initialiseEventForChatModule() {
     })
 
   //send chat:message-typing event
-
   activeChatInputTextContent.addEventListener("input", async e => {
     if (activeChatSection.dataset.chatId !== "") {
       if (

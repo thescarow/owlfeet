@@ -43,7 +43,10 @@ export async function createChatSocket(socket) {
       "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
-
+    let { increaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    increaseUnseenMessagesCountInChatBox(message.chat)
     if (
       chatId.toString() !== "" &&
       chatId.toString() === message.chat.toString()
@@ -51,7 +54,7 @@ export async function createChatSocket(socket) {
       let { checkTimeAndCreateNewMessage } = await import(
         "../../../chat/js/message.dev"
       )
-      checkTimeAndCreateNewMessage(message, activeChatMessageContainer)
+      checkTimeAndCreateNewMessage(message, activeChatMessageContainer, true)
     }
   })
   ////////////////////////////////////////////
@@ -61,10 +64,13 @@ export async function createChatSocket(socket) {
       "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
-
+    let { increaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    increaseUnseenMessagesCountInChatBox(message.chat._id)
     if (chatId !== "" && chatId === message.chat._id) {
       let { createInfoMessage } = await import("../../../chat/js/message.dev")
-      createInfoMessage(message, activeChatMessageContainer, "beforeend")
+      createInfoMessage(message, activeChatMessageContainer, "beforeend", true)
     }
   })
 
@@ -169,5 +175,11 @@ export async function createChatSocket(socket) {
         data.pushedUserTime
       )
     }
+  })
+  socket.on("chat:message-seen-by-self", async data => {
+    let { decreaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    decreaseUnseenMessagesCountInChatBox(data.chatId)
   })
 }

@@ -132,7 +132,8 @@ function isMessageDateChanged(messageDate, fromCheckingDate) {
 
 export async function checkTimeAndCreateOldMessage(
   allMessages,
-  activeChatMessageContainer
+  activeChatMessageContainer,
+  isScrolled = false
 ) {
   let isUserChanged
   if (allMessages.length > 0) {
@@ -147,7 +148,8 @@ export async function checkTimeAndCreateOldMessage(
         createDateMessage(
           TOP_MESSAGE_TIME_POINTER,
           activeChatMessageContainer,
-          "afterbegin"
+          "afterbegin",
+          isScrolled
         )
         TOP_MESSAGE_TIME_POINTER = allMessages[i].createdAt
       }
@@ -158,7 +160,8 @@ export async function checkTimeAndCreateOldMessage(
         createInfoMessage(
           allMessages[i],
           activeChatMessageContainer,
-          "afterbegin"
+          "afterbegin",
+          isScrolled
         )
       } else {
         isUserChanged = false
@@ -189,7 +192,8 @@ export async function checkTimeAndCreateOldMessage(
           allMessages[i],
           activeChatMessageContainer,
           "afterbegin",
-          isUserChanged
+          isUserChanged,
+          isScrolled
         )
       }
     }
@@ -198,7 +202,8 @@ export async function checkTimeAndCreateOldMessage(
       createDateMessage(
         TOP_MESSAGE_TIME_POINTER,
         activeChatMessageContainer,
-        "afterbegin"
+        "afterbegin",
+        isScrolled
       )
     } else {
       TOP_MESSAGE_TIME_POINTER = ""
@@ -209,7 +214,8 @@ export async function checkTimeAndCreateOldMessage(
 
 export async function checkTimeAndCreateNewMessage(
   message,
-  activeChatMessageContainer
+  activeChatMessageContainer,
+  isScrolled = false
 ) {
   let isUserChanged
   if (activeChatMessageContainer.children.length === 0) {
@@ -220,7 +226,8 @@ export async function checkTimeAndCreateNewMessage(
     createDateMessage(
       message.createdAt,
       activeChatMessageContainer,
-      "beforeend"
+      "beforeend",
+      isScrolled
     )
     BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
   }
@@ -228,7 +235,12 @@ export async function checkTimeAndCreateNewMessage(
     message.hasOwnProperty("isInfoMessage") &&
     message.isInfoMessage === true
   ) {
-    createInfoMessage(message, activeChatMessageContainer, "beforeend")
+    createInfoMessage(
+      message,
+      activeChatMessageContainer,
+      "beforeend",
+      isScrolled
+    )
   } else {
     isUserChanged = false
     if (
@@ -249,7 +261,8 @@ export async function checkTimeAndCreateNewMessage(
       message,
       activeChatMessageContainer,
       "beforeend",
-      isUserChanged
+      isUserChanged,
+      isScrolled
     )
     if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = message.sender
   }
@@ -259,7 +272,8 @@ export async function createUserMessage(
   message,
   activeChatMessageContainer,
   addPosition = "beforeend",
-  isUserChanged = true
+  isUserChanged = true,
+  isScrolled = false
 ) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -378,8 +392,10 @@ export async function createUserMessage(
           "active-chat-user-message-box__content--image"
         )
         image.onload = () => {
-          activeChatMessageContainer.scrollTop =
-            activeChatMessageContainer.scrollHeight
+          if (isScrolled) {
+            activeChatMessageContainer.scrollTop =
+              activeChatMessageContainer.scrollHeight
+          }
         }
         image.setAttribute("src", message.mediaContentPath)
         image.setAttribute("alt", "Image")
@@ -573,7 +589,10 @@ export async function createUserMessage(
   ) {
     USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
   }
-  activeChatMessageContainer.scrollTop = activeChatMessageContainer.scrollHeight
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
 }
 
 function insertLinksToString(str) {
@@ -618,7 +637,8 @@ function insertLinksToString(str) {
 export function createInfoMessage(
   message,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "beforeend",
+  isScrolled = false
 ) {
   if (
     message.hasOwnProperty("isInfoMessage") &&
@@ -653,13 +673,18 @@ export function createInfoMessage(
       addPosition,
       infoMessageBox
     )
+    if (isScrolled) {
+      activeChatMessageContainer.scrollTop =
+        activeChatMessageContainer.scrollHeight
+    }
   }
 }
 
 export function createDateMessage(
   messageDate,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "beforeend",
+  isScrolled = false
 ) {
   const dateMessageBox = document.createElement("div")
   dateMessageBox.classList.add("active-chat-date-message-box")
@@ -673,8 +698,41 @@ export function createDateMessage(
   )[0].textContent = getDateString(messageDate)
 
   activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
 }
 
+export function createUnseenMessageTagBox(
+  messageCount,
+  activeChatMessageContainer,
+  addPosition = "beforeend",
+  isScrolled = false
+) {
+  const unseenMessageTagBox = document.createElement("div")
+  unseenMessageTagBox.classList.add("active-chat-unseen-message-tag-box")
+
+  let unseenMessageTagBoxInnerHtml = `<div class="active-chat-unseen-message-tag-box__content">
+    </div>`
+  unseenMessageTagBox.insertAdjacentHTML(
+    "beforeend",
+    unseenMessageTagBoxInnerHtml
+  )
+
+  unseenMessageTagBox.getElementsByClassName(
+    "active-chat-unseen-message-tag-box__content"
+  )[0].textContent = messageCount + " unread messages"
+
+  activeChatMessageContainer.insertAdjacentElement(
+    addPosition,
+    unseenMessageTagBox
+  )
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
+}
 export function convertUserMessageToDeletedForAllMessage(message) {
   let userMessageBox = document.querySelector(
     `.active-chat-user-message-box[data-message-id="${message._id}"]`

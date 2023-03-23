@@ -146,7 +146,11 @@
                         </div>
 
                     </div>
-                    <div class="chat-box__unseen-message-count">9+</div>
+
+                    <div
+                        class='chat-box__unseen-messages-count <%= (chat.unseenMessagesCount > 0) ? "chat-box__unseen-messages-count--have":"" _%>'>
+                        <%= (chat.unseenMessagesCount===0) ?"":chat.unseenMessagesCount _%>
+                    </div>
 
                     <div class="chat-box__latest-message-time">
                         <%= chat.hasOwnProperty("latestMessageTime") ? chat.latestMessageTime: chat.chatCreatedTime -%>

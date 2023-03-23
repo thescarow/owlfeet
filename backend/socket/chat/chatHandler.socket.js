@@ -64,7 +64,7 @@ exports.chatHandler = async (io, socket) => {
         _id: data.messageId,
         reader: { $elemMatch: { $eq: socket.loginUser.id } }
       }).select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
-      console.log("seen message:", message)
+
       if (message) {
         let userExist = message.seenStatus.find(entry => {
           return entry.seenBy.toString() === socket.loginUser.id.toString()
@@ -99,6 +99,12 @@ exports.chatHandler = async (io, socket) => {
               messageReaderCount: updatedMessage.reader.length,
               pushedUser: pushedUser,
               pushedUserTime: Date.now()
+            }
+          )
+          io.to(socket.loginUser.id.toString()).emit(
+            "chat:message-seen-by-self",
+            {
+              chatId: updatedMessage.chat
             }
           )
         }

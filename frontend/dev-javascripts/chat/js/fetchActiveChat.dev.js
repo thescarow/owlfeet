@@ -2,6 +2,9 @@
 export async function fetchActiveChat(chatId) {
   let allChatSection = document.getElementById("allChatSection")
   let activeChatSection = document.getElementById("activeChatSection")
+  let activeChatMessageContainer = document.getElementById(
+    "activeChatMessageContainer"
+  )
 
   let activeChatId = activeChatSection.dataset.chatId
 
@@ -10,6 +13,8 @@ export async function fetchActiveChat(chatId) {
     document.title = `${activeChatData.chatName} chat `
     allChatSection.classList.add("all-chat-section--hide")
     activeChatSection.classList.remove("active-chat-section--hide")
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
   } else {
     fetch(`/chat/data/chat/${chatId}`)
       .then(response => {

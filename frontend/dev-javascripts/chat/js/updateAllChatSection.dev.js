@@ -112,7 +112,7 @@ export async function createChatBox(chat) {
   </div>
  
 </div>
-<div class="chat-box__unseen-message-count">9+</div>
+<div class="chat-box__unseen-messages-count"></div>
 <div class="chat-box__latest-message-time"></div>
 `
 
@@ -275,4 +275,54 @@ export function deleteChatBox(chatId) {
     `.chat-box[data-chat-id = "${chatId.toString()}"]`
   )
   chatBox.remove()
+}
+
+export function increaseUnseenMessagesCountInChatBox(chatId) {
+  let chatBox = allChatChatBoxContainer.querySelector(
+    `.chat-box[data-chat-id = "${chatId.toString()}"]`
+  )
+  if (chatBox) {
+    let unseenMessagesCountBox = chatBox.getElementsByClassName(
+      "chat-box__unseen-messages-count"
+    )[0]
+
+    if (
+      !unseenMessagesCountBox.classList.contains(
+        "chat-box__unseen-messages-count--have"
+      )
+    ) {
+      unseenMessagesCountBox.classList.add(
+        "chat-box__unseen-messages-count--have"
+      )
+      unseenMessagesCountBox.textContent = 1
+    } else {
+      unseenMessagesCountBox.textContent =
+        parseInt(unseenMessagesCountBox.textContent) + 1
+    }
+  }
+}
+export function decreaseUnseenMessagesCountInChatBox(chatId) {
+  let chatBox = allChatChatBoxContainer.querySelector(
+    `.chat-box[data-chat-id = "${chatId.toString()}"]`
+  )
+  if (chatBox) {
+    let unseenMessagesCountBox = chatBox.getElementsByClassName(
+      "chat-box__unseen-messages-count"
+    )[0]
+    if (
+      unseenMessagesCountBox.classList.contains(
+        "chat-box__unseen-messages-count--have"
+      )
+    ) {
+      let oldCount = parseInt(unseenMessagesCountBox.textContent)
+      if (oldCount === 1) {
+        unseenMessagesCountBox.classList.remove(
+          "chat-box__unseen-messages-count--have"
+        )
+        unseenMessagesCountBox.textContent = ""
+      } else {
+        unseenMessagesCountBox.textContent = oldCount - 1
+      }
+    }
+  }
 }

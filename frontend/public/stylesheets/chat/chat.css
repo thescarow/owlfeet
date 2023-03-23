@@ -230,19 +230,25 @@ svg {
     white-space: nowrap;
 }
 
-.chat-box__unseen-message-count {
+.chat-box__unseen-messages-count {
     position: absolute;
     right: 5px;
     bottom: 5px;
+    transition: all 0.5s;
+}
+
+.chat-box__unseen-messages-count--have {
+    /* position: absolute; */
+    /* right: 5px; */
+    /* bottom: 5px; */
     padding: 2px 6px;
     border-radius: 11px;
     font-size: 15px;
     font-weight: 800;
-    background-color: var(--first-color);
-    color: var(--third-color);
-    /* border: 1px solid rgba(var(--rgba-first-color),0.2); */
+    background-color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-third-color), 1);
+    border: 1px solid rgba(var(--rgba-first-color), 0.2);
 }
-
 
 
 .chat-box__latest-message-box {
@@ -1077,7 +1083,22 @@ svg {
     color: rgba(var(--rgba-fourth-color), 1);
 }
 
+.active-chat-unseen-message-tag-box {
+    width: 100%;
+    /* height: 30px; */
+}
 
+.active-chat-unseen-message-tag-box__content {
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 20px 0;
+    padding: 2px 0;
+    border-radius: 30px;
+    background: linear-gradient(45deg, rgba(var(--rgba-first-color), 0.4), transparent, rgba(var(--rgba-first-color), 0.4));
+    color: rgba(var(--rgba-first-color), 0.8);
+}
 
 /*/////////////////////////////////////////////// */
 /* //////////////////////////////////////////////////// */
