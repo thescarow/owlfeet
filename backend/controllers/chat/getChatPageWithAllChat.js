@@ -48,6 +48,11 @@ exports.getChatPageWithAllChat = async (req, res) => {
 
       await Promise.all(
         allChat.map(async chat => {
+          let unseenMessagesCount = await Message.countDocuments({
+            chat: chat._id,
+            "seenStatus.seenBy": { $ne: req.user.id }
+          })
+          chat.unseenMessagesCount = unseenMessagesCount
           let latestMessage = await Message.findOne({
             chat: chat._id,
             reader: { $elemMatch: { $eq: req.user.id } },

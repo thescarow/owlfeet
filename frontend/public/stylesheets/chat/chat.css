@@ -230,19 +230,24 @@ svg {
     white-space: nowrap;
 }
 
-.chat-box__unseen-message-count {
+.chat-box__unseen-messages-count {
     position: absolute;
     right: 5px;
     bottom: 5px;
+}
+
+.chat-box__unseen-messages-count--have {
+    /* position: absolute; */
+    /* right: 5px; */
+    /* bottom: 5px; */
     padding: 2px 6px;
     border-radius: 11px;
     font-size: 15px;
     font-weight: 800;
-    background-color: var(--first-color);
-    color: var(--third-color);
-    /* border: 1px solid rgba(var(--rgba-first-color),0.2); */
+    background-color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-third-color), 1);
+    border: 1px solid rgba(var(--rgba-first-color),0.2);
 }
-
 
 
 .chat-box__latest-message-box {

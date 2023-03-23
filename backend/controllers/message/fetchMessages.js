@@ -60,6 +60,11 @@ exports.fetchMessages = async (req, res) => {
           .sort({ createdAt: -1 })
           .lean()
 
+        let unseenMessagesCount = await Message.countDocuments({
+          chat: chat._id,
+          "seenStatus.seenBy": { $ne: req.user.id }
+        })
+
         await Promise.all(
           allMessages.map(async message => {
             if (
@@ -95,7 +100,11 @@ exports.fetchMessages = async (req, res) => {
         )
         attachSocketForFetchingMessage(req, chat)
         // console.log(allMessages)
-        res.json({ isSuccess: true, allMessages: allMessages })
+        res.json({
+          isSuccess: true,
+          allMessages: allMessages,
+          unseenMessagesCount: unseenMessagesCount
+        })
       } else {
         res.json({
           isSuccess: false,

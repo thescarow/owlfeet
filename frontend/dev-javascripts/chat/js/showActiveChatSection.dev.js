@@ -31,21 +31,51 @@ export async function showActiveChatSection(chat) {
     .then(async data => {
       if (data.isSuccess) {
         activeChatMessageContainer.innerHTML = ""
-        console.log(data.allMessages)
-        checkTimeAndCreateOldMessage(
-          data.allMessages,
-          activeChatMessageContainer
+        console.log(data)
+
+        let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
+        let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
+        console.log(
+          "unseenMessages:",
+          unseenMessages,
+          "seenMessages:",
+          seenMessages
         )
+        await checkTimeAndCreateOldMessage(
+          seenMessages,
+          activeChatMessageContainer,
+          true
+        )
+
+        if (unseenMessages.length > 0) {
+          const { checkTimeAndCreateNewMessage } = await import("./message.dev")
+          const { createUnseenMessageTagBox } = await import("./message.dev")
+          createUnseenMessageTagBox(
+            unseenMessages.length,
+            activeChatMessageContainer,
+            "beforeend",
+            false
+          )
+
+          for (let i = unseenMessages.length - 1; i >= 0; i--) {
+            await checkTimeAndCreateNewMessage(
+              unseenMessages[i],
+              activeChatMessageContainer,
+              false
+            )
+          }
+        }
+
         let { adjustMessageContainerBottomPadding } = await import(
           "../chat.dev"
         )
         adjustMessageContainerBottomPadding()
-        if (activeChatMessageContainer.lastElementChild)
-          activeChatMessageContainer.lastElementChild.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest"
-          })
+        // if (activeChatMessageContainer.lastElementChild)
+        //   activeChatMessageContainer.lastElementChild.scrollIntoView({
+        //     behavior: "smooth",
+        //     block: "center",
+        //     inline: "nearest"
+        //   })
       } else {
         let { createMainNotification } = await import(
           "../../common/mainNotification.dev"
@@ -131,61 +161,6 @@ export async function clearActiveChatMessageContainer() {
     "activeChatMessageContainer"
   )
   activeChatMessageContainer.innerHTML = ""
-}
-
-export async function createMessageSeenByModal() {
-  let chatMainContainer = document.getElementById("chatMainContainer")
-  if (chatMainContainer) {
-    let messageSeenByModal = document.createElement("div")
-    messageSeenByModal.classList.add(
-      "inner-modal",
-      "inner-modal--hide",
-      "inner-modal--message-seen-by"
-    )
-    messageSeenByModal.innerHTML = `
-    <div class="inner-modal-content inner-modal-content--message-seen-by">
-    
-    <div class="inner-modal-header">
-    <div class="inner-modal-header__title">
-  Message seen by
-    </div>
-    <div class="inner-modal-header__message-count">
-  20
-    </div>
-    </div>
-    <div class="inner-modal-main">
-    <div class="message-seen-user-container">
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    </div>
-    </div>
-  
-    `
-
-    chatMainContainer.insertAdjacentElement("afterbegin", messageSeenByModal)
-  }
 }
 
 export async function onOffActiveChatInputContainer(chat) {

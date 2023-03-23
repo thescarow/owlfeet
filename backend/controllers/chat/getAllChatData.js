@@ -42,6 +42,12 @@ exports.getAllChatData = async (req, res) => {
 
       await Promise.all(
         allChat.map(async chat => {
+          let unseenMessagesCount = await Message.countDocuments({
+            chat: chat._id,
+            "seenStatus.seenBy": { $ne: req.user.id }
+          })
+          chat.unseenMessagesCount = unseenMessagesCount
+
           let latestMessage = await Message.findOne({
             chat: chat._id,
             reader: { $elemMatch: { $eq: req.user.id } },
@@ -87,7 +93,7 @@ exports.getAllChatData = async (req, res) => {
             }
           } else {
             let chatOtherMemberId = chat.currentChatMembers.find(
-              userId => userId != req.user.id
+              userId => userId.toString() !== req.user.id.toString()
             )
             let chatOtherMember = await User.findById(chatOtherMemberId)
               .select({
