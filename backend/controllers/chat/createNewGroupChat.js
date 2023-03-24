@@ -43,6 +43,10 @@ exports.createNewGroupChat = async (req, res) => {
 
           if (allMembersInFollowingList) {
             newGroupChatData.chatUserIds.push(req.user.id)
+            newGroupChatData.chatUserIds = Array.from(
+              new Set(newGroupChatData.chatUserIds)
+            )
+
             let newChatData = {
               isGroupChat: true,
               groupChatAdmin: [req.user.id],

@@ -132,7 +132,8 @@ function isMessageDateChanged(messageDate, fromCheckingDate) {
 
 export async function checkTimeAndCreateOldMessage(
   allMessages,
-  activeChatMessageContainer
+  activeChatMessageContainer,
+  isScrolled = false
 ) {
   let isUserChanged
   if (allMessages.length > 0) {
@@ -147,7 +148,8 @@ export async function checkTimeAndCreateOldMessage(
         createDateMessage(
           TOP_MESSAGE_TIME_POINTER,
           activeChatMessageContainer,
-          "afterbegin"
+          "afterbegin",
+          isScrolled
         )
         TOP_MESSAGE_TIME_POINTER = allMessages[i].createdAt
       }
@@ -158,7 +160,8 @@ export async function checkTimeAndCreateOldMessage(
         createInfoMessage(
           allMessages[i],
           activeChatMessageContainer,
-          "afterbegin"
+          "afterbegin",
+          isScrolled
         )
       } else {
         isUserChanged = false
@@ -189,7 +192,8 @@ export async function checkTimeAndCreateOldMessage(
           allMessages[i],
           activeChatMessageContainer,
           "afterbegin",
-          isUserChanged
+          isUserChanged,
+          isScrolled
         )
       }
     }
@@ -198,7 +202,8 @@ export async function checkTimeAndCreateOldMessage(
       createDateMessage(
         TOP_MESSAGE_TIME_POINTER,
         activeChatMessageContainer,
-        "afterbegin"
+        "afterbegin",
+        isScrolled
       )
     } else {
       TOP_MESSAGE_TIME_POINTER = ""
@@ -209,7 +214,8 @@ export async function checkTimeAndCreateOldMessage(
 
 export async function checkTimeAndCreateNewMessage(
   message,
-  activeChatMessageContainer
+  activeChatMessageContainer,
+  isScrolled = false
 ) {
   let isUserChanged
   if (activeChatMessageContainer.children.length === 0) {
@@ -220,7 +226,8 @@ export async function checkTimeAndCreateNewMessage(
     createDateMessage(
       message.createdAt,
       activeChatMessageContainer,
-      "beforeend"
+      "beforeend",
+      isScrolled
     )
     BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
   }
@@ -228,7 +235,12 @@ export async function checkTimeAndCreateNewMessage(
     message.hasOwnProperty("isInfoMessage") &&
     message.isInfoMessage === true
   ) {
-    createInfoMessage(message, activeChatMessageContainer, "beforeend")
+    createInfoMessage(
+      message,
+      activeChatMessageContainer,
+      "beforeend",
+      isScrolled
+    )
   } else {
     isUserChanged = false
     if (
@@ -249,17 +261,19 @@ export async function checkTimeAndCreateNewMessage(
       message,
       activeChatMessageContainer,
       "beforeend",
-      isUserChanged
+      isUserChanged,
+      isScrolled
     )
     if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = message.sender
   }
 }
 
-export function createUserMessage(
+export async function createUserMessage(
   message,
   activeChatMessageContainer,
   addPosition = "beforeend",
-  isUserChanged = true
+  isUserChanged = true,
+  isScrolled = false
 ) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -378,8 +392,10 @@ export function createUserMessage(
           "active-chat-user-message-box__content--image"
         )
         image.onload = () => {
-          activeChatMessageContainer.scrollTop =
-            activeChatMessageContainer.scrollHeight
+          if (isScrolled) {
+            activeChatMessageContainer.scrollTop =
+              activeChatMessageContainer.scrollHeight
+          }
         }
         image.setAttribute("src", message.mediaContentPath)
         image.setAttribute("alt", "Image")
@@ -502,13 +518,45 @@ export function createUserMessage(
     messageBox.classList.add("active-chat-user-message-box--right")
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
-      `<div class="active-chat-user-message-box__content-status-container ">
+      `<div class="active-chat-user-message-box__content-status-container">
                <div class="active-chat-user-message-box__content-status">${svg_messageTick}
                 </div>
                <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--second ">${svg_messageTick}
                </div>
       </div>`
     )
+    let contentStatusContainer = messageContentInfo.getElementsByClassName(
+      "active-chat-user-message-box__content-status-container"
+    )[0]
+    if (
+      message.hasOwnProperty("deliveryStatus") &&
+      message.deliveryStatus.isDelivered === true
+    ) {
+      contentStatusContainer.classList.add(
+        "active-chat-user-message-box__content-status-container--delivered"
+      )
+    }
+
+    if (
+      message.hasOwnProperty("seenStatus") &&
+      message.hasOwnProperty("reader")
+    ) {
+      let svgs = [
+        ...messageBox.querySelectorAll(
+          ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
+        )
+      ]
+      let color = generateColorForUserMessageStatus(
+        message.seenStatus.length,
+        message.reader.length
+      )
+      svgs.forEach(svg => {
+        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        svg.style.strokeWidth = `1px`
+        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+      })
+      messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+    }
   }
 
   if (
@@ -533,7 +581,18 @@ export function createUserMessage(
   }
   activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
-  activeChatMessageContainer.scrollTop = activeChatMessageContainer.scrollHeight
+  if (
+    message.hasOwnProperty("seenStatus") &&
+    message.hasOwnProperty("reader") &&
+    message.seenStatus.length !== message.reader.length &&
+    message.sender._id.toString() !== loginUser._id.toString()
+  ) {
+    USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
+  }
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
 }
 
 function insertLinksToString(str) {
@@ -578,7 +637,8 @@ function insertLinksToString(str) {
 export function createInfoMessage(
   message,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "beforeend",
+  isScrolled = false
 ) {
   if (
     message.hasOwnProperty("isInfoMessage") &&
@@ -613,13 +673,18 @@ export function createInfoMessage(
       addPosition,
       infoMessageBox
     )
+    if (isScrolled) {
+      activeChatMessageContainer.scrollTop =
+        activeChatMessageContainer.scrollHeight
+    }
   }
 }
 
 export function createDateMessage(
   messageDate,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "beforeend",
+  isScrolled = false
 ) {
   const dateMessageBox = document.createElement("div")
   dateMessageBox.classList.add("active-chat-date-message-box")
@@ -633,8 +698,41 @@ export function createDateMessage(
   )[0].textContent = getDateString(messageDate)
 
   activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
 }
 
+export function createUnseenMessageTagBox(
+  messageCount,
+  activeChatMessageContainer,
+  addPosition = "beforeend",
+  isScrolled = false
+) {
+  const unseenMessageTagBox = document.createElement("div")
+  unseenMessageTagBox.classList.add("active-chat-unseen-message-tag-box")
+
+  let unseenMessageTagBoxInnerHtml = `<div class="active-chat-unseen-message-tag-box__content">
+    </div>`
+  unseenMessageTagBox.insertAdjacentHTML(
+    "beforeend",
+    unseenMessageTagBoxInnerHtml
+  )
+
+  unseenMessageTagBox.getElementsByClassName(
+    "active-chat-unseen-message-tag-box__content"
+  )[0].textContent = messageCount + " unread messages"
+
+  activeChatMessageContainer.insertAdjacentElement(
+    addPosition,
+    unseenMessageTagBox
+  )
+  if (isScrolled) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
+}
 export function convertUserMessageToDeletedForAllMessage(message) {
   let userMessageBox = document.querySelector(
     `.active-chat-user-message-box[data-message-id="${message._id}"]`
@@ -686,71 +784,79 @@ export function unSelectUserMessage(messageId) {
     userMessageBox.classList.remove("active-chat-user-message-box--selected")
 }
 
-//////////////////////////////////////////////
-let activeChatMessageContainer = document.getElementById(
-  "activeChatMessageContainer"
-)
-activeChatMessageContainer.addEventListener("click", async e => {
-  let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
-  let userMessageBoxBtn = e.target.closest(
-    `.active-chat-user-message-box__btn[data-message-box-btn ="user"]`
-  )
-  let userMessageContentBox = e.target.closest(
-    `.active-chat-user-message-box__content-box`
-  )
-
-  if (
-    userMessageBoxBtn &&
-    activeChatMessageContainer.contains(userMessageBoxBtn)
-  ) {
-    userMessageBox.classList.add("active-chat-user-message-box--selected")
-    let { createUserMessageOptionModal } = await import(
-      "./userMessageOptionModal.dev"
+export function changeUserMessageStatusToDelivered(messageId) {
+  setTimeout(() => {
+    let userMessageBox = document.querySelector(
+      `.active-chat-user-message-box[data-message-id="${messageId}"]`
     )
 
-    createUserMessageOptionModal(userMessageBox)
-  } else if (
-    userMessageContentBox &&
-    activeChatMessageContainer.contains(userMessageContentBox)
-  ) {
-    if (
-      userMessageBox.classList.contains(
-        "active-chat-user-message-box--replied-message"
-      )
-    ) {
-      let repliedMessageId = userMessageBox.dataset.repliedMessageId
-      let repliedUserMessageBox = document.querySelector(
-        `.active-chat-user-message-box[data-message-id="${repliedMessageId}"]`
-      )
-      if (repliedUserMessageBox) {
-        repliedUserMessageBox.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "nearest"
-        })
-        repliedUserMessageBox.classList.add(
-          "active-chat-user-message-box--highlight"
+    if (userMessageBox) {
+      userMessageBox
+        .getElementsByClassName(
+          "active-chat-user-message-box__content-status-container"
+        )[0]
+        .classList.add(
+          "active-chat-user-message-box__content-status-container--delivered"
         )
-        setTimeout(function () {
-          repliedUserMessageBox.classList.remove(
-            "active-chat-user-message-box--highlight"
-          )
-        }, 1000)
-      }
     }
-  } else {
-    return
-  }
-})
-activeChatMessageContainer.addEventListener("dblclick", async e => {
-  let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
+  }, 500)
+}
 
-  if (userMessageBox && activeChatMessageContainer.contains(userMessageBox)) {
-    let messageId = userMessageBox.dataset.messageId
-    let { openReplyMessageBox } = await import("./replyMessageBox.dev.js")
-
-    openReplyMessageBox(messageId)
-  } else {
-    return
+export function changeUserMessageStatusWithMessageSeenStatusCount(
+  messageId,
+  messageSeenStatusCount,
+  messageReaderCount
+) {
+  let userMessageBox = document.querySelector(
+    `.active-chat-user-message-box[data-message-id="${messageId}"]`
+  )
+  console.log("userMessageBox:", userMessageBox, "messageId:", messageId)
+  if (userMessageBox) {
+    if (
+      messageSeenStatusCount > userMessageBox.dataset.messageSeenStatusCount
+    ) {
+      let svgs = [
+        ...userMessageBox.querySelectorAll(
+          ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
+        )
+      ]
+      console.log(svgs)
+      let color = generateColorForUserMessageStatus(
+        messageSeenStatusCount - 1,
+        messageReaderCount - 1
+      )
+      svgs.forEach(svg => {
+        svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
+        svg.style.strokeWidth = `1px`
+        svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
+      })
+      userMessageBox.dataset.messageSeenStatusCount = messageSeenStatusCount
+    }
   }
-})
+}
+export function generateColorForUserMessageStatus(
+  seenStatusCountExceptMe,
+  readerCountExceptMe
+) {
+  let percent = seenStatusCountExceptMe / readerCountExceptMe
+  let firstColor = { r: 255, g: 255, b: 255 }
+  let secondColor = { r: 8, g: 175, b: 124 }
+  let thirdColor = { r: 236, g: 179, b: 101 }
+
+  let resultColor
+
+  if (percent < 0.5) {
+    let subPercent = percent / 0.5
+    resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
+  } else {
+    var subPercent = (percent - 0.5) / 0.5
+    resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
+  }
+  return resultColor
+}
+export function getColorWithPercentage(color1, color2, percent) {
+  let r = Math.round(color1.r + (color2.r - color1.r) * percent)
+  let g = Math.round(color1.g + (color2.g - color1.g) * percent)
+  let b = Math.round(color1.b + (color2.b - color1.b) * percent)
+  return { r, g, b }
+}

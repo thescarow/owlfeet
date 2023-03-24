@@ -38,13 +38,15 @@ export async function createChatSocket(socket) {
   })
 
   socket.on("chat:new-message", async message => {
-    socket.emit("called message socket bhaiya", 3, 3, 3, 3)
     let chatId = activeChatSection.dataset.chatId
     let { updateAllChatSection } = await import(
       "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
-
+    let { increaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    increaseUnseenMessagesCountInChatBox(message.chat)
     if (
       chatId.toString() !== "" &&
       chatId.toString() === message.chat.toString()
@@ -52,7 +54,7 @@ export async function createChatSocket(socket) {
       let { checkTimeAndCreateNewMessage } = await import(
         "../../../chat/js/message.dev"
       )
-      checkTimeAndCreateNewMessage(message, activeChatMessageContainer)
+      checkTimeAndCreateNewMessage(message, activeChatMessageContainer, true)
     }
   })
   ////////////////////////////////////////////
@@ -62,10 +64,13 @@ export async function createChatSocket(socket) {
       "../../../chat/js/updateAllChatSection.dev"
     )
     updateAllChatSection(message)
-
+    let { increaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    increaseUnseenMessagesCountInChatBox(message.chat._id)
     if (chatId !== "" && chatId === message.chat._id) {
       let { createInfoMessage } = await import("../../../chat/js/message.dev")
-      createInfoMessage(message, activeChatMessageContainer, "beforeend")
+      createInfoMessage(message, activeChatMessageContainer, "beforeend", true)
     }
   })
 
@@ -134,5 +139,47 @@ export async function createChatSocket(socket) {
       )
       updateChatBoxLatestMessage(data.latestMessage)
     }
+  })
+  socket.on("chat:message-delivered", async data => {
+    if (
+      data.chatId.toString() === activeChatSection.dataset.chatId.toString()
+    ) {
+      let { changeUserMessageStatusToDelivered } = await import(
+        "../../../chat/js/message.dev"
+      )
+      changeUserMessageStatusToDelivered(data.messageId)
+      let { updateMessageInfoDeliveryStatus } = await import(
+        "../../../chat/js/userMessageOptionModal.dev"
+      )
+      updateMessageInfoDeliveryStatus(data.messageId, data.deliveredTime)
+    }
+  })
+  socket.on("chat:update-message-seen-status", async data => {
+    if (
+      data.chatId.toString() === activeChatSection.dataset.chatId.toString()
+    ) {
+      let { changeUserMessageStatusWithMessageSeenStatusCount } = await import(
+        "../../../chat/js/message.dev"
+      )
+      changeUserMessageStatusWithMessageSeenStatusCount(
+        data.messageId,
+        data.messageSeenStatusCount,
+        data.messageReaderCount
+      )
+      let { addUserToMessageInfoSeenStatus } = await import(
+        "../../../chat/js/userMessageOptionModal.dev"
+      )
+      addUserToMessageInfoSeenStatus(
+        data.messageId,
+        data.pushedUser,
+        data.pushedUserTime
+      )
+    }
+  })
+  socket.on("chat:message-seen-by-self", async data => {
+    let { decreaseUnseenMessagesCountInChatBox } = await import(
+      "../../../chat/js/updateAllChatSection.dev"
+    )
+    decreaseUnseenMessagesCountInChatBox(data.chatId)
   })
 }

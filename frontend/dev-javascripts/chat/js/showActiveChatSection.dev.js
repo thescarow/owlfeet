@@ -1,10 +1,9 @@
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
+const activeChatMessageContainer = document.getElementById(
+  "activeChatMessageContainer"
+)
 export async function showActiveChatSection(chat) {
-  const activeChatMessageContainer = document.getElementById(
-    "activeChatMessageContainer"
-  )
-
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
@@ -14,6 +13,10 @@ export async function showActiveChatSection(chat) {
   let { openActiveChatInputBox } = await import("../chat.dev.js")
   openActiveChatInputBox()
   updateActiveChatSection(chat)
+  if (USER_MESSAGE_BOX_OBSERVER !== undefined) {
+    USER_MESSAGE_BOX_OBSERVER.disconnect()
+  }
+  initializeUserMessageBoxObserver()
 
   /////////////////////
   const { checkTimeAndCreateOldMessage } = await import("./message.dev")
@@ -27,21 +30,59 @@ export async function showActiveChatSection(chat) {
     })
     .then(async data => {
       if (data.isSuccess) {
-        console.log(data.allMessages)
-        checkTimeAndCreateOldMessage(
-          data.allMessages,
-          activeChatMessageContainer
+        activeChatMessageContainer.innerHTML = ""
+        console.log(data)
+
+        let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
+        let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
+        console.log(
+          "unseenMessages:",
+          unseenMessages,
+          "seenMessages:",
+          seenMessages
         )
+        await checkTimeAndCreateOldMessage(
+          seenMessages,
+          activeChatMessageContainer,
+          true
+        )
+
+        if (unseenMessages.length > 0) {
+          const { checkTimeAndCreateNewMessage } = await import("./message.dev")
+          const { createUnseenMessageTagBox } = await import("./message.dev")
+          createUnseenMessageTagBox(
+            unseenMessages.length,
+            activeChatMessageContainer,
+            "beforeend",
+            false
+          )
+
+          for (let i = unseenMessages.length - 1; i >= 0; i--) {
+            await checkTimeAndCreateNewMessage(
+              unseenMessages[i],
+              activeChatMessageContainer,
+              false
+            )
+          }
+
+          let unseenMessageTagBox =
+            activeChatMessageContainer.getElementsByClassName(
+              "active-chat-unseen-message-tag-box"
+            )[0]
+          if (unseenMessageTagBox) {
+            activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
+            // unseenMessageTagBox.scrollIntoView({
+            //   behavior: "smooth",
+            //   block: "end",
+            //   inline: "nearest"
+            // })
+          }
+        }
+
         let { adjustMessageContainerBottomPadding } = await import(
           "../chat.dev"
         )
         adjustMessageContainerBottomPadding()
-        // if (activeChatMessageContainer.lastElementChild)
-        //   activeChatMessageContainer.lastElementChild.scrollIntoView({
-        //     behavior: "smooth",
-        //     block: "center",
-        //     inline: "nearest"
-        //   })
       } else {
         let { createMainNotification } = await import(
           "../../common/mainNotification.dev"
@@ -104,10 +145,13 @@ export async function updateActiveChatSection(chat) {
       activeChatHeaderStatus.classList.remove(
         "active-chat-header__chat-status--hide"
       )
-
-      activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
-        chat.userLastActive
-      )} ago`
+      if (chat.hasOwnProperty("userLastActive")) {
+        activeChatHeaderStatus.textContent = `last active ${timeDifferenceFromNow(
+          chat.userLastActive
+        )} ago`
+      } else {
+        activeChatHeaderStatus.textContent = ""
+      }
     }
   } else {
     activeChatHeaderStatus.classList.remove(
@@ -124,61 +168,6 @@ export async function clearActiveChatMessageContainer() {
     "activeChatMessageContainer"
   )
   activeChatMessageContainer.innerHTML = ""
-}
-
-export async function createMessageSeenByModal() {
-  let chatMainContainer = document.getElementById("chatMainContainer")
-  if (chatMainContainer) {
-    let messageSeenByModal = document.createElement("div")
-    messageSeenByModal.classList.add(
-      "inner-modal",
-      "inner-modal--hide",
-      "inner-modal--message-seen-by"
-    )
-    messageSeenByModal.innerHTML = `
-    <div class="inner-modal-content inner-modal-content--message-seen-by">
-    
-    <div class="inner-modal-header">
-    <div class="inner-modal-header__title">
-  Message seen by
-    </div>
-    <div class="inner-modal-header__message-count">
-  20
-    </div>
-    </div>
-    <div class="inner-modal-main">
-    <div class="message-seen-user-container">
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    <div class="message-seen-user">
-    <div class="message-seen-user__pic">
-    <img src="https://wallpapers.com/images/file/cool-neon-blue-profile-picture-u9y9ydo971k9mdcf-u9y9ydo971k9mdcf.jpg">
-    </div>
-    <div class="message-seen-user__fullname">Rithik Pathak</div>
-    </div>
-    </div>
-    </div>
-  
-    `
-
-    chatMainContainer.insertAdjacentElement("afterbegin", messageSeenByModal)
-  }
 }
 
 export async function onOffActiveChatInputContainer(chat) {
@@ -204,3 +193,195 @@ export async function onOffActiveChatInputContainer(chat) {
     )
   }
 }
+
+function initializeUserMessageBoxObserver() {
+  USER_MESSAGE_BOX_OBSERVER = new IntersectionObserver(
+    async (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting === true) {
+          let messageId = entry.target.dataset.messageId
+          socket.emit("chat:update-message-seen-status", {
+            messageId: messageId
+          })
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.5, root: activeChatMessageContainer }
+  )
+}
+// function initializeTopUserMessageBoxObserver() {
+//   TOP_USER_MESSAGE_BOX_OBSERVER = new IntersectionObserver(
+//     async (entries, observer) => {
+//       entries.forEach(entry => {
+//         if (entry.isIntersecting === true) {
+//           fetch(`/message/fetch-messages/${chat._id}?skipMessagesCount=${}`)
+//     .then(response => {
+//       if (response.ok) {
+//         return response.json()
+//       }
+//       return Promise.reject(response)
+//     })
+//     .then(async data => {
+//       if (data.isSuccess) {
+//         activeChatMessageContainer.innerHTML = ""
+//         console.log(data)
+
+//         skipskipMessagesCount = data.allMessages.length
+
+//         let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
+//         let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
+//         console.log(
+//           "unseenMessages:",
+//           unseenMessages,
+//           "seenMessages:",
+//           seenMessages
+//         )
+//         await checkTimeAndCreateOldMessage(
+//           seenMessages,
+//           activeChatMessageContainer,
+//           true
+//         )
+
+//         if (unseenMessages.length > 0) {
+//           const { checkTimeAndCreateNewMessage } = await import("./message.dev")
+//           const { createUnseenMessageTagBox } = await import("./message.dev")
+//           createUnseenMessageTagBox(
+//             unseenMessages.length,
+//             activeChatMessageContainer,
+//             "beforeend",
+//             false
+//           )
+
+//           for (let i = unseenMessages.length - 1; i >= 0; i--) {
+//             await checkTimeAndCreateNewMessage(
+//               unseenMessages[i],
+//               activeChatMessageContainer,
+//               false
+//             )
+//           }
+
+//           let unseenMessageTagBox =
+//             activeChatMessageContainer.getElementsByClassName(
+//               "active-chat-unseen-message-tag-box"
+//             )[0]
+//           if (unseenMessageTagBox) {
+//             activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
+//             // unseenMessageTagBox.scrollIntoView({
+//             //   behavior: "smooth",
+//             //   block: "end",
+//             //   inline: "nearest"
+//             // })
+//           }
+//         }
+
+//         let { adjustMessageContainerBottomPadding } = await import(
+//           "../chat.dev"
+//         )
+//         adjustMessageContainerBottomPadding()
+//       } else {
+//         let { createMainNotification } = await import(
+//           "../../common/mainNotification.dev"
+//         )
+//         createMainNotification(data.error, "error")
+//       }
+//     })
+//     .catch(async err => {
+//       console.log(err)
+//       let { createMainNotification } = await import(
+//         "../../common/mainNotification.dev"
+//       )
+//       createMainNotification(
+//         "Server Error In Accessing Messages, Please Refresh Your Page",
+//         "error"
+//       )
+//     })
+//           observer.unobserve(entry.target)
+//         }
+//       })
+//     },
+//     { threshold: 0.5, root: activeChatMessageContainer }
+//   )
+// }
+
+// async function fetchMessageAndCreateUserMessageBox(chatId){
+//   fetch(`/message/fetch-messages/${chatId}?skipMessagesCount=${SKIP_MESSAGES_COUNT}`)
+//     .then(response => {
+//       if (response.ok) {
+//         return response.json()
+//       }
+//       return Promise.reject(response)
+//     })
+//     .then(async data => {
+//       if (data.isSuccess) {
+
+//         SKIP_MESSAGES_COUNT = data.allMessages.length
+
+//         let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
+//         let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
+//         console.log(
+//           "unseenMessages:",
+//           unseenMessages,
+//           "seenMessages:",
+//           seenMessages
+//         )
+//         await checkTimeAndCreateOldMessage(
+//           seenMessages,
+//           activeChatMessageContainer,
+//           true
+//         )
+
+//         if (unseenMessages.length > 0) {
+//           const { checkTimeAndCreateNewMessage } = await import("./message.dev")
+//           const { createUnseenMessageTagBox } = await import("./message.dev")
+//           createUnseenMessageTagBox(
+//             unseenMessages.length,
+//             activeChatMessageContainer,
+//             "beforeend",
+//             false
+//           )
+
+//           for (let i = unseenMessages.length - 1; i >= 0; i--) {
+//             await checkTimeAndCreateNewMessage(
+//               unseenMessages[i],
+//               activeChatMessageContainer,
+//               false
+//             )
+//           }
+
+//           let unseenMessageTagBox =
+//             activeChatMessageContainer.getElementsByClassName(
+//               "active-chat-unseen-message-tag-box"
+//             )[0]
+//           if (unseenMessageTagBox) {
+//             activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
+//             // unseenMessageTagBox.scrollIntoView({
+//             //   behavior: "smooth",
+//             //   block: "end",
+//             //   inline: "nearest"
+//             // })
+//           }
+//         }
+
+//         let { adjustMessageContainerBottomPadding } = await import(
+//           "../chat.dev"
+//         )
+//         adjustMessageContainerBottomPadding()
+//       } else {
+//         let { createMainNotification } = await import(
+//           "../../common/mainNotification.dev"
+//         )
+//         createMainNotification(data.error, "error")
+//       }
+//     })
+//     .catch(async err => {
+//       console.log(err)
+//       let { createMainNotification } = await import(
+//         "../../common/mainNotification.dev"
+//       )
+//       createMainNotification(
+//         "Server Error In Accessing Messages, Please Refresh Your Page",
+//         "error"
+//       )
+//     })
+// }

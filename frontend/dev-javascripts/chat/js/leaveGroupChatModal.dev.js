@@ -26,6 +26,7 @@ export async function createLeaveGroupChatModal(chatData) {
         <div class="inner-modal-btns-container">
         <div class="inner-modal-btn" id="closeLeaveGroupChatModalBtn">Cancel</div>
         <div class="inner-modal-btn inner-modal-btn--action" id="leaveGroupChatRequestBtn">Leave</div>
+        </div>
         </div>`
 
       chatMainContainer.insertAdjacentElement("afterbegin", leaveGroupChatModal)

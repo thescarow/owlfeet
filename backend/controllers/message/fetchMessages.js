@@ -23,6 +23,8 @@ exports.fetchMessages = async (req, res) => {
         _id: chatId,
         allChatMembers: { $elemMatch: { $eq: req.user.id } }
       })
+        .select({ _id: 1 })
+        .lean()
       if (chat) {
         let allMessages = await Message.find({
           chat: chat._id,
@@ -58,6 +60,11 @@ exports.fetchMessages = async (req, res) => {
           .sort({ createdAt: -1 })
           .lean()
 
+        let unseenMessagesCount = await Message.countDocuments({
+          chat: chat._id,
+          "seenStatus.seenBy": { $ne: req.user.id }
+        })
+
         await Promise.all(
           allMessages.map(async message => {
             if (
@@ -91,9 +98,13 @@ exports.fetchMessages = async (req, res) => {
             }
           })
         )
-
+        attachSocketForFetchingMessage(req, chat)
         // console.log(allMessages)
-        res.json({ isSuccess: true, allMessages: allMessages })
+        res.json({
+          isSuccess: true,
+          allMessages: allMessages,
+          unseenMessagesCount: unseenMessagesCount
+        })
       } else {
         res.json({
           isSuccess: false,
@@ -113,4 +124,25 @@ exports.fetchMessages = async (req, res) => {
       error: "Server Error In Getting Messages, Please Refresh Your Page"
     })
   }
+}
+
+async function attachSocketForFetchingMessage(req, chat) {
+  let allNotDeliveredMessages = await Message.find({
+    chat: chat._id,
+    reader: { $elemMatch: { $eq: req.user.id } }
+  }).select({ sender: 1, deliveryStatus: 1 })
+  await Promise.all(
+    allNotDeliveredMessages.map(async message => {
+      if (message.deliveryStatus.isDelivered === false) {
+        message.deliveryStatus.isDelivered = true
+        message.deliveryStatus.deliveredTime = Date.now()
+        await message.save()
+        req.io.to(message.sender.toString()).emit("chat:message-delivered", {
+          messageId: message._id,
+          chatId: chat._id,
+          deliveredTime: message.deliveryStatus.deliveredTime
+        })
+      }
+    })
+  )
 }

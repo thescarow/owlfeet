@@ -7,7 +7,17 @@ const messageSchema = new mongoose.Schema(
 
     reader: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
 
-    seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    seenStatus: [
+      {
+        seenBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        seenTime: { type: Date }
+      }
+    ],
+
+    deliveryStatus: {
+      isDelivered: { type: Boolean, default: false },
+      deliveredTime: { type: Date }
+    },
 
     deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
 

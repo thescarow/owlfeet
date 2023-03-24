@@ -52,6 +52,13 @@ exports.getChatDataById = async (req, res) => {
         .lean()
 
       if (chat) {
+        let unseenMessagesCount = await Message.countDocuments({
+          chat: chat._id,
+          "seenStatus.seenBy": { $ne: req.user.id }
+        })
+
+        chat.unseenMessagesCount = unseenMessagesCount
+
         let latestMessage = await Message.findOne({
           chat: chat._id,
           reader: { $elemMatch: { $eq: req.user.id } },
@@ -91,13 +98,17 @@ exports.getChatDataById = async (req, res) => {
             chat.chatPic = await signedUrlForGetAwsS3Object(chat.chatPic)
           }
 
-          if (!chat.currentChatMembers.some(user => user._id == req.user.id)) {
+          if (
+            !chat.currentChatMembers.some(
+              user => user._id.toString() === req.user.id.toString()
+            )
+          ) {
             chat = filterChatFieldForNonMember(chat)
             chat.canSendMessageToThisChat = false
           }
         } else {
           let chatOtherMember = chat.currentChatMembers.find(
-            user => user._id != req.user.id
+            user => user._id.toString() !== req.user.id.toString()
           )
           if (
             chatOtherMember.hasOwnProperty("profile") &&

@@ -26,6 +26,7 @@ export async function createDeleteChatModal(chatData) {
         <div class="inner-modal-btns-container">
         <div class="inner-modal-btn" id="closeDeleteChatModalBtn">Cancel</div>
         <div class="inner-modal-btn inner-modal-btn--action" id="submitDeleteChatRequestBtn">Delete</div>
+        </div>
         </div>`
 
       chatMainContainer.insertAdjacentElement("afterbegin", deleteChatModal)
