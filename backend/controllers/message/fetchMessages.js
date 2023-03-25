@@ -19,6 +19,7 @@ exports.fetchMessages = async (req, res) => {
   try {
     if (req.user) {
       const chatId = req.params.chatId
+      const totalReceivedMessagesCount = req.query.totalReceivedMessagesCount
       const chat = await Chat.findOne({
         _id: chatId,
         allChatMembers: { $elemMatch: { $eq: req.user.id } }
@@ -58,6 +59,8 @@ exports.fetchMessages = async (req, res) => {
           })
           .select(selectSafeMessageField)
           .sort({ createdAt: -1 })
+          .skip(totalReceivedMessagesCount)
+          .limit(30)
           .lean()
 
         let unseenMessagesCount = await Message.countDocuments({
@@ -102,8 +105,7 @@ exports.fetchMessages = async (req, res) => {
         // console.log(allMessages)
         res.json({
           isSuccess: true,
-          allMessages: allMessages,
-          unseenMessagesCount: unseenMessagesCount
+          allMessages: allMessages
         })
       } else {
         res.json({

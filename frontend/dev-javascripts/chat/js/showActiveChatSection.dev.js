@@ -3,25 +3,37 @@ let activeChatSection = document.getElementById("activeChatSection")
 const activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
+
+let totalReceivedMessagesCount
+let totalUnseenMessagesCount
 export async function showActiveChatSection(chat) {
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
 
+  totalReceivedMessagesCount = 0
+  totalUnseenMessagesCount = 0
   activeChatInputTextContent.value = ""
   activeChatMessageContainer.innerHTML = ""
+
   let { openActiveChatInputBox } = await import("../chat.dev.js")
   openActiveChatInputBox()
+
   updateActiveChatSection(chat)
+
   if (USER_MESSAGE_BOX_OBSERVER !== undefined) {
     USER_MESSAGE_BOX_OBSERVER.disconnect()
   }
   initializeUserMessageBoxObserver()
+  if (TOP_MESSAGE_BOX_OBSERVER !== undefined) {
+    TOP_MESSAGE_BOX_OBSERVER.disconnect()
+  }
+  initializeTopMessageBoxObserver()
 
-  /////////////////////
+  ///////////////////
   const { checkTimeAndCreateOldMessage } = await import("./message.dev")
 
-  fetch(`/message/fetch-messages/${chat._id}`)
+  fetch(`/message/fetch-messages/${chat._id}?totalReceivedMessagesCount=0`)
     .then(response => {
       if (response.ok) {
         return response.json()
@@ -32,53 +44,75 @@ export async function showActiveChatSection(chat) {
       if (data.isSuccess) {
         activeChatMessageContainer.innerHTML = ""
         console.log(data)
-
-        let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
-        let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
-        console.log(
-          "unseenMessages:",
-          unseenMessages,
-          "seenMessages:",
-          seenMessages
-        )
-        await checkTimeAndCreateOldMessage(
-          seenMessages,
-          activeChatMessageContainer,
-          true
-        )
-
-        if (unseenMessages.length > 0) {
-          const { checkTimeAndCreateNewMessage } = await import("./message.dev")
-          const { createUnseenMessageTagBox } = await import("./message.dev")
-          createUnseenMessageTagBox(
-            unseenMessages.length,
+        if (data.allMessages.length > 0) {
+          totalReceivedMessagesCount += data.allMessages.length
+          checkTimeAndCreateOldMessage(
+            data.allMessages,
             activeChatMessageContainer,
-            "beforeend",
             false
           )
-
-          for (let i = unseenMessages.length - 1; i >= 0; i--) {
-            await checkTimeAndCreateNewMessage(
-              unseenMessages[i],
-              activeChatMessageContainer,
-              false
-            )
-          }
-
-          let unseenMessageTagBox =
-            activeChatMessageContainer.getElementsByClassName(
-              "active-chat-unseen-message-tag-box"
-            )[0]
-          if (unseenMessageTagBox) {
-            activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
-            // unseenMessageTagBox.scrollIntoView({
-            //   behavior: "smooth",
-            //   block: "end",
-            //   inline: "nearest"
-            // })
-          }
+          TOP_MESSAGE_BOX_OBSERVER.observe(
+            activeChatMessageContainer.firstElementChild
+          )
         }
 
+        // let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
+        // let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
+        // console.log(
+        //   "unseenMessages:",
+        //   unseenMessages,
+        //   "seenMessages:",
+        //   seenMessages
+        // )
+        // await checkTimeAndCreateOldMessage(
+        //   seenMessages,
+        //   activeChatMessageContainer,
+        //   true
+        // )
+
+        // if (unseenMessages.length > 0) {
+        //   const { checkTimeAndCreateNewMessage } = await import("./message.dev")
+        //   const { createUnseenMessageTagBox } = await import("./message.dev")
+        //   createUnseenMessageTagBox(
+        //     unseenMessages.length,
+        //     activeChatMessageContainer,
+        //     "beforeend",
+        //     false
+        //   )
+
+        //   for (let i = unseenMessages.length - 1; i >= 0; i--) {
+        //     await checkTimeAndCreateNewMessage(
+        //       unseenMessages[i],
+        //       activeChatMessageContainer,
+        //       false
+        //     )
+        //   }
+
+        //   let unseenMessageTagBox =
+        //     activeChatMessageContainer.getElementsByClassName(
+        //       "active-chat-unseen-message-tag-box"
+        //     )[0]
+        //   if (unseenMessageTagBox) {
+        //     activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
+        //     // unseenMessageTagBox.scrollIntoView({
+        //     //   behavior: "smooth",
+        //     //   block: "end",
+        //     //   inline: "nearest"
+        //     // })
+        //   }
+        // }
+
+        // let activeChatUnseenMessageTagBox = document.getElementById(
+        //   "activeChatUnseenMessageTagBox"
+        // )
+        // if (activeChatUnseenMessageTagBox) {
+        //   // activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
+        //   activeChatUnseenMessageTagBox.scrollIntoView({
+        //     behavior: "smooth",
+        //     block: "end",
+        //     inline: "nearest"
+        //   })
+        // }
         let { adjustMessageContainerBottomPadding } = await import(
           "../chat.dev"
         )
@@ -210,178 +244,97 @@ function initializeUserMessageBoxObserver() {
     { threshold: 0.5, root: activeChatMessageContainer }
   )
 }
-// function initializeTopUserMessageBoxObserver() {
-//   TOP_USER_MESSAGE_BOX_OBSERVER = new IntersectionObserver(
-//     async (entries, observer) => {
-//       entries.forEach(entry => {
-//         if (entry.isIntersecting === true) {
-//           fetch(`/message/fetch-messages/${chat._id}?skipMessagesCount=${}`)
-//     .then(response => {
-//       if (response.ok) {
-//         return response.json()
-//       }
-//       return Promise.reject(response)
-//     })
-//     .then(async data => {
-//       if (data.isSuccess) {
-//         activeChatMessageContainer.innerHTML = ""
-//         console.log(data)
+function initializeTopMessageBoxObserver() {
+  TOP_MESSAGE_BOX_OBSERVER = new IntersectionObserver(
+    async (entries, observer) => {
+      entries.forEach(async entry => {
+        console.log("entry.target", entry.target)
+        if (entry.isIntersecting === true) {
+          console.log("called topMessageBoxObserver")
+          observer.unobserve(entry.target)
+          let chatId = activeChatSection.dataset.chatId
+          // activeChatMessageContainer.scrollTop += 100
+          await fetchMessageAndCreateUserMessageBox(chatId)
+        }
+      })
+    },
+    { threshold: 0.5, root: activeChatMessageContainer, rootMargin: "0px" }
+  )
+}
 
-//         skipskipMessagesCount = data.allMessages.length
+async function fetchMessageAndCreateUserMessageBox(chatId) {
+  const { checkTimeAndCreateOldMessage } = await import("./message.dev")
 
-//         let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
-//         let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
-//         console.log(
-//           "unseenMessages:",
-//           unseenMessages,
-//           "seenMessages:",
-//           seenMessages
-//         )
-//         await checkTimeAndCreateOldMessage(
-//           seenMessages,
-//           activeChatMessageContainer,
-//           true
-//         )
+  fetch(
+    `/message/fetch-messages/${chatId}?totalReceivedMessagesCount=${totalReceivedMessagesCount}`
+  )
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      }
+      return Promise.reject(response)
+    })
+    .then(async data => {
+      if (data.isSuccess) {
+        console.log(data)
 
-//         if (unseenMessages.length > 0) {
-//           const { checkTimeAndCreateNewMessage } = await import("./message.dev")
-//           const { createUnseenMessageTagBox } = await import("./message.dev")
-//           createUnseenMessageTagBox(
-//             unseenMessages.length,
-//             activeChatMessageContainer,
-//             "beforeend",
-//             false
-//           )
+        if (data.allMessages.length > 0) {
+          totalReceivedMessagesCount += data.allMessages.length
+          checkTimeAndCreateOldMessage(
+            data.allMessages,
+            activeChatMessageContainer,
+            false
+          )
+          activeChatMessageContainer.scrollTop =
+            activeChatMessageContainer.scrollHeight
+          TOP_MESSAGE_BOX_OBSERVER.observe(
+            activeChatMessageContainer.firstElementChild
+          )
+        }
 
-//           for (let i = unseenMessages.length - 1; i >= 0; i--) {
-//             await checkTimeAndCreateNewMessage(
-//               unseenMessages[i],
-//               activeChatMessageContainer,
-//               false
-//             )
-//           }
+        // if (totalUnseenMessagesCount < totalReceivedMessagesCount) {
+        //   let unseenMessagesLine =
+        //     totalReceivedMessagesCount - totalUnseenMessagesCount
+        //   await checkTimeAndCreateOldMessage(
+        //     data.allMessages.slice(0, unseenMessagesLine),
+        //     activeChatMessageContainer,
+        //     false
+        //   )
+        //   const { createUnseenMessageTagBox } = await import("./message.dev")
+        //   createUnseenMessageTagBox(
+        //     totalUnseenMessagesCount,
+        //     activeChatMessageContainer,
+        //     "afterbegin",
+        //     false
+        //   )
+        //   await checkTimeAndCreateOldMessage(
+        //     data.allMessages.slice(unseenMessagesLine),
+        //     activeChatMessageContainer,
+        //     false
+        //   )
+        // } else {
 
-//           let unseenMessageTagBox =
-//             activeChatMessageContainer.getElementsByClassName(
-//               "active-chat-unseen-message-tag-box"
-//             )[0]
-//           if (unseenMessageTagBox) {
-//             activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
-//             // unseenMessageTagBox.scrollIntoView({
-//             //   behavior: "smooth",
-//             //   block: "end",
-//             //   inline: "nearest"
-//             // })
-//           }
-//         }
+        // }
+      } else {
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
+        createMainNotification(data.error, "error")
+      }
+    })
+    .catch(async err => {
+      console.log(err)
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
+      createMainNotification(
+        "Server Error In Accessing Messages, Please Refresh Your Page",
+        "error"
+      )
+    })
+}
 
-//         let { adjustMessageContainerBottomPadding } = await import(
-//           "../chat.dev"
-//         )
-//         adjustMessageContainerBottomPadding()
-//       } else {
-//         let { createMainNotification } = await import(
-//           "../../common/mainNotification.dev"
-//         )
-//         createMainNotification(data.error, "error")
-//       }
-//     })
-//     .catch(async err => {
-//       console.log(err)
-//       let { createMainNotification } = await import(
-//         "../../common/mainNotification.dev"
-//       )
-//       createMainNotification(
-//         "Server Error In Accessing Messages, Please Refresh Your Page",
-//         "error"
-//       )
-//     })
-//           observer.unobserve(entry.target)
-//         }
-//       })
-//     },
-//     { threshold: 0.5, root: activeChatMessageContainer }
-//   )
-// }
-
-// async function fetchMessageAndCreateUserMessageBox(chatId){
-//   fetch(`/message/fetch-messages/${chatId}?skipMessagesCount=${SKIP_MESSAGES_COUNT}`)
-//     .then(response => {
-//       if (response.ok) {
-//         return response.json()
-//       }
-//       return Promise.reject(response)
-//     })
-//     .then(async data => {
-//       if (data.isSuccess) {
-
-//         SKIP_MESSAGES_COUNT = data.allMessages.length
-
-//         let unseenMessages = data.allMessages.slice(0, data.unseenMessagesCount)
-//         let seenMessages = data.allMessages.slice(data.unseenMessagesCount)
-//         console.log(
-//           "unseenMessages:",
-//           unseenMessages,
-//           "seenMessages:",
-//           seenMessages
-//         )
-//         await checkTimeAndCreateOldMessage(
-//           seenMessages,
-//           activeChatMessageContainer,
-//           true
-//         )
-
-//         if (unseenMessages.length > 0) {
-//           const { checkTimeAndCreateNewMessage } = await import("./message.dev")
-//           const { createUnseenMessageTagBox } = await import("./message.dev")
-//           createUnseenMessageTagBox(
-//             unseenMessages.length,
-//             activeChatMessageContainer,
-//             "beforeend",
-//             false
-//           )
-
-//           for (let i = unseenMessages.length - 1; i >= 0; i--) {
-//             await checkTimeAndCreateNewMessage(
-//               unseenMessages[i],
-//               activeChatMessageContainer,
-//               false
-//             )
-//           }
-
-//           let unseenMessageTagBox =
-//             activeChatMessageContainer.getElementsByClassName(
-//               "active-chat-unseen-message-tag-box"
-//             )[0]
-//           if (unseenMessageTagBox) {
-//             activeChatMessageContainer.scrollTop = unseenMessageTagBox.offsetTop
-//             // unseenMessageTagBox.scrollIntoView({
-//             //   behavior: "smooth",
-//             //   block: "end",
-//             //   inline: "nearest"
-//             // })
-//           }
-//         }
-
-//         let { adjustMessageContainerBottomPadding } = await import(
-//           "../chat.dev"
-//         )
-//         adjustMessageContainerBottomPadding()
-//       } else {
-//         let { createMainNotification } = await import(
-//           "../../common/mainNotification.dev"
-//         )
-//         createMainNotification(data.error, "error")
-//       }
-//     })
-//     .catch(async err => {
-//       console.log(err)
-//       let { createMainNotification } = await import(
-//         "../../common/mainNotification.dev"
-//       )
-//       createMainNotification(
-//         "Server Error In Accessing Messages, Please Refresh Your Page",
-//         "error"
-//       )
-//     })
-// }
+export function increaseTotalReceivedMessagesCount() {
+  totalUnseenMessagesCount = -1
+  totalReceivedMessagesCount++
+}
