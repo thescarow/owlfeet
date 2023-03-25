@@ -34,8 +34,9 @@ let svg_youtubeIcon = `<svg width="100" height="68" viewBox="0 0 100 68"  xmlns=
 </svg>
 `
 import Plyr from "plyr"
+import { increaseTotalReceivedMessagesCount } from "./showActiveChatSection.dev"
 
-async function createPlyr(element, type) {
+function createPlyr(element, type) {
   let player = new Plyr(element, {
     controls: [
       "play-large",
@@ -130,12 +131,18 @@ function isMessageDateChanged(messageDate, fromCheckingDate) {
   }
 }
 
-export async function checkTimeAndCreateOldMessage(
+export function checkTimeAndCreateOldMessages(
   allMessages,
   activeChatMessageContainer,
-  isScrolled = false
+  isScrolledToTop = false,
+  isScrolledToBottom = false
 ) {
   let isUserChanged
+  let container = document.createElement("div")
+  let scrollPosBefore =
+    activeChatMessageContainer.scrollHeight -
+    activeChatMessageContainer.scrollTop -
+    activeChatMessageContainer.clientHeight
   if (allMessages.length > 0) {
     if (activeChatMessageContainer.children.length == 0) {
       TOP_MESSAGE_TIME_POINTER = allMessages[0].createdAt
@@ -145,24 +152,17 @@ export async function checkTimeAndCreateOldMessage(
       if (
         isMessageDateChanged(allMessages[i].createdAt, TOP_MESSAGE_TIME_POINTER)
       ) {
-        createDateMessage(
-          TOP_MESSAGE_TIME_POINTER,
-          activeChatMessageContainer,
-          "afterbegin",
-          isScrolled
-        )
+        let dateMessageBox = createDateMessage(TOP_MESSAGE_TIME_POINTER)
+        container.insertAdjacentElement("afterbegin", dateMessageBox)
+
         TOP_MESSAGE_TIME_POINTER = allMessages[i].createdAt
       }
       if (
         allMessages[i].hasOwnProperty("isInfoMessage") &&
         allMessages[i].isInfoMessage === true
       ) {
-        createInfoMessage(
-          allMessages[i],
-          activeChatMessageContainer,
-          "afterbegin",
-          isScrolled
-        )
+        let infoMessageBox = createInfoMessage(allMessages[i])
+        container.insertAdjacentElement("afterbegin", infoMessageBox)
       } else {
         isUserChanged = false
         if (
@@ -188,34 +188,59 @@ export async function checkTimeAndCreateOldMessage(
           isUserChanged = true
         }
 
-        createUserMessage(
+        let userMessageBox = createUserMessage(
           allMessages[i],
           activeChatMessageContainer,
-          "afterbegin",
           isUserChanged,
-          isScrolled
+          isScrolledToBottom
         )
+        container.insertAdjacentElement("afterbegin", userMessageBox)
       }
     }
   } else {
     if (TOP_MESSAGE_TIME_POINTER !== "") {
-      createDateMessage(
-        TOP_MESSAGE_TIME_POINTER,
-        activeChatMessageContainer,
-        "afterbegin",
-        isScrolled
-      )
+      let dateMessageBox = createDateMessage(TOP_MESSAGE_TIME_POINTER)
+      container.insertAdjacentElement("afterbegin", dateMessageBox)
     } else {
       TOP_MESSAGE_TIME_POINTER = ""
       BOTTOM_MESSAGE_TIME_POINTER = ""
     }
   }
+  let loadingMessageAnimationBox = [
+    ...activeChatMessageContainer.getElementsByClassName(
+      "loading-message-animation-box"
+    )
+  ]
+  loadingMessageAnimationBox.forEach(box => {
+    box.parentNode.removeChild(box)
+  })
+
+  activeChatMessageContainer.insertAdjacentHTML(
+    "afterbegin",
+    container.innerHTML
+  )
+  let scrollPosAfter =
+    activeChatMessageContainer.scrollHeight -
+    activeChatMessageContainer.scrollTop -
+    activeChatMessageContainer.clientHeight
+
+  if (isScrolledToBottom === true) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight + 1000
+  }
+  if (isScrolledToTop === false) {
+    activeChatMessageContainer.scrollTop += scrollPosAfter - scrollPosBefore
+    // console.log("before", scrollPosBefore, "after", scrollPosAfter)
+  }
+  // }
+
+  // console.log(container)
 }
 
-export async function checkTimeAndCreateNewMessage(
+export function checkTimeAndCreateNewMessage(
   message,
   activeChatMessageContainer,
-  isScrolled = false
+  isScrolledToBottom = false
 ) {
   let isUserChanged
   if (activeChatMessageContainer.children.length === 0) {
@@ -223,11 +248,10 @@ export async function checkTimeAndCreateNewMessage(
     TOP_MESSAGE_TIME_POINTER = message.createdAt
   }
   if (isMessageDateChanged(message.createdAt, BOTTOM_MESSAGE_TIME_POINTER)) {
-    createDateMessage(
-      message.createdAt,
-      activeChatMessageContainer,
+    let dateMessageBox = createDateMessage(message.createdAt)
+    activeChatMessageContainer.insertAdjacentElement(
       "beforeend",
-      isScrolled
+      dateMessageBox
     )
     BOTTOM_MESSAGE_TIME_POINTER = message.createdAt
   }
@@ -235,11 +259,14 @@ export async function checkTimeAndCreateNewMessage(
     message.hasOwnProperty("isInfoMessage") &&
     message.isInfoMessage === true
   ) {
-    createInfoMessage(
+    let infoMessageBox = createInfoMessage(
       message,
       activeChatMessageContainer,
+      "beforeend"
+    )
+    activeChatMessageContainer.insertAdjacentElement(
       "beforeend",
-      isScrolled
+      infoMessageBox
     )
   } else {
     isUserChanged = false
@@ -257,23 +284,30 @@ export async function checkTimeAndCreateNewMessage(
         isUserChanged = true
       }
     }
-    createUserMessage(
+    let userMessageBox = createUserMessage(
       message,
       activeChatMessageContainer,
-      "beforeend",
       isUserChanged,
-      isScrolled
+      isScrolledToBottom
+    )
+    activeChatMessageContainer.insertAdjacentElement(
+      "beforeend",
+      userMessageBox
     )
     if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = message.sender
   }
+  increaseTotalReceivedMessagesCount()
+  if (isScrolledToBottom) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight + 1000
+  }
 }
 
-export async function createUserMessage(
+export function createUserMessage(
   message,
   activeChatMessageContainer,
-  addPosition = "beforeend",
   isUserChanged = true,
-  isScrolled = false
+  isScrolledToBottom = false
 ) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -392,7 +426,7 @@ export async function createUserMessage(
           "active-chat-user-message-box__content--image"
         )
         image.onload = () => {
-          if (isScrolled) {
+          if (isScrolledToBottom) {
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight
           }
@@ -579,7 +613,6 @@ export async function createUserMessage(
     )
     messageBox.classList.add("active-chat-user-message-box--has-user-box")
   }
-  activeChatMessageContainer.insertAdjacentElement(addPosition, messageBox)
 
   if (
     message.hasOwnProperty("seenStatus") &&
@@ -589,10 +622,7 @@ export async function createUserMessage(
   ) {
     USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
   }
-  if (isScrolled) {
-    activeChatMessageContainer.scrollTop =
-      activeChatMessageContainer.scrollHeight
-  }
+  return messageBox
 }
 
 function insertLinksToString(str) {
@@ -634,12 +664,7 @@ function insertLinksToString(str) {
   return container.innerHTML
 }
 
-export function createInfoMessage(
-  message,
-  activeChatMessageContainer,
-  addPosition = "beforeend",
-  isScrolled = false
-) {
+export function createInfoMessage(message) {
   if (
     message.hasOwnProperty("isInfoMessage") &&
     message.isInfoMessage === true
@@ -669,23 +694,11 @@ export function createInfoMessage(
       )
     }
 
-    activeChatMessageContainer.insertAdjacentElement(
-      addPosition,
-      infoMessageBox
-    )
-    if (isScrolled) {
-      activeChatMessageContainer.scrollTop =
-        activeChatMessageContainer.scrollHeight
-    }
+    return infoMessageBox
   }
 }
 
-export function createDateMessage(
-  messageDate,
-  activeChatMessageContainer,
-  addPosition = "beforeend",
-  isScrolled = false
-) {
+export function createDateMessage(messageDate) {
   const dateMessageBox = document.createElement("div")
   dateMessageBox.classList.add("active-chat-date-message-box")
 
@@ -697,18 +710,13 @@ export function createDateMessage(
     "active-chat-date-message-box__content"
   )[0].textContent = getDateString(messageDate)
 
-  activeChatMessageContainer.insertAdjacentElement(addPosition, dateMessageBox)
-  if (isScrolled) {
-    activeChatMessageContainer.scrollTop =
-      activeChatMessageContainer.scrollHeight
-  }
+  return dateMessageBox
 }
 
 export function createUnseenMessageTagBox(
   messageCount,
   activeChatMessageContainer,
-  addPosition = "beforeend",
-  isScrolled = false
+  addPosition = "beforeend"
 ) {
   const unseenMessageTagBox = document.createElement("div")
   unseenMessageTagBox.classList.add("active-chat-unseen-message-tag-box")
@@ -728,10 +736,13 @@ export function createUnseenMessageTagBox(
     addPosition,
     unseenMessageTagBox
   )
-  if (isScrolled) {
-    activeChatMessageContainer.scrollTop =
-      activeChatMessageContainer.scrollHeight
-  }
+}
+
+export function createLoadingMessagesAnimation() {
+  let loadingMessageAnimationBox = document.createElement("div")
+  loadingMessageAnimationBox.classList.add("loading-message-animation-box")
+  loadingMessageAnimationBox.innerHTML = `<div class="loading-message-animation-box__content"><div></div><div></div></div>`
+  return loadingMessageAnimationBox
 }
 export function convertUserMessageToDeletedForAllMessage(message) {
   let userMessageBox = document.querySelector(
