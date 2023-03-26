@@ -230,7 +230,7 @@ export function checkTimeAndCreateOldMessages(
   }
   if (isScrolledToTop === false) {
     activeChatMessageContainer.scrollTop += scrollPosAfter - scrollPosBefore
-    // console.log("before", scrollPosBefore, "after", scrollPosAfter)
+    console.log("before", scrollPosBefore, "after", scrollPosAfter)
   }
   // }
 
@@ -581,8 +581,8 @@ export function createUserMessage(
         )
       ]
       let color = generateColorForUserMessageStatus(
-        message.seenStatus.length,
-        message.reader.length
+        message.seenStatus.length - 1,
+        message.reader.length - 1
       )
       svgs.forEach(svg => {
         svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
@@ -716,7 +716,7 @@ export function createDateMessage(messageDate) {
 export function createUnseenMessageTagBox(
   messageCount,
   activeChatMessageContainer,
-  addPosition = "beforeend"
+  addPosition = "afterbegin"
 ) {
   const unseenMessageTagBox = document.createElement("div")
   unseenMessageTagBox.classList.add("active-chat-unseen-message-tag-box")
