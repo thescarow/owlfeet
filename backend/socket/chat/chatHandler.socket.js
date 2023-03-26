@@ -111,4 +111,68 @@ exports.chatHandler = async (io, socket) => {
       }
     }
   })
+  socket.on("chat:update-chat-unseen-messages", async data => {
+    if (socket.loginUser) {
+      let unseenMessages = await Message.find({
+        chat: data.chatId,
+        reader: { $elemMatch: { $eq: socket.loginUser.id } },
+        "seenStatus.seenBy": { $ne: socket.loginUser.id }
+      }).select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
+
+      if (unseenMessages.length > 0) {
+        await Promise.all(
+          unseenMessages.map(async message => {
+            let userExist = message.seenStatus.find(entry => {
+              return entry.seenBy.toString() === socket.loginUser.id.toString()
+            })
+            if (!userExist) {
+              message.seenStatus.push({
+                seenBy: socket.loginUser.id,
+                seenTime: Date.now()
+              })
+
+              await message.save()
+              let updatedMessage = await Message.findById(message._id)
+                .select({
+                  _id: 1,
+                  seenStatus: 1,
+                  reader: 1,
+                  sender: 1,
+                  chat: 1
+                })
+                .lean()
+              let pushedUser = await User.findById(socket.loginUser.id)
+                .select({ firstName: 1, lastName: 1, username: 1, profile: 1 })
+                .lean()
+              if (
+                pushedUser.hasOwnProperty("profile") &&
+                pushedUser.profile !== ""
+              ) {
+                pushedUser.profile = await signedUrlForGetAwsS3Object(
+                  pushedUser.profile
+                )
+              }
+              io.to(updatedMessage.sender.toString()).emit(
+                "chat:update-message-seen-status",
+                {
+                  messageId: updatedMessage._id.toString(),
+                  chatId: updatedMessage.chat.toString(),
+                  messageSeenStatusCount: updatedMessage.seenStatus.length,
+                  messageReaderCount: updatedMessage.reader.length,
+                  pushedUser: pushedUser,
+                  pushedUserTime: Date.now()
+                }
+              )
+              io.to(socket.loginUser.id.toString()).emit(
+                "chat:message-seen-by-self",
+                {
+                  chatId: updatedMessage.chat
+                }
+              )
+            }
+          })
+        )
+      }
+    }
+  })
 }
