@@ -138,7 +138,7 @@ export function checkTimeAndCreateOldMessages(
   isScrolledToBottom = false
 ) {
   let isUserChanged
-  let container = document.createElement("div")
+  // let container = document.createElement("div")
   let scrollPosBefore =
     activeChatMessageContainer.scrollHeight -
     activeChatMessageContainer.scrollTop -
@@ -153,7 +153,10 @@ export function checkTimeAndCreateOldMessages(
         isMessageDateChanged(allMessages[i].createdAt, TOP_MESSAGE_TIME_POINTER)
       ) {
         let dateMessageBox = createDateMessage(TOP_MESSAGE_TIME_POINTER)
-        container.insertAdjacentElement("afterbegin", dateMessageBox)
+        activeChatMessageContainer.insertAdjacentElement(
+          "afterbegin",
+          dateMessageBox
+        )
 
         TOP_MESSAGE_TIME_POINTER = allMessages[i].createdAt
       }
@@ -162,7 +165,10 @@ export function checkTimeAndCreateOldMessages(
         allMessages[i].isInfoMessage === true
       ) {
         let infoMessageBox = createInfoMessage(allMessages[i])
-        container.insertAdjacentElement("afterbegin", infoMessageBox)
+        activeChatMessageContainer.insertAdjacentElement(
+          "afterbegin",
+          infoMessageBox
+        )
       } else {
         isUserChanged = false
         if (
@@ -194,13 +200,19 @@ export function checkTimeAndCreateOldMessages(
           isUserChanged,
           isScrolledToBottom
         )
-        container.insertAdjacentElement("afterbegin", userMessageBox)
+        activeChatMessageContainer.insertAdjacentElement(
+          "afterbegin",
+          userMessageBox
+        )
       }
     }
   } else {
     if (TOP_MESSAGE_TIME_POINTER !== "") {
       let dateMessageBox = createDateMessage(TOP_MESSAGE_TIME_POINTER)
-      container.insertAdjacentElement("afterbegin", dateMessageBox)
+      activeChatMessageContainer.insertAdjacentElement(
+        "afterbegin",
+        dateMessageBox
+      )
     } else {
       TOP_MESSAGE_TIME_POINTER = ""
       BOTTOM_MESSAGE_TIME_POINTER = ""
@@ -215,10 +227,6 @@ export function checkTimeAndCreateOldMessages(
     box.parentNode.removeChild(box)
   })
 
-  activeChatMessageContainer.insertAdjacentHTML(
-    "afterbegin",
-    container.innerHTML
-  )
   let scrollPosAfter =
     activeChatMessageContainer.scrollHeight -
     activeChatMessageContainer.scrollTop -
@@ -659,7 +667,6 @@ function insertLinksToString(str) {
   textNodes.forEach(node => {
     container.appendChild(node)
   })
-  console.log("container", container)
 
   return container.innerHTML
 }

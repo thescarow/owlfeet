@@ -95,7 +95,7 @@ export async function showActiveChatSection(chat) {
               TOP_MESSAGE_BOX_OBSERVER.observe(
                 activeChatMessageContainer.firstElementChild
               )
-          }, 2000)
+          }, 2500)
           setTimeout(() => {
             if (activeChatMessageContainer.lastElementChild)
               BOTTOM_MESSAGE_BOX_OBSERVER.observe(
@@ -162,7 +162,7 @@ function initializeTopMessageBoxObserver() {
             "afterbegin",
             loadingMessageAnimationBox
           )
-          // activeChatMessageContainer.scrollTop += 100
+          activeChatMessageContainer.scrollTop += 150
           await fetchMessageAndCreateUserMessageBox(chatId)
         }
       })
