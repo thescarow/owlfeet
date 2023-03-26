@@ -246,7 +246,7 @@ async function fetchMessageAndCreateUserMessageBox(chatId) {
               TOP_MESSAGE_BOX_OBSERVER.observe(
                 activeChatMessageContainer.firstElementChild
               )
-          }, 2000)
+          }, 4000)
         } else {
           let loadingMessageAnimationBox = [
             ...activeChatMessageContainer.getElementsByClassName(

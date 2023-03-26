@@ -17,11 +17,7 @@ const svg_messageDeleteIconBlank = `<svg width="100" height="100" viewBox="0 0 1
 <path d="M38.35 80.4281C39.5932 80.4281 40.7855 79.9343 41.6646 79.0552C42.5436 78.1761 43.0375 76.9838 43.0375 75.7406V40.9406C43.0375 39.6974 42.5436 38.5051 41.6646 37.6261C40.7855 36.747 39.5932 36.2531 38.35 36.2531C37.1068 36.2531 35.9145 36.747 35.0354 37.6261C34.1564 38.5051 33.6625 39.6974 33.6625 40.9406V75.7406C33.6625 76.9838 34.1564 78.1761 35.0354 79.0552C35.9145 79.9343 37.1068 80.4281 38.35 80.4281ZM61.65 80.4281C62.8932 80.4281 64.0855 79.9343 64.9646 79.0552C65.8436 78.1761 66.3375 76.9838 66.3375 75.7406V40.9406C66.3375 39.6974 65.8436 38.5051 64.9646 37.6261C64.0855 36.747 62.8932 36.2531 61.65 36.2531C60.4068 36.2531 59.2145 36.747 58.3354 37.6261C57.4564 38.5051 56.9625 39.6974 56.9625 40.9406V75.7406C56.9625 76.9838 57.4564 78.1761 58.3354 79.0552C59.2145 79.9343 60.4068 80.4281 61.65 80.4281Z" stroke-width="0"/>
 </svg>
 `
-const svg_messageSeenByIconBlank = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
-<path d="M50 37.5C48.3354 37.4624 46.68 37.7577 45.1311 38.3686C43.5822 38.9795 42.1709 39.8937 40.9802 41.0575C39.7894 42.2213 38.8432 43.6113 38.197 45.1459C37.5509 46.6805 37.2178 48.3286 37.2174 49.9937C37.217 51.6587 37.5492 53.3071 38.1946 54.8419C38.84 56.3768 39.7855 57.7673 40.9757 58.9317C42.1659 60.0961 43.5767 61.0111 45.1253 61.6227C46.6739 62.2344 48.3291 62.5306 49.9938 62.4937C53.2598 62.4215 56.3677 61.0736 58.6523 58.7385C60.9369 56.4034 62.2166 53.2667 62.2174 49.9999C62.2182 46.7331 60.9401 43.5958 58.6567 41.2596C56.3733 38.9233 53.266 37.5739 50 37.5Z" stroke-width="0"/>
-<path d="M50 28.125C69.55 28.125 82.0125 40.2625 88.8625 50C82.0125 59.7375 69.55 71.875 50 71.875C30.45 71.875 17.9875 59.7375 11.1375 50C17.9875 40.2625 30.45 28.125 50 28.125ZM50 18.75C27.5625 18.75 10.4875 32.0812 0 50C10.4875 67.9188 27.5625 81.25 50 81.25C72.4375 81.25 89.5125 67.9188 100 50C89.5125 32.0812 72.4312 18.75 50 18.75Z" stroke-width="0" />
-</svg>
-`
+
 const svg_messageReplyIconBlank = `<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
 <path d="M70.8333 39.5833H30.875L36.2917 34.2083C37.0763 33.4237 37.517 32.3596 37.517 31.25C37.517 30.1404 37.0763 29.0763 36.2917 28.2917C35.5071 27.5071 34.4429 27.0663 33.3333 27.0663C32.2237 27.0663 31.1596 27.5071 30.375 28.2917L17.875 40.7917C17.4957 41.1879 17.1983 41.6552 17 42.1667C16.5833 43.1811 16.5833 44.3189 17 45.3333C17.1983 45.8448 17.4957 46.3121 17.875 46.7083L30.375 59.2083C30.7623 59.5989 31.2232 59.9088 31.7309 60.1204C32.2387 60.3319 32.7833 60.4408 33.3333 60.4408C33.8834 60.4408 34.428 60.3319 34.9357 60.1204C35.4435 59.9088 35.9043 59.5989 36.2917 59.2083C36.6822 58.821 36.9922 58.3601 37.2037 57.8524C37.4152 57.3447 37.5242 56.8 37.5242 56.25C37.5242 55.6999 37.4152 55.1553 37.2037 54.6476C36.9922 54.1398 36.6822 53.679 36.2917 53.2917L30.875 47.9167H70.8333C71.9384 47.9167 72.9982 48.3557 73.7796 49.1371C74.561 49.9185 75 50.9783 75 52.0833V68.75C75 69.8551 75.439 70.9149 76.2204 71.6963C77.0018 72.4777 78.0616 72.9167 79.1667 72.9167C80.2717 72.9167 81.3315 72.4777 82.1129 71.6963C82.8943 70.9149 83.3333 69.8551 83.3333 68.75V52.0833C83.3333 48.7681 82.0164 45.5887 79.6722 43.2445C77.328 40.9003 74.1485 39.5833 70.8333 39.5833Z"  stroke-width="3"/>
 </svg>
@@ -40,19 +36,31 @@ const svg_messageDoubleTick = `<svg width="99" height="60" viewBox="0 0 99 60"  
 </svg>
 `
 
+const svg_messageViewIconBlank = `<svg width="92" height="60" viewBox="0 0 92 60"  xmlns="http://www.w3.org/2000/svg">
+<path d="M46 0.833334C25.4333 0.833334 9.78333 13.575 0.166667 30C9.78333 46.425 25.4333 59.1667 46 59.1667C66.5667 59.1667 82.2208 46.425 91.8333 30C82.2208 13.575 66.5625 0.833334 46 0.833334ZM46 50.8333C28.0417 50.8333 16.7958 39.5292 10.0667 30C16.7958 20.4708 28.0417 9.16667 46 9.16667C63.9625 9.16667 75.2083 20.4708 81.9333 30C75.2083 39.5292 63.9625 50.8333 46 50.8333Z" />
+<path d="M46 42.5C52.9036 42.5 58.5 36.9036 58.5 30C58.5 23.0964 52.9036 17.5 46 17.5C39.0964 17.5 33.5 23.0964 33.5 30C33.5 36.9036 39.0964 42.5 46 42.5Z" />
+</svg>
+`
+const svg_messageDownloadIconBlank = `<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<path d="M95 60C93.6739 60 92.4021 60.5268 91.4645 61.4645C90.5268 62.4021 90 63.6739 90 65V85C90 86.3261 89.4732 87.5979 88.5355 88.5355C87.5979 89.4732 86.3261 90 85 90H15C13.6739 90 12.4021 89.4732 11.4645 88.5355C10.5268 87.5979 10 86.3261 10 85V65C10 63.6739 9.47322 62.4021 8.53553 61.4645C7.59785 60.5268 6.32608 60 5 60C3.67392 60 2.40215 60.5268 1.46447 61.4645C0.526784 62.4021 0 63.6739 0 65V85C0 88.9782 1.58035 92.7936 4.3934 95.6066C7.20644 98.4196 11.0218 100 15 100H85C88.9782 100 92.7936 98.4196 95.6066 95.6066C98.4196 92.7936 100 88.9782 100 85V65C100 63.6739 99.4732 62.4021 98.5355 61.4645C97.5979 60.5268 96.3261 60 95 60ZM46.45 68.55C46.9255 69.0052 47.4862 69.362 48.1 69.6C48.6985 69.8645 49.3456 70.0012 50 70.0012C50.6544 70.0012 51.3015 69.8645 51.9 69.6C52.5138 69.362 53.0745 69.0052 53.55 68.55L73.55 48.55C74.4915 47.6085 75.0205 46.3315 75.0205 45C75.0205 43.6685 74.4915 42.3915 73.55 41.45C72.6085 40.5085 71.3315 39.9795 70 39.9795C68.6685 39.9795 67.3915 40.5085 66.45 41.45L55 52.95V5C55 3.67392 54.4732 2.40215 53.5355 1.46447C52.5979 0.526784 51.3261 0 50 0C48.6739 0 47.4021 0.526784 46.4645 1.46447C45.5268 2.40215 45 3.67392 45 5V52.95L33.55 41.45C33.0838 40.9838 32.5304 40.614 31.9212 40.3617C31.3121 40.1094 30.6593 39.9795 30 39.9795C29.3407 39.9795 28.6879 40.1094 28.0788 40.3617C27.4696 40.614 26.9162 40.9838 26.45 41.45C25.9838 41.9162 25.614 42.4696 25.3617 43.0788C25.1094 43.6879 24.9795 44.3407 24.9795 45C24.9795 45.6593 25.1094 46.3121 25.3617 46.9212C25.614 47.5304 25.9838 48.0838 26.45 48.55L46.45 68.55Z" />
+</svg>
+`
+
 let userMessageSenderOptions = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
 <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
+<div class="inner-modal-option inner-modal-option--view-media" data-user-message-option-btn="view" >${svg_messageViewIconBlank}View</div>
+<div class="inner-modal-option inner-modal-option--downloaded-media" data-user-message-option-btn="download" >${svg_messageDownloadIconBlank}Download</div>
 <div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
 <div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="true">${svg_messageDeleteIconBlank}Delete</div>
 <div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
-<div class="inner-modal-option" data-user-message-option-btn="seenBy">${svg_messageSeenByIconBlank}Seen By</div>
 <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
 
 let userMessageOtherUserOptions = `<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
 <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
+<div class="inner-modal-option inner-modal-option--image" data-user-message-option-btn="view" >${svg_messageViewIconBlank}View</div>
+<div class="inner-modal-option inner-modal-option--downloaded-media" data-user-message-option-btn="download" >${svg_messageDownloadIconBlank}Download</div>
 <div class="inner-modal-option" data-user-message-option-btn="forward" >${svg_messageForwardIconBlank}Forward</div>
 <div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
-<div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
 <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
 
 let userMessageDeletedMessageOptions = `<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
@@ -108,6 +116,39 @@ export async function createUserMessageOptionModal(userMessageBox) {
     ) {
       userMessageOptionsContainer.innerHTML = userMessageDeletedMessageOptions
     } else {
+      if (
+        userMessageBox.classList.contains(
+          "active-chat-user-message-box--image"
+        ) ||
+        userMessageBox.classList.contains(
+          "active-chat-user-message-box--youtube"
+        )
+      ) {
+        userMessageOptionsContainer.classList.add(
+          "inner-modal-options-container--show-view-media"
+        )
+      } else {
+        userMessageOptionsContainer.classList.remove(
+          "inner-modal-options-container--show-view-media"
+        )
+      }
+      if (
+        userMessageBox.classList.contains(
+          "active-chat-user-message-box--video"
+        ) ||
+        userMessageBox.classList.contains(
+          "active-chat-user-message-box--image"
+        ) ||
+        userMessageBox.classList.contains("active-chat-user-message-box--audio")
+      ) {
+        userMessageOptionsContainer.classList.add(
+          "inner-modal-options-container--show-downloaded-media"
+        )
+      } else {
+        userMessageOptionsContainer.classList.remove(
+          "inner-modal-options-container--show-downloaded-media"
+        )
+      }
       if (senderId.toString() === loginUser._id.toString()) {
         userMessageOptionsContainer.innerHTML = userMessageSenderOptions
       }
@@ -156,6 +197,18 @@ async function initialiseEventForUserMessageOptionModal(
         import("../css/messageInfoModal.dev.css")
         unSelectUserMessage(messageId)
         createMessageInfoModal(messageId)
+      }
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "download") {
+        let { downloadUserMedia } = await import("./downloadUserMedia.dev")
+        userMessageOptionModal.classList.add("inner-modal--hide")
+        unSelectUserMessage(messageId)
+        downloadUserMedia(messageId)
+      }
+      if (userMessageOptionBtn.dataset.userMessageOptionBtn === "view") {
+        let { viewUserMedia } = await import("./viewUserMedia.dev")
+        userMessageOptionModal.classList.add("inner-modal--hide")
+        unSelectUserMessage(messageId)
+        viewUserMedia(messageId)
       }
 
       if (userMessageOptionBtn.dataset.userMessageOptionBtn === "closeModal") {
@@ -334,6 +387,8 @@ async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
     }
   })
 }
+
+function downloadMedia(messageId) {}
 
 async function createMessageInfoModal(messageId) {
   if (document.getElementById("userMessageOptionModal")) {
