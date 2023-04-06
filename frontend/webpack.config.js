@@ -6,6 +6,10 @@ module.exports = {
       __dirname,
       "./dev-javascripts/layout/mainLayout.dev.js"
     ),
+    callLayout: path.resolve(
+      __dirname,
+      "./dev-javascripts/layout/callLayout.dev.js"
+    ),
 
     home: path.resolve(__dirname, "./dev-javascripts/index/home.dev.js"),
 
@@ -22,6 +26,8 @@ module.exports = {
     profile: path.resolve(__dirname, "./dev-javascripts/user/profile.dev.js"),
 
     chat: path.resolve(__dirname, "./dev-javascripts/chat/chat.dev.js"),
+
+    call: path.resolve(__dirname, "./dev-javascripts/call/call.dev.js"),
 
     indexSocket: path.resolve(
       __dirname,

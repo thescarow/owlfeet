@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link id="layoutCss" rel="stylesheet" href="/stylesheets/layout/callLayout.css">
+
+    <%- style %>
+
+</head>
+
+<body>
+
+    <script>
+        let IS_INIT_SOCKET_MODULE = false
+        let socket
+
+        let pageName = '<%= locals.pageName-%>'
+
+        let isLogin = '<%= locals.isLogin -%>'
+        isLogin = isLogin === "true"
+
+
+
+        let loginUser = {}
+    </script>
+
+    <%- body %>
+
+        <script src="/javascripts/callLayout.bundle.js" defer></script>
+        <script src="/javascripts/indexSocket.bundle.js" defer></script>
+
+
+
+        <%- script %>
+</body>
+
+</html>
