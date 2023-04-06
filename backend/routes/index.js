@@ -4,6 +4,7 @@ const userAuthRouter = require("./userAuth.route")
 const followRouter = require("./follow.route")
 const chatRouter = require("./chat.route")
 const messageRouter = require("./message.route")
+const callRouter = require("./call.route")
 // const newsRouter = require("./news.route")
 // const trendRouter = require("./trend.route")
 // const addRouter = require("./add.route")
@@ -18,6 +19,7 @@ exports.registerRoutes = app => {
   app.use("/follow", followRouter)
   app.use("/chat", chatRouter)
   app.use("/message", messageRouter)
+  app.use("/call", callRouter)
   // app.use("/news", newsRouter);
   // app.use("/trends", trendRouter);
   // app.use("/add", addRouter);
