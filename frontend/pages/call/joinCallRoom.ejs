@@ -3,77 +3,69 @@
 <script src="/javascripts/call.bundle.js" defer></script>
 
 
+
+
+
+
 <div class="call-main-container">
     <div class="before-call-section">
-        <div class="before-call-section__row">
-            <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
 
-                <div class="room-info-container room-info-container--chat-room" id="roomInfoContainer">
+        <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
 
-                    <div class="creating-room-info">
-                        <% if(locals.isChatCallRoom) { _%>
-                            <div class="creating-chat-room" id="creatingChatRoom" data-chat-id="<%=locals.chat._id_%>">
+            <div class="room-info-container">
 
-                                <div class='creating-chat-room__pic <%=(locals.chat.hasOwnProperty(" chatPic") &&
-                                locals.chat.chatPic !==""
-                                )?"creating-chat-room__pic--img":"creating-chat-room__pic--svg" _%>
-                                '>
-                                    <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
-                                        <img src='<%= locals.chat.chatPic _%>' alt="Room Pic">
-                                </div>
-                                <div class="creating-chat-room__name">
-                                    <%=locals.chat.chatName _%>
-                                </div>
-                                <div class="creating-chat-room__btn creating-chat-room__btn--select-calltype">
-                                    <div class="creating-chat-room__btn-icon">
-                                        <%- include("../partials/icons/callTypeIcon.svg") _%>
-                                    </div>
-                                    Select Call Type
-                                </div>
-                                <div class="creating-chat-room__start-title">
-                                    Ready ?
-                                </div>
-                                <div class="creating-chat-room__btn creating-chat-room__btn--create-call"
-                                    data-btn="start-call">
-                                    Start Call
-                                </div>
-                            </div>
+                <div class="joining-room-info">
 
-                            <% } else{ _%>
-                                <div class="creating-new-room">
-                                    <div class="creating-new-room__pic creating-new-room__pic--svg">
-                                        <%- include("../partials/icons/callAddRoomImageIcon.svg")_%>
-                                    </div>
-
-
-                                    <div class="creating-new-room__name">
-                                        Room Name: <input type="text" placeholder="Room Name">
-                                    </div>
-
-
-                                    <div class="creating-new-room__about">
-                                        About: <textarea id="" placeholder="Tell us about room..."></textarea>
-                                    </div>
-
-                                    <div class="creating-new-room__btn creating-new-room__btn--select-calltype">
-                                        <div class="creating-chat-room__btn-icon">
-                                            <%- include("../partials/icons/callTypeIcon.svg") _%>
-                                        </div>
-                                        Select Call Type
-                                    </div>
-                                    <div class="creating-new-room__start-title">
-                                        Ready ?
-                                    </div>
-                                    <div class="creating-new-room__btn creating-new-room__btn--create-call">
-                                        Start Call
-                                    </div>
-                                </div>
-                                <% } _%>
+                    <div class="joining-room-info__pic joining-room-info__pic--svg joining-room-info__pic--img">
+                        <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
+                            <img src="" alt="">
                     </div>
-
+                    <div class="joining-room-info__name">
+                        Room Name
+                    </div>
+                    <div class="joining-room-info__participants">
+                        <div class="joining-room-info__participants-title">
+                            <div class="joining-room-info__participants-icon">
+                                <%- include("../partials/icons/callRoomParticipantsIcon.svg") _%>
+                            </div>Participants
+                        </div>
+                        <div class="joining-room-info__participants-count">2</div>
+                    </div>
+                    <div class="joining-room-info__user-container">
+                        <div class="joining-room-info-user">
+                            <div
+                                class="joining-room-info-user__pic joining-room-info-user__pic--svg joining-room-info-user__pic--img">
+                                <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
+                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
+                                        alt="">
+                            </div>
+                            <div class="joining-room-info-user__name">User 1</div>
+                        </div>
+                        <div class="joining-room-info-user">
+                            <div
+                                class="joining-room-info-user__pic joining-room-info-user__pic--svg joining-room-info-user__pic--img">
+                                <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
+                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
+                                        alt="">
+                            </div>
+                            <div class="joining-room-info-user__name">User 1</div>
+                        </div>
+                    </div>
+                    <div class="joining-room-info__btn joining-room-info__btn--select-calltype">
+                        <div class="joining-room-info__btn--icon">
+                            <%- include("../partials/icons/callTypeIcon.svg") _%>
+                        </div>
+                        Select Call Type
+                    </div>
+                    <div class="joining-room-info__join-title">
+                        Ready ?
+                    </div>
+                    <div class="joining-room-info__btn joining-room-info__btn--join-call">
+                        Join Call
+                    </div>
                 </div>
-        </div>
 
+            </div>
 
     </div>
     <div class="on-call-section">

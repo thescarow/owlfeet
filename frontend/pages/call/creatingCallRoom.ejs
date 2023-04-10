@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/stylesheets/call/call.css">
+<link rel="stylesheet" href="/stylesheets/call/createCallRoom.css">
 
 <script src="/javascripts/call.bundle.js" defer></script>
 
@@ -8,16 +8,15 @@
         <div class="before-call-section__row">
             <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
 
-                <div class="room-info-container room-info-container--chat-room" id="roomInfoContainer">
+                <div class="room-info-container">
 
                     <div class="creating-room-info">
                         <% if(locals.isChatCallRoom) { _%>
-                            <div class="creating-chat-room" id="creatingChatRoom" data-chat-id="<%=locals.chat._id_%>">
+                            <div class="creating-chat-room">
 
-                                <div class='creating-chat-room__pic <%=(locals.chat.hasOwnProperty(" chatPic") &&
-                                locals.chat.chatPic !==""
-                                )?"creating-chat-room__pic--img":"creating-chat-room__pic--svg" _%>
-                                '>
+                                <div class='creating-chat-room__pic <%=(locals.chat.hasOwnProperty("chatPic") &&
+                        locals.chat.chatPic !=="")?"creating-chat-room__pic--img":"creating-chat-room__pic--svg" _%>
+                        '>
                                     <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
                                         <img src='<%= locals.chat.chatPic _%>' alt="Room Pic">
                                 </div>
@@ -33,8 +32,7 @@
                                 <div class="creating-chat-room__start-title">
                                     Ready ?
                                 </div>
-                                <div class="creating-chat-room__btn creating-chat-room__btn--create-call"
-                                    data-btn="start-call">
+                                <div class="creating-chat-room__btn creating-chat-room__btn--create-call">
                                     Start Call
                                 </div>
                             </div>
