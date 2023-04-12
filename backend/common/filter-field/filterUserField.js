@@ -154,6 +154,30 @@ exports.selectBasicInfoUserField = {
   //   isEmailVerified: 1,
 }
 
+exports.selectUserFieldForCallRoom = {
+  _id: 1,
+  firstName: 1,
+  lastName: 1,
+  profile: 1,
+  gender: 1,
+  bio: 1
+  // isActive: 1,
+  // role: 1,
+  // privacy: 1,
+  // username: 1,
+  // lastActive:1,
+  //   location: 1,
+  //   birthday: 1,
+  //   followers: 1,
+  //   followings: 1
+  //   mobile: 1,
+  //   password: 1,
+  //   email: 1,
+  //   isEmailVerified: 1,
+  // createdAt:1,
+  // updatedAt:1
+}
+
 exports.filterListUserField = user => {
   const userDataFilterArray = Object.keys(listUserField)
 

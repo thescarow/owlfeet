@@ -15,68 +15,70 @@ function initialiseEventForCreatingChatRoom() {
   //       location.reload()
   //     })
   //   }
-  creatingChatRoom.addEventListener("click", async e => {
-    let creatingChatRoomBtn = e.target.closest(`.creating-chat-room__btn`)
-    if (
-      creatingChatRoomBtn &&
-      roomInfoContainer.contains(creatingChatRoomBtn)
-    ) {
-      if (creatingChatRoomBtn.dataset.btn === "start-call") {
-        let chatId = creatingChatRoom.dataset.chatId
-        if (chatId !== "") {
-          fetch("/call/create-chat-room", {
-            method: "POST", // or 'PUT'
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ chatId })
-          })
-            .then(response => {
-              if (response.ok) {
-                return response.json()
-              }
-              return Promise.reject(response)
+  if (creatingChatRoom) {
+    creatingChatRoom.addEventListener("click", async e => {
+      let creatingChatRoomBtn = e.target.closest(`.creating-chat-room__btn`)
+      if (
+        creatingChatRoomBtn &&
+        roomInfoContainer.contains(creatingChatRoomBtn)
+      ) {
+        if (creatingChatRoomBtn.dataset.btn === "start-call") {
+          let chatId = creatingChatRoom.dataset.chatId
+          if (chatId !== "") {
+            fetch("/call/create-chat-room", {
+              method: "POST", // or 'PUT'
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ chatId })
             })
-            .then(async data => {
-              if (data.isSuccess) {
-                console.log(data.callRoom)
-              } else {
+              .then(response => {
+                if (response.ok) {
+                  return response.json()
+                }
+                return Promise.reject(response)
+              })
+              .then(async data => {
+                if (data.isSuccess) {
+                  console.log(data.callRoom)
+                } else {
+                  let { createMainNotification } = await import(
+                    "../../common/mainNotification.dev"
+                  )
+                  createMainNotification(data.error, "error")
+                }
+              })
+              .catch(async err => {
+                console.log(err)
                 let { createMainNotification } = await import(
                   "../../common/mainNotification.dev"
                 )
-                createMainNotification(data.error, "error")
-              }
-            })
-            .catch(async err => {
-              console.log(err)
-              let { createMainNotification } = await import(
-                "../../common/mainNotification.dev"
-              )
-              createMainNotification(
-                "Server error in creating chat room, Please try again",
-                "error"
-              )
-            })
+                createMainNotification(
+                  "Server error in creating chat room, Please try again",
+                  "error"
+                )
+              })
+          }
         }
+        // if (calltypeInfoBtn.dataset.calltypeInfoBtn === "mic") {
+        //   if (myMediaStream !== null) {
+        //     let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
+        //     if (audioEnabled) {
+        //       myMediaStream.getAudioTracks()[0].enabled = false
+        //       calltypeInfoBtn.classList.add("calltype-info-btn--selected")
+        //       calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
+        //       calltypeInfoPreview.classList.add("calltype-info__preview--mic-off")
+        //     } else {
+        //       myMediaStream.getAudioTracks()[0].enabled = true
+        //       calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+        //       calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+        //       calltypeInfoPreview.classList.remove(
+        //         "calltype-info__preview--mic-off"
+        //       )
+        //     }
+        //   }
+        // }
       }
-      // if (calltypeInfoBtn.dataset.calltypeInfoBtn === "mic") {
-      //   if (myMediaStream !== null) {
-      //     let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
-      //     if (audioEnabled) {
-      //       myMediaStream.getAudioTracks()[0].enabled = false
-      //       calltypeInfoBtn.classList.add("calltype-info-btn--selected")
-      //       calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-      //       calltypeInfoPreview.classList.add("calltype-info__preview--mic-off")
-      //     } else {
-      //       myMediaStream.getAudioTracks()[0].enabled = true
-      //       calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
-      //       calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
-      //       calltypeInfoPreview.classList.remove(
-      //         "calltype-info__preview--mic-off"
-      //       )
-      //     }
-      //   }
-      // }
-    }
-  })
+    })
+  }
 }

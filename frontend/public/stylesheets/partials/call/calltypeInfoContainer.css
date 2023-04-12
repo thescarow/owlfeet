@@ -70,7 +70,7 @@
     align-items: center;
 }
 
-.mic-off-preview {
+.audio-off-preview {
     position: absolute;
     z-index: 2;
     top: 0;
@@ -79,13 +79,13 @@
     display: none;
 }
 
-.mic-off-preview svg {
+.audio-off-preview svg {
     width: 20px;
     height: 20px;
     fill: rgba(var(--rgba-fourth-color), 0.8);
 }
 
-/* .mic-off-preview__title {
+/* .audio-off-preview__title {
     margin: 4px 0 0 0;
     text-align: center;
     font-size: 16px;
@@ -94,7 +94,7 @@
 } */
 
 
-.calltype-info__preview--mic-off .mic-off-preview {
+.calltype-info__preview--audio-off .audio-off-preview {
     display: flex;
     flex-direction: column;
     justify-content: center;

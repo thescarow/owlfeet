@@ -101,20 +101,22 @@ function initialiseEventForCalltypeInfoContainer() {
           }
         }
       }
-      if (calltypeInfoBtn.dataset.calltypeInfoBtn === "mic") {
+      if (calltypeInfoBtn.dataset.calltypeInfoBtn === "audio") {
         if (myMediaStream !== null) {
           let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
           if (audioEnabled) {
             myMediaStream.getAudioTracks()[0].enabled = false
             calltypeInfoBtn.classList.add("calltype-info-btn--selected")
             calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-            calltypeInfoPreview.classList.add("calltype-info__preview--mic-off")
+            calltypeInfoPreview.classList.add(
+              "calltype-info__preview--audio-off"
+            )
           } else {
             myMediaStream.getAudioTracks()[0].enabled = true
             calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
             calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
             calltypeInfoPreview.classList.remove(
-              "calltype-info__preview--mic-off"
+              "calltype-info__preview--audio-off"
             )
           }
         }

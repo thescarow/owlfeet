@@ -3,9 +3,7 @@ const callRoomMemberSchema = new mongoose.Schema(
   {
     callRoom: { type: mongoose.Schema.Types.ObjectId, ref: "CallRoom" },
 
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-
-    userName: { type: String, default: "", trim: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 
     isVideoOn: {
       type: Boolean,
