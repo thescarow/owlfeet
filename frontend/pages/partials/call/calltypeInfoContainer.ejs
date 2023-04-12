@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="/stylesheets/partials/call/calltypeInfoContainer.css">
+<div class="calltype-info-container" id="calltypeInfoContainer">
+
+    <div class="calltype-message calltype-message--hide" id="calltypeMessage">
+
+        <div class="calltype-message__title" id="calltypeMessageTitle"> Allow OwlFeet to use your camera and
+            microphone so others can see and hear you </div>
+        <div class="calltype-message__desc" id="calltypeMessageDesc">
+
+            You can turn off your <span>Camera</span> and mute your <span>Microphone</span> at any time.
+
+        </div>
+
+        <div class="calltype-message__btn " id="calltypeMessageReloadBtn">
+            reload page
+        </div>
+        <div class="calltype-message__btn calltype-message__btn--hide" id="calltypeMessageGetCamAndMicPermissionBtn">
+            Use camera and microphone
+        </div>
+        <div class="calltype-message__btn calltype-message__btn--hide" id="calltypeMessageGetOnlyMicPermissionBtn">
+            Use microphone only
+        </div>
+
+    </div>
+
+    <div class="calltype-info " id="calltypeInfo">
+
+        <div class="calltype-info__preview" id="calltypeInfoPreview">
+
+            <div class="video-off-preview">
+                <%- include("../icons/callVideoOffIcon.svg") _%>
+                    <div class="video-off-preview__title">
+                        Camera off
+                    </div>
+            </div>
+            <div class="audio-off-preview">
+                <%- include("../icons/callMicOffIcon.svg") _%>
+            </div>
+        </div>
+        <div class="calltype-info__btn-container" id="calltypeInfoBtnContainer">
+
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="video">
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
+                    <%- include("../icons/callVideoOnIcon.svg") _%>
+                </div>
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--selected">
+                    <%- include("../icons/callVideoOffIcon.svg") _%>
+                </div>
+            </div>
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="audio">
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
+                    <%- include("../icons/callMicOnIcon.svg") _%>
+                </div>
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--selected">
+                    <%- include("../icons/callMicOffIcon.svg") _%>
+                </div>
+            </div>
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="settings">
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
+                    <%- include("../icons/callSettingsIcon.svg") _%>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
