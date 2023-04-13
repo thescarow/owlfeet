@@ -31,7 +31,7 @@ svg {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    display: none;
+    /* display: none; */
 }
 
 .before-call-section__row {
@@ -40,7 +40,7 @@ svg {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    display: none;
+    /* display: none; */
 }
 
 
@@ -144,16 +144,16 @@ svg {
 
 
 ::placeholder {
-    color: rgba(var(--rgba-first-color), 0.1);
+    color: rgba(var(--rgba-first-color), 0.2);
 }
 
 :-ms-input-placeholder {
-    color: rgba(var(--rgba-first-color), 0.1);
+    color: rgba(var(--rgba-first-color), 0.2);
 
 }
 
 ::-ms-input-placeholder {
-    color: rgba(var(--rgba-first-color), 0.1);
+    color: rgba(var(--rgba-first-color), 0.2);
 
 }
 
@@ -196,7 +196,7 @@ svg {
     color: rgba(var(--rgba-fourth-color), 0.4);
 }
 
-.creating-chat-room {
+.call-room {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -205,45 +205,53 @@ svg {
     /* display: none; */
 }
 
-.creating-chat-room__pic {
+.call-room__pic {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background: rgba(var(--rgba-fourth-color), 0.1);
 }
 
-.creating-chat-room__pic svg {
+.call-room__pic svg {
     display: none;
     fill: rgba(var(--rgba-fourth-color), 0.6);
     padding: 21px;
     transform: translate(-3px, 2px);
 }
 
-.creating-chat-room__pic--svg svg {
+.call-room__pic--svg svg {
     display: inline-block;
 
 }
 
-.creating-chat-room__pic img {
+.call-room__pic img {
     display: none;
     width: 100%;
     height: 100%;
     border-radius: 50%;
 }
 
-.creating-chat-room__pic--img img {
+.call-room__pic--img img {
     display: inline-block;
 
 }
 
-.creating-chat-room__name {
+.call-room__name {
     font-size: 23px;
     font-weight: 900;
     margin: 10px 0 0 0;
     color: rgba(var(--rgba-fourth-color), 1);
 }
 
-.creating-chat-room__btn {
+
+.call-room__btn-info {
+    margin: 15px 0 4px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(var(--rgba-fourth-color), 0.4);
+}
+
+.call-room__btn {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -255,78 +263,29 @@ svg {
     border-radius: 10px;
     cursor: pointer;
 }
-
-.creating-chat-room__btn--select-calltype {
-    margin: 10px 0 0 0;
-    display: none;
-}
-
-.creating-chat-room__btn--create-call {
-    background: rgba(var(--rgba-third-color), 1);
-    color: rgba(var(--rgba-first-color), 1);
-}
-
-.creating-chat-room__btn-icon {
+.call-room__btn-icon {
     width: 15px;
     height: 15px;
     margin: 0 5px 0 0;
 }
 
-.creating-chat-room__btn-icon svg {
+.call-room__btn-icon svg {
     fill: rgba(var(--rgba-fourth-color), 1);
 }
 
-.creating-chat-room__start-title {
-    margin: 15px 0 4px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(var(--rgba-fourth-color), 0.4);
-}
 
-.joining-room-info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    display: none;
-}
-
-.joining-room-info__pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(var(--rgba-fourth-color), 0.1);
-}
-
-.joining-room-info__pic svg {
-    display: none;
-}
-
-.joining-room-info__pic--svg svg {
-    display: inline-block;
-    fill: rgba(var(--rgba-fourth-color), 0.6);
-    padding: 21px;
-    transform: translate(-3px, 2px);
-}
-
-.joining-room-info__pic img {
-    display: none;
-}
-
-.joining-room-info__pic--svg img {
-    display: inline-block;
-
-}
-
-.joining-room-info__name {
-    font-size: 23px;
-    font-weight: 900;
+.call-room__btn--select-calltype {
     margin: 10px 0 0 0;
-    color: rgba(var(--rgba-fourth-color), 1);
+    display: none;
 }
 
-.joining-room-info__participants {
+.call-room__btn--create-call {
+    background: rgba(var(--rgba-third-color), 1);
+    color: rgba(var(--rgba-first-color), 1);
+}
+
+
+.call-room__participants {
     width: 80%;
     display: flex;
     justify-content: space-between;
@@ -334,17 +293,17 @@ svg {
     padding: 5px 15px;
 }
 
-.joining-room-info__participants-icon {
+.call-room__participants-icon {
     width: 30px;
     height: 30px;
     margin: 0 5px 0 0;
 }
 
-.joining-room-info__participants-icon svg {
+.call-room__participants-icon svg {
     fill: rgba(var(--rgba-second-color), 0.4);
 }
 
-.joining-room-info__participants-title {
+.call-room__participants-title {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -353,13 +312,13 @@ svg {
     color: rgba(var(--rgba-second-color), 0.4);
 }
 
-.joining-room-info__participants-count {
+.call-room__participants-count {
     font-size: 16px;
     font-weight: 800;
     color: rgba(var(--rgba-second-color), 0.4);
 }
 
-.joining-room-info__user-container {
+.call-room__user-container {
     width: 80%;
     max-height: 120px;
     display: flex;
@@ -377,13 +336,13 @@ svg {
     /* Internet Explorer 10+ */
 }
 
-.joining-room-info__user-container::-webkit-scrollbar {
+.call-room__user-container::-webkit-scrollbar {
     /* WebKit */
     width: 0;
     height: 0;
 }
 
-.joining-room-info-user {
+.call-room-user {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -391,73 +350,36 @@ svg {
     margin: 4px 0;
 }
 
-.joining-room-info-user__pic {
+.call-room-user__pic {
     width: 30px;
     height: 30px;
     background: rgba(var(--rgba-fourth-color), 0.2);
     border-radius: 50%;
 }
 
-.joining-room-info-user__pic svg {
+.call-room-user__pic svg {
     display: none;
 }
 
-.joining-room-info-user__pic--svg svg {
+.call-room-user__pic--svg svg {
     display: inline-block;
     padding: 4px;
     fill: rgba(var(--rgba-first-color), 1);
 }
 
-.joining-room-info-user__pic img {
+.call-room-user__pic img {
     display: none;
 }
 
-.joining-room-info-user__pic--img img {}
+.call-room-user__pic--img img {}
 
-.joining-room-info-user__name {
+.call-room-user__name {
     font-size: 15px;
     font-weight: 600;
     color: rgba(var(--rgba-fourth-color), 1);
     margin: 0 5px;
 }
 
-.joining-room-info__btn {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 5px 8px;
-    color: rgba(var(--rgba-fourth-color), 0.8);
-    background: rgba(var(--rgba-fourth-color), 0.1);
-    font-size: 15px;
-    font-weight: 800;
-    border-radius: 10px;
-}
-
-.joining-room-info__btn--select-calltype {
-    display: none;
-}
-
-.joining-room-info__btn--icon {
-    width: 15px;
-    height: 15px;
-    margin: 0 5px 0 0;
-}
-
-.joining-room-info__btn--icon svg {
-    fill: rgba(var(--rgba-fourth-color), 1);
-}
-
-.joining-room-info__join-title {
-    margin: 15px 0 4px 0;
-    font-size: 13px;
-    font-weight: 600;
-    color: rgba(var(--rgba-fourth-color), 0.4);
-}
-
-.joining-room-info__btn--join-call {
-    background: rgba(var(--rgba-third-color), 1);
-    color: rgba(var(--rgba-first-color), 1);
-}
 
 .on-call-section {
     position: relative;
@@ -467,7 +389,7 @@ svg {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    /* display: none; */
+    display: none;
 }
 
 .on-call-main-view {
@@ -477,7 +399,97 @@ svg {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     /* display: none; */
+}
+
+
+
+
+
+
+
+.on-call-room-share {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    transition: all 1s;
+    background: rgba(var(--rgba-fourth-color), 1);
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border: 1px solid rgba(var(--rgba-fourth-color), 1);
+    border-radius: 8px;
+    padding: 5px;
+    display: none;
+}
+
+.on-call-room-share__title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 5px 0 0 0;
+    color: rgba(var(--rgba-first-color), 0.7);
+    align-self: flex-start;
+}
+
+.on-call-room-share__desc {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 5px 0 0 0;
+    color: rgba(var(--rgba-first-color), 0.6);
+    align-self: flex-start;
+}
+
+.on-call-room-share__link {
+    position: relative;
+    border: 1px solid rgba(var(--rgba-first-color), 0.1);
+    border-radius: 5px;
+    padding: 5px 50px 5px 5px;
+    font-size: 14px;
+    font-weight: 800;
+    margin: 5px 0 0 0;
+    background: rgba(var(--rgba-second-color), 0.1);
+    color: rgba(var(--rgba-first-color), 0.6);
+}
+
+.on-call-btn--copy-room-link {
+    fill: rgba(var(--rgba-first-color), 0.1);
+}
+
+.on-call-room-share__link .on-call-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translate(0, -50%);
+    background: rgba(var(--rgba-third-color), 1);
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.on-call-room-share__close-btn {
+    padding: 0px 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 17px;
+    font-weight: 900;
+    border: 1px solid rgba(var(--rgba-first-color), 0.1);
+    color: rgba(var(--rgba-first-color), 1);
+    background: rgba(var(--rgba-fourth-color), 0.3);
+    cursor: pointer;
+}
+
+.on-call-main-view .on-call-user-box {
+
+    width: 33%;
+
+    height: 26%;
+
+    border-radius: 10px;
 }
 
 .on-call-btn.on-call-btn--room-info {
@@ -625,6 +637,7 @@ svg {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    display: none;
 }
 
 .on-call-call-status__room-pic {
@@ -689,12 +702,13 @@ svg {
     width: 100%;
     height: 100%;
     /* border: 1px solid green; */
+    background: rgba(var(--rgba-third-color), 0.1);
 }
 
 .on-call-user-box__video video {
     width: 100%;
     height: 100%;
-    background: #aaa;
+    background: rgba(var(--rgba-third-color), 0.1);
 }
 
 .on-call-user-box__audio {
@@ -799,6 +813,7 @@ svg {
     font-weight: 800;
     color: rgba(var(--rgba-fourth-color), 1);
     text-align: center;
+    margin: 6px 0 0 0;
 }
 
 .on-call-user-box--video-off .on-call-user-box__info {
@@ -826,6 +841,7 @@ svg {
     /* border: 1px solid rgba(var(--rgba-fourth-color), 0.1); */
     border-radius: 10px 0px 0px 10px;
     display: flex;
+    display: none;
 }
 
 .on-call-user-box-slider-btn {
@@ -873,9 +889,6 @@ svg {
     justify-content: center;
     align-items: center;
 }
-
-
-
 
 
 
