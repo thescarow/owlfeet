@@ -91,6 +91,7 @@ function initialiseEventForCalltypeInfoContainer() {
             calltypeInfoPreview.classList.add(
               "calltype-info__preview--video-off"
             )
+            calltypeInfoBtn.dataset.calltypeVideoValue = "false"
           } else {
             myMediaStream.getVideoTracks()[0].enabled = true
             calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
@@ -98,6 +99,8 @@ function initialiseEventForCalltypeInfoContainer() {
             calltypeInfoPreview.classList.remove(
               "calltype-info__preview--video-off"
             )
+
+            calltypeInfoBtn.dataset.calltypeVideoValue = "true"
           }
         }
       }
@@ -111,6 +114,7 @@ function initialiseEventForCalltypeInfoContainer() {
             calltypeInfoPreview.classList.add(
               "calltype-info__preview--audio-off"
             )
+            calltypeInfoBtn.dataset.calltypeAudioValue = "false"
           } else {
             myMediaStream.getAudioTracks()[0].enabled = true
             calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
@@ -118,6 +122,7 @@ function initialiseEventForCalltypeInfoContainer() {
             calltypeInfoPreview.classList.remove(
               "calltype-info__preview--audio-off"
             )
+            calltypeInfoBtn.dataset.calltypeAudioValue = "true"
           }
         }
       }

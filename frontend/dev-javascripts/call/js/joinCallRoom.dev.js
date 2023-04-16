@@ -3,21 +3,22 @@ let svg_callPermissionLockIcon = `<svg width="80" height="100" viewBox="0 0 80 1
 </svg>
 `
 let roomInfoContainer = document.getElementById("roomInfoContainer")
-let creatingChatRoom = document.getElementById("creatingChatRoom")
+let joiningCallRoom = document.getElementById("joiningCallRoom")
 
-export function createChatRoom() {
-  initialiseEventForCreatingChatRoom()
+export function joinCallRoom() {
+  initialiseEventForJoinCallRoom()
 }
 
-function initialiseEventForCreatingChatRoom() {
-  if (creatingChatRoom) {
-    creatingChatRoom.addEventListener("click", async e => {
-      let callRoomBtn = e.target.closest(`.call-room__btn`)
-      if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
-        if (callRoomBtn.dataset.btn === "create-chat-room") {
-          let chatId = creatingChatRoom.dataset.chatId
+function initialiseEventForJoinCallRoom() {
+  if (joiningCallRoom) {
+    joiningCallRoom.addEventListener("click", async e => {
+      let callRoomBtn = e.target.closest(`.call-room__btn `)
+      console.log(callRoomBtn)
 
-          if (chatId !== "") {
+      if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
+        if (callRoomBtn.dataset.btn === "join-call-room") {
+          let joiningRoomId = joiningCallRoom.dataset.callRoomId
+          if (joiningRoomId !== "") {
             let calltypeInfoVideoBtn = document.getElementById(
               "calltypeInfoVideoBtn"
             )
@@ -35,9 +36,10 @@ function initialiseEventForCreatingChatRoom() {
             let callRoomData = {
               isVideoOn: isVideoOn,
               isAudioOn: isAudioOn,
-              chatId: chatId
+              joiningRoomId: joiningRoomId
             }
-            fetch("/call/create-chat-room", {
+
+            fetch("/call/join-room", {
               method: "POST", // or 'PUT'
               headers: {
                 "Content-Type": "application/json"
@@ -53,6 +55,10 @@ function initialiseEventForCreatingChatRoom() {
               .then(async data => {
                 if (data.isSuccess) {
                   console.log(data.callRoom)
+                  let { createOnCallSection } = await import(
+                    "./onCallSection.dev"
+                  )
+                  createOnCallSection(data.callRoom)
                 } else {
                   let { createMainNotification } = await import(
                     "../../common/mainNotification.dev"
@@ -66,10 +72,18 @@ function initialiseEventForCreatingChatRoom() {
                   "../../common/mainNotification.dev"
                 )
                 createMainNotification(
-                  "Server error in creating chat room, Please try again",
+                  "Server error in creating new room, Please try again",
                   "error"
                 )
               })
+          } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
+            createMainNotification(
+              "There are some error in joining this room, Please refresh your page",
+              "error"
+            )
           }
         }
       }

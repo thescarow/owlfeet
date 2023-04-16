@@ -8,21 +8,31 @@ const CallRoom = require("../../models/callRoom")
 const CallRoomMember = require("../../models/callRoomMember")
 
 const {
+  selectChatFieldForCallRoom
+} = require("../../common/filter-field/filterChatField")
+const {
   selectUserFieldForCallRoom
 } = require("../../common/filter-field/filterUserField")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
+const { createCallRoomMember } = require("./common/createCallRoomMember")
 
 // router.post("/join-room", getLoginUser, createChatRoom)
 exports.joinRoom = async (req, res) => {
   try {
     if (req.user) {
-      let userData = req.body.userData
+      let userData = req.body
       if (
         userData.hasOwnProperty("joiningRoomId") &&
         userData.hasOwnProperty("isAudioOn") &&
         userData.hasOwnProperty("isVideoOn")
       ) {
-        let callRoom = await CallRoom.findById(userData.joiningRoomId).lean()
+        let callRoom = await CallRoom.findById(userData.joiningRoomId)
+          .populate({
+            path: "roomChat",
+            select: selectChatFieldForCallRoom,
+            options: { lean: true }
+          })
+          .lean()
 
         if (callRoom) {
           let canJoinedCall = false
@@ -36,7 +46,22 @@ exports.joinRoom = async (req, res) => {
             }).lean()
 
             if (chat) {
-              await createCallRoomMember(req, res, userData)
+              let callRoomMemberData = {
+                roomId: userData.joiningRoomId,
+                userId: req.user.id,
+                isVideoOn: userData.isVideoOn,
+                isAudioOn: userData.isAudioOn
+              }
+              let isCallRoomMemberCreated = await createCallRoomMember(
+                callRoomMemberData
+              )
+              if (!isCallRoomMemberCreated) {
+                return res.json({
+                  isSuccess: false,
+                  error:
+                    "You have already joined this room, if you want to join here please left from there"
+                })
+              }
               canJoinedCall = true
             } else {
               return res.json({
@@ -45,7 +70,22 @@ exports.joinRoom = async (req, res) => {
               })
             }
           } else {
-            await createCallRoomMember(req, res, userData)
+            let callRoomMemberData = {
+              roomId: userData.joiningRoomId,
+              userId: req.user.id,
+              isVideoOn: userData.isVideoOn,
+              isAudioOn: userData.isAudioOn
+            }
+            let isCallRoomMemberCreated = await createCallRoomMember(
+              callRoomMemberData
+            )
+            // if (!isCallRoomMemberCreated) {
+            //   return res.json({
+            //     isSuccess: false,
+            //     error:
+            //       "You have already joined this room, if you want to join here please left from there"
+            //   })
+            // }
             canJoinedCall = true
           }
 
@@ -108,29 +148,6 @@ exports.joinRoom = async (req, res) => {
     res.status(500).json({
       isSuccess: false,
       error: "Server error in joining room, Please try again"
-    })
-  }
-}
-
-async function createCallRoomMember(req, res, userData) {
-  let callRoomMember = await findOne({
-    callRoom: userData.joiningRoomId,
-    user: req.user.id
-  }).lean()
-  if (!callRoomMember) {
-    let newCallRoomMemberData = {
-      callRoom: userData.joiningRoomId,
-      user: req.user.id,
-      isVideoOn: userData.isVideoOn,
-      isAudioOn: userData.isAudioOn
-    }
-    let newCallRoomMember = new CallRoomMember(newCallRoomMemberData)
-    await newCallRoomMember.save()
-  } else {
-    res.json({
-      isSuccess: false,
-      error:
-        "You have already joined this room, if you want to join here please left from there"
     })
   }
 }

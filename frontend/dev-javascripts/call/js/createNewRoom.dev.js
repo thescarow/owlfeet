@@ -3,34 +3,171 @@ let svg_callPermissionLockIcon = `<svg width="80" height="100" viewBox="0 0 80 1
 </svg>
 `
 let roomInfoContainer = document.getElementById("roomInfoContainer")
-let creatingChatRoom = document.getElementById("creatingChatRoom")
+let creatingNewRoom = document.getElementById("creatingNewRoom")
 
-export function createChatRoom() {
-  initialiseEventForCreatingChatRoom()
+import Uppy from "@uppy/core"
+import Dashboard from "@uppy/dashboard"
+import Webcam from "@uppy/webcam"
+import ImageEditor from "@uppy/image-editor"
+
+import "@uppy/core/dist/style.css"
+import "@uppy/dashboard/dist/style.css"
+import "@uppy/webcam/dist/style.css"
+import "@uppy/image-editor/dist/style.css"
+
+import AwsS3Multipart from "@uppy/aws-s3-multipart"
+
+export function createNewRoom() {
+  console.log("called")
+  initialiseEventForCreatingNewRoom()
 }
 
-function initialiseEventForCreatingChatRoom() {
-  //   if (calltypeMessageReloadBtn) {
-  //     calltypeMessageReloadBtn.addEventListener("click", () => {
-  //       location.reload()
-  //     })
-  //   }
-  if (creatingChatRoom) {
-    creatingChatRoom.addEventListener("click", async e => {
-      let creatingChatRoomBtn = e.target.closest(`.creating-chat-room__btn`)
-      if (
-        creatingChatRoomBtn &&
-        roomInfoContainer.contains(creatingChatRoomBtn)
-      ) {
-        if (creatingChatRoomBtn.dataset.btn === "start-call") {
-          let chatId = creatingChatRoom.dataset.chatId
-          if (chatId !== "") {
-            fetch("/call/create-chat-room", {
+function initialiseEventForCreatingNewRoom() {
+  if (creatingNewRoom) {
+    const uppy = new Uppy({
+      id: "creatingNewRoomPic",
+      autoProceed: false,
+      allowMultipleUploadBatches: false,
+      debug: false,
+      onBeforeFileAdded: (currentFile, files) => {
+        if (!currentFile.type) {
+          uppy.log(`Skipping file because it has no type`)
+          uppy.info(`Skipping file because it has no type`, "error", 500)
+          return false
+        } else {
+          let creatingNewRoomPicKey =
+            document.getElementById("creatingNewRoomPic").dataset.roomPic
+          currentFile.name = creatingNewRoomPicKey
+          return currentFile
+        }
+      },
+      onBeforeUpload: files => {
+        // const updatedFiles = {}
+        // Object.keys(files).forEach(fileID => {
+        //   updatedFiles[fileID] = {
+        //     ...files[fileID],
+        //     meta: {
+        //       ...files[fileID].meta,
+        //       fileType: files[fileID].type
+        //     }
+        //   }
+        // })
+        // console.log(updatedFiles)
+        // return updatedFiles
+      },
+      restrictions: {
+        maxFileSize: 1024 * 1024 * 5,
+        minFileSize: null,
+        maxTotalFileSize: 1024 * 1024 * 5 * 1,
+        maxNumberOfFiles: 1,
+        minNumberOfFiles: 1,
+        allowedFileTypes: [
+          "image/jpeg",
+          "image/png",
+          "image/gif",
+          "image/svg+xml",
+          "image/x-png"
+        ]
+      },
+      meta: { mediaType: "new-call-room-pic" },
+      infoTimeout: 5000
+    })
+      .use(Dashboard, {
+        trigger: "#creatingNewRoomPic",
+        target: "body",
+        inline: false,
+        plugins: ["Webcam", "ImageEditor"],
+        thumbnailWidth: 300,
+        // closeAfterFinish: false,
+        showRemoveButtonAfterComplete: false,
+        disablePageScrollWhenModalOpen: true,
+        closeModalOnClickOutside: true,
+
+        theme: "dark",
+        locale: {
+          strings: {}
+        },
+        note: "File size up to 5 MB",
+        proudlyDisplayPoweredByUppy: false
+      })
+      .use(Webcam, {
+        target: Dashboard,
+        title: "Camera",
+        mirror: true,
+        modes: ["picture"]
+      })
+      .use(ImageEditor, {
+        target: Dashboard,
+        quality: 0.8
+      })
+
+      .use(AwsS3Multipart, {
+        limit: 4,
+        companionUrl: "http://localhost:5000/companion"
+      })
+
+    // uppy.on("complete", result => {
+    //   console.log(
+    //     "Upload complete! We’ve uploaded these files:",
+    //     result.successful
+    //   )
+    // })
+    uppy.on("upload-success", (file, response) => {
+      let creatingNewRoomPic = document.getElementById("creatingNewRoomPic")
+      creatingNewRoomPic.classList.add("creating-new-room__pic--img")
+      creatingNewRoomPic.classList.remove("creating-new-room__pic--svg")
+
+      creatingNewRoomPic.dataset.roomPic = file.s3Multipart.key
+
+      let creatingNewRoomPicImg = creatingNewRoomPic.querySelector("img")
+      if (creatingNewRoomPicImg) {
+        creatingNewRoomPicImg.src = file.preview
+      }
+    })
+
+    creatingNewRoom.addEventListener("click", async e => {
+      let callRoomBtn = e.target.closest(`.creating-new-room__btn `)
+      console.log(callRoomBtn)
+
+      if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
+        if (callRoomBtn.dataset.btn === "create-new-room") {
+          let newRoomNameInput = document.getElementById("newRoomNameInput")
+          let newRoomAboutInput = document.getElementById("newRoomAboutInput")
+          let creatingNewRoomPic = document.getElementById("creatingNewRoomPic")
+
+          let newRoomNameInputValue = newRoomNameInput.value
+          let newRoomAboutInputValue = newRoomAboutInput.value
+          let creatingNewRoomPicKey = creatingNewRoomPic.dataset.roomPic
+
+          if (newRoomNameInputValue.trim() !== "") {
+            let calltypeInfoVideoBtn = document.getElementById(
+              "calltypeInfoVideoBtn"
+            )
+            let calltypeInfoAudioBtn = document.getElementById(
+              "calltypeInfoAudioBtn"
+            )
+
+            let isVideoOn = calltypeInfoVideoBtn.dataset.calltypeVideoValue
+            let isAudioOn = calltypeInfoAudioBtn.dataset.calltypeAudioValue
+            if (isVideoOn === "string")
+              isVideoOn = isVideoOn === "true" ? true : false
+            if (isAudioOn === "string")
+              isAudioOn = isAudioOn === "true" ? true : false
+
+            let callRoomData = {
+              isVideoOn: isVideoOn,
+              isAudioOn: isAudioOn,
+              roomName: newRoomNameInputValue,
+              roomAbout: newRoomAboutInputValue,
+              roomPic: creatingNewRoomPicKey
+            }
+
+            fetch("/call/create-new-room", {
               method: "POST", // or 'PUT'
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({ chatId })
+              body: JSON.stringify(callRoomData)
             })
               .then(response => {
                 if (response.ok) {
@@ -41,6 +178,10 @@ function initialiseEventForCreatingChatRoom() {
               .then(async data => {
                 if (data.isSuccess) {
                   console.log(data.callRoom)
+                  let { createOnCallSection } = await import(
+                    "./onCallSection.dev"
+                  )
+                  createOnCallSection(data.callRoom)
                 } else {
                   let { createMainNotification } = await import(
                     "../../common/mainNotification.dev"
@@ -54,30 +195,18 @@ function initialiseEventForCreatingChatRoom() {
                   "../../common/mainNotification.dev"
                 )
                 createMainNotification(
-                  "Server error in creating chat room, Please try again",
+                  "Server error in creating new room, Please try again",
                   "error"
                 )
               })
+          } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
+            createMainNotification("Please give a name to call room", "error")
+            newRoomNameInput.focus()
           }
         }
-        // if (calltypeInfoBtn.dataset.calltypeInfoBtn === "mic") {
-        //   if (myMediaStream !== null) {
-        //     let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
-        //     if (audioEnabled) {
-        //       myMediaStream.getAudioTracks()[0].enabled = false
-        //       calltypeInfoBtn.classList.add("calltype-info-btn--selected")
-        //       calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-        //       calltypeInfoPreview.classList.add("calltype-info__preview--mic-off")
-        //     } else {
-        //       myMediaStream.getAudioTracks()[0].enabled = true
-        //       calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
-        //       calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
-        //       calltypeInfoPreview.classList.remove(
-        //         "calltype-info__preview--mic-off"
-        //       )
-        //     }
-        //   }
-        // }
       }
     })
   }
