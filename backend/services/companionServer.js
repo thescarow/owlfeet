@@ -10,7 +10,7 @@ const options = {
   s3: {
     getKey: (req, filename, metadata) => {
       console.log(req, "-----", filename, "-------", metadata)
-      if (filename != "") {
+      if (filename !== "") {
         return filename
       } else {
         let fileName = `${metadata.mediaType}/${

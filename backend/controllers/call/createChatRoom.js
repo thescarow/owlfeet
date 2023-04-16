@@ -5,8 +5,13 @@ const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
 const Chat = require("../../models/chat")
 const CallRoom = require("../../models/callRoom")
+const CallRoomMember = require("../../models/callRoomMember")
 
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
+
+const {
+  selectChatFieldForCallRoom
+} = require("../../common/filter-field/filterChatField")
 
 const {
   selectSafeCallRoomField
@@ -14,6 +19,7 @@ const {
 const {
   selectUserFieldForCallRoom
 } = require("../../common/filter-field/filterUserField")
+const { createCallRoomMember } = require("./common/createCallRoomMember")
 
 // router.post("/create-chat-room", getLoginUser, createChatRoom)
 exports.createChatRoom = async (req, res) => {
@@ -25,6 +31,11 @@ exports.createChatRoom = async (req, res) => {
         userData.hasOwnProperty("isAudioOn") &&
         userData.hasOwnProperty("isVideoOn")
       ) {
+        if (userData.isVideoOn === "string")
+          userData.isVideoOn = userData.isVideoOn === "true" ? true : false
+        if (userData.isAudioOn === "string")
+          userData.isAudioOn = userData.isAudioOn === "true" ? true : false
+
         let chat = await Chat.findOne({
           _id: userData.chatId,
           currentChatMembers: {
@@ -44,6 +55,11 @@ exports.createChatRoom = async (req, res) => {
           newChatRoom = await newChatRoom.save()
           let createdChatRoom = await CallRoom.findById(newChatRoom._id)
             .select(selectSafeCallRoomField)
+            .populate({
+              path: "roomChat",
+              select: selectChatFieldForCallRoom,
+              options: { lean: true }
+            })
             .lean()
           if (
             createdChatRoom.hasOwnProperty("roomPic") &&
@@ -54,11 +70,21 @@ exports.createChatRoom = async (req, res) => {
             )
           }
           let callRoomMemberData = {
-            callRoom: createdChatRoom._id,
+            roomId: createdChatRoom._id,
+            userId: req.user.id,
             isVideoOn: userData.isVideoOn,
             isAudioOn: userData.isAudioOn
           }
-          await createCallRoomMember(req, res, callRoomMemberData)
+          let isCallRoomMemberCreated = await createCallRoomMember(
+            callRoomMemberData
+          )
+          if (!isCallRoomMemberCreated) {
+            return res.json({
+              isSuccess: false,
+              error:
+                "You have already joined this room, if you want to join here please left from there"
+            })
+          }
           let callRoomMembers = await CallRoomMember.find({
             callRoom: createdChatRoom._id
           })
@@ -110,29 +136,6 @@ exports.createChatRoom = async (req, res) => {
     res.status(500).json({
       isSuccess: false,
       error: "Server error in creating chat room, Please try again"
-    })
-  }
-}
-
-async function createCallRoomMember(req, res, callRoomMemberData) {
-  let callRoomMember = await findOne({
-    callRoom: callRoomMemberData.callRoom,
-    user: req.user.id
-  }).lean()
-  if (!callRoomMember) {
-    let newCallRoomMemberData = {
-      callRoom: callRoomMemberData.callRoom,
-      user: req.user.id,
-      isVideoOn: callRoomMemberData.isVideoOn,
-      isAudioOn: callRoomMemberData.userData.isAudioOn
-    }
-    let newCallRoomMember = new CallRoomMember(newCallRoomMemberData)
-    await newCallRoomMember.save()
-  } else {
-    res.json({
-      isSuccess: false,
-      error:
-        "You have already joined this room, if you want to join here please left from there"
     })
   }
 }

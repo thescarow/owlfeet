@@ -4,8 +4,26 @@
       "./js/calltypeInfoContainer.dev"
     )
     createCalltypeInfoContainer()
-    let { createChatRoom } = await import("./js/createChatRoom.dev")
-    createChatRoom()
+    let roomInfoContainer = document.getElementById("roomInfoContainer")
+    console.log(roomInfoContainer)
+    if (roomInfoContainer.dataset.callRoom.trim() === "join") {
+      console.log("here")
+      let { joinCallRoom } = await import("./js/joinCallRoom.dev")
+      joinCallRoom()
+    }
+    if (roomInfoContainer.dataset.callRoom.trim() === "create") {
+      let creatingRoomInfo = document.getElementById("creatingRoomInfo")
+      if (creatingRoomInfo) {
+        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
+          let { createChatRoom } = await import("./js/createChatRoom.dev")
+          createChatRoom()
+        }
+        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
+          let { createNewRoom } = await import("./js/createNewRoom.dev")
+          createNewRoom()
+        }
+      }
+    }
 
     IS_INIT_CALL_MODULE = true
   }

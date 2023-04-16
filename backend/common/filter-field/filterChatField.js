@@ -59,3 +59,15 @@ exports.selectChatFieldForCreatingCallRoom = {
   // isDeleted: 1
   // allChatMembers: 1,
 }
+exports.selectChatFieldForCallRoom = {
+  _id: 1,
+  isGroupChat: 1
+  // chatPic: 1,
+  // chatName: 1,
+  // chatDescription: 1,
+  // createdAt: 1,
+  // currentChatMembers: 1,
+  // groupChatAdmin: 1
+  // isDeleted: 1
+  // allChatMembers: 1,
+}
