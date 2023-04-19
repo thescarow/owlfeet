@@ -83,8 +83,10 @@ exports.createNewRoom = async (req, res) => {
               "You have already joined this room, if you want to join here please left from there"
           })
         }
-        let callRoomMembers = await CallRoomMember.find({
-          callRoom: createdNewRoom._id
+
+        let joinedMember = await CallRoomMember.findOne({
+          callRoom: createdNewRoom._id,
+          user: req.user.id
         })
           .populate({
             path: "user",
@@ -93,19 +95,17 @@ exports.createNewRoom = async (req, res) => {
           })
           .lean()
 
-        await Promise.all(
-          callRoomMembers.map(async member => {
-            if (
-              member.user.hasOwnProperty("profile") &&
-              member.user.profile !== ""
-            ) {
-              member.user.profile = await signedUrlForGetAwsS3Object(
-                member.user.profile
-              )
-            }
-          })
-        )
-        createdNewRoom.members = callRoomMembers
+        if (
+          joinedMember.user.hasOwnProperty("profile") &&
+          joinedMember.user.profile !== ""
+        ) {
+          joinedMember.user.profile = await signedUrlForGetAwsS3Object(
+            joinedMember.user.profile
+          )
+        }
+
+        createdNewRoom.joinedMember = joinedMember
+
         res.json({ isSuccess: true, callRoom: createdNewRoom })
       } else {
         res.json({

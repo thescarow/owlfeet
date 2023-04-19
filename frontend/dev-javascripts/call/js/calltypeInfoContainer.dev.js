@@ -16,8 +16,6 @@ let calltypeMessageReloadBtn = document.getElementById(
 
 let myMediaStream = null
 export function createCalltypeInfoContainer() {
-  console.log("calltypeInfoContainer")
-
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     console.log("Camera and microphone access is supported")
 
