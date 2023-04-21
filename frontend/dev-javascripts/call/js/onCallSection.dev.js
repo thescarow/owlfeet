@@ -62,6 +62,10 @@ const onCallMainBtnContainer = document.getElementById("onCallMainBtnContainer")
 let myMediaStream = null
 let myPeer
 let allMediaConnections = {}
+
+import { v4 as uuidv4 } from "uuid"
+import { Peer } from "peerjs"
+
 export async function createOnCallSection(callRoom) {
   beforeCallSection.classList.add("before-call-section--hide")
 
@@ -128,13 +132,10 @@ export async function createOnCallSection(callRoom) {
   }
 
   await initialiseCall(callRoom)
-  initialiseEventForOnCallSection()
+  //   initialiseEventForOnCallSection()
 }
 async function initialiseCall(callRoom) {
   try {
-    let { v4: uuidv4 } = await import("uuid")
-    let { Peer } = await import("peerjs")
-
     myPeer = new Peer(uuidv4(), { debug: 0 })
 
     fetch("/call-room-member/update-peer-id", {
@@ -187,20 +188,12 @@ async function implementCall(callRoom) {
     })
     .then(stream => {
       myMediaStream = stream
-      addStreamToOnCallUserBox(loginUser._id.toString(), stream)
+
+      addStreamToOnCallUserBox(loginUser._id.toString(), myMediaStream)
 
       myPeer.on("call", mediaConnection => {
-        console.log(
-          "this is called bro on call event  mediaConnection:",
-          mediaConnection
-        )
-        mediaConnection.answer(stream)
-        mediaConnection.on("stream", otherMediaStream => {
-          console.log(
-            "this is called bro on stream event otherMediaStream:",
-            otherMediaStream
-          )
-
+        mediaConnection.answer(myMediaStream)
+        mediaConnection.once("stream", otherMediaStream => {
           fetchCallRoomMemberAndCreateUserBoxWithStream(
             mediaConnection.peer,
             callRoom._id,
@@ -223,18 +216,17 @@ async function implementCall(callRoom) {
   })
 
   myPeer.on("error", err => {
-    console.log("error in peer: ", err)
+    console.log("Error in peer: ", err.type)
   })
 
   socket.on("call:joined-new-member", data => {
-    console.log("this one calling again and again")
     connectToNewJoinedMember(data.userId, data.peerId, callRoom, myMediaStream)
   })
-}
 
-socket.on("call:disconnect-call-member", data => {
-  removeOnCallUserBox(data.userId)
-})
+  socket.on("call:disconnect-call-member", data => {
+    removeOnCallUserBox(data.userId)
+  })
+}
 
 function connectToNewJoinedMember(
   otherUserId,
@@ -246,14 +238,10 @@ function connectToNewJoinedMember(
     metadata: { userId: loginUser._id.toString(), callRoomId: callRoom._id }
   })
 
-  mediaConnection.on("stream", otherMediaStream => {
-    console.log(
-      "here i called =>on stream event otherMediaStream:",
-      otherMediaStream
-    )
+  mediaConnection.once("stream", otherMediaStream => {
     fetchCallRoomMemberAndCreateUserBoxWithStream(
       mediaConnection.peer,
-      mediaConnection.metadata.callRoomId,
+      callRoom._id,
       otherMediaStream
     )
   })
@@ -263,7 +251,7 @@ function connectToNewJoinedMember(
   })
 
   mediaConnection.on("error", function (err) {
-    console.log("Error in media connection:", err)
+    console.log("Error in media connection:", err.type)
   })
 
   allMediaConnections[otherPeerId] = mediaConnection
@@ -411,50 +399,6 @@ function removeOnCallUserBox(userId) {
   })
 
   //   changeHeightAndWidthOfOnCallUserBoxInMainView()
-}
-function fetchCallRoomMemberAndCreateUserBox(userId, callRoomId) {
-  fetch("/call-room-member/data/member", {
-    method: "POST", // or 'PUT'
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userId: userId,
-      callRoomId: callRoomId
-    })
-  })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      }
-      return Promise.reject(response)
-    })
-    .then(async data => {
-      if (data.isSuccess) {
-        let onCallUserBox = createOnCallUserBox(data.callRoomMember)
-
-        if (onCallSection.dataset.callViewType === "single") {
-          onCallUserBoxSlider.insertAdjacentElement("afterbegin", onCallUserBox)
-        } else if (onCallSection.dataset.callViewType === "multiple") {
-          onCallMainView.insertAdjacentElement("afterbegin", onCallUserBox)
-        }
-      } else {
-        let { createMainNotification } = await import(
-          "../../common/mainNotification.dev"
-        )
-        createMainNotification(data.error, "error")
-      }
-    })
-    .catch(async err => {
-      console.log(err)
-      let { createMainNotification } = await import(
-        "../../common/mainNotification.dev"
-      )
-      createMainNotification(
-        "Server error in fetching room member,please refresh your page",
-        "error"
-      )
-    })
 }
 
 function showOnCallCallStatus(callRoom) {
@@ -620,337 +564,3 @@ function initialiseEventForOnCallSection() {
     }
   })
 }
-/* <div class="on-call-section">
-
-                    <div class="on-call-main-view  ">
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-btn on-call-btn--unselected on-call-btn--room-info ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callRoomInfoIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callRoomInfoIcon.svg") _%>
-                            </div>
-                        </div>
-
-                        <div class="on-call-room-info on-call-room-info--more-info">
-                            <div class="on-call-room-info__close-btn">X</div>
-                            <div class="on-call-room-info__pic on-call-room-info__pic--svg">
-                                <%- include("../partials/icons/callDefaultRoomPicIcon.svg") _%>
-                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
-                                        alt="">
-                            </div>
-                            <div class="on-call-room-info__name">
-                                Room 1
-                            </div>
-                            <div class="on-call-room-info__desc">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti, eius!
-                            </div>
-
-                            <div class="on-call-room-info__secure-info">
-                                <div class="on-call-room-info__secure-icon">
-                                    <%- include("../partials/icons/callSecureInfoIcon.svg") _%>
-                                </div>
-                                <div class="on-call-room-info__secure-desc">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto laborum
-                                     iusto quaerat. Tempore, esse modi!
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-room-share">
-
-                            <div class="on-call-room-share__close-btn">X</div>
-                            <div class="on-call-room-share__title">
-                                Your room's ready
-                            </div>
-                            <div class="on-call-room-share__desc">
-                                Share this call link with other you want in this call
-
-                            </div>
-
-
-                            <div class="on-call-room-share__link">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia
-                                repudiandae ut commodi maxime
-
-
-                                <div class="on-call-btn on-call-btn--unselected on-call-btn--copy-room-link ">
-                                    <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                        <%- include("../partials/icons/callCopyRoomLinkIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                        <%- include("../partials/icons/callCoppiedLinkSuccessfullyIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-btn on-call-btn--view-change on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callViewChange.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callViewChange.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-call-status">
-                            <div class="on-call-call-status__room-pic on-call-call-status__room-pic--svg">
-                                <%- include("../partials/icons/callDefaultRoomPicIcon.svg") _%>
-                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
-                                        alt="">
-                            </div>
-                            <div class="on-call-call-status__room-status">
-                                Calling...
-                            </div>
-                        </div>
-                        <div class="on-call-user-box-slider">
-                            <div class="on-call-user-box-slider-btn on-call-user-box-slider-btn--selected">
-                                <div
-                                    class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--unselected">
-                                    <%- include("../partials/icons/callLeftArrowIcon.svg") _%>
-                                </div>
-                                <div
-                                    class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--selected">
-                                    <%- include("../partials/icons/callRightArrowIcon.svg") _%>
-                                </div>
-                            </div>
-                            <div class="on-call-user-box on-call-user-box--video-off">
-                                <div class="on-call-user-box__video">
-                                    <video src=""></video>
-                                </div>
-
-                                <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                        <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                        <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                                <div class="on-call-user-box__info">
-
-                                    <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                        <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                                alt="">
-                                    </div>
-
-                                    <div class="on-call-user-box__name">User1</div>
-
-                                </div>
-
-                            </div>
-                            <div class="on-call-user-box on-call-user-box--video-off">
-                                <div class="on-call-user-box__video">
-                                    <video src=""></video>
-                                </div>
-
-                                <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                        <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                        <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                                <div class="on-call-user-box__info">
-
-                                    <div class="on-call-user-box__pic"></div>
-
-                                    <div class="on-call-user-box__name">User1</div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="on-call-main-btn-container">
-
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callCopyLinkIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callCopyLinkIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callScreenShareIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callScreenShareCancelIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callVideoOnIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callVideoOffIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn__icon--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callSettingsIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callEndIcon.svg") _%>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> */

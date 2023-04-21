@@ -34,7 +34,7 @@ exports.updatePeerId = async (req, res) => {
             res.json({
               isSuccess: false,
               error:
-                "user has not joined this room successfully, please refresh your page"
+                "User has not joined this room successfully, please refresh your page"
             })
           }
         } else {
@@ -62,7 +62,7 @@ exports.updatePeerId = async (req, res) => {
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server error updating peer, Please try again"
+      error: "Server error updating peer, Please refresh your page"
     })
   }
 }

@@ -27,13 +27,15 @@ exports.callHandler = async (io, socket) => {
           if (callRoom) {
             joinedCallRoomId = data.callRoomId
             socket.join(joinedCallRoomId)
+
             let callRoomMembers = await CallRoomMember.find({
               callRoom: callRoom._id
             })
-              .select(selectSafeCallRoomMemberField)
+              .select({ user: 1 })
               .lean()
 
             console.log("CallRoomMembers:", callRoomMembers)
+
             let eventData = {
               userId: socket.loginUser.id,
               peerId: data.peerId
