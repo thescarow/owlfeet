@@ -13,7 +13,6 @@ function initialiseEventForJoinCallRoom() {
   if (joiningCallRoom) {
     joiningCallRoom.addEventListener("click", async e => {
       let callRoomBtn = e.target.closest(`.call-room__btn `)
-      console.log(callRoomBtn)
 
       if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
         if (callRoomBtn.dataset.btn === "join-call-room") {

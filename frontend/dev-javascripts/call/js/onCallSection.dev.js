@@ -51,7 +51,6 @@ let svg_callRightArrowIcon = `<svg width="50" height="100" viewBox="0 0 50 100" 
 <path d="M47.6323 43.2565L13.6938 2.82094C12.9497 1.92708 12.0644 1.2176 11.089 0.733435C10.1136 0.24927 9.06738 0 8.01071 0C6.95404 0 5.90782 0.24927 4.93242 0.733435C3.95701 1.2176 3.07172 1.92708 2.32761 2.82094C0.836789 4.60776 0 7.02485 0 9.54431C0 12.0638 0.836789 14.4809 2.32761 16.2677L30.6631 50.0276L2.32761 83.7875C0.836789 85.5743 0 87.9914 0 90.5108C0 93.0303 0.836789 95.4474 2.32761 97.2342C3.07554 98.1181 3.96255 98.8174 4.93778 99.2919C5.91301 99.7665 6.95728 100.007 8.01071 99.9998C9.06414 100.007 10.1084 99.7665 11.0836 99.2919C12.0589 98.8174 12.9459 98.1181 13.6938 97.2342L47.6323 56.7986C48.3826 55.9121 48.978 54.8573 49.3844 53.6952C49.7908 52.533 50 51.2865 50 50.0276C50 48.7686 49.7908 47.5221 49.3844 46.36C48.978 45.1978 48.3826 44.1431 47.6323 43.2565Z" />
 </svg>
 `
-
 const callMainContainer = document.getElementById("callMainContainer")
 const beforeCallSection = document.getElementById("beforeCallSection")
 const onCallSection = document.getElementById("onCallSection")
@@ -59,6 +58,13 @@ const onCallMainView = document.getElementById("onCallMainView")
 const onCallUserBoxSlider = document.getElementById("onCallUserBoxSlider")
 const onCallCallStatus = document.getElementById("onCallCallStatus")
 const onCallMainBtnContainer = document.getElementById("onCallMainBtnContainer")
+
+let myMediaStream = null
+let myPeer
+let allMediaConnections = {}
+
+import { v4 as uuidv4 } from "uuid"
+import { Peer } from "peerjs"
 
 export async function createOnCallSection(callRoom) {
   beforeCallSection.classList.add("before-call-section--hide")
@@ -93,11 +99,11 @@ export async function createOnCallSection(callRoom) {
 `
   onCallUserBoxSlider.insertAdjacentHTML("beforeend", onCallUserBoxSliderHtml)
 
-  for (let i = 0; i < callRoom.members.length; i++) {
-    let onCallUser = createOnCallUser(callRoom.members[i])
-    onCallMainView.insertAdjacentElement("afterbegin", onCallUser)
-  }
-  switchViewToSingle()
+  //   for (let i = 0; i < callRoom.members.length; i++) {
+  //     let onCallUserBox = createOnCallUserBox(callRoom.members[i])
+  //     onCallMainView.insertAdjacentElement("afterbegin", onCallUserBox)
+  //   }
+  //   switchViewToSingle()
 
   let onCallMainBtnContainerHtml
   if (callRoom.isChatRoom) {
@@ -116,92 +122,215 @@ export async function createOnCallSection(callRoom) {
     "beforeend",
     onCallMainBtnContainerHtml
   )
-  updateOnCallCallStatus(callRoom)
+  showOnCallCallStatus(callRoom)
 
   onCallSection.classList.remove("on-call-section--hide")
 
-  initialiseEventForOnCallSection()
+  if (callRoom.hasOwnProperty("joinedMember")) {
+    let onCallUserBox = createOnCallUserBox(callRoom.joinedMember)
+    onCallUserBoxSlider.insertAdjacentElement("afterbegin", onCallUserBox)
+  }
+
+  await initialiseCall(callRoom)
+  //   initialiseEventForOnCallSection()
+}
+async function initialiseCall(callRoom) {
+  try {
+    myPeer = new Peer(uuidv4(), { debug: 0 })
+
+    fetch("/call-room-member/update-peer-id", {
+      method: "Put", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: loginUser._id.toString(),
+        callRoomId: callRoom._id.toString(),
+        peerId: myPeer.id
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        return Promise.reject(response)
+      })
+      .then(async data => {
+        if (data.isSuccess) {
+          implementCall(callRoom)
+        } else {
+          let { createMainNotification } = await import(
+            "../../common/mainNotification.dev"
+          )
+          createMainNotification(data.error, "error")
+        }
+      })
+      .catch(async err => {
+        console.log(err)
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
+        createMainNotification(
+          "Server error in updating peer,please refresh your page",
+          "error"
+        )
+      })
+  } catch (e) {
+    console.log("error in calling:", e)
+  }
 }
 
-function initialiseEventForOnCallSection() {
-  // if (joiningCallRoom) {
-  //   joiningCallRoom.addEventListener("click", async e => {
-  //     let callRoomBtn = e.target.closest(`.call-room__btn `)
-  //     console.log(callRoomBtn)
-  //     if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
-  //       if (callRoomBtn.dataset.btn === "join-call-room") {
-  //         let joiningRoomId = joiningCallRoom.dataset.callRoomId
-  //         if (joiningRoomId !== "") {
-  //           let calltypeInfoVideoBtn = document.getElementById(
-  //             "calltypeInfoVideoBtn"
-  //           )
-  //           let calltypeInfoAudioBtn = document.getElementById(
-  //             "calltypeInfoAudioBtn"
-  //           )
-  //           let isVideoOn = calltypeInfoVideoBtn.dataset.calltypeVideoValue
-  //           let isAudioOn = calltypeInfoAudioBtn.dataset.calltypeAudioValue
-  //           if (isVideoOn === "string")
-  //             isVideoOn = isVideoOn === "true" ? true : false
-  //           if (isAudioOn === "string")
-  //             isAudioOn = isAudioOn === "true" ? true : false
-  //           let callRoomData = {
-  //             isVideoOn: isVideoOn,
-  //             isAudioOn: isAudioOn,
-  //             joiningRoomId: joiningRoomId
-  //           }
-  //           fetch("/call/join-room", {
-  //             method: "POST", // or 'PUT'
-  //             headers: {
-  //               "Content-Type": "application/json"
-  //             },
-  //             body: JSON.stringify(callRoomData)
-  //           })
-  //             .then(response => {
-  //               if (response.ok) {
-  //                 return response.json()
-  //               }
-  //               return Promise.reject(response)
-  //             })
-  //             .then(async data => {
-  //               if (data.isSuccess) {
-  //                 console.log(data.callRoom)
-  //               } else {
-  //                 let { createMainNotification } = await import(
-  //                   "../../common/mainNotification.dev"
-  //                 )
-  //                 createMainNotification(data.error, "error")
-  //               }
-  //             })
-  //             .catch(async err => {
-  //               console.log(err)
-  //               let { createMainNotification } = await import(
-  //                 "../../common/mainNotification.dev"
-  //               )
-  //               createMainNotification(
-  //                 "Server error in creating new room, Please try again",
-  //                 "error"
-  //               )
-  //             })
-  //         } else {
-  //           let { createMainNotification } = await import(
-  //             "../../common/mainNotification.dev"
-  //           )
-  //           createMainNotification(
-  //             "There are some error in joining this room, Please refresh your page",
-  //             "error"
-  //           )
-  //         }
-  //       }
-  //     }
-  //   })
-  // }
+async function implementCall(callRoom) {
+  navigator.mediaDevices
+    .getUserMedia({
+      video: true,
+      audio: true
+    })
+    .then(stream => {
+      myMediaStream = stream
+
+      addStreamToOnCallUserBox(loginUser._id.toString(), myMediaStream)
+
+      myPeer.on("call", mediaConnection => {
+        mediaConnection.answer(myMediaStream)
+        mediaConnection.once("stream", otherMediaStream => {
+          fetchCallRoomMemberAndCreateUserBoxWithStream(
+            mediaConnection.peer,
+            callRoom._id,
+            otherMediaStream
+          )
+        })
+      })
+    })
+    .catch(e => {
+      console.log("Error in accessing your camera and mic:", e.message)
+    })
+
+  myPeer.on("open", id => {
+    let eventData = {
+      callRoomId: callRoom._id,
+      userId: loginUser._id,
+      peerId: myPeer.id
+    }
+    socket.emit("call:join-call-room", eventData)
+  })
+
+  myPeer.on("error", err => {
+    console.log("Error in peer: ", err.type)
+  })
+
+  socket.on("call:joined-new-member", data => {
+    connectToNewJoinedMember(data.userId, data.peerId, callRoom, myMediaStream)
+  })
+
+  socket.on("call:disconnect-call-member", data => {
+    removeOnCallUserBox(data.userId)
+  })
 }
 
-function createOnCallUser(member) {
-  let oncallUser = document.createElement("div")
-  oncallUser.classList.add("on-call-user-box")
-  oncallUser.dataset.userId = member.user._id
-  let onCallUserHtml = `<div class="on-call-user-box__video">
+function connectToNewJoinedMember(
+  otherUserId,
+  otherPeerId,
+  callRoom,
+  myStream
+) {
+  const mediaConnection = myPeer.call(otherPeerId, myStream, {
+    metadata: { userId: loginUser._id.toString(), callRoomId: callRoom._id }
+  })
+
+  mediaConnection.once("stream", otherMediaStream => {
+    fetchCallRoomMemberAndCreateUserBoxWithStream(
+      mediaConnection.peer,
+      callRoom._id,
+      otherMediaStream
+    )
+  })
+
+  mediaConnection.on("close", () => {
+    removeOnCallUserBox(otherUserId)
+  })
+
+  mediaConnection.on("error", function (err) {
+    console.log("Error in media connection:", err.type)
+  })
+
+  allMediaConnections[otherPeerId] = mediaConnection
+}
+
+function fetchCallRoomMemberAndCreateUserBoxWithStream(
+  peerId,
+  callRoomId,
+  stream
+) {
+  fetch("/call-room-member/data/member", {
+    method: "POST", // or 'PUT'
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      peerId: peerId,
+      callRoomId: callRoomId
+    })
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      }
+      return Promise.reject(response)
+    })
+    .then(async data => {
+      if (data.isSuccess) {
+        let onCallUserBox = createOnCallUserBox(data.callRoomMember)
+
+        if (onCallSection.dataset.callViewType === "single") {
+          onCallUserBoxSlider.insertAdjacentElement("afterbegin", onCallUserBox)
+        } else if (onCallSection.dataset.callViewType === "multiple") {
+          onCallMainView.insertAdjacentElement("afterbegin", onCallUserBox)
+          changeHeightAndWidthOfOnCallUserBoxInMainView()
+        }
+
+        addStreamToOnCallUserBox(data.callRoomMember.user._id, stream)
+      } else {
+        let { createMainNotification } = await import(
+          "../../common/mainNotification.dev"
+        )
+        createMainNotification(data.error, "error")
+      }
+    })
+    .catch(async err => {
+      console.log(err)
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
+      createMainNotification(
+        "Server error in fetching room member,please refresh your page",
+        "error"
+      )
+    })
+}
+
+function addStreamToOnCallUserBox(userId, stream) {
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId}"]`
+  )
+  let video = document.createElement("video")
+  video.muted = true
+
+  video.srcObject = stream
+  video.addEventListener("loadedmetadata", () => {
+    video.play()
+  })
+
+  onCallUserBox
+    .getElementsByClassName("on-call-user-box__video")[0]
+    .insertAdjacentElement("beforeend", video)
+}
+
+function createOnCallUserBox(member) {
+  let onCallUserBox = document.createElement("div")
+  onCallUserBox.classList.add("on-call-user-box")
+  onCallUserBox.dataset.userId = member.user._id
+  let onCallUserBoxHtml = `<div class="on-call-user-box__video">
                         </div>
 
           <div class="on-call-user-box__audio">
@@ -233,35 +362,47 @@ function createOnCallUser(member) {
 
   </div>`
 
-  oncallUser.insertAdjacentHTML("beforeend", onCallUserHtml)
+  onCallUserBox.insertAdjacentHTML("beforeend", onCallUserBoxHtml)
   let name
   if (member._id.toString() === loginUser._id.toString()) {
     name = "(You)"
   } else {
     name = member.user.firstName + " " + member.user.lastName
   }
-  oncallUser.getElementsByClassName("on-call-user-box__name")[0].textContent =
-    name
+  onCallUserBox.getElementsByClassName(
+    "on-call-user-box__name"
+  )[0].textContent = name
 
   if (member.isAudioOn) {
-    oncallUser
+    onCallUserBox
       .getElementsByClassName("on-call-user-box__audio")[0]
       .classList.add("on-call-user-box__audio--on")
   } else {
-    oncallUser
+    onCallUserBox
       .getElementsByClassName("on-call-user-box__audio")[0]
       .classList.add("on-call-user-box__audio--off")
   }
   if (!member.isVideoOn) {
-    oncallUser.classList.add("on-call-user-box--video-off")
+    onCallUserBox.classList.add("on-call-user-box--video-off")
   }
 
-  return oncallUser
+  return onCallUserBox
 }
 
-function updateOnCallCallStatus(callRoom) {
-  if (callRoom.members.length <= 1) {
-    onCallCallStatus.innerHTML = `
+function removeOnCallUserBox(userId) {
+  let onCallUserBoxs = [
+    ...document.querySelectorAll(`.on-call-user-box[data-user-id="${userId}"]`)
+  ]
+  onCallUserBoxs.forEach(userBox => {
+    console.log(userBox)
+    userBox.remove()
+  })
+
+  //   changeHeightAndWidthOfOnCallUserBoxInMainView()
+}
+
+function showOnCallCallStatus(callRoom) {
+  onCallCallStatus.innerHTML = `
         <div class='on-call-call-status__room-pic ${
           callRoom.hasOwnProperty("roomPic") && callRoom.roomPic !== ""
             ? "on-call-call-status__room-pic--img"
@@ -280,24 +421,44 @@ function updateOnCallCallStatus(callRoom) {
          <div class="on-call-call-status__room-status">
          </div>
       `
-    let roomStatus = callRoom.roomStatus
-    if (roomStatus === "waiting") {
-      roomStatus = "waiting for others to join"
-    }
-    onCallCallStatus.getElementsByClassName(
-      "on-call-call-status__room-status"
-    )[0].textContent = roomStatus
-
-    onCallCallStatus
-      .getElementsByClassName("on-call-call-status__room-status")[0]
-      .insertAdjacentHTML(
-        "beforeend",
-        `<span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span>`
-      )
-    onCallCallStatus.classList.remove("on-call-call-status--hide")
+  let roomStatus = callRoom.roomStatus
+  if (roomStatus === "waiting") {
+    roomStatus = "waiting for others to join"
   }
+  onCallCallStatus.getElementsByClassName(
+    "on-call-call-status__room-status"
+  )[0].textContent = roomStatus
+
+  onCallCallStatus
+    .getElementsByClassName("on-call-call-status__room-status")[0]
+    .insertAdjacentHTML(
+      "beforeend",
+      `<span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span>`
+    )
+  onCallCallStatus.classList.remove("on-call-call-status--hide")
 }
 
+function changeHeightAndWidthOfOnCallUserBoxInMainView() {
+  let onCallUserBoxs = [
+    ...onCallMainView.getElementsByClassName("on-call-user-box")
+  ]
+  let noOfUsers = onCallUserBoxs.length
+  let devider = Math.ceil(Math.sqrt(noOfUsers))
+  let percent = 100 / devider - 1
+
+  onCallUserBoxs.forEach(userBox => {
+    userBox.style.height = percent + "%"
+    userBox.style.width = percent + "%"
+  })
+}
+
+function resetHeightAndWidthOfOnCallUserBox() {
+  let onCallUserBoxs = [...document.getElementsByClassName("on-call-user-box")]
+
+  onCallUserBoxs.forEach(userBox => {
+    userBox.style = ""
+  })
+}
 function switchViewToSingle() {
   let onCallUserBoxs = [
     ...onCallMainView.getElementsByClassName("on-call-user-box")
@@ -326,6 +487,7 @@ function switchViewToSingle() {
     switchCallViewBtn.classList.add("on-call-btn--unselected")
     switchCallViewBtn.classList.remove("on-call-btn--selected")
   }
+  onCallSection.dataset.callViewType = "single"
 }
 
 function switchViewToMultiple() {
@@ -348,363 +510,57 @@ function switchViewToMultiple() {
     switchCallViewBtn.classList.remove("on-call-btn--unselected")
     switchCallViewBtn.classList.add("on-call-btn--selected")
   }
+  onCallSection.dataset.callViewType = "multiple"
 }
-
-function changeHeightAndWidthOfOnCallUserBoxInMainView() {
-  let onCallUserBoxs = [
-    ...onCallMainView.getElementsByClassName("on-call-user-box")
-  ]
-  let noOfUsers = onCallUserBoxs.length
-  let devider = Math.ceil(Math.sqrt(noOfUsers))
-  let percent = 100 / devider - 1
-
-  onCallUserBoxs.forEach(userBox => {
-    userBox.style.height = percent + "%"
-    userBox.style.width = percent + "%"
+function initialiseEventForOnCallSection() {
+  onCallMainBtnContainer.addEventListener("click", async e => {
+    let onCallBtn = e.target.closest(`.on-call-btn`)
+    if (onCallBtn && onCallMainBtnContainer.contains(onCallBtn)) {
+      console.log("clicked btn")
+      //   if (onCallBtn.dataset.btnType === "video") {
+      //     if (myMediaStream !== null) {
+      //       let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
+      //       if (videoEnabled) {
+      //         myMediaStream.getVideoTracks()[0].enabled = false
+      //         calltypeInfoBtn.classList.add("calltype-info-btn--selected")
+      //         calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
+      //         calltypeInfoPreview.classList.add(
+      //           "calltype-info__preview--video-off"
+      //         )
+      //         calltypeInfoBtn.dataset.calltypeVideoValue = "false"
+      //       } else {
+      //         myMediaStream.getVideoTracks()[0].enabled = true
+      //         calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+      //         calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+      //         calltypeInfoPreview.classList.remove(
+      //           "calltype-info__preview--video-off"
+      //         )
+      //         calltypeInfoBtn.dataset.calltypeVideoValue = "true"
+      //       }
+      //     }
+      //   }
+      //   if (calltypeInfoBtn.dataset.calltypeInfoBtn === "audio") {
+      //     if (myMediaStream !== null) {
+      //       let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
+      //       if (audioEnabled) {
+      //         myMediaStream.getAudioTracks()[0].enabled = false
+      //         calltypeInfoBtn.classList.add("calltype-info-btn--selected")
+      //         calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
+      //         calltypeInfoPreview.classList.add(
+      //           "calltype-info__preview--audio-off"
+      //         )
+      //         calltypeInfoBtn.dataset.calltypeAudioValue = "false"
+      //       } else {
+      //         myMediaStream.getAudioTracks()[0].enabled = true
+      //         calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+      //         calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+      //         calltypeInfoPreview.classList.remove(
+      //           "calltype-info__preview--audio-off"
+      //         )
+      //         calltypeInfoBtn.dataset.calltypeAudioValue = "true"
+      //       }
+      //     }
+      //   }
+    }
   })
 }
-
-function resetHeightAndWidthOfOnCallUserBox() {
-  let onCallUserBoxs = [...document.getElementsByClassName("on-call-user-box")]
-
-  onCallUserBoxs.forEach(userBox => {
-    userBox.style = ""
-  })
-}
-
-/* <div class="on-call-section">
-
-                    <div class="on-call-main-view  ">
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-                        <div class="on-call-user-box on-call-user-box--video-off">
-                            <div class="on-call-user-box__video">
-                                <video src=""></video>
-                            </div>
-
-                            <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                    <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                </div>
-                                <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                    <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                </div>
-                            </div>
-
-                            <div class="on-call-user-box__info">
-
-                                <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                        <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                            alt="">
-                                </div>
-
-                                <div class="on-call-user-box__name">User1</div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-btn on-call-btn--unselected on-call-btn--room-info ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callRoomInfoIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callRoomInfoIcon.svg") _%>
-                            </div>
-                        </div>
-
-                        <div class="on-call-room-info on-call-room-info--more-info">
-                            <div class="on-call-room-info__close-btn">X</div>
-                            <div class="on-call-room-info__pic on-call-room-info__pic--svg">
-                                <%- include("../partials/icons/callDefaultRoomPicIcon.svg") _%>
-                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
-                                        alt="">
-                            </div>
-                            <div class="on-call-room-info__name">
-                                Room 1
-                            </div>
-                            <div class="on-call-room-info__desc">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corrupti, eius!
-                            </div>
-
-                            <div class="on-call-room-info__secure-info">
-                                <div class="on-call-room-info__secure-icon">
-                                    <%- include("../partials/icons/callSecureInfoIcon.svg") _%>
-                                </div>
-                                <div class="on-call-room-info__secure-desc">
-                                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto laborum
-                                    ullam in
-                                    accusantium.
-                                    Hic incidunt iusto quaerat. Tempore, esse modi!
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-room-share">
-
-                            <div class="on-call-room-share__close-btn">X</div>
-                            <div class="on-call-room-share__title">
-                                Your room's ready
-                            </div>
-                            <div class="on-call-room-share__desc">
-                                Share this call link with other you want in this call
-
-                            </div>
-
-
-                            <div class="on-call-room-share__link">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia
-                                repudiandae ut commodi maxime
-
-
-                                <div class="on-call-btn on-call-btn--unselected on-call-btn--copy-room-link ">
-                                    <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                        <%- include("../partials/icons/callCopyRoomLinkIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                        <%- include("../partials/icons/callCoppiedLinkSuccessfullyIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="on-call-btn on-call-btn--view-change on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callViewChange.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callViewChange.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-call-status">
-                            <div class="on-call-call-status__room-pic on-call-call-status__room-pic--svg">
-                                <%- include("../partials/icons/callDefaultRoomPicIcon.svg") _%>
-                                    <img src="https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"
-                                        alt="">
-                            </div>
-                            <div class="on-call-call-status__room-status">
-                                Calling...
-                            </div>
-                        </div>
-                        <div class="on-call-user-box-slider">
-                            <div class="on-call-user-box-slider-btn on-call-user-box-slider-btn--selected">
-                                <div
-                                    class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--unselected">
-                                    <%- include("../partials/icons/callLeftArrowIcon.svg") _%>
-                                </div>
-                                <div
-                                    class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--selected">
-                                    <%- include("../partials/icons/callRightArrowIcon.svg") _%>
-                                </div>
-                            </div>
-                            <div class="on-call-user-box on-call-user-box--video-off">
-                                <div class="on-call-user-box__video">
-                                    <video src=""></video>
-                                </div>
-
-                                <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                        <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                        <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                                <div class="on-call-user-box__info">
-
-                                    <div class="on-call-user-box__pic on-call-user-box__pic--svg">
-                                        <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
-                                            <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-                                                alt="">
-                                    </div>
-
-                                    <div class="on-call-user-box__name">User1</div>
-
-                                </div>
-
-                            </div>
-                            <div class="on-call-user-box on-call-user-box--video-off">
-                                <div class="on-call-user-box__video">
-                                    <video src=""></video>
-                                </div>
-
-                                <div class="on-call-user-box__audio on-call-user-box__audio--on">
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--on">
-                                        <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                                    </div>
-                                    <div class="on-call-user-box__audio-icon on-call-user-box__audio-icon--off">
-                                        <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                                    </div>
-                                </div>
-
-                                <div class="on-call-user-box__info">
-
-                                    <div class="on-call-user-box__pic"></div>
-
-                                    <div class="on-call-user-box__name">User1</div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="on-call-main-btn-container">
-
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callCopyLinkIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callCopyLinkIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callScreenShareIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callScreenShareCancelIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callVideoOnIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callVideoOffIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callMicOnIcon.svg") _%>
-                            </div>
-                            <div class="on-call-btn__icon on-call-btn__icon--selected">
-                                <%- include("../partials/icons/callMicOffIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn__icon--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callSettingsIcon.svg") _%>
-                            </div>
-                        </div>
-                        <div class="on-call-btn on-call-btn--unselected ">
-                            <div class="on-call-btn__icon on-call-btn__icon--unselected">
-                                <%- include("../partials/icons/callEndIcon.svg") _%>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> */
