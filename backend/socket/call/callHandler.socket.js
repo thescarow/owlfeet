@@ -64,24 +64,131 @@ exports.callHandler = async (io, socket) => {
       }
     })
 
-    socket.on("disconnecting", async () => {
+    socket.on("call:toggle-audio-stream", async data => {
       if (socket.loginUser) {
-        if (joinedCallRoomId !== null) {
-          let deletedMembers = await CallRoomMember.deleteMany({
-            callRoom: joinedCallRoomId,
+        if (
+          data.hasOwnProperty("isEnabled") &&
+          data.hasOwnProperty("callRoomId")
+        ) {
+          let callRoomMember = await CallRoomMember.findOne({
+            callRoom: data.callRoomId,
             user: socket.loginUser.id
           })
-          console.log("deletedMembers:", deletedMembers)
+          if (callRoomMember) {
+            callRoomMember.isAudioOn = data.isEnabled
+            await callRoomMember.save()
 
-          let eventData = {
-            userId: socket.loginUser.id
+            let allCallRoomMembers = await CallRoomMember.find({
+              callRoom: data.callRoomId
+            })
+              .select({ user: 1 })
+              .lean()
+
+            let eventData = {
+              userId: socket.loginUser.id,
+              callRoomId: data.callRoomId,
+              isEnabled: data.isEnabled
+            }
+            allCallRoomMembers.forEach(member => {
+              if (member.user.toString() !== socket.loginUser.id.toString()) {
+                socket
+                  .to(member.user.toString())
+                  .emit("call:toggle-audio-stream", eventData)
+              }
+            })
           }
-          socket
-            .to(joinedCallRoomId)
-            .emit("call:disconnect-call-member", eventData)
+        } else {
+          console.log(
+            errorLog("Server Error In Call Handler Socket:"),
+            mainErrorLog("Not send all properties with event")
+          )
+        }
+      } else {
+        console.log(
+          errorLog("Server Error In Call Handler Socket:"),
+          mainErrorLog("User not logged in")
+        )
+      }
+    })
+
+    socket.on("call:toggle-video-stream", async data => {
+      if (socket.loginUser) {
+        if (
+          data.hasOwnProperty("isEnabled") &&
+          data.hasOwnProperty("callRoomId")
+        ) {
+          let callRoomMember = await CallRoomMember.findOne({
+            callRoom: data.callRoomId,
+            user: socket.loginUser.id
+          })
+          if (callRoomMember) {
+            callRoomMember.isVideoOn = data.isEnabled
+            console.log("callRoomMember", callRoomMember)
+            await callRoomMember.save()
+
+            let allCallRoomMembers = await CallRoomMember.find({
+              callRoom: data.callRoomId
+            })
+              .select({ user: 1 })
+              .lean()
+
+            let eventData = {
+              userId: socket.loginUser.id,
+              callRoomId: data.callRoomId,
+              isEnabled: data.isEnabled
+            }
+            allCallRoomMembers.forEach(member => {
+              if (member.user.toString() !== socket.loginUser.id.toString()) {
+                socket
+                  .to(member.user.toString())
+                  .emit("call:toggle-video-stream", eventData)
+              }
+            })
+          }
+        } else {
+          console.log(
+            errorLog("Server Error In Call Handler Socket:"),
+            mainErrorLog("Not send all properties with event")
+          )
+        }
+      } else {
+        console.log(
+          errorLog("Server Error In Call Handler Socket:"),
+          mainErrorLog("User not logged in")
+        )
+      }
+    })
+
+    socket.on("disconnecting", async () => {
+      if (socket.loginUser) {
+        await disconnectUser(socket.loginUser.id)
+      }
+    })
+    socket.on("call:left-call-room", async data => {
+      if (socket.loginUser) {
+        if (socket.loginUser.id.toString() === data.userId.toString()) {
+          await disconnectUser(data.userId)
         }
       }
     })
+
+    async function disconnectUser(userId) {
+      if (joinedCallRoomId !== null) {
+        socket.leave(joinedCallRoomId)
+        let deletedMembers = await CallRoomMember.deleteMany({
+          callRoom: joinedCallRoomId,
+          user: userId
+        })
+        console.log("deletedMembers:", deletedMembers)
+
+        let eventData = {
+          userId: userId
+        }
+        socket
+          .to(joinedCallRoomId)
+          .emit("call:disconnect-call-member", eventData)
+      }
+    }
   } catch (err) {
     console.log(
       errorLog("Server Error In Call Handler Socket"),

@@ -1,0 +1,102 @@
+.inner-modal--call-room-share {}
+
+.inner-modal-content--call-room-share {
+          position: absolute;
+    bottom: 60px;
+    left: 0;
+    background: rgba(var(--rgba-fourth-color), 1);
+    width: 70%;
+    min-width: 240px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* border: 1px solid rgba(var(--rgba-fourth-color), 1); */
+    border-radius: 8px;
+    padding: 10px 15px 10px 15px;
+    align-self: flex-start;
+}
+
+.on-call-room-share__close-btn {
+    padding: 0px 5px;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 17px;
+    font-weight: 900;
+    border: 1px solid rgba(var(--rgba-first-color), 0.1);
+    color: rgba(var(--rgba-first-color), 1);
+    background: rgba(var(--rgba-fourth-color), 0.3);
+    cursor: pointer;
+}
+
+.on-call-room-share__title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 5px 0 0 0;
+    color: rgba(var(--rgba-first-color), 0.7);
+    align-self: flex-start;
+}
+
+.on-call-room-share__desc {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 5px 0 0 0;
+    color: rgba(var(--rgba-first-color), 0.6);
+    align-self: flex-start;
+}
+
+.on-call-room-share__link {
+    position: relative;
+    border: 1px solid rgba(var(--rgba-first-color), 0.1);
+    border-radius: 5px;
+    padding: 5px 50px 5px 5px;
+    font-size: 14px;
+    font-weight: 800;
+    margin: 5px 0 0 0;
+    background: rgba(var(--rgba-second-color), 0.1);
+    color: rgba(var(--rgba-first-color), 0.6);
+}
+
+.on-call-btn--copy-room-link {
+    fill: rgba(var(--rgba-first-color), 0.1);
+}
+
+.on-call-room-share__link .on-call-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translate(0, -50%);
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.on-call-btn.on-call-btn--copy-room-link {
+    transition: all 0.5s;
+}
+
+.on-call-btn--unselected.on-call-btn--copy-room-link {
+    background: rgba(var(--rgba-third-color), 0.3);
+}
+
+.on-call-btn--selected.on-call-btn--copy-room-link {
+    background: rgba(var(--rgba-second-color), 0.5);
+}
+
+.on-call-btn.on-call-btn--copy-room-link svg {
+    stroke-width: 3;
+}
+
+.on-call-btn--selected.on-call-btn--copy-room-link svg {
+    fill: green;
+    stroke: green;
+}
+
+.on-call-btn--unselected.on-call-btn--copy-room-link svg {
+    fill: rgba(var(--rgba-first-color), 1);
+    stroke: rgba(var(--rgba-first-color), 1);
+
+}

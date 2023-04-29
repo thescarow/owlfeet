@@ -85,6 +85,8 @@
     --rgba-notification-error-border-color: 230, 167, 0;
     --rgba-notification-success-color: 230, 246, 230;
     --rgba-notification-success-border-color: 0, 148, 0;
+    /* call page  */
+    --on-call-main-view-user-box-container-height: 100%;
 }
 
 body {

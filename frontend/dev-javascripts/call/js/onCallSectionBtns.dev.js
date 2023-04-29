@@ -37,13 +37,13 @@ let svg_callSettingsIcon = `<svg width="100" height="100" viewBox="0 0 100 100" 
 `
 
 export let groupChatCallRoomBtns = `
-<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room">
+<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" >
     <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
          ${svg_callShareRoomIcon}
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen" data-btn-working-state="call-share-screen-on">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
          ${svg_callShareScreenIcon}
     </div>
@@ -52,7 +52,7 @@ export let groupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video" >
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video"  data-btn-working-state="call-video-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callVideoOnIcon}
     </div>
@@ -61,7 +61,7 @@ export let groupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio" data-btn-working-state="call-audio-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callAudioOnIcon}
     </div>
@@ -83,13 +83,13 @@ export let groupChatCallRoomBtns = `
 </div>
 `
 export let nonGroupChatCallRoomBtns = `
-<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room">
+<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" >
     <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
          ${svg_callShareRoomIcon}
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen" data-btn-working-state="call-share-screen-on">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
          ${svg_callShareScreenIcon}
     </div>
@@ -98,7 +98,7 @@ export let nonGroupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video" >
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video"  data-btn-working-state="call-video-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callVideoOnIcon}
     </div>
@@ -107,7 +107,7 @@ export let nonGroupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio" data-btn-working-state="call-audio-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callAudioOnIcon}
     </div>
@@ -129,13 +129,16 @@ export let nonGroupChatCallRoomBtns = `
 </div>
 `
 export let nonChatCallRoomBtns = `
-<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room">
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" data-btn-working-state="open-modal">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
+         ${svg_callShareRoomIcon}
+    </div>
+    <div class="on-call-btn__icon on-call-btn__icon--selected">
          ${svg_callShareRoomIcon}
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-share-screen" data-btn-working-state="call-share-screen-on">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
          ${svg_callShareScreenIcon}
     </div>
@@ -144,7 +147,7 @@ export let nonChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video" >
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-video"  data-btn-working-state="call-video-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callVideoOnIcon}
     </div>
@@ -153,7 +156,7 @@ export let nonChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio">
+<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-audio" data-btn-working-state="call-audio-off">
     <div class="on-call-btn__icon on-call-btn__icon--unselected">
         ${svg_callAudioOnIcon}
     </div>
@@ -168,8 +171,8 @@ export let nonChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-end">
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--call-end on-call-btn--unselected" data-btn-type="call-end" data-btn-working-state="end-call">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
          ${svg_callEndCallIcon}
     </div>
 </div>
