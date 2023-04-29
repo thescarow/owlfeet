@@ -56,27 +56,37 @@ const beforeCallSection = document.getElementById("beforeCallSection")
 const onCallSection = document.getElementById("onCallSection")
 const onCallMainView = document.getElementById("onCallMainView")
 const onCallUserBoxSlider = document.getElementById("onCallUserBoxSlider")
+const onCallMainViewUserBoxContainer = document.getElementById(
+  "onCallMainViewUserBoxContainer"
+)
+const onCallSliderUserBoxContainer = document.getElementById(
+  "onCallSliderUserBoxContainer"
+)
 const onCallCallStatus = document.getElementById("onCallCallStatus")
 const onCallMainBtnContainer = document.getElementById("onCallMainBtnContainer")
-
-let myMediaStream = null
+let callRoom
+let myMediaStream
+let myCameraVideoTrack
+let myScreenVideoTrack
 let myPeer
 let allMediaConnections = {}
+import "../css/onCallSection.dev.css"
 
 import { v4 as uuidv4 } from "uuid"
 import { Peer } from "peerjs"
 
-export async function createOnCallSection(callRoom) {
+export async function createOnCallSection(callRoomData) {
+  callRoom = callRoomData
   beforeCallSection.classList.add("before-call-section--hide")
 
   let onCallMainViewHtml = `
-  <div class="on-call-btn on-call-btn--unselected on-call-btn--room-info ">
+  <div class="on-call-btn on-call-btn--unselected on-call-btn--room-info" id="onCallRoomInfoBtn">
          <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
                ${svg_callRoomInfoIcon}
          </div>
   </div>
   
-  <div class="on-call-btn on-call-btn--view-change on-call-btn--unselected ">
+  <div class="on-call-btn on-call-btn--view-change on-call-btn--unselected" data-btn-working-state="switch-to-multiple" id="onCallChangeViewBtn">
         <div class="on-call-btn__icon on-call-btn__icon--unselected">
              ${svg_callSwitchViewToMultipleIcon}
         </div>
@@ -88,12 +98,12 @@ export async function createOnCallSection(callRoom) {
   onCallMainView.insertAdjacentHTML("beforeend", onCallMainViewHtml)
 
   let onCallUserBoxSliderHtml = `
-     <div class="on-call-user-box-slider-btn on-call-user-box-slider-btn--selected">
+     <div class="on-call-user-box-slider-btn on-call-user-box-slider-btn--unselected">
            <div class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--unselected">
-                     ${svg_callLeftArrowIcon}
+           ${svg_callRightArrowIcon}
            </div>
            <div class="on-call-user-box-slider-btn__icon on-call-user-box-slider-btn__icon--selected">
-                     ${svg_callRightArrowIcon}
+           ${svg_callLeftArrowIcon}
            </div>
      </div>
 `
@@ -122,19 +132,22 @@ export async function createOnCallSection(callRoom) {
     "beforeend",
     onCallMainBtnContainerHtml
   )
-  showOnCallCallStatus(callRoom)
+  createOnCallCallStatus()
 
   onCallSection.classList.remove("on-call-section--hide")
 
   if (callRoom.hasOwnProperty("joinedMember")) {
     let onCallUserBox = createOnCallUserBox(callRoom.joinedMember)
-    onCallUserBoxSlider.insertAdjacentElement("afterbegin", onCallUserBox)
+    onCallSliderUserBoxContainer.insertAdjacentElement(
+      "afterbegin",
+      onCallUserBox
+    )
   }
 
-  await initialiseCall(callRoom)
-  //   initialiseEventForOnCallSection()
+  await initialiseCall()
+  initialiseEventForOnCallSection()
 }
-async function initialiseCall(callRoom) {
+async function initialiseCall() {
   try {
     myPeer = new Peer(uuidv4(), { debug: 0 })
 
@@ -157,7 +170,7 @@ async function initialiseCall(callRoom) {
       })
       .then(async data => {
         if (data.isSuccess) {
-          implementCall(callRoom)
+          implementCall()
         } else {
           let { createMainNotification } = await import(
             "../../common/mainNotification.dev"
@@ -180,7 +193,7 @@ async function initialiseCall(callRoom) {
   }
 }
 
-async function implementCall(callRoom) {
+async function implementCall() {
   navigator.mediaDevices
     .getUserMedia({
       video: true,
@@ -188,8 +201,14 @@ async function implementCall(callRoom) {
     })
     .then(stream => {
       myMediaStream = stream
+      myCameraVideoTrack = stream.getVideoTracks()[0]
 
       addStreamToOnCallUserBox(loginUser._id.toString(), myMediaStream)
+
+      myMediaStream.getVideoTracks()[0].enabled =
+        callRoom.joinedMember.isVideoOn
+      myMediaStream.getAudioTracks()[0].enabled =
+        callRoom.joinedMember.isAudioOn
 
       myPeer.on("call", mediaConnection => {
         mediaConnection.answer(myMediaStream)
@@ -200,6 +219,7 @@ async function implementCall(callRoom) {
             otherMediaStream
           )
         })
+        allMediaConnections[mediaConnection.peer] = mediaConnection
       })
     })
     .catch(e => {
@@ -218,22 +238,9 @@ async function implementCall(callRoom) {
   myPeer.on("error", err => {
     console.log("Error in peer: ", err.type)
   })
-
-  socket.on("call:joined-new-member", data => {
-    connectToNewJoinedMember(data.userId, data.peerId, callRoom, myMediaStream)
-  })
-
-  socket.on("call:disconnect-call-member", data => {
-    removeOnCallUserBox(data.userId)
-  })
 }
 
-function connectToNewJoinedMember(
-  otherUserId,
-  otherPeerId,
-  callRoom,
-  myStream
-) {
+function connectToNewJoinedMember(otherUserId, otherPeerId, myStream) {
   const mediaConnection = myPeer.call(otherPeerId, myStream, {
     metadata: { userId: loginUser._id.toString(), callRoomId: callRoom._id }
   })
@@ -254,7 +261,7 @@ function connectToNewJoinedMember(
     console.log("Error in media connection:", err.type)
   })
 
-  allMediaConnections[otherPeerId] = mediaConnection
+  allMediaConnections[mediaConnection.peer] = mediaConnection
 }
 
 function fetchCallRoomMemberAndCreateUserBoxWithStream(
@@ -280,13 +287,48 @@ function fetchCallRoomMemberAndCreateUserBoxWithStream(
     })
     .then(async data => {
       if (data.isSuccess) {
+        let callRoomMembers = [
+          ...document.getElementsByClassName("on-call-user-box")
+        ]
+
         let onCallUserBox = createOnCallUserBox(data.callRoomMember)
 
-        if (onCallSection.dataset.callViewType === "single") {
+        if (callRoomMembers.length === 0) {
           onCallUserBoxSlider.insertAdjacentElement("afterbegin", onCallUserBox)
-        } else if (onCallSection.dataset.callViewType === "multiple") {
-          onCallMainView.insertAdjacentElement("afterbegin", onCallUserBox)
+        }
+        if (callRoomMembers.length === 1) {
+          onCallMainViewUserBoxContainer.insertAdjacentElement(
+            "afterbegin",
+            onCallUserBox
+          )
+          onCallMainViewUserBoxContainer.insertAdjacentElement(
+            "afterbegin",
+            onCallUserBox
+          )
+
+          onCallCallStatus.classList.add("on-call-call-status--hide")
+          onCallMainViewUserBoxContainer.classList.remove(
+            "on-call-main-view-user-box-container--hide"
+          )
           changeHeightAndWidthOfOnCallUserBoxInMainView()
+        }
+        if (callRoomMembers.length >= 2) {
+          onCallCallStatus.classList.add("on-call-call-status--hide")
+          onCallSliderUserBoxContainer.classList.remove(
+            "on-call-main-view-user-box-container--hide"
+          )
+          if (onCallSection.dataset.callViewType === "single") {
+            onCallSliderUserBoxContainer.insertAdjacentElement(
+              "afterbegin",
+              onCallUserBox
+            )
+          } else if (onCallSection.dataset.callViewType === "multiple") {
+            onCallMainViewUserBoxContainer.insertAdjacentElement(
+              "afterbegin",
+              onCallUserBox
+            )
+            changeHeightAndWidthOfOnCallUserBoxInMainView()
+          }
         }
 
         addStreamToOnCallUserBox(data.callRoomMember.user._id, stream)
@@ -313,6 +355,7 @@ function addStreamToOnCallUserBox(userId, stream) {
   let onCallUserBox = document.querySelector(
     `.on-call-user-box[data-user-id="${userId}"]`
   )
+
   let video = document.createElement("video")
   video.muted = true
 
@@ -364,7 +407,7 @@ function createOnCallUserBox(member) {
 
   onCallUserBox.insertAdjacentHTML("beforeend", onCallUserBoxHtml)
   let name
-  if (member._id.toString() === loginUser._id.toString()) {
+  if (member.user._id.toString() === loginUser._id.toString()) {
     name = "(You)"
   } else {
     name = member.user.firstName + " " + member.user.lastName
@@ -398,10 +441,10 @@ function removeOnCallUserBox(userId) {
     userBox.remove()
   })
 
-  //   changeHeightAndWidthOfOnCallUserBoxInMainView()
+  changeHeightAndWidthOfOnCallUserBoxInMainView()
 }
 
-function showOnCallCallStatus(callRoom) {
+function createOnCallCallStatus() {
   onCallCallStatus.innerHTML = `
         <div class='on-call-call-status__room-pic ${
           callRoom.hasOwnProperty("roomPic") && callRoom.roomPic !== ""
@@ -419,6 +462,11 @@ function showOnCallCallStatus(callRoom) {
          </div>
          
          <div class="on-call-call-status__room-status">
+         <div class="on-call-call-status__room-status-text" id="onCallRoomStatusText">
+         </div>
+         <div class="on-call-call-status__room-status-effect">
+         </div>
+
          </div>
       `
   let roomStatus = callRoom.roomStatus
@@ -426,23 +474,46 @@ function showOnCallCallStatus(callRoom) {
     roomStatus = "waiting for others to join"
   }
   onCallCallStatus.getElementsByClassName(
-    "on-call-call-status__room-status"
+    "on-call-call-status__room-status-text"
   )[0].textContent = roomStatus
 
-  onCallCallStatus
-    .getElementsByClassName("on-call-call-status__room-status")[0]
-    .insertAdjacentHTML(
-      "beforeend",
-      `<span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span><span class="on-call-call-status__room-status-effect">.</span>`
-    )
+  onCallCallStatus.getElementsByClassName(
+    "on-call-call-status__room-status-effect"
+  )[0].innerHTML = `<span>.</span> <span>.</span> <span>.</span>`
+
   onCallCallStatus.classList.remove("on-call-call-status--hide")
+  onCallMainViewUserBoxContainer.classList.add(
+    "on-call-main-view-user-box-container--hide"
+  )
+}
+
+function checkAndShowOnCallCallStatus() {
+  let callRoomMembers = [...document.getElementsByClassName("on-call-user-box")]
+
+  if (callRoomMembers.length <= 1) {
+    if (callRoomMembers.length === 1) {
+      onCallCallStatus.getElementsByClassName(
+        "on-call-call-status__room-status-text"
+      )[0].textContent = "waiting for others to join"
+    }
+    if (callRoomMembers.length === 0) {
+      onCallCallStatus.getElementsByClassName(
+        "on-call-call-status__room-status-text"
+      )[0].textContent = "end call"
+    }
+    onCallCallStatus.classList.remove("on-call-call-status--hide")
+    onCallMainViewUserBoxContainer.classList.add(
+      "on-call-main-view-user-box-container--hide"
+    )
+  }
 }
 
 function changeHeightAndWidthOfOnCallUserBoxInMainView() {
   let onCallUserBoxs = [
-    ...onCallMainView.getElementsByClassName("on-call-user-box")
+    ...onCallMainViewUserBoxContainer.getElementsByClassName("on-call-user-box")
   ]
   let noOfUsers = onCallUserBoxs.length
+  console.log("noOfUsers:", noOfUsers)
   let devider = Math.ceil(Math.sqrt(noOfUsers))
   let percent = 100 / devider - 1
 
@@ -459,108 +530,421 @@ function resetHeightAndWidthOfOnCallUserBox() {
     userBox.style = ""
   })
 }
+
 function switchViewToSingle() {
   let onCallUserBoxs = [
-    ...onCallMainView.getElementsByClassName("on-call-user-box")
+    ...onCallMainViewUserBoxContainer.getElementsByClassName("on-call-user-box")
   ]
 
   let noOfOnCallUserBoxs = onCallUserBoxs.length
 
   if (noOfOnCallUserBoxs > 1) {
-    for (let i = 1; i < onCallUserBoxs.length; i++) {
-      onCallUserBoxs[0].classList.add("on-call-user-box--change-info")
-      onCallUserBoxSlider.appendChild(onCallUserBoxs[i])
+    // onCallUserBoxs[0].classList.add("on-call-user-box--main-view-info")
+    for (let i = 1; i < noOfOnCallUserBoxs; i++) {
+      onCallSliderUserBoxContainer.appendChild(onCallUserBoxs[i])
     }
-  } else if (noOfOnCallUserBoxs === 1) {
-    onCallUserBoxSlider.appendChild(onCallUserBoxs[0])
-    onCallCallStatus.classList.remove("on-call-call-status--hide")
   } else {
-    onCallCallStatus.classList.remove("on-call-call-status--hide")
+    if (noOfOnCallUserBoxs === 1) {
+      onCallSliderUserBoxContainer.appendChild(onCallUserBoxs[0])
+    }
+    if (onCallCallStatus.classList.contains("on-call-call-status--hide")) {
+      onCallCallStatus.classList.remove("on-call-call-status--hide")
+    }
+    if (
+      !onCallMainViewUserBoxContainer.classList.contains(
+        "on-call-main-view-user-box-container--hide"
+      )
+    ) {
+      onCallMainViewUserBoxContainer.classList.add(
+        "on-call-main-view-user-box-container--hide"
+      )
+    }
   }
+
+  checkAndShowOnCallCallStatus()
 
   resetHeightAndWidthOfOnCallUserBox()
 
-  let switchCallViewBtn = onCallMainView.querySelector(
-    '.on-call-btn[data-btn-type="switch-call-view"]'
-  )
-  if (switchCallViewBtn) {
-    switchCallViewBtn.classList.add("on-call-btn--unselected")
-    switchCallViewBtn.classList.remove("on-call-btn--selected")
+  if (onCallUserBoxSlider.classList.contains("on-call-user-box-slider--hide")) {
+    onCallUserBoxSlider.classList.remove("on-call-user-box-slider--hide")
   }
-  onCallSection.dataset.callViewType = "single"
+
+  let onCallChangeViewBtn = document.getElementById("onCallChangeViewBtn")
+  if (onCallChangeViewBtn) {
+    if (onCallChangeViewBtn.dataset.btnWorkingState === "switch-to-single") {
+      onCallChangeViewBtn.classList.remove("on-call-btn--selected")
+      onCallChangeViewBtn.classList.add("on-call-btn--unselected")
+      onCallChangeViewBtn.dataset.btnWorkingState = "switch-to-multiple"
+    }
+  }
 }
 
 function switchViewToMultiple() {
-  onCallCallStatus.classList.add("on-call-call-status--hide")
+  if (!onCallCallStatus.classList.contains("on-call-call-status--hide")) {
+    onCallCallStatus.classList.add("on-call-call-status--hide")
+  }
+
+  if (
+    onCallMainViewUserBoxContainer.classList.contains(
+      "on-call-main-view-user-box-container--hide"
+    )
+  ) {
+    onCallMainViewUserBoxContainer.classList.remove(
+      "on-call-main-view-user-box-container--hide"
+    )
+  }
 
   let onCallUserBoxs = [
-    ...onCallUserBoxSlider.getElementsByClassName("on-call-user-box")
+    ...onCallSliderUserBoxContainer.getElementsByClassName("on-call-user-box")
   ]
 
   for (let i = 0; i < onCallUserBoxs.length; i++) {
-    onCallMainView.appendChild(onCallUserBoxs[i])
+    onCallMainViewUserBoxContainer.appendChild(onCallUserBoxs[i])
   }
 
   changeHeightAndWidthOfOnCallUserBoxInMainView()
 
-  let switchCallViewBtn = onCallMainView.querySelector(
-    '.on-call-btn[data-btn-type="switch-call-view"]'
-  )
-  if (switchCallViewBtn) {
-    switchCallViewBtn.classList.remove("on-call-btn--unselected")
-    switchCallViewBtn.classList.add("on-call-btn--selected")
+  if (
+    !onCallUserBoxSlider.classList.contains("on-call-user-box-slider--hide")
+  ) {
+    onCallUserBoxSlider.classList.add("on-call-user-box-slider--hide")
   }
-  onCallSection.dataset.callViewType = "multiple"
+
+  let onCallChangeViewBtn = document.getElementById("onCallChangeViewBtn")
+  if (onCallChangeViewBtn) {
+    if (onCallChangeViewBtn.dataset.btnWorkingState === "switch-to-multiple") {
+      onCallChangeViewBtn.classList.remove("on-call-btn--unselected")
+      onCallChangeViewBtn.classList.add("on-call-btn--selected")
+      onCallChangeViewBtn.dataset.btnWorkingState = "switch-to-single"
+    }
+  }
 }
 function initialiseEventForOnCallSection() {
   onCallMainBtnContainer.addEventListener("click", async e => {
     let onCallBtn = e.target.closest(`.on-call-btn`)
     if (onCallBtn && onCallMainBtnContainer.contains(onCallBtn)) {
-      console.log("clicked btn")
-      //   if (onCallBtn.dataset.btnType === "video") {
-      //     if (myMediaStream !== null) {
-      //       let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
-      //       if (videoEnabled) {
-      //         myMediaStream.getVideoTracks()[0].enabled = false
-      //         calltypeInfoBtn.classList.add("calltype-info-btn--selected")
-      //         calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-      //         calltypeInfoPreview.classList.add(
-      //           "calltype-info__preview--video-off"
-      //         )
-      //         calltypeInfoBtn.dataset.calltypeVideoValue = "false"
-      //       } else {
-      //         myMediaStream.getVideoTracks()[0].enabled = true
-      //         calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
-      //         calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
-      //         calltypeInfoPreview.classList.remove(
-      //           "calltype-info__preview--video-off"
-      //         )
-      //         calltypeInfoBtn.dataset.calltypeVideoValue = "true"
-      //       }
-      //     }
-      //   }
-      //   if (calltypeInfoBtn.dataset.calltypeInfoBtn === "audio") {
-      //     if (myMediaStream !== null) {
-      //       let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
-      //       if (audioEnabled) {
-      //         myMediaStream.getAudioTracks()[0].enabled = false
-      //         calltypeInfoBtn.classList.add("calltype-info-btn--selected")
-      //         calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-      //         calltypeInfoPreview.classList.add(
-      //           "calltype-info__preview--audio-off"
-      //         )
-      //         calltypeInfoBtn.dataset.calltypeAudioValue = "false"
-      //       } else {
-      //         myMediaStream.getAudioTracks()[0].enabled = true
-      //         calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
-      //         calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
-      //         calltypeInfoPreview.classList.remove(
-      //           "calltype-info__preview--audio-off"
-      //         )
-      //         calltypeInfoBtn.dataset.calltypeAudioValue = "true"
-      //       }
-      //     }
-      //   }
+      if (onCallBtn.dataset.btnType === "call-video") {
+        console.log("click outside")
+        if (onCallBtn.dataset.btnWorkingState === "call-video-off") {
+          // let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
+          // if (videoEnabled) {
+          onCallBtn.classList.add("on-call-btn--selected")
+          onCallBtn.classList.remove("on-call-btn--unselected")
+          onCallBtn.dataset.btnWorkingState = "call-video-on"
+          changeVideoStream(false, loginUser._id)
+          // }
+        } else if (onCallBtn.dataset.btnWorkingState === "call-video-on") {
+          // let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
+          // if (!videoEnabled) {
+          onCallBtn.classList.add("on-call-btn--unselected")
+          onCallBtn.classList.remove("on-call-btn--selected")
+          onCallBtn.dataset.btnWorkingState = "call-video-off"
+          changeVideoStream(true, loginUser._id)
+          // }
+        }
+      }
+      if (onCallBtn.dataset.btnType === "call-audio") {
+        if (onCallBtn.dataset.btnWorkingState === "call-audio-off") {
+          console.log("click inside call-audio-off 1")
+
+          let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
+          // if (audioEnabled) {
+          onCallBtn.classList.remove("on-call-btn--unselected")
+          onCallBtn.classList.add("on-call-btn--selected")
+          onCallBtn.dataset.btnWorkingState = "call-audio-on"
+          changeAudioStream(false, loginUser._id)
+          // }
+        } else if (onCallBtn.dataset.btnWorkingState === "call-audio-on") {
+          console.log("click inside call-audio-off 2")
+
+          let audioEnabled = myMediaStream.getVideoTracks()[0].enabled
+          // if (!audioEnabled) {
+          onCallBtn.classList.remove("on-call-btn--selected")
+          onCallBtn.classList.add("on-call-btn--unselected")
+          onCallBtn.dataset.btnWorkingState = "call-audio-off"
+          changeAudioStream(true, loginUser._id)
+          // }
+        }
+      }
+      if (onCallBtn.dataset.btnType === "call-share-screen") {
+        if (onCallBtn.dataset.btnWorkingState === "call-share-screen-on") {
+          onCallBtn.classList.add("on-call-btn--selected")
+          onCallBtn.classList.remove("on-call-btn--unselected")
+          onCallBtn.dataset.btnWorkingState = "call-share-screen-off"
+          switchCameraToScreenStream()
+        } else if (
+          onCallBtn.dataset.btnWorkingState === "call-share-screen-off"
+        ) {
+          onCallBtn.classList.add("on-call-btn--unselected")
+          onCallBtn.classList.remove("on-call-btn--selected")
+          onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+          switchScreenToCameraStream()
+        }
+      }
+      if (onCallBtn.dataset.btnType === "call-share-room") {
+        if (onCallBtn.dataset.btnWorkingState === "open-modal") {
+          onCallBtn.classList.remove("on-call-btn--unselected")
+          onCallBtn.classList.add("on-call-btn--selected")
+          onCallBtn.dataset.btnWorkingState = "close-modal"
+          let { createOnCallRoomShareModal } = await import(
+            "./onCallRoomShareModal.dev"
+          )
+          createOnCallRoomShareModal()
+        }
+      }
+      if (onCallBtn.dataset.btnType === "call-end") {
+        if (onCallBtn.dataset.btnWorkingState === "end-call") {
+          let { createAfterCallSection } = await import(
+            "./afterCallSection.dev"
+          )
+          createAfterCallSection(callRoom, 2)
+
+          // let eventData = {
+          //   userId: loginUser._id
+          // }
+          // socket.emit("call:left-call-room", eventData)
+          // , async isLeft => {
+          //   console.log("left", isLeft)
+          //   // if (isLeft) {
+          //   //   let { createAfterCallSection } = await import(
+          //   //     "./afterCallSection.dev"
+          //   //   )
+          //   //   createAfterCallSection(callRoom, 2)
+          //   // }
+          // }
+        }
+      }
     }
   })
+
+  onCallSliderUserBoxContainer.addEventListener("dblclick", async e => {
+    let onCallUserBox = e.target.closest(`.on-call-user-box`)
+    if (onCallUserBox && onCallSliderUserBoxContainer.contains(onCallUserBox)) {
+      let mainOnCallUserBox =
+        onCallMainViewUserBoxContainer.getElementsByClassName(
+          "on-call-user-box"
+        )[0]
+      onCallSliderUserBoxContainer.appendChild(mainOnCallUserBox)
+      onCallMainViewUserBoxContainer.appendChild(onCallUserBox)
+    }
+  })
+
+  let onCallUserBoxSliderBtn = onCallUserBoxSlider.getElementsByClassName(
+    "on-call-user-box-slider-btn"
+  )[0]
+  if (onCallUserBoxSliderBtn) {
+    onCallUserBoxSliderBtn.addEventListener("click", async e => {
+      if (
+        !onCallUserBoxSlider.classList.contains(
+          "on-call-user-box-slider--slide"
+        )
+      ) {
+        onCallUserBoxSlider.classList.add("on-call-user-box-slider--slide")
+
+        onCallUserBoxSliderBtn.classList.remove(
+          "on-call-user-box-slider-btn--unselected"
+        )
+        onCallUserBoxSliderBtn.classList.add(
+          "on-call-user-box-slider-btn--selected"
+        )
+      } else {
+        onCallUserBoxSlider.classList.remove("on-call-user-box-slider--slide")
+
+        onCallUserBoxSliderBtn.classList.remove(
+          "on-call-user-box-slider-btn--selected"
+        )
+        onCallUserBoxSliderBtn.classList.add(
+          "on-call-user-box-slider-btn--unselected"
+        )
+      }
+    })
+  }
+
+  let onCallChangeViewBtn = document.getElementById("onCallChangeViewBtn")
+
+  if (onCallChangeViewBtn) {
+    onCallChangeViewBtn.addEventListener("click", async e => {
+      if (
+        onCallChangeViewBtn.dataset.btnWorkingState === "switch-to-multiple"
+      ) {
+        onCallChangeViewBtn.classList.remove("on-call-btn--unselected")
+        onCallChangeViewBtn.classList.add("on-call-btn--selected")
+        onCallChangeViewBtn.dataset.btnWorkingState = "switch-to-single"
+        switchViewToMultiple()
+      } else if (
+        onCallChangeViewBtn.dataset.btnWorkingState === "switch-to-single"
+      ) {
+        onCallChangeViewBtn.classList.remove("on-call-btn--selected")
+        onCallChangeViewBtn.classList.add("on-call-btn--unselected")
+        onCallChangeViewBtn.dataset.btnWorkingState = "switch-to-multiple"
+        switchViewToSingle()
+      }
+    })
+  }
+
+  let onCallRoomInfoBtn = document.getElementById("onCallRoomInfoBtn")
+  if (onCallRoomInfoBtn) {
+    onCallRoomInfoBtn.addEventListener("click", async e => {
+      let { createOnCallRoomInfoModal } = await import(
+        "./onCallRoomInfoModal.dev"
+      )
+      createOnCallRoomInfoModal(callRoom)
+    })
+  }
 }
+
+function changeAudioStream(isEnabled, userId) {
+  if (loginUser._id.toString() === userId.toString()) {
+    myMediaStream.getAudioTracks()[0].enabled = isEnabled
+    let eventData = {
+      isEnabled: isEnabled,
+      callRoomId: callRoom._id,
+      userId: loginUser._id
+    }
+    socket.emit("call:toggle-audio-stream", eventData)
+  }
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId}"]`
+  )
+  if (onCallUserBox) {
+    let onCallUserBoxAudio = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__audio"
+    )[0]
+    console.log("isEnabled", isEnabled)
+    if (isEnabled) {
+      while (
+        onCallUserBoxAudio.classList.contains("on-call-user-box__audio--off")
+      ) {
+        onCallUserBoxAudio.classList.remove("on-call-user-box__audio--off")
+      }
+      onCallUserBoxAudio.classList.add("on-call-user-box__audio--on")
+    } else {
+      while (
+        onCallUserBoxAudio.classList.contains("on-call-user-box__audio--on")
+      ) {
+        onCallUserBoxAudio.classList.remove("on-call-user-box__audio--on")
+      }
+      onCallUserBoxAudio.classList.add("on-call-user-box__audio--off")
+    }
+  }
+}
+
+function changeVideoStream(isEnabled, userId) {
+  if (loginUser._id.toString() === userId.toString()) {
+    myMediaStream.getVideoTracks()[0].enabled = isEnabled
+    let eventData = {
+      isEnabled: isEnabled,
+      callRoomId: callRoom._id,
+      userId: loginUser._id
+    }
+    socket.emit("call:toggle-video-stream", eventData)
+  }
+
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId}"]`
+  )
+  if (onCallUserBox) {
+    if (isEnabled) {
+      onCallUserBox.classList.remove("on-call-user-box--video-off")
+    } else {
+      onCallUserBox.classList.add("on-call-user-box--video-off")
+    }
+  }
+}
+
+function switchCameraToScreenStream() {
+  navigator.mediaDevices
+    .getDisplayMedia({
+      video: true,
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        sampleRate: 44100
+      }
+    })
+    .then(stream => {
+      myScreenVideoTrack = stream.getVideoTracks()[0]
+
+      myMediaStream.removeTrack(myMediaStream.getVideoTracks()[0])
+      myMediaStream.addTrack(stream.getVideoTracks()[0])
+      let peerId
+      for (peerId in allMediaConnections) {
+        let otherUser = allMediaConnections[peerId].peerConnection
+          .getSenders()
+          .find(function (s) {
+            return s.track.kind == myScreenVideoTrack.kind
+          })
+        otherUser.replaceTrack(myScreenVideoTrack)
+      }
+      console.log("myScreenVideoTrack:", myScreenVideoTrack)
+      myScreenVideoTrack.onended = () => {
+        let onCallBtn = document.querySelector(
+          `.on-call-btn[data-btn-type="call-share-screen"]`
+        )
+        if (onCallBtn) {
+          if (onCallBtn.dataset.btnWorkingState === "call-share-screen-off") {
+            onCallBtn.classList.add("on-call-btn--unselected")
+            onCallBtn.classList.remove("on-call-btn--selected")
+            onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+            switchScreenToCameraStream()
+          }
+        }
+      }
+      myScreenVideoTrack.onmute = () => {
+        // let onCallBtn = document.querySelector(
+        //   `.on-call-btn[data-btn-type="call-share-screen"]`
+        // )
+      }
+      myScreenVideoTrack.onunmute = () => {
+        // let onCallBtn = document.querySelector(
+        //   `.on-call-btn[data-btn-type="call-share-screen"]`
+        // )
+      }
+    })
+    .catch(e => {
+      let onCallShareScreenBtn = document.querySelector(
+        `.on-call-btn[data-btn-type="call-share-screen"]`
+      )
+      if (
+        onCallShareScreenBtn.dataset.btnWorkingState === "call-share-screen-off"
+      ) {
+        onCallShareScreenBtn.classList.add("on-call-btn--unselected")
+        onCallShareScreenBtn.classList.remove("on-call-btn--selected")
+        onCallShareScreenBtn.dataset.btnWorkingState = "call-share-screen-on"
+      }
+      console.log(e)
+    })
+}
+
+function switchScreenToCameraStream() {
+  // myMediaStream.getVideoTracks()[0].stop()
+
+  myMediaStream.removeTrack(myMediaStream.getVideoTracks()[0])
+  myMediaStream.addTrack(myCameraVideoTrack)
+  let peerId
+  for (peerId in allMediaConnections) {
+    let otherUser = allMediaConnections[peerId].peerConnection
+      .getSenders()
+      .find(function (s) {
+        return s.track.kind == myCameraVideoTrack.kind
+      })
+    otherUser.replaceTrack(myCameraVideoTrack)
+  }
+}
+
+socket.on("call:joined-new-member", data => {
+  connectToNewJoinedMember(data.userId, data.peerId, myMediaStream)
+})
+
+socket.on("call:disconnect-call-member", data => {
+  removeOnCallUserBox(data.userId)
+  checkAndShowOnCallCallStatus()
+})
+
+socket.on("call:toggle-video-stream", data => {
+  changeVideoStream(data.isEnabled, data.userId)
+})
+
+socket.on("call:toggle-audio-stream", data => {
+  changeAudioStream(data.isEnabled, data.userId)
+})

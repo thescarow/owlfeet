@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@betahuhn/feedback-js": "^2.1.22",
     "@emoji-mart/data": "^1.1.1",
     "@uppy/audio": "^1.0.2",
     "@uppy/aws-s3-multipart": "^3.1.1",
