@@ -10,7 +10,8 @@ const CallRoomMember = require("../../models/callRoomMember")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 
 const {
-  selectChatFieldForCallRoom
+  selectChatFieldForCallRoom,
+  selectSafeChatField
 } = require("../../common/filter-field/filterChatField")
 
 const {
@@ -42,18 +43,23 @@ exports.createChatRoom = async (req, res) => {
             $elemMatch: { $eq: req.user.id }
           },
           isDeleted: false
-        }).lean()
+        }).select(selectSafeChatField)
         if (chat) {
-          let newChatRoomData = {
+          let newCallRoomData = {
             roomPic: chat.chatPic,
             roomName: chat.chatName,
             roomDescription: chat.chatDescription,
             isChatRoom: true,
             roomChat: chat._id
           }
-          let newChatRoom = new CallRoom(newChatRoomData)
-          newChatRoom = await newChatRoom.save()
-          let createdChatRoom = await CallRoom.findById(newChatRoom._id)
+          let newCallRoom = new CallRoom(newCallRoomData)
+          newCallRoom = await newCallRoom.save()
+
+          chat.isOnCall = true
+          chat.callRoomID = newCallRoom._id
+          await chat.save()
+
+          let createdCallRoom = await CallRoom.findById(newCallRoom._id)
             .select(selectSafeCallRoomField)
             .populate({
               path: "roomChat",
@@ -62,15 +68,15 @@ exports.createChatRoom = async (req, res) => {
             })
             .lean()
           if (
-            createdChatRoom.hasOwnProperty("roomPic") &&
-            createdChatRoom.roomPic !== ""
+            createdCallRoom.hasOwnProperty("roomPic") &&
+            createdCallRoom.roomPic !== ""
           ) {
-            createdChatRoom.roomPic = await signedUrlForGetAwsS3Object(
-              createdChatRoom.roomPic
+            createdCallRoom.roomPic = await signedUrlForGetAwsS3Object(
+              createdCallRoom.roomPic
             )
           }
           let callRoomMemberData = {
-            roomId: createdChatRoom._id,
+            roomId: createdCallRoom._id,
             userId: req.user.id,
             isVideoOn: userData.isVideoOn,
             isAudioOn: userData.isAudioOn
@@ -85,9 +91,11 @@ exports.createChatRoom = async (req, res) => {
                 "You have already joined this room, if you want to join here please left from there"
             })
           }
-          let joinedMember = await CallRoomMember.findOne({
-            callRoom: createdChatRoom._id,
-            user: req.user.id
+
+          createdCallRoom.ownMemberUserId = req.user.id
+
+          let callRoomMembers = await CallRoomMember.find({
+            callRoom: createdCallRoom._id
           })
             .populate({
               path: "user",
@@ -96,18 +104,22 @@ exports.createChatRoom = async (req, res) => {
             })
             .lean()
 
-          if (
-            joinedMember.user.hasOwnProperty("profile") &&
-            joinedMember.user.profile !== ""
-          ) {
-            joinedMember.user.profile = await signedUrlForGetAwsS3Object(
-              joinedMember.user.profile
-            )
-          }
+          await Promise.all(
+            callRoomMembers.map(async member => {
+              if (
+                member.user.hasOwnProperty("profile") &&
+                member.user.profile !== ""
+              ) {
+                member.user.profile = await signedUrlForGetAwsS3Object(
+                  member.user.profile
+                )
+              }
+            })
+          )
+          createdCallRoom.members = callRoomMembers
+          res.json({ isSuccess: true, callRoom: createdCallRoom })
 
-          createdChatRoom.joinedMember = joinedMember
-
-          res.json({ isSuccess: true, callRoom: createdChatRoom })
+          initialiseSocket(req, chat, createdCallRoom)
         } else {
           res.json({
             isSuccess: false,
@@ -139,11 +151,13 @@ exports.createChatRoom = async (req, res) => {
   }
 }
 
-// async function createInfoMessage(chat, req) {
-//   let user = await User.findById(req.user.id)
-//     .select({ firstName: 1, lastName: 1, username: 1 })
-//     .lean()
-//   let messageContent = `${user.firstName} ${user.lastName} created *${chat.chatName}*  group`
-//   let messageType = infoMessageType.NEW_GROUP
-//   createAndSendInfoMessage(messageContent, messageType, chat, req)
-// }
+function initialiseSocket(req, chat, createdCallRoom) {
+  let eventData = {
+    callRoomId: createdCallRoom._id,
+    chatId: chat._id,
+    startedBy: req.user.id
+  }
+  chat.currentChatMembers.forEach(userId => {
+    req.io.to(userId.toString()).emit("chat:created-chat-call-room", eventData)
+  })
+}

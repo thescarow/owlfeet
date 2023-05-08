@@ -53,6 +53,11 @@ function initialiseEventForCreatingChatRoom() {
               .then(async data => {
                 if (data.isSuccess) {
                   console.log(data.callRoom)
+
+                  let { createOnCallSection } = await import(
+                    "./onCallSection.dev"
+                  )
+                  createOnCallSection(data.callRoom)
                 } else {
                   let { createMainNotification } = await import(
                     "../../common/mainNotification.dev"
@@ -70,6 +75,14 @@ function initialiseEventForCreatingChatRoom() {
                   "error"
                 )
               })
+          } else {
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
+            createMainNotification(
+              "There are some error, Please refresh your page",
+              "error"
+            )
           }
         }
       }

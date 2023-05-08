@@ -47,13 +47,7 @@ exports.createSocketIOInstance = httpServer => {
     /////////////////////////////////
     console.log("All Rooms:", socket.rooms)
     socket.prependAny((eventName, ...args) => {
-      console.log(
-        "socket event:",
-        "_____eventName:",
-        eventName,
-        "____args:",
-        args
-      )
+      console.log("@eventName:", eventName, "@args:", args)
     })
   })
 

@@ -23,7 +23,7 @@ export function createCalltypeInfoContainer() {
     video.muted = true
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: { aspectRatio: 4 / 3 },
         audio: true
       })
       .then(stream => {

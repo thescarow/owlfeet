@@ -14,11 +14,9 @@ let callRoom
 
 export async function createAfterCallSection(
   callRoomData,
-  callRoomLeftMembersCount
+  isCallEnded = false
 ) {
   callRoom = callRoomData
-  callRoom.leftMembersCount = callRoomLeftMembersCount
-
   onCallSection.classList.add("on-call-section--hide")
 
   afterCallSection.innerHTML = `
@@ -45,10 +43,13 @@ export async function createAfterCallSection(
     `
 
   if (callRoom.isChatRoom === true) {
-    if (callRoom.leftMembersCount === 1) {
+    if (isCallEnded) {
       afterCallSection.getElementsByClassName(
         "after-call-message"
       )[0].textContent = "Call ended"
+      document
+        .getElementById("afterCallRejoinBtn")
+        .classList.add("after-call-btn--hide")
     } else {
       afterCallSection.getElementsByClassName(
         "after-call-message"

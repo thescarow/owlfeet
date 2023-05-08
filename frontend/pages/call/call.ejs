@@ -5,119 +5,113 @@
 
 <div class="call-main-container" id="callMainContainer">
     <div class="before-call-section" id="beforeCallSection">
-        <div class="before-call-section__row">
-            <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
 
-                <div class="room-info-container room-info-container--chat-room" id="roomInfoContainer"
-                    data-call-room='<%=(locals.isJoinCallRoomPage)?"join":"create" _%>'>
-                    <% if(locals.isJoinCallRoomPage===false){ _%>
-                        <div class="creating-room-info"
-                            data-creating-call-room='<%=(locals.isChatCallRoom)?"chat":"new" _%>' id="creatingRoomInfo">
-                            <% if(locals.isChatCallRoom) { _%>
-                                <div class="call-room" id="creatingChatRoom" data-chat-id="<%=locals.chat._id_%>">
+        <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
 
-                                    <div class=' call-room__pic <%=(locals.chat.hasOwnProperty(" chatPic") &&
+            <div class="room-info-container room-info-container--chat-room" id="roomInfoContainer"
+                data-call-room-type='<%=(locals.isJoinCallRoomPage)?"join":"create" _%>'>
+                <% if(locals.isJoinCallRoomPage===false){ _%>
+
+                    <div class="creating-room-info"
+                        data-creating-call-room='<%=(locals.isChatCallRoom)?"chat":"new" _%>' id="creatingRoomInfo">
+
+                        <% if(locals.isChatCallRoom) { _%>
+                            <div class="call-room" id="creatingChatRoom" data-chat-id="<%=locals.chat._id_%>">
+
+                                <div class=' call-room__pic <%=(locals.chat.hasOwnProperty("chatPic") &&
                             locals.chat.chatPic !=="" )?"call-room__pic--img":"call-room__pic--svg" _%>
                             '>
-                                        <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
-                                            <img src='<%= locals.chat.chatPic _%>' alt="Room Pic">
+                                    <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
+                                        <img src='<%= locals.chat.chatPic _%>' alt="Room Pic">
+                                </div>
+                                <div class="call-room__name">
+                                    <%=locals.chat.chatName _%>
+                                </div>
+
+                                <div class="call-room__btn-info">
+                                    Ready ?
+                                </div>
+                                <div class="call-room__btn call-room__btn--create-call" data-btn="create-chat-room">
+                                    Start call
+                                </div>
+                            </div>
+
+                            <% } else{ _%>
+                                <div class="creating-new-room" id="creatingNewRoom">
+                                    <div class="creating-new-room__pic creating-new-room__pic--svg"
+                                        id="creatingNewRoomPic" data-room-pic="">
+                                        <%- include("../partials/icons/callAddRoomImageIcon.svg")_%>
+                                            <img src="" alt="">
                                     </div>
-                                    <div class="call-room__name">
-                                        <%=locals.chat.chatName _%>
+
+
+                                    <div class="creating-new-room__name">
+                                        Room Name: <input type="text" placeholder="Room Name" id="newRoomNameInput">
                                     </div>
-                                    <div class="call-room__btn call-room__btn--select-calltype">
-                                        <div class="call-room__btn-icon">
-                                            <%- include("../partials/icons/callTypeIcon.svg") _%>
-                                        </div>
-                                        Select Call Type
+
+
+                                    <div class="creating-new-room__about">
+                                        About: <textarea placeholder="Tell us about room..."
+                                            id="newRoomAboutInput"></textarea>
                                     </div>
-                                    <div class="call-room__btn-info">
+
+
+                                    <div class="creating-new-room__btn-info">
                                         Ready ?
                                     </div>
-                                    <div class="call-room__btn call-room__btn--create-call" data-btn="create-chat-room">
+                                    <div class="creating-new-room__btn creating-new-room__btn--create-call"
+                                        data-btn="create-new-room">
                                         Start call
                                     </div>
                                 </div>
-
-                                <% } else{ _%>
-                                    <div class="creating-new-room" id="creatingNewRoom">
-                                        <div class="creating-new-room__pic creating-new-room__pic--svg"
-                                            id="creatingNewRoomPic" data-room-pic="">
-                                            <%- include("../partials/icons/callAddRoomImageIcon.svg")_%>
-                                                <img src="" alt="">
-                                        </div>
+                                <% } _%>
+                    </div>
 
 
-                                        <div class="creating-new-room__name">
-                                            Room Name: <input type="text" placeholder="Room Name" id="newRoomNameInput">
-                                        </div>
 
 
-                                        <div class="creating-new-room__about">
-                                            About: <textarea placeholder="Tell us about room..."
-                                                id="newRoomAboutInput"></textarea>
-                                        </div>
 
-                                        <div class="creating-new-room__btn creating-new-room__btn--select-calltype">
-                                            <div class="call-room__btn-icon">
-                                                <%- include("../partials/icons/callTypeIcon.svg") _%>
-                                            </div>
-                                            Select Call Type
-                                        </div>
-                                        <div class="creating-new-room__start-title">
-                                            Ready ?
-                                        </div>
-                                        <div class="creating-new-room__btn creating-new-room__btn--create-call"
-                                            data-btn="create-new-room">
-                                            Start call
-                                        </div>
-                                    </div>
-                                    <% } _%>
-                        </div>
-                        <% } else{ _%>
+                    <% } else{ _%>
 
+                        <div class="joining-room-info">
 
-                            <div class="joining-room-info">
+                            <div class="call-room" id="joiningCallRoom" data-call-room-id="<%=locals.callRoom._id_%>">
 
-                                <div class="call-room" id="joiningCallRoom"
-                                    data-call-room-id="<%=locals.callRoom._id_%>">
-
-                                    <div class=' call-room__pic <%=(locals.callRoom.hasOwnProperty("roomPic") &&
+                                <div class=' call-room__pic <%=(locals.callRoom.hasOwnProperty("roomPic") &&
                                             locals.callRoom.roomPic !=="" )?"call-room__pic--img":"call-room__pic--svg"
                                             _%>
                                             '>
-                                        <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
-                                            <img src='<%= locals.callRoom.roomPic _%>' alt="Room Pic">
-                                    </div>
-                                    <div class="call-room__name">
-                                        <%=locals.callRoom.roomName _%>
-                                    </div>
+                                    <%- include("../partials/icons/callDefaultRoomPicIcon.svg")_%>
+                                        <img src='<%= locals.callRoom.roomPic _%>' alt="Room Pic">
+                                </div>
+                                <div class="call-room__name">
+                                    <%=locals.callRoom.roomName _%>
+                                </div>
 
-                                    <div class="call-room__participants">
-                                        <div class="call-room__participants-title">
-                                            <div class="call-room__participants-icon">
-                                                <%- include("../partials/icons/callRoomParticipantsIcon.svg") _%>
-                                            </div>Participants
-                                        </div>
-                                        <div class="call-room__participants-count">
-                                            <%= locals.callRoom.members.length _%>
-                                        </div>
+                                <div class="call-room__participants">
+                                    <div class="call-room__participants-title">
+                                        <div class="call-room__participants-icon">
+                                            <%- include("../partials/icons/callRoomParticipantsIcon.svg") _%>
+                                        </div>Participants
                                     </div>
+                                    <div class="call-room__participants-count">
+                                        <%= locals.callRoom.members.length _%>
+                                    </div>
+                                </div>
 
-                                    <% if(locals.callRoom.members.length> 0) { _%>
-                                        <div class="call-room__user-container">
-                                            <% locals.callRoom.members.forEach(member=> { _%>
-                                                <div class="call-room-user">
-                                                    <div class='call-room-user__pic <%=(member.user.hasOwnProperty("profile") &&
+                                <% if(locals.callRoom.members.length> 0) { _%>
+                                    <div class="call-room__user-container">
+                                        <% locals.callRoom.members.forEach(member=> { _%>
+                                            <div class="call-room-user">
+                                                <div class='call-room-user__pic <%=(member.user.hasOwnProperty("profile") &&
                                                     member.user.profile !==""
                                                     )?"call-room-user__pic--img":"call-room-user__pic--svg" _%>'>
-                                                        <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg")
-                                                            _%>
-                                                            <img src=<%=member.user.profile -%>
-                                                            alt="">
-                                                    </div>
-                                                    <div class="call-room-user__name">
-                                                        <%= member.user.firstName +" "+ member.user.lastName _%>
+                                                    <%- include("../partials/icons/callDefaultRoomUserPicIcon.svg") _%>
+                                                        <img src=<%=member.user.profile -%>
+                                                        alt="">
+                                                </div>
+                                                <div class="call-room-user__name">
+                                                    <%= member.user.firstName +" "+ member.user.lastName _%>
                                                     </div>
                                                 </div>
                                             <% }) _%>
@@ -125,70 +119,67 @@
                                     <% } _%>
 
 
-                                <div class=" call-room__btn call-room__btn--select-calltype">
-                                                            <div class="call-room__btn-icon">
-                                                                <%- include("../partials/icons/callTypeIcon.svg") _%>
-                                                            </div>
-                                                            Select Call Type
-                                                    </div>
-                                                    <div class="call-room__btn-info">
+                                
+                                                <div class=" call-room__btn-info">
                                                         Ready ?
-                                                    </div>
-                                                    <div class="call-room__btn call-room__btn--join-call"
-                                                        data-btn="join-call-room">
-                                                        Join call
-                                                    </div>
                                                 </div>
+                                                <div class="call-room__btn call-room__btn--join-call"
+                                                    data-btn="join-call-room">
+                                                    Join call
+                                                </div>
+                                            </div>
 
-                                        </div>
-                                        <% } _%>
+                                    </div>
+                                    <% } _%>
+
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="on-call-section on-call-section--hide" id="onCallSection"
+                            data-call-view-type="single">
+
+                            <div class="on-call-main-view" id="onCallMainView">
+
+                                <div class="on-call-main-view-user-box-container on-call-main-view-user-box-container--hide"
+                                    id="onCallMainViewUserBoxContainer">
+
                                 </div>
-                            </div>
 
 
-                </div>
+                                <div class="on-call-call-status on-call-call-status--hide" id="onCallCallStatus">
 
+                                </div>
 
-                <div class="on-call-section on-call-section--hide" id="onCallSection" data-call-view-type="single">
+                                <div class="on-call-user-box-slider" id="onCallUserBoxSlider">
+                                    <div class="on-call-slider-user-box-container" id="onCallSliderUserBoxContainer">
 
-                    <div class="on-call-main-view" id="onCallMainView">
-
-                        <div class="on-call-main-view-user-box-container on-call-main-view-user-box-container--hide"
-                            id="onCallMainViewUserBoxContainer">
-
-                        </div>
-
-
-                        <div class="on-call-call-status on-call-call-status--hide" id="onCallCallStatus">
-
-                        </div>
-
-                        <div class="on-call-user-box-slider" id="onCallUserBoxSlider">
-                            <div class="on-call-slider-user-box-container" id="onCallSliderUserBoxContainer">
+                                    </div>
+                                </div>
 
                             </div>
+
+                            <div class="on-call-main-btn-container" id="onCallMainBtnContainer">
+
+
+                            </div>
+
                         </div>
 
-                    </div>
-
-                    <div class="on-call-main-btn-container" id="onCallMainBtnContainer">
-
-
-                    </div>
-
-                </div>
 
 
 
 
 
 
-
-                <div class="after-call-section after-call-section--hide" id="afterCallSection">
-
+                        <div class="after-call-section after-call-section--hide" id="afterCallSection">
 
 
-                </div>
+
+                        </div>
 
 
-        </div>
+            </div>

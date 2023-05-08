@@ -21,6 +21,11 @@ const chatSchema = new mongoose.Schema(
       default: "",
       trim: true
     },
+
+    isOnCall: { type: Boolean, default: false },
+
+    callRoomId: { type: mongoose.Schema.Types.ObjectId, ref: "CallRoom" },
+
     isDeleted: {
       type: Boolean,
       default: false

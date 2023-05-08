@@ -6,14 +6,15 @@ let roomInfoContainer = document.getElementById("roomInfoContainer")
 let joiningCallRoom = document.getElementById("joiningCallRoom")
 
 export function joinCallRoom() {
+  console.log("called")
   initialiseEventForJoinCallRoom()
 }
 
 function initialiseEventForJoinCallRoom() {
   if (joiningCallRoom) {
     joiningCallRoom.addEventListener("click", async e => {
+      console.log("clickedd")
       let callRoomBtn = e.target.closest(`.call-room__btn `)
-
       if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
         if (callRoomBtn.dataset.btn === "join-call-room") {
           let joiningRoomId = joiningCallRoom.dataset.callRoomId
@@ -38,7 +39,7 @@ function initialiseEventForJoinCallRoom() {
               joiningRoomId: joiningRoomId
             }
 
-            fetch("/call/join-room", {
+            fetch("/call/join-call-room", {
               method: "POST", // or 'PUT'
               headers: {
                 "Content-Type": "application/json"

@@ -37,8 +37,11 @@ let svg_callSettingsIcon = `<svg width="100" height="100" viewBox="0 0 100 100" 
 `
 
 export let groupChatCallRoomBtns = `
-<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" >
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" data-btn-working-state="open-modal">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
+         ${svg_callShareRoomIcon}
+    </div>
+    <div class="on-call-btn__icon on-call-btn__icon--selected">
          ${svg_callShareRoomIcon}
     </div>
 </div>
@@ -76,15 +79,18 @@ export let groupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-end">
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--call-end on-call-btn--unselected" data-btn-type="call-end" data-btn-working-state="end-call">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
          ${svg_callEndCallIcon}
     </div>
 </div>
 `
 export let nonGroupChatCallRoomBtns = `
-<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" >
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--unselected"  data-btn-type="call-share-room" data-btn-working-state="open-modal">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
+         ${svg_callShareRoomIcon}
+    </div>
+    <div class="on-call-btn__icon on-call-btn__icon--selected">
          ${svg_callShareRoomIcon}
     </div>
 </div>
@@ -122,8 +128,8 @@ export let nonGroupChatCallRoomBtns = `
     </div>
 </div>
 
-<div class="on-call-btn on-call-btn--unselected" data-btn-type="call-end">
-    <div class="on-call-btn__icon on-call-btn__icon--unselected on-call-btn__icon--selected">
+<div class="on-call-btn on-call-btn--call-end on-call-btn--unselected" data-btn-type="call-end" data-btn-working-state="end-call">
+    <div class="on-call-btn__icon on-call-btn__icon--unselected ">
          ${svg_callEndCallIcon}
     </div>
 </div>

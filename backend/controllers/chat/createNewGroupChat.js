@@ -20,6 +20,9 @@ const {
 const {
   timeDifferenceFromNow
 } = require("../../common/calculateTimeDifference")
+const {
+  selectChatFieldForChatBox
+} = require("../../common/filter-field/filterChatField")
 ///////////////
 
 // router.post("/create-new-group-chat", getLoginUser, createNewGroupChat)
@@ -61,7 +64,7 @@ exports.createNewGroupChat = async (req, res) => {
             newChat = await newChat.save()
 
             let createdNewChat = await Chat.findById(newChat._id)
-              .select({ allChatMembers: 0 })
+              .select(selectChatFieldForChatBox)
               .populate({
                 path: "currentChatMembers",
                 select: { firstName: 1, lastName: 1, username: 1, profile: 1 },

@@ -16,6 +16,10 @@ const {
   selectRepliedToMessageField,
   filterMessageFieldForDeletedForAll
 } = require("../../common/filter-field/filterMessageField")
+
+const {
+  selectChatFieldForChatBox
+} = require("../../common/filter-field/filterChatField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 // router.post("/", getLoginUser, createMessage)
 
@@ -110,6 +114,13 @@ exports.createMessage = async (req, res) => {
             .populate({
               path: "sender",
               select: { username: 1, firstName: 1, lastName: 1, profile: 1 },
+              options: {
+                lean: true
+              }
+            })
+            .populate({
+              path: "chat",
+              select: selectChatFieldForChatBox,
               options: {
                 lean: true
               }

@@ -50,6 +50,7 @@ exports.getCallPage = async (req, res) => {
             if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
               chat.chatPic = await signedUrlForGetAwsS3Object(chat.chatPic)
             }
+
             res.render("./call/call.ejs", {
               pageName: "call",
               isLogin: true,
