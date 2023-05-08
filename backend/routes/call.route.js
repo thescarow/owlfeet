@@ -5,12 +5,14 @@ const {
   getCallPage,
   createChatRoom,
   createNewRoom,
-  joinRoom
+  joinCallRoom,
+  leftCallRoom
 } = require("../controllers/call")
 
 router.get("/", getLoginUser, getCallPage)
 router.post("/create-chat-room", getLoginUser, createChatRoom)
 router.post("/create-new-room", getLoginUser, createNewRoom)
-router.post("/join-room", getLoginUser, joinRoom)
+router.post("/join-call-room", getLoginUser, joinCallRoom)
+router.post("/left-call-room", getLoginUser, leftCallRoom)
 
 module.exports = router

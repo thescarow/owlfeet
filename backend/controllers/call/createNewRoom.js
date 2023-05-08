@@ -84,9 +84,10 @@ exports.createNewRoom = async (req, res) => {
           })
         }
 
-        let joinedMember = await CallRoomMember.findOne({
-          callRoom: createdNewRoom._id,
-          user: req.user.id
+        createdChatRoom.ownMemberUserId = req.user.id
+
+        let callRoomMembers = await CallRoomMember.find({
+          callRoom: createdChatRoom._id
         })
           .populate({
             path: "user",
@@ -95,16 +96,19 @@ exports.createNewRoom = async (req, res) => {
           })
           .lean()
 
-        if (
-          joinedMember.user.hasOwnProperty("profile") &&
-          joinedMember.user.profile !== ""
-        ) {
-          joinedMember.user.profile = await signedUrlForGetAwsS3Object(
-            joinedMember.user.profile
-          )
-        }
-
-        createdNewRoom.joinedMember = joinedMember
+        await Promise.all(
+          callRoomMembers.map(async member => {
+            if (
+              member.user.hasOwnProperty("profile") &&
+              member.user.profile !== ""
+            ) {
+              member.user.profile = await signedUrlForGetAwsS3Object(
+                member.user.profile
+              )
+            }
+          })
+        )
+        createdChatRoom.members = callRoomMembers
 
         res.json({ isSuccess: true, callRoom: createdNewRoom })
       } else {

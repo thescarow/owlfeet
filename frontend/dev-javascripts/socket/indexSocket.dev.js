@@ -14,12 +14,12 @@
 
     socket.prependAny((eventName, ...args) => {
       console.log(
-        "socketId:",
-        socket.id,
-        "_____eventName:",
+        "eventName:",
         eventName,
-        "____args:",
-        args
+        "args:",
+        args,
+        "socketId:",
+        socket.id
       )
     })
     //////////////////////////////////////////////////

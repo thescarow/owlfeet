@@ -6,11 +6,15 @@ const mainErrorLog = chalk.white.bgYellow.bold
 
 const CallRoomMember = require("../../models/callRoomMember")
 const CallRoom = require("../../models/callRoom")
-const Chat = require("../../models/chat")
+// const Chat = require("../../models/chat")
 
 const {
-  selectSafeCallRoomMemberField
-} = require("../../common/filter-field/filterCallRoomMemberField")
+  selectChatFieldForCallRoom
+} = require("../../common/filter-field/filterChatField")
+
+const {
+  endChatCallRoom
+} = require("../../controllers/call/common/endChatCallRoom")
 
 // const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 
@@ -161,34 +165,47 @@ exports.callHandler = async (io, socket) => {
 
     socket.on("disconnecting", async () => {
       if (socket.loginUser) {
-        await disconnectUser(socket.loginUser.id)
-      }
-    })
-    socket.on("call:left-call-room", async data => {
-      if (socket.loginUser) {
-        if (socket.loginUser.id.toString() === data.userId.toString()) {
-          await disconnectUser(data.userId)
+        if (joinedCallRoomId !== null) {
+          // socket.leave(joinedCallRoomId)
+          let callRoom = await CallRoom.findById(joinedCallRoomId)
+            .populate({
+              path: "roomChat",
+              select: selectChatFieldForCallRoom,
+              options: { lean: true }
+            })
+            .lean()
+
+          if (callRoom) {
+            let deletedMemberObj = await CallRoomMember.deleteMany({
+              callRoom: callRoom._id,
+              user: socket.loginUser.id
+            })
+            if (deletedMemberObj.deletedCount > 0) {
+              let leftMembers = await CallRoomMember.find({
+                callRoom: callRoom._id
+              })
+                .select({ user: 1 })
+                .lean()
+              let isCallEnded = false
+              if (leftMembers.length <= 1) {
+                isCallEnded = await endChatCallRoom(callRoom, leftMembers, io)
+              }
+
+              let eventData = {
+                userId: socket.loginUser.id,
+                callRoomId: callRoom._id
+              }
+              leftMembers.forEach(member => {
+                io.to(member.user.toString()).emit(
+                  "call:disconnect-call-room-member",
+                  eventData
+                )
+              })
+            }
+          }
         }
       }
     })
-
-    async function disconnectUser(userId) {
-      if (joinedCallRoomId !== null) {
-        socket.leave(joinedCallRoomId)
-        let deletedMembers = await CallRoomMember.deleteMany({
-          callRoom: joinedCallRoomId,
-          user: userId
-        })
-        console.log("deletedMembers:", deletedMembers)
-
-        let eventData = {
-          userId: userId
-        }
-        socket
-          .to(joinedCallRoomId)
-          .emit("call:disconnect-call-member", eventData)
-      }
-    }
   } catch (err) {
     console.log(
       errorLog("Server Error In Call Handler Socket"),

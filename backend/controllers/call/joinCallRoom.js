@@ -17,7 +17,7 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 const { createCallRoomMember } = require("./common/createCallRoomMember")
 
 // router.post("/join-room", getLoginUser, createChatRoom)
-exports.joinRoom = async (req, res) => {
+exports.joinCallRoom = async (req, res) => {
   try {
     if (req.user) {
       let userData = req.body
@@ -95,9 +95,11 @@ exports.joinRoom = async (req, res) => {
                 callRoom.roomPic
               )
             }
-            let joinedMember = await CallRoomMember.findOne({
-              callRoom: callRoom._id,
-              user: req.user.id
+
+            callRoom.ownMemberUserId = req.user.id
+
+            let callRoomMembers = await CallRoomMember.find({
+              callRoom: callRoom._id
             })
               .populate({
                 path: "user",
@@ -106,16 +108,20 @@ exports.joinRoom = async (req, res) => {
               })
               .lean()
 
-            if (
-              joinedMember.user.hasOwnProperty("profile") &&
-              joinedMember.user.profile !== ""
-            ) {
-              joinedMember.user.profile = await signedUrlForGetAwsS3Object(
-                joinedMember.user.profile
-              )
-            }
+            await Promise.all(
+              callRoomMembers.map(async member => {
+                if (
+                  member.user.hasOwnProperty("profile") &&
+                  member.user.profile !== ""
+                ) {
+                  member.user.profile = await signedUrlForGetAwsS3Object(
+                    member.user.profile
+                  )
+                }
+              })
+            )
+            callRoom.members = callRoomMembers
 
-            callRoom.joinedMember = joinedMember
             res.json({ isSuccess: true, callRoom: callRoom })
           } else {
             return res.json({
@@ -149,12 +155,3 @@ exports.joinRoom = async (req, res) => {
     })
   }
 }
-
-// async function createInfoMessage(chat, req) {
-//   let user = await User.findById(req.user.id)
-//     .select({ firstName: 1, lastName: 1, username: 1 })
-//     .lean()
-//   let messageContent = `${user.firstName} ${user.lastName} created *${chat.chatName}*  group`
-//   let messageType = infoMessageType.NEW_GROUP
-//   createAndSendInfoMessage(messageContent, messageType, chat, req)
-// }

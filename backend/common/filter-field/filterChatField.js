@@ -9,6 +9,8 @@ let chatFieldForNonMember = {
   //   currentChatMembers: 1,
   //   allChatMembers:1
   //   isDeleted: 1
+  //isOnCall: 1,
+  //callRoomId:1
 }
 
 exports.filterChatFieldForNonMember = chat => {
@@ -31,7 +33,9 @@ exports.selectSafeChatField = {
   chatName: 1,
   chatDescription: 1,
   createdAt: 1,
-  isDeleted: 1
+  isDeleted: 1,
+  isOnCall: 1,
+  callRoomId: 1
   //   allChatMembers: 1,
 }
 exports.selectChatBoxField = {
@@ -41,7 +45,9 @@ exports.selectChatBoxField = {
   chatName: 1,
   createdAt: 1,
   chatDescription: 1,
-  currentChatMembers: 1
+  currentChatMembers: 1,
+  isOnCall: 1,
+  callRoomId: 1
   // groupChatAdmin: 1,
   // isDeleted: 1
   // allChatMembers: 1,
@@ -52,7 +58,9 @@ exports.selectChatFieldForCreatingCallRoom = {
   chatPic: 1,
   chatName: 1,
   chatDescription: 1,
-  isGroupChat: 1
+  isGroupChat: 1,
+  isOnCall: 1,
+  callRoomId: 1
   // createdAt: 1,
   // currentChatMembers: 1,
   // groupChatAdmin: 1
@@ -61,12 +69,14 @@ exports.selectChatFieldForCreatingCallRoom = {
 }
 exports.selectChatFieldForCallRoom = {
   _id: 1,
-  isGroupChat: 1
+  isGroupChat: 1,
+  currentChatMembers: 1,
+  isOnCall: 1,
+  callRoomId: 1
   // chatPic: 1,
   // chatName: 1,
   // chatDescription: 1,
   // createdAt: 1,
-  // currentChatMembers: 1,
   // groupChatAdmin: 1
   // isDeleted: 1
   // allChatMembers: 1,

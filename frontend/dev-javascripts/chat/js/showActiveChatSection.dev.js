@@ -310,6 +310,7 @@ export async function updateActiveChatSection(chat) {
     activeChatHeaderPic.classList.add("active-chat-header__pic--hide-img")
     activeChatHeaderPic.classList.remove("active-chat-header__pic--hide-svg")
   }
+
   activeChatHeaderName.textContent = chat.chatName
   if (!chat.isGroupChat) {
     if (chat.isUserActive) {
@@ -339,7 +340,35 @@ export async function updateActiveChatSection(chat) {
     activeChatHeaderStatus.textContent = ""
   }
 
+  if (chat.hasOwnProperty("isOnCall") && chat.isOnCall === true) {
+    openActiveChatCallRoomBox(chat.callRoomId)
+  } else {
+    closeActiveChatCallRoomBox()
+  }
+
   onOffActiveChatInputContainer(chat)
+}
+
+export function openActiveChatCallRoomBox(callRoomId) {
+  let activeChatCallBtn = document.getElementById("activeChatAudioCallBtn")
+  let activeChatCallRoomBox = document.getElementById("activeChatCallRoomBox")
+
+  while (activeChatCallRoomBox.classList.contains("chat-call-room-box--hide"))
+    chatCallRoomBox.classList.remove("chat-call-room-box--hide")
+  activeChatCallBtn.classList.add("active-chat-header__btn---hide")
+
+  activeChatCallRoomBox.dataset.callRoomId = callRoomId
+}
+
+export function closeActiveChatCallRoomBox() {
+  let activeChatCallBtn = document.getElementById("activeChatAudioCallBtn")
+  let activeChatCallRoomBox = document.getElementById("activeChatCallRoomBox")
+
+  while (activeChatCallBtn.classList.contains("active-chat-header__btn---hide"))
+    activeChatCallBtn.classList.remove("active-chat-header__btn---hide")
+  chatCallRoomBox.classList.add("chat-call-room-box--hide")
+
+  activeChatCallRoomBox.dataset.callRoomId = ""
 }
 
 export async function clearActiveChatMessageContainer() {
