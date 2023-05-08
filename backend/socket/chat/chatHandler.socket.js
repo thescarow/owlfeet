@@ -72,49 +72,69 @@ exports.chatHandler = async (io, socket) => {
       if (socket.loginUser) {
         let message = await Message.findOne({
           _id: data.messageId,
-          reader: { $elemMatch: { $eq: socket.loginUser.id } }
-        }).select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
+          reader: { $elemMatch: { $eq: socket.loginUser.id } },
+          "seenStatus.seenBy": { $ne: socket.loginUser.id }
+        }).select({
+          _id: 1,
+          seenStatus: 1,
+          reader: 1,
+          sender: 1,
+          chat: 1,
+          isInfoMessage: 1
+        })
 
         if (message) {
-          let userExist = message.seenStatus.find(entry => {
-            return entry.seenBy.toString() === socket.loginUser.id.toString()
-          })
+          let userExist = false
+          if (message.hasOwnProperty("seenStatus")) {
+            userExist = message.seenStatus.find(entry => {
+              return entry.seenBy.toString() === socket.loginUser.id.toString()
+            })
+          }
           if (!userExist) {
             message.seenStatus.push({
               seenBy: socket.loginUser.id,
               seenTime: Date.now()
             })
-
             await message.save()
-            let updatedMessage = await Message.findById(message._id)
-              .select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
-              .lean()
-            let pushedUser = await User.findById(socket.loginUser.id)
-              .select({ firstName: 1, lastName: 1, username: 1, profile: 1 })
-              .lean()
-            if (
-              pushedUser.hasOwnProperty("profile") &&
-              pushedUser.profile !== ""
-            ) {
-              pushedUser.profile = await signedUrlForGetAwsS3Object(
-                pushedUser.profile
+
+            if (message.isInfoMessage === false) {
+              let updatedMessage = await Message.findById(message._id)
+                .select({
+                  _id: 1,
+                  seenStatus: 1,
+                  reader: 1,
+                  sender: 1,
+                  chat: 1
+                })
+                .lean()
+              let pushedUser = await User.findById(socket.loginUser.id)
+                .select({ firstName: 1, lastName: 1, username: 1, profile: 1 })
+                .lean()
+              if (
+                pushedUser.hasOwnProperty("profile") &&
+                pushedUser.profile !== ""
+              ) {
+                pushedUser.profile = await signedUrlForGetAwsS3Object(
+                  pushedUser.profile
+                )
+              }
+
+              io.to(updatedMessage.sender.toString()).emit(
+                "chat:update-message-seen-status",
+                {
+                  messageId: updatedMessage._id.toString(),
+                  chatId: updatedMessage.chat.toString(),
+                  messageSeenStatusCount: updatedMessage.seenStatus.length,
+                  messageReaderCount: updatedMessage.reader.length,
+                  pushedUser: pushedUser,
+                  pushedUserTime: Date.now()
+                }
               )
             }
-            io.to(updatedMessage.sender.toString()).emit(
-              "chat:update-message-seen-status",
-              {
-                messageId: updatedMessage._id.toString(),
-                chatId: updatedMessage.chat.toString(),
-                messageSeenStatusCount: updatedMessage.seenStatus.length,
-                messageReaderCount: updatedMessage.reader.length,
-                pushedUser: pushedUser,
-                pushedUserTime: Date.now()
-              }
-            )
             io.to(socket.loginUser.id.toString()).emit(
               "chat:message-seen-by-self",
               {
-                chatId: updatedMessage.chat
+                chatId: message.chat
               }
             )
           }
@@ -127,16 +147,27 @@ exports.chatHandler = async (io, socket) => {
           chat: data.chatId,
           reader: { $elemMatch: { $eq: socket.loginUser.id } },
           "seenStatus.seenBy": { $ne: socket.loginUser.id }
-        }).select({ _id: 1, seenStatus: 1, reader: 1, sender: 1, chat: 1 })
+        }).select({
+          _id: 1,
+          seenStatus: 1,
+          reader: 1,
+          sender: 1,
+          chat: 1,
+          isInfoMessage: 1
+        })
 
         if (unseenMessages.length > 0) {
           await Promise.all(
             unseenMessages.map(async message => {
-              let userExist = message.seenStatus.find(entry => {
-                return (
-                  entry.seenBy.toString() === socket.loginUser.id.toString()
-                )
-              })
+              let userExist = false
+              if (message.hasOwnProperty("seenStatus")) {
+                userExist = message.seenStatus.find(entry => {
+                  return (
+                    entry.seenBy.toString() === socket.loginUser.id.toString()
+                  )
+                })
+              }
+
               if (!userExist) {
                 message.seenStatus.push({
                   seenBy: socket.loginUser.id,
@@ -144,46 +175,48 @@ exports.chatHandler = async (io, socket) => {
                 })
 
                 await message.save()
-                let updatedMessage = await Message.findById(message._id)
-                  .select({
-                    _id: 1,
-                    seenStatus: 1,
-                    reader: 1,
-                    sender: 1,
-                    chat: 1
-                  })
-                  .lean()
-                let pushedUser = await User.findById(socket.loginUser.id)
-                  .select({
-                    firstName: 1,
-                    lastName: 1,
-                    username: 1,
-                    profile: 1
-                  })
-                  .lean()
-                if (
-                  pushedUser.hasOwnProperty("profile") &&
-                  pushedUser.profile !== ""
-                ) {
-                  pushedUser.profile = await signedUrlForGetAwsS3Object(
-                    pushedUser.profile
+                if (message.isInfoMessage === false) {
+                  let updatedMessage = await Message.findById(message._id)
+                    .select({
+                      _id: 1,
+                      seenStatus: 1,
+                      reader: 1,
+                      sender: 1,
+                      chat: 1
+                    })
+                    .lean()
+                  let pushedUser = await User.findById(socket.loginUser.id)
+                    .select({
+                      firstName: 1,
+                      lastName: 1,
+                      username: 1,
+                      profile: 1
+                    })
+                    .lean()
+                  if (
+                    pushedUser.hasOwnProperty("profile") &&
+                    pushedUser.profile !== ""
+                  ) {
+                    pushedUser.profile = await signedUrlForGetAwsS3Object(
+                      pushedUser.profile
+                    )
+                  }
+                  io.to(updatedMessage.sender.toString()).emit(
+                    "chat:update-message-seen-status",
+                    {
+                      messageId: updatedMessage._id.toString(),
+                      chatId: updatedMessage.chat.toString(),
+                      messageSeenStatusCount: updatedMessage.seenStatus.length,
+                      messageReaderCount: updatedMessage.reader.length,
+                      pushedUser: pushedUser,
+                      pushedUserTime: Date.now()
+                    }
                   )
                 }
-                io.to(updatedMessage.sender.toString()).emit(
-                  "chat:update-message-seen-status",
-                  {
-                    messageId: updatedMessage._id.toString(),
-                    chatId: updatedMessage.chat.toString(),
-                    messageSeenStatusCount: updatedMessage.seenStatus.length,
-                    messageReaderCount: updatedMessage.reader.length,
-                    pushedUser: pushedUser,
-                    pushedUserTime: Date.now()
-                  }
-                )
                 io.to(socket.loginUser.id.toString()).emit(
                   "chat:message-seen-by-self",
                   {
-                    chatId: updatedMessage.chat
+                    chatId: data.chatId
                   }
                 )
               }

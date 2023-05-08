@@ -8,6 +8,9 @@ const Message = require("../../../models/message")
 const User = require("../../../models/user")
 //////////////////////
 const { signedUrlForGetAwsS3Object } = require("../../../services/awsS3")
+const {
+  selectChatFieldForChatBox
+} = require("../../../common/filter-field/filterChatField")
 ///////
 // const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
@@ -40,13 +43,7 @@ exports.createAndSendInfoMessage = async (
       })
       .populate({
         path: "chat",
-        select: {
-          isGroupChat: 1,
-          chatName: 1,
-          chatPic: 1,
-          groupChatAdmin: 1,
-          currentChatMembers: 1
-        },
+        select: selectChatFieldForChatBox,
         options: {
           lean: true
         }

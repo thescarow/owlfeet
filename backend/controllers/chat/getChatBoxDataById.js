@@ -14,7 +14,7 @@ const {
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////////////
 const {
-  selectChatBoxField
+  selectChatFieldForChatBox
 } = require("../../common/filter-field/filterChatField")
 
 // router.get("/get-chat-box/:chatId", getLoginUser, fetchChatBoxById)
@@ -27,7 +27,7 @@ exports.getChatBoxDataById = async (req, res) => {
         currentChatMembers: { $elemMatch: { $eq: req.user.id } },
         isDeleted: false
       })
-        .select(selectChatBoxField)
+        .select(selectChatFieldForChatBox)
         .populate({
           path: "currentChatMembers",
           select: {

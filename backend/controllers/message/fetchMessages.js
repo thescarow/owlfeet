@@ -126,20 +126,28 @@ exports.fetchMessages = async (req, res) => {
 async function attachSocketForFetchingMessage(req, chat) {
   let allNotDeliveredMessages = await Message.find({
     chat: chat._id,
-    reader: { $elemMatch: { $eq: req.user.id } }
-  }).select({ sender: 1, deliveryStatus: 1 })
-  await Promise.all(
-    allNotDeliveredMessages.map(async message => {
-      if (message.deliveryStatus.isDelivered === false) {
-        message.deliveryStatus.isDelivered = true
-        message.deliveryStatus.deliveredTime = Date.now()
-        await message.save()
-        req.io.to(message.sender.toString()).emit("chat:message-delivered", {
-          messageId: message._id,
-          chatId: chat._id,
-          deliveredTime: message.deliveryStatus.deliveredTime
-        })
-      }
-    })
-  )
+    reader: { $elemMatch: { $eq: req.user.id } },
+    "deliveryStatus.isDelivered": false
+  }).select({ sender: 1, deliveryStatus: 1, isInfoMessage: 1 })
+
+  if (allNotDeliveredMessages.length > 0) {
+    await Promise.all(
+      allNotDeliveredMessages.map(async message => {
+        if (message.deliveryStatus.isDelivered === false) {
+          message.deliveryStatus.isDelivered = true
+          message.deliveryStatus.deliveredTime = Date.now()
+          await message.save()
+          if (message.isInfoMessage === false) {
+            req.io
+              .to(message.sender.toString())
+              .emit("chat:message-delivered", {
+                messageId: message._id,
+                chatId: chat._id,
+                deliveredTime: message.deliveryStatus.deliveredTime
+              })
+          }
+        }
+      })
+    )
+  }
 }

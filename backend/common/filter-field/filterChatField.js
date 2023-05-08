@@ -38,7 +38,7 @@ exports.selectSafeChatField = {
   callRoomId: 1
   //   allChatMembers: 1,
 }
-exports.selectChatBoxField = {
+exports.selectChatFieldForChatBox = {
   _id: 1,
   isGroupChat: 1,
   chatPic: 1,

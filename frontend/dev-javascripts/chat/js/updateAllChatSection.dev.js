@@ -69,13 +69,14 @@ export function showAllChatSection() {
 }
 
 export async function updateAllChatSection(message) {
+  console.log("updateAllChatSection message:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
-    `.chat-box[data-chat-id = "${message.chat.toString()}"]`
+    `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
   )
 
   if (!chatBox) {
     try {
-      let response = await fetch(`/chat/data/chat-box/${message.chat}`)
+      let response = await fetch(`/chat/data/chat-box/${message.chat._id}`)
       if (!response.ok) {
         throw Promise.reject(response)
       }
@@ -195,7 +196,7 @@ export async function createChatBox(chat) {
 export async function updateChatBoxLatestMessage(message = null) {
   console.log("latest message:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
-    `.chat-box[data-chat-id = "${message.chat.toString()}"]`
+    `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
   )
   if (chatBox) {
     let chatBoxLatestMessage = chatBox.getElementsByClassName(
