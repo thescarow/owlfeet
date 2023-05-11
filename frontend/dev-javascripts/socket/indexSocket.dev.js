@@ -1,7 +1,19 @@
 ;(async function () {
   if (!IS_INIT_SOCKET_MODULE) {
     let { io } = await import("socket.io-client")
-    socket = io() // socket is define in mainLayout File
+    let clientSocketOptions = {
+      query: {
+        socketType: "all"
+      }
+    }
+    if (pageName === "call") {
+      clientSocketOptions = {
+        query: {
+          socketType: "call"
+        }
+      }
+    }
+    socket = io(clientSocketOptions) // socket is define in mainLayout File
     socket.on("connect", () => {
       console.log("client connected")
     })

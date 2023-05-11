@@ -52,17 +52,25 @@ function initialiseEventForCreatingChatRoom() {
               })
               .then(async data => {
                 if (data.isSuccess) {
-                  console.log(data.callRoom)
-
                   let { createOnCallSection } = await import(
                     "./onCallSection.dev"
                   )
                   createOnCallSection(data.callRoom)
-                } else {
-                  let { createMainNotification } = await import(
-                    "../../common/mainNotification.dev"
+                  history.replaceState(
+                    data.callRoom,
+                    "",
+                    `/call/?room=${data.callRoom._id.toString()}`
                   )
-                  createMainNotification(data.error, "error")
+                } else {
+                  if (data.hasOwnProperty("isRedirected")) {
+                    if (data.hasOwnProperty("redirectedUrl"))
+                      location.replace(data.redirectedUrl)
+                  } else {
+                    let { createMainNotification } = await import(
+                      "../../common/mainNotification.dev"
+                    )
+                    createMainNotification(data.error, "error")
+                  }
                 }
               })
               .catch(async err => {

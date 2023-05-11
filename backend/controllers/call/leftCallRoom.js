@@ -11,11 +11,14 @@ const {
   selectChatFieldForCallRoom
 } = require("../../common/filter-field/filterChatField")
 
+const { endChatCallRoom } = require("./common/endChatCallRoom")
+
 // router.post("left-call-room", getLoginUser, leftCallRoom)
 exports.leftCallRoom = async (req, res) => {
   try {
     if (req.user) {
       let userData = req.body
+      console.log("userData:", userData)
       if (userData.hasOwnProperty("callRoomId")) {
         let callRoom = await CallRoom.findById(userData.callRoomId)
           .populate({
@@ -26,11 +29,18 @@ exports.leftCallRoom = async (req, res) => {
           .lean()
 
         if (callRoom) {
-          let deletedMemberObj = await CallRoomMember.deleteMany({
-            callRoom: callRoom._id,
-            user: req.user.id
+          let callRoomMember = await CallRoomMember.findOne({
+            user: req.user.id,
+            callRoom: callRoom._id
           })
-          if (deletedMemberObj.deletedCount > 0) {
+            .select({ peerId: 1 })
+            .lean()
+          if (callRoomMember) {
+            let deletedMemberObj = await CallRoomMember.deleteMany({
+              callRoom: callRoom._id,
+              user: req.user.id
+            })
+
             let leftMembers = await CallRoomMember.find({
               callRoom: callRoom._id
             })
@@ -38,7 +48,12 @@ exports.leftCallRoom = async (req, res) => {
               .lean()
             let isCallEnded = false
             if (leftMembers.length <= 1) {
-              isCallEnded = await endChatCallRoom(callRoom, leftMembers, req.io)
+              isCallEnded = await endChatCallRoom(
+                req.io,
+                callRoom,
+                leftMembers,
+                req.user.id
+              )
             }
 
             res.json({
@@ -48,6 +63,7 @@ exports.leftCallRoom = async (req, res) => {
 
             let eventData = {
               userId: req.user.id,
+              peerId: callRoomMember.peerId,
               callRoomId: callRoom._id
             }
             leftMembers.forEach(member => {

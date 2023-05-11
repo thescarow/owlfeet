@@ -9,7 +9,7 @@ const User = require("../../models/user")
 ///////
 const {
   createAndSendInfoMessage
-} = require("./common/createAndSendInfoMessage")
+} = require("../../common/createAndSendInfoMessage")
 const { infoMessageType } = require("../../models/common/infoMessageType")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 ////////
@@ -176,5 +176,11 @@ async function createInfoMessage(chat, req) {
     .lean()
   let messageContent = `${user.firstName} ${user.lastName} created *${chat.chatName}*  group`
   let messageType = infoMessageType.NEW_GROUP
-  createAndSendInfoMessage(messageContent, messageType, chat, req)
+  createAndSendInfoMessage(
+    messageContent,
+    messageType,
+    chat,
+    req.io,
+    req.user.id
+  )
 }

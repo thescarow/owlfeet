@@ -69,7 +69,6 @@ export function showAllChatSection() {
 }
 
 export async function updateAllChatSection(message) {
-  console.log("updateAllChatSection message:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
   )
@@ -194,7 +193,6 @@ export async function createChatBox(chat) {
 }
 
 export async function updateChatBoxLatestMessage(message = null) {
-  console.log("latest message:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
   )
@@ -369,31 +367,31 @@ export function decreaseUnseenMessagesCountInChatBox(chatId) {
   }
 }
 
-export function showChatCallRoomBox(chatId, callRoomId) {
+export function showChatBoxCallRoomBox(chatId, callRoomId) {
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${chatId.toString()}"]`
   )
   if (chatBox) {
-    let chatCallRoomBox = chatBox.getElementsByClassName(
+    let chatBoxCallRoomBox = chatBox.getElementsByClassName(
       "chat-call-room-box--chat-box"
     )[0]
-    while (chatCallRoomBox.classList.contains("chat-call-room-box--hide"))
-      chatCallRoomBox.classList.remove("chat-call-room-box--hide")
+    while (chatBoxCallRoomBox.classList.contains("chat-call-room-box--hide"))
+      chatBoxCallRoomBox.classList.remove("chat-call-room-box--hide")
 
-    chatCallRoomBox.dataset.callRoomId = callRoomId
+    chatBoxCallRoomBox.dataset.callRoomId = callRoomId
   }
 }
-export function hideChatCallRoomBox(chatId) {
+export function hideChatBoxCallRoomBox(chatId) {
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${chatId.toString()}"]`
   )
   if (chatBox) {
-    let chatCallRoomBox = chatBox.getElementsByClassName(
+    let chatBoxCallRoomBox = chatBox.getElementsByClassName(
       "chat-call-room-box--chat-box"
     )[0]
 
-    chatCallRoomBox.classList.add("chat-call-room-box--hide")
+    chatBoxCallRoomBox.classList.add("chat-call-room-box--hide")
 
-    chatCallRoomBox.dataset.callRoomId = ""
+    chatBoxCallRoomBox.dataset.callRoomId = ""
   }
 }

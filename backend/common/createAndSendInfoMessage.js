@@ -3,14 +3,12 @@ const dataLog = chalk.blue.bold
 const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
-const Message = require("../../../models/message")
+const Message = require("../models/message")
 // const Chat = require("../../../models/chat")
-const User = require("../../../models/user")
+const User = require("../models/user")
 //////////////////////
-const { signedUrlForGetAwsS3Object } = require("../../../services/awsS3")
-const {
-  selectChatFieldForChatBox
-} = require("../../../common/filter-field/filterChatField")
+const { signedUrlForGetAwsS3Object } = require("../services/awsS3")
+const { selectChatFieldForChatBox } = require("./filter-field/filterChatField")
 ///////
 // const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
@@ -18,7 +16,8 @@ exports.createAndSendInfoMessage = async (
   messageContent,
   messageType,
   chat,
-  req
+  io,
+  loginUserId
 ) => {
   try {
     const newInfoMessageData = {
@@ -62,7 +61,7 @@ exports.createAndSendInfoMessage = async (
     } else {
       let otherUserId = createdInfoMessage.chat.currentChatMembers.find(
         userId => {
-          return userId.toString() !== req.user.id.toString()
+          return userId.toString() !== loginUserId.toString()
         }
       )
       let groupOtherUser = await User.findById(otherUserId)
@@ -78,10 +77,11 @@ exports.createAndSendInfoMessage = async (
       }
     }
 
+    let eventData = {
+      message: createdInfoMessage
+    }
     createdInfoMessage.reader.forEach(userId => {
-      req.io
-        .to(userId.toString())
-        .emit("chat:new-info-message", createdInfoMessage)
+      io.to(userId.toString()).emit("chat:new-info-message", eventData)
     })
   } catch (e) {
     console.log(

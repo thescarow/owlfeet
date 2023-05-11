@@ -122,18 +122,16 @@ let nonGroupCallBtns = `
 import "./css/comingCallModal.dev.css"
 
 export async function createComingCallModal(callRoom) {
-  let comingCallModal = document.getElementById("comingCallModal")
-  if (!comingCallModal) {
-    comingCallModal = document.createElement("div")
-    comingCallModal.classList.add("coming-call-modal")
-    comingCallModal.setAttribute("id", "comingCallModal")
+  let comingCallModal = document.createElement("div")
+  comingCallModal.classList.add("coming-call-modal")
+  comingCallModal.dataset.callRoomId = callRoom._id
 
-    comingCallModal.innerHTML = `
+  comingCallModal.innerHTML = `
     <div class="coming-call-modal-content">
     
-    <div class="coming-call" id="comingCall">
+    <div class="coming-call" >
 
-         <audio id="comingCallAudio" class="coming-call__audio" loop>
+         <audio class="coming-call__audio" loop>
              <source src="/assets/audios/comingCallAudio.mp3" type="audio/mpeg">
          </audio>
      
@@ -149,7 +147,7 @@ export async function createComingCallModal(callRoom) {
 
         </div>
 
-        <div class="coming-call__ignore" id="comingCallIgnorebtn">
+        <div class="coming-call__ignore-btn">
             ${svg_callIgnoreCallIcon} Ignore
         </div>
 
@@ -164,39 +162,23 @@ export async function createComingCallModal(callRoom) {
 
         </div>
         
-        <div class="coming-call__btn-container" id="comingCallMainBtnContainer">
+        <div class="coming-call__btn-container" >
 
         </div>
     </div>
 
 </div>`
 
-    document.body.insertAdjacentElement("afterbegin", comingCallModal)
-    updateComingCallModal(callRoom)
-    initialiseEventForComingCallModal(comingCallModal)
-  } else {
-    updateComingCallModal(callRoom)
-    comingCallModal.classList.remove("coming-call-modal--hide")
-  }
-
-  // let innerModalMain =
-  //   comingCallModal.getElementsByClassName("inner-modal-main")[0]
-
-  // innerModalMain.innerHTML = ""
-  // innerModalMain.insertAdjacentHTML(
-  //   "beforeend",
-  //   `<div class="inner-modal-main__info">
-  //  After deleting chat, all messages will be deleted and this chat is also deleted.
-  //  </div>`
-  // )
+  document.body.insertAdjacentElement("beforeend", comingCallModal)
+  updateComingCallModal(comingCallModal, callRoom)
+  initialiseEventForComingCallModal(comingCallModal)
 }
 
-function updateComingCallModal(callRoom) {
-  let comingCallModal = document.getElementById("comingCallModal")
+function updateComingCallModal(comingCallModal, callRoom) {
+  console.log("coming callRoom: ", callRoom)
   if (comingCallModal) {
-    comingCallModal.dataset.callRoomId = callRoom._id
-
-    let comingCallAudio = document.getElementById("comingCallAudio")
+    let comingCallAudio =
+      comingCallModal.getElementsByClassName("coming-call__audio")[0]
     comingCallAudio.play()
 
     comingCallModal.getElementsByClassName("coming-call__name")[0].textContent =
@@ -235,9 +217,9 @@ function updateComingCallModal(callRoom) {
           "coming-call__btn-container"
         )[0].innerHTML = `${groupCallBtns}`
 
-        document
-          .getElementById("comingCallIgnorebtn")
-          .classList.add("coming-call__ignore--hide")
+        comingCallModal
+          .getElementsByClassName("coming-call__ignore-btn")[0]
+          .classList.add("coming-call__ignore-btn--hide")
       } else {
         let comingCallType =
           comingCallModal.getElementsByClassName("coming-call__type")[0]
@@ -256,20 +238,19 @@ function updateComingCallModal(callRoom) {
           "coming-call__btn-container"
         )[0].innerHTML = `${nonGroupCallBtns}`
 
-        document
-          .getElementById("comingCallIgnorebtn")
-          .classList.remove("coming-call__ignore--hide")
+        comingCallModal
+          .getElementsByClassName("coming-call__ignore-btn")[0]
+          .classList.remove("coming-call__ignore-btn--hide")
       }
     }
   }
 }
-async function initialiseEventForComingCallModal() {
-  let comingCallModal = document.getElementById("comingCallModal")
+async function initialiseEventForComingCallModal(comingCallModal) {
   if (comingCallModal) {
     let callRoomId = comingCallModal.dataset.callRoomId
-    let comingCallMainBtnContainer = document.getElementById(
-      "comingCallMainBtnContainer"
-    )
+    let comingCallMainBtnContainer = comingCallModal.getElementsByClassName(
+      "coming-call__btn-container"
+    )[0]
     comingCallMainBtnContainer.addEventListener("click", async e => {
       let comingCallMainBtn = e.target.closest(`.coming-call-btn__icon`)
 
@@ -277,8 +258,6 @@ async function initialiseEventForComingCallModal() {
         comingCallMainBtn &&
         comingCallMainBtnContainer.contains(comingCallMainBtn)
       ) {
-        closeComingCallModal()
-
         if (comingCallMainBtn.dataset.btnType === "accept-call") {
           if (callRoomId !== "") {
             openNewTab(`/call/?room=${callRoomId}`)
@@ -288,27 +267,36 @@ async function initialiseEventForComingCallModal() {
         if (comingCallMainBtn.dataset.btnType === "decline-call") {
         }
         if (comingCallMainBtn.dataset.btnType === "ignore-call") {
+          closeComingCallModal(callRoomId)
         }
       }
     })
-    let comingCallIgnorebtn = document.getElementById("comingCallIgnorebtn")
+
+    let comingCallIgnorebtn = comingCallModal.getElementsByClassName(
+      "coming-call__ignore-btn"
+    )[0]
     if (comingCallIgnorebtn) {
       comingCallIgnorebtn.addEventListener("click", () => {
-        closeComingCallModal()
+        closeComingCallModal(callRoomId)
       })
     }
   }
 }
 
-async function closeComingCallModal() {
-  let comingCallModal = document.getElementById("comingCallModal")
-  if (!comingCallModal.classList.contains("coming-call-modal--hide"))
-    comingCallModal.classList.add("coming-call-modal--hide")
-  let comingCallAudio = document.getElementById("comingCallAudio")
-  comingCallAudio.pause()
-  comingCallAudio.currentTime = 0
+export async function closeComingCallModal(callRoomId) {
+  let comingCallModal = document.querySelector(
+    `.coming-call-modal[data-call-room-id = "${callRoomId.toString()}"]`
+  )
+  if (comingCallModal) {
+    if (!comingCallModal.classList.contains("coming-call-modal--hide")) {
+      comingCallModal.classList.add("coming-call-modal--hide")
+      let comingCallAudio =
+        comingCallModal.getElementsByClassName("coming-call__audio")[0]
+      comingCallAudio.pause()
+      comingCallAudio.currentTime = 0
+    }
+  }
 }
-
 function openNewTab(url) {
   const link = document.createElement("a")
   link.setAttribute("href", url)

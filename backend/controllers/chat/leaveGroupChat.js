@@ -9,7 +9,7 @@ const { infoMessageType } = require("../../models/common/infoMessageType")
 ///////
 const {
   createAndSendInfoMessage
-} = require("./common/createAndSendInfoMessage")
+} = require("../../common/createAndSendInfoMessage")
 
 const {
   timeDifferenceFromNow
@@ -114,5 +114,11 @@ async function createInfoMessage(req, chat) {
     .lean()
   let messageContent = `${user.firstName} ${user.lastName} leave this *${chat.chatName}* group`
   let messageType = infoMessageType.LEAVE_GROUP
-  createAndSendInfoMessage(messageContent, messageType, chat, req)
+  createAndSendInfoMessage(
+    messageContent,
+    messageType,
+    chat,
+    req.io,
+    req.user.id
+  )
 }

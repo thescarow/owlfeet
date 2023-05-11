@@ -212,8 +212,6 @@ function initialiseOnCallSection() {
   bestScreenWidth = parseFloat(mainViewCss.width)
 
   const resizeObserverForMainView = new ResizeObserver(entries => {
-    console.log("resize observer called")
-
     let elementWidth = entries[0].contentBoxSize[0].inlineSize
     let elementHeight = entries[0].contentBoxSize[0].blockSize
 
@@ -326,7 +324,51 @@ async function implementCall() {
   })
 
   myPeer.on("error", err => {
+    if (!myPeer.destroyed) myPeer.destroy()
+
     console.log("Error in peer: ", err.type)
+  })
+  myPeer.on("disconnected", () => {
+    myPeer.reconnect()
+  })
+  myPeer.on("close", () => {
+    let data = {
+      callRoomId: callRoom._Id
+    }
+    fetch("/call/left-call-room", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        return Promise.reject(response)
+      })
+      .then(async data => {
+        if (data.isSuccess) {
+          onCallMainViewUserBoxContainer.innerHTML = ""
+          onCallSliderUserBoxContainer.innerHTML = ""
+
+          let { createAfterCallSection } = await import(
+            "./afterCallSection.dev"
+          )
+          createAfterCallSection(callRoom, data.isCallEnded)
+        } else {
+          myPeer.destroy()
+        }
+      })
+      .catch(async err => {
+        console.log(err)
+        myPeer.destroy()
+      })
+    for (let peer in allMediaConnections) {
+      allMediaConnections[peer].close()
+      delete allMediaConnections.peer
+    }
   })
 }
 
@@ -359,7 +401,6 @@ function initialiseEventForOnCallSection() {
     let onCallBtn = e.target.closest(`.on-call-btn`)
     if (onCallBtn && onCallMainBtnContainer.contains(onCallBtn)) {
       if (onCallBtn.dataset.btnType === "call-video") {
-        console.log("click outside")
         if (onCallBtn.dataset.btnWorkingState === "call-video-off") {
           // let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
           // if (videoEnabled) {
@@ -429,9 +470,7 @@ function initialiseEventForOnCallSection() {
       }
       if (onCallBtn.dataset.btnType === "call-end") {
         if (onCallBtn.dataset.btnWorkingState === "end-call") {
-          let data = {
-            callRoomId: callRoom._Id
-          }
+          let data = { callRoomId: callRoom._id }
           fetch("/call/left-call-room", {
             method: "POST", // or 'PUT'
             headers: {
@@ -447,9 +486,14 @@ function initialiseEventForOnCallSection() {
             })
             .then(async data => {
               if (data.isSuccess) {
-                console.log("afterCallRoom called:", data)
                 onCallMainViewUserBoxContainer.innerHTML = ""
                 onCallSliderUserBoxContainer.innerHTML = ""
+
+                let videoTracks = myMediaStream.getVideoTracks()
+                videoTracks.forEach(track => track.stop())
+
+                let audioTrack = myMediaStream.getAudioTracks()
+                audioTrack.forEach(track => track.stop())
 
                 let { createAfterCallSection } = await import(
                   "./afterCallSection.dev"
@@ -469,11 +513,6 @@ function initialiseEventForOnCallSection() {
               )
               createMainNotification("Server error, Please try again", "error")
             })
-
-          let { createAfterCallSection } = await import(
-            "./afterCallSection.dev"
-          )
-          createAfterCallSection(callRoom, 2)
         }
       }
     }
@@ -1087,9 +1126,23 @@ socket.on("call:joined-new-member", data => {
   connectToNewJoinedMember(data.userId, data.peerId, myMediaStream)
 })
 
-socket.on("call:disconnect-call-member", data => {
-  removeOnCallUserBox(data.userId)
+socket.on("call:disconnect-call-room-member", data => {
+  allMediaConnections[data.peerId.toString()].close()
+  removeOnCallUserBox(data.userId.toString())
   switchMainView()
+})
+socket.on("call:end-call-room", async data => {
+  onCallMainViewUserBoxContainer.innerHTML = ""
+  onCallSliderUserBoxContainer.innerHTML = ""
+
+  let videoTracks = myMediaStream.getVideoTracks()
+  videoTracks.forEach(track => track.stop())
+
+  let audioTrack = myMediaStream.getAudioTracks()
+  audioTrack.forEach(track => track.stop())
+
+  let { createAfterCallSection } = await import("./afterCallSection.dev")
+  createAfterCallSection(data.callRoom, true)
 })
 
 socket.on("call:toggle-video-stream", data => {

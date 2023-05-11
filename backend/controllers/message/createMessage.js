@@ -219,9 +219,10 @@ async function attachSocketForCreatingNewMessage(
   newMessageDocument,
   createdNewMessage
 ) {
+  let eventData = { message: createdNewMessage }
   messageChat.currentChatMembers.forEach(userId => {
     if (req.user.id.toString() !== userId.toString()) {
-      req.io.to(userId.toString()).emit("chat:new-message", createdNewMessage)
+      req.io.to(userId.toString()).emit("chat:new-message", eventData)
     }
   })
   newMessageDocument.deliveryStatus.isDelivered = true

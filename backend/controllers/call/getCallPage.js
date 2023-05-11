@@ -15,6 +15,9 @@ const {
   selectSafeCallRoomField
 } = require("../../common/filter-field/filterCallRoomField")
 const {
+  selectListUserField
+} = require("../../common/filter-field/filterUserField")
+const {
   selectUserFieldForCallRoom
 } = require("../../common/filter-field/filterUserField")
 const {
@@ -45,10 +48,36 @@ exports.getCallPage = async (req, res) => {
             isDeleted: false
           })
             .select(selectChatFieldForCreatingCallRoom)
+            .populate({
+              path: "currentChatMembers",
+              select: selectListUserField,
+              options: {
+                lean: true
+              }
+            })
             .lean()
           if (chat) {
-            if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
-              chat.chatPic = await signedUrlForGetAwsS3Object(chat.chatPic)
+            if (chat.isGroupChat) {
+              if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
+                chat.chatPic = await signedUrlForGetAwsS3Object(chat.chatPic)
+              }
+            } else {
+              let chatOtherMember = chat.currentChatMembers.find(
+                user => user._id.toString() !== req.user.id.toString()
+              )
+              if (
+                chatOtherMember.hasOwnProperty("profile") &&
+                chatOtherMember.profile !== ""
+              ) {
+                chat.chatPic = await signedUrlForGetAwsS3Object(
+                  chatOtherMember.profile
+                )
+              }
+              chat.isUserActive = chatOtherMember.isActive
+              chat.userLastActive = chatOtherMember.lastActive
+              chat.chatName =
+                chatOtherMember.firstName + " " + chatOtherMember.lastName
+              chat.chatDescription = chatOtherMember.bio
             }
 
             res.render("./call/call.ejs", {

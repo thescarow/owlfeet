@@ -148,12 +148,12 @@
                                                     <% } _%>
                             </div>
 
-                            <div class='chat-call-room-box chat-call-room-box--chat-box  <%=(chat.hasOwnProperty("isOnCall") && chat.isOnCall === false)?"chat-call-room-box--hide":"hello" %>'
-                                data-call-room-id='<%=(chat.hasOwnProperty("callRoomId")&& chat.callRoomId !== '')? chat.callRoomId:"" %>'>
+                            <div class='chat-call-room-box chat-call-room-box--chat-box  <%=(chat.hasOwnProperty("isOnCall") && chat.isOnCall === false)?"chat-call-room-box--hide":"" %>'
+                                data-call-room-id='<%=(chat.hasOwnProperty("callRoomId")&& chat.callRoomId !== undefined)? chat.callRoomId:"" %>'>
                                 <div class="chat-call-room-icon chat-call-room-icon--chat-box">
                                     <%- include('../partials/icons/callAcceptCallIcon.svg')-%>
                                 </div>
-                                <div class="chat-call-room-title chat-call-room-title--chat-box">Jin</div>
+                                <div class="chat-call-room-title chat-call-room-title--chat-box">Join</div>
                             </div>
                         </div>
 
@@ -201,7 +201,7 @@
                 </div>
             </div>
             <div class="active-chat-header__right-btn-container">
-                <div class="active-chat-header__btn" id="activeChatCallBtn">
+                <div class="active-chat-header__btn " id="activeChatCallBtn">
                     <%- include('../partials/icons/audioCallBtn.svg') -%>
                 </div>
 

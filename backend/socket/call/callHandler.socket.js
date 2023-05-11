@@ -29,7 +29,7 @@ exports.callHandler = async (io, socket) => {
             .lean()
 
           if (callRoom) {
-            joinedCallRoomId = data.callRoomId
+            joinedCallRoomId = callRoom._id
             socket.join(joinedCallRoomId)
 
             let callRoomMembers = await CallRoomMember.find({
@@ -180,15 +180,22 @@ exports.callHandler = async (io, socket) => {
               callRoom: callRoom._id,
               user: socket.loginUser.id
             })
+
             if (deletedMemberObj.deletedCount > 0) {
               let leftMembers = await CallRoomMember.find({
                 callRoom: callRoom._id
               })
                 .select({ user: 1 })
                 .lean()
+
               let isCallEnded = false
               if (leftMembers.length <= 1) {
-                isCallEnded = await endChatCallRoom(callRoom, leftMembers, io)
+                isCallEnded = await endChatCallRoom(
+                  io,
+                  callRoom,
+                  leftMembers,
+                  socket.loginUser.id
+                )
               }
 
               let eventData = {
