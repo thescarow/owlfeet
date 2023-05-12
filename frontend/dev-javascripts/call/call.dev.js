@@ -8,7 +8,6 @@
     let roomInfoContainer = document.getElementById("roomInfoContainer")
 
     if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
-      console.log("fetch join call room")
       let { joinCallRoom } = await import("./js/joinCallRoom.dev")
       joinCallRoom()
     }

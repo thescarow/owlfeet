@@ -8,10 +8,17 @@ let svg_messageTick = `
 <path d="M35.5523 72.8954C34.3946 74.0434 32.7545 75 31.3073 75C29.8601 75 28.22 73.9955 27.014 72.8476L0 46.0619L8.58659 37.5478L31.3555 60.1244L91.5581 0L100 8.65752L35.5523 72.8954V72.8954Z" />
 </svg>
 `
-let svg_videoCallBlankIcon = `
-<svg width="100" height="63" viewBox="0 0 100 66"  xmlns="http://www.w3.org/2000/svg">
-<path d="M16.6636 0C7.46055 0 0 6.56645 0 14.6666V51.3334C0 59.433 7.46055 66 16.6636 66H58.3226C67.2118 66 74.4747 59.8738 74.9604 52.1577L93.7278 61.8362C95.0159 62.5005 96.6098 62.5072 97.9054 61.8538C99.201 61.2004 100 59.9867 100 58.6726V7.3275C100 6.01462 99.2026 4.80191 97.9087 4.148C96.6156 3.49409 95.0234 3.49879 93.7353 4.16032L74.9579 13.8005C74.4489 6.10357 67.1952 0 58.3226 0H16.6636ZM8.33181 14.6666C8.33181 10.6166 12.0621 7.33329 16.6636 7.33329H58.3226C62.9242 7.33329 66.6544 10.6166 66.6544 14.6666V51.3334C66.6544 55.3829 62.9242 58.6667 58.3226 58.6667H16.6636C12.0621 58.6667 8.33181 55.3829 8.33181 51.3334V14.6666ZM74.9871 43.6715V22.2753L91.6682 13.7111V52.2743L74.9871 43.6715Z" />
+let svg_messageEndCallIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M17.0231 58.5209C17.7515 59.5258 19.2083 59.6243 20.0942 58.7377L30.6065 48.2166C31.1971 47.6255 31.3546 46.7192 30.9806 45.9508C30.1538 44.2367 29.4057 42.4635 28.7364 40.5721C27.8111 37.8926 28.5198 34.8978 30.5081 32.9079L37.9888 25.421C39.3275 24.0812 39.3275 21.8943 37.9888 20.5348L18.4799 1.00975C17.1413 -0.330015 14.9561 -0.330015 13.5978 1.00975L5.11306 9.52117C0.467139 14.1709 -1.22586 21.0865 0.919919 27.2927C4.95557 38.9762 10.3692 49.3396 17.0231 58.5209ZM98.996 81.5924L79.4871 62.0674C78.1484 60.7276 75.9633 60.7276 74.6049 62.0674L67.1439 69.5149C65.1359 71.5245 62.1043 72.2338 59.427 71.2684C57.5568 70.5985 55.785 69.8301 54.0724 69.0026C53.3046 68.6283 52.399 68.7859 51.8085 69.3769L41.3551 79.8389C40.489 80.7058 40.5874 82.1835 41.5914 82.9125C50.7257 89.4537 61.0412 94.8915 72.6954 99.029C78.9359 101.255 85.9048 99.561 90.5901 94.8915L98.996 86.4786C100.335 85.1388 100.335 82.9519 98.996 81.5924ZM98.5039 1.4629C96.5549 -0.487633 93.3855 -0.487633 91.4365 1.4629L1.54987 91.4239C-0.399049 93.3744 -0.399049 96.5465 1.54987 98.497C2.53418 99.4822 3.79409 99.955 5.07368 99.955C6.35328 99.955 7.63288 99.4625 8.59749 98.497L98.5039 8.53605C100.453 6.58552 100.453 3.43314 98.5039 1.4629Z"/>
 </svg>
+
+`
+let svg_messageStartCallIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M98.1868 80.7796L77.9281 60.517C75.4896 58.0987 71.5504 58.078 69.1327 60.517L66.2356 63.3938C65.1727 64.457 62.4423 64.2484 59.0868 62.8309C55.0016 61.0797 50.4372 57.8277 46.2688 53.6793C37.2233 44.6112 34.4721 35.7932 36.5563 33.7086L39.4326 30.8109C41.8711 28.3927 41.8711 24.4528 39.4326 22.0137L19.1739 1.75109C16.8396 -0.583695 12.7337 -0.583695 10.3785 1.75109L3.91751 8.23428C-6.52446 18.6783 4.58435 46.1329 29.1991 70.7525C40.7248 82.2806 53.376 91.307 64.881 96.1851C70.8627 98.7284 76.2191 100 80.7418 100C85.3479 100 89.0787 98.6867 91.7049 96.0391L98.1868 89.5768C100.604 87.1377 100.604 83.1978 98.1868 80.7796Z" />
+</svg>
+
 `
 let svg_newGroupBlankIcon = `
 <svg width="100" height="95" viewBox="0 0 100 95"  xmlns="http://www.w3.org/2000/svg">
@@ -249,7 +256,7 @@ export function checkTimeAndCreateOldMessages(
   }
   if (isScrolledToTop === false) {
     activeChatMessageContainer.scrollTop += scrollPosAfter - scrollPosBefore
-    console.log("before", scrollPosBefore, "after", scrollPosAfter)
+    // console.log("before", scrollPosBefore, "after", scrollPosAfter)
   }
   // }
 
@@ -278,11 +285,7 @@ export function checkTimeAndCreateNewMessage(
     message.hasOwnProperty("isInfoMessage") &&
     message.isInfoMessage === true
   ) {
-    let infoMessageBox = createInfoMessage(
-      message,
-      activeChatMessageContainer,
-      "beforeend"
-    )
+    let infoMessageBox = createInfoMessage(message)
     activeChatMessageContainer.insertAdjacentElement(
       "beforeend",
       infoMessageBox
@@ -656,11 +659,11 @@ function insertLinksToString(str) {
     url.startsWith("http") ? url : `http://${url}`
   })
 
-  console.log("allUrls:", allUrls)
+  // console.log("allUrls:", allUrls)
   let textNodes = []
   let i = 0
   let arr = str.split(regexForUrl)
-  console.log("arr:", arr)
+
   arr.forEach(text => {
     textNodes.push(document.createTextNode(text))
     if (i < allUrls.length) {
@@ -699,10 +702,16 @@ export function createInfoMessage(message) {
       "active-chat-info-message-box__content"
     )[0]
     infoMessageBoxContent.textContent = message.infoMessageContent
-    if (message.infoMessageType === "video-call") {
+    if (message.infoMessageType === "start-call") {
       infoMessageBoxContent.insertAdjacentHTML(
         "afterbegin",
-        svg_videoCallBlankIcon
+        svg_messageStartCallIcon
+      )
+    }
+    if (message.infoMessageType === "end-call") {
+      infoMessageBoxContent.insertAdjacentHTML(
+        "afterbegin",
+        svg_messageEndCallIcon
       )
     }
     if (message.infoMessageType === "new-group") {
@@ -839,7 +848,7 @@ export function changeUserMessageStatusWithMessageSeenStatusCount(
   let userMessageBox = document.querySelector(
     `.active-chat-user-message-box[data-message-id="${messageId}"]`
   )
-  console.log("userMessageBox:", userMessageBox, "messageId:", messageId)
+
   if (userMessageBox) {
     if (
       messageSeenStatusCount > userMessageBox.dataset.messageSeenStatusCount
@@ -849,7 +858,7 @@ export function changeUserMessageStatusWithMessageSeenStatusCount(
           ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
         )
       ]
-      console.log(svgs)
+
       let color = generateColorForUserMessageStatus(
         messageSeenStatusCount - 1,
         messageReaderCount - 1

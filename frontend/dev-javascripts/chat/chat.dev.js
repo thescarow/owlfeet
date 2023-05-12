@@ -588,6 +588,7 @@ function initialiseEventForChatModule() {
       createActiveChatInfoModal(activeChatId)
     }
   })
+
   let activeChatHeaderName = document.getElementById("activeChatHeaderName")
   activeChatHeaderName.addEventListener("click", async () => {
     let activeChatId = activeChatSection.dataset.chatId
@@ -598,6 +599,25 @@ function initialiseEventForChatModule() {
       createActiveChatInfoModal(activeChatId)
     }
   })
+  let activeChatCallBtn = document.getElementById("activeChatCallBtn")
+  if (activeChatCallBtn) {
+    activeChatCallBtn.addEventListener("click", async () => {
+      let activeChatId = activeChatSection.dataset.chatId
+      if (activeChatId.toString() !== "") {
+        openNewTab(`/call/?chat=${activeChatId}`)
+      }
+    })
+  }
+
+  let activeChatCallRoomBox = document.getElementById("activeChatCallRoomBox")
+  if (activeChatCallRoomBox) {
+    activeChatCallRoomBox.addEventListener("click", async () => {
+      let callRoomId = activeChatCallRoomBox.dataset.callRoomId
+      if (callRoomId.toString() !== "") {
+        openNewTab(`/call/?room=${callRoomId}`)
+      }
+    })
+  }
 
   ////////////////////
   // create new group chat btn
@@ -735,4 +755,13 @@ function initialiseEventForChatModule() {
       return
     }
   })
+}
+function openNewTab(url) {
+  const link = document.createElement("a")
+  link.setAttribute("href", url)
+  link.setAttribute("target", "_blank")
+  link.setAttribute("rel", "noopener noreferrer")
+
+  // simulate a click on the link to open the new tab
+  link.click()
 }

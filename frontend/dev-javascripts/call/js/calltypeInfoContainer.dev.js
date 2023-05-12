@@ -1,4 +1,5 @@
-let svg_callPermissionLockIcon = `<svg width="80" height="100" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+let svg_callPermissionLockIcon = `
+<svg width="80" height="100" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
 <path d="M73.1429 38.8889H62.8571V25.5556C62.8571 9.46111 55.2286 0 40 0C24.7657 0 17.1429 9.46111 17.1429 25.5556V38.8889H5.71429C2.55429 38.8889 0 42.4778 0 45.55V88.8889C0 91.9389 2.44571 95.2167 5.43429 96.15L12.2743 98.3C15.9023 99.3282 19.651 99.8995 23.4286 100H56.5714C60.3476 99.9003 64.0948 99.3271 67.72 98.2944L74.5543 96.1444C77.5486 95.2167 80 91.9389 80 88.8889V45.55C80 42.4778 76.2971 38.8889 73.1429 38.8889ZM51.4286 38.8889H28.5714V23.3278C28.5714 15.3 33.1257 11.1111 40 11.1111C46.8743 11.1111 51.4286 15.3 51.4286 23.3278V38.8889Z" />
 </svg>
 `
@@ -27,6 +28,12 @@ export function createCalltypeInfoContainer() {
         audio: true
       })
       .then(stream => {
+        let videoTracks = stream.getVideoTracks()
+        videoTracks.forEach(track => track.stop())
+
+        let audioTrack = stream.getAudioTracks()
+        audioTrack.forEach(track => track.stop())
+
         myMediaStream = stream
         video.srcObject = stream
         video.addEventListener("loadedmetadata", () => {

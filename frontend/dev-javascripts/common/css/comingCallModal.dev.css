@@ -180,7 +180,7 @@
     margin: 0px 0 0 0;
 }
 
-.coming-call__ignore {
+.coming-call__ignore-btn {
     font-size: 15px;
     top: 5px;
     right: 5px;
@@ -197,11 +197,11 @@
     border-radius: 10px;
 }
 
-.coming-call__ignore--hide {
+.coming-call__ignore-btn--hide {
     display: none;
 }
 
-.coming-call__ignore svg {
+.coming-call__ignore-btn svg {
     width: 30px;
     height: 30px;
     /* margin: 0 3px 0 0; */

@@ -40,7 +40,9 @@ export async function createChatSocket(socket) {
       }
     })
 
-    socket.on("chat:new-message", async message => {
+    socket.on("chat:new-message", async data => {
+      console.log("new-message data:", data)
+      let message = data.message
       let chatId = activeChatSection.dataset.chatId
       let { updateAllChatSection } = await import(
         "../../../chat/js/updateAllChatSection.dev"
@@ -49,10 +51,10 @@ export async function createChatSocket(socket) {
       let { increaseUnseenMessagesCountInChatBox } = await import(
         "../../../chat/js/updateAllChatSection.dev"
       )
-      increaseUnseenMessagesCountInChatBox(message.chat)
+      increaseUnseenMessagesCountInChatBox(message.chat._id)
       if (
         chatId.toString() !== "" &&
-        chatId.toString() === message.chat.toString()
+        chatId.toString() === message.chat._id.toString()
       ) {
         let { checkTimeAndCreateNewMessage } = await import(
           "../../../chat/js/message.dev"
@@ -61,7 +63,8 @@ export async function createChatSocket(socket) {
       }
     })
     ////////////////////////////////////////////
-    socket.on("chat:new-info-message", async message => {
+    socket.on("chat:new-info-message", async data => {
+      let message = data.message
       let chatId = activeChatSection.dataset.chatId
       let { updateAllChatSection } = await import(
         "../../../chat/js/updateAllChatSection.dev"
@@ -73,12 +76,14 @@ export async function createChatSocket(socket) {
       increaseUnseenMessagesCountInChatBox(message.chat._id)
       if (chatId !== "" && chatId === message.chat._id) {
         let { createInfoMessage } = await import("../../../chat/js/message.dev")
-        createInfoMessage(
-          message,
-          activeChatMessageContainer,
+
+        let infoMessageBox = createInfoMessage(message)
+        activeChatMessageContainer.insertAdjacentElement(
           "beforeend",
-          true
+          infoMessageBox
         )
+        activeChatMessageContainer.scrollTop =
+          activeChatMessageContainer.scrollHeight + 1000
       }
     })
 
@@ -189,18 +194,35 @@ export async function createChatSocket(socket) {
       )
       decreaseUnseenMessagesCountInChatBox(data.chatId)
     })
-    socket.on("call:created-chat-call-room", async data => {
-      let { showChatCallRoomBox } = await import(
+    socket.on("chat:created-chat-call-room", async data => {
+      let { showChatBoxCallRoomBox } = await import(
         "../../../chat/js/updateAllChatSection.dev"
       )
 
-      showChatCallRoomBox(data.chatId, data.callRoomId)
+      showChatBoxCallRoomBox(data.chatId, data.callRoom._id)
+      if (
+        activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+      ) {
+        let { openActiveChatCallRoomBox } = await import(
+          "../../../chat/js/showActiveChatSection.dev"
+        )
+        openActiveChatCallRoomBox(data.callRoom._id)
+      }
     })
-    socket.on("call:end-chat-call-room", async data => {
-      let { hideChatCallRoomBox } = await import(
+    socket.on("chat:end-chat-call-room", async data => {
+      let { hideChatBoxCallRoomBox } = await import(
         "../../../chat/js/updateAllChatSection.dev"
       )
-      hideChatCallRoomBox(data.chatId)
+      hideChatBoxCallRoomBox(data.chatId)
+
+      if (
+        activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+      ) {
+        let { closeActiveChatCallRoomBox } = await import(
+          "../../../chat/js/showActiveChatSection.dev"
+        )
+        closeActiveChatCallRoomBox()
+      }
     })
   } catch (e) {
     console.log("socket problem", e.message)

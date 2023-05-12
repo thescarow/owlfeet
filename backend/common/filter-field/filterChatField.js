@@ -60,9 +60,9 @@ exports.selectChatFieldForCreatingCallRoom = {
   chatDescription: 1,
   isGroupChat: 1,
   isOnCall: 1,
-  callRoomId: 1
+  callRoomId: 1,
+  currentChatMembers: 1
   // createdAt: 1,
-  // currentChatMembers: 1,
   // groupChatAdmin: 1
   // isDeleted: 1
   // allChatMembers: 1,

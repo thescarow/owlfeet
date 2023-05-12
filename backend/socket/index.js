@@ -43,7 +43,9 @@ exports.createSocketIOInstance = httpServer => {
     // socket handlers
     userHandler(io, socket)
     chatHandler(io, socket)
-    callHandler(io, socket)
+    if (socket.handshake.query.socketType === "call") {
+      callHandler(io, socket)
+    }
     /////////////////////////////////
     console.log("All Rooms:", socket.rooms)
     socket.prependAny((eventName, ...args) => {
