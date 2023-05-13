@@ -15,64 +15,23 @@ let calltypeMessageReloadBtn = document.getElementById(
   "calltypeMessageReloadBtn"
 )
 
-let myMediaStream = null
-export function createCalltypeInfoContainer() {
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    console.log("Camera and microphone access is supported")
+let myMediaStream
+let myStreamTypeData
 
-    let video = document.createElement("video")
-    video.muted = true
-    navigator.mediaDevices
-      .getUserMedia({
-        video: { aspectRatio: 4 / 3 },
-        audio: true
-      })
-      .then(stream => {
-        let videoTracks = stream.getVideoTracks()
-        videoTracks.forEach(track => track.stop())
+export function createCalltypeInfoContainer(stream, streamTypeData) {
+  myMediaStream = stream
+  myStreamTypeData = streamTypeData
 
-        let audioTrack = stream.getAudioTracks()
-        audioTrack.forEach(track => track.stop())
+  let video = document.createElement("video")
+  video.muted = true
 
-        myMediaStream = stream
-        video.srcObject = stream
-        video.addEventListener("loadedmetadata", () => {
-          video.play()
-        })
+  video.srcObject = myMediaStream
+  video.addEventListener("loadedmetadata", () => {
+    video.play()
+  })
 
-        calltypeInfoPreview.insertAdjacentElement("beforeend", video)
-      })
-      .catch(e => {
-        console.log(e, typeof e, e.message)
+  calltypeInfoPreview.insertAdjacentElement("beforeend", video)
 
-        if (e.message === "Permission dismissed") {
-          showCalltypeMessage(
-            "You've blocked access to your camera and microphone",
-            `To allow access, Please <span>reload</span> your page and give permission to your <span>camera</span> and <span>microphone</span>`
-          )
-        } else if (e.message === "Permission denied") {
-          showCalltypeMessage(
-            "You've blocked access to your camera and microphone",
-            `To allow access, click
-        the <span>lock icon</span> ${svg_callPermissionLockIcon} in the
-        address bar. Select the <span>Allow</span> option for <span>Camera</span> and
-        <span>Microphone</span>. Then reload the page
-        for the new settings to take effect.`
-          )
-        } else {
-          showCalltypeMessage(
-            "You've blocked access to your camera and microphone",
-            `Your <span>camera</span> or <span>microphone</span> is busy in <span>another app</span> or there is <span>problem</span> with <span>camera</span> or <span>microphone</span>, Please <span>reload</span> your page and give permission to your <span>camera</span> and <span>microphone</span>`
-          )
-        }
-      })
-  } else {
-    console.warn("Camera and microphone access is not supported")
-    showCalltypeMessage(
-      "Your browser does not support microphone and camera access",
-      `please upgrade your browser version or switch to <span>Chrome</span> latest version`
-    )
-  }
   initialiseEventForCalltypeInfoContainer()
 }
 
@@ -86,56 +45,205 @@ function initialiseEventForCalltypeInfoContainer() {
   calltypeInfoBtnContainer.addEventListener("click", async e => {
     let calltypeInfoBtn = e.target.closest(`.calltype-info-btn`)
     if (calltypeInfoBtn && calltypeInfoBtnContainer.contains(calltypeInfoBtn)) {
-      if (calltypeInfoBtn.dataset.calltypeInfoBtn === "video") {
-        if (myMediaStream !== null) {
-          let videoEnabled = myMediaStream.getVideoTracks()[0].enabled
-          if (videoEnabled) {
-            myMediaStream.getVideoTracks()[0].enabled = false
+      if (calltypeInfoBtn.dataset.btnType === "video") {
+        if (myStreamTypeData.isScreenShareOn === false) {
+          if (calltypeInfoBtn.dataset.btnWorkingState === "video-on") {
+            let { getCameraVideoTrack } = await import("../call.dev")
+            let cameraVideoTrack = await getCameraVideoTrack()
+
+            if (cameraVideoTrack) {
+              let videoTracks = myMediaStream.getVideoTracks()
+              videoTracks.forEach(track => {
+                track.stop()
+                myMediaStream.removeTrack(track)
+              })
+              myMediaStream.addTrack(cameraVideoTrack)
+
+              calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+              calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+              calltypeInfoPreview.classList.remove(
+                "calltype-info__preview--video-off"
+              )
+              calltypeInfoPreview.classList.add(
+                "calltype-info__preview--camera"
+              )
+
+              calltypeInfoBtn.dataset.btnWorkingState = "video-off"
+              myStreamTypeData.isCameraOn = true
+            }
+          } else if (calltypeInfoBtn.dataset.btnWorkingState === "video-off") {
+            let videoTracks = myMediaStream.getVideoTracks()
+            videoTracks.forEach(track => {
+              track.stop()
+            })
+
             calltypeInfoBtn.classList.add("calltype-info-btn--selected")
             calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
             calltypeInfoPreview.classList.add(
               "calltype-info__preview--video-off"
             )
-            calltypeInfoBtn.dataset.calltypeVideoValue = "false"
-          } else {
-            myMediaStream.getVideoTracks()[0].enabled = true
-            calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
-            calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
             calltypeInfoPreview.classList.remove(
-              "calltype-info__preview--video-off"
+              "calltype-info__preview--camera"
             )
-
-            calltypeInfoBtn.dataset.calltypeVideoValue = "true"
+            calltypeInfoBtn.dataset.btnWorkingState = "video-on"
+            myStreamTypeData.isCameraOn = false
           }
         }
       }
-      if (calltypeInfoBtn.dataset.calltypeInfoBtn === "audio") {
-        if (myMediaStream !== null) {
-          let audioEnabled = myMediaStream.getAudioTracks()[0].enabled
-          if (audioEnabled) {
-            myMediaStream.getAudioTracks()[0].enabled = false
-            calltypeInfoBtn.classList.add("calltype-info-btn--selected")
-            calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
-            calltypeInfoPreview.classList.add(
-              "calltype-info__preview--audio-off"
-            )
-            calltypeInfoBtn.dataset.calltypeAudioValue = "false"
-          } else {
-            myMediaStream.getAudioTracks()[0].enabled = true
+      if (calltypeInfoBtn.dataset.btnType === "audio") {
+        if (calltypeInfoBtn.dataset.btnWorkingState === "audio-on") {
+          let { getCallAudioTrack } = await import("../call.dev")
+          let callAudioTrack = await getCallAudioTrack()
+
+          if (callAudioTrack) {
+            let audioTracks = myMediaStream.getAudioTracks()
+            audioTracks.forEach(track => {
+              track.stop()
+              myMediaStream.removeTrack(track)
+            })
+            myMediaStream.addTrack(callAudioTrack)
+
             calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
             calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
             calltypeInfoPreview.classList.remove(
               "calltype-info__preview--audio-off"
             )
-            calltypeInfoBtn.dataset.calltypeAudioValue = "true"
+            calltypeInfoBtn.dataset.btnWorkingState = "audio-off"
           }
+        } else if (calltypeInfoBtn.dataset.btnWorkingState === "audio-off") {
+          let audioTracks = myMediaStream.getAudioTracks()
+          audioTracks.forEach(track => {
+            track.stop()
+          })
+          calltypeInfoBtn.classList.add("calltype-info-btn--selected")
+          calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
+          calltypeInfoPreview.classList.add("calltype-info__preview--audio-off")
+          calltypeInfoBtn.dataset.btnWorkingState = "audio-on"
+        }
+      }
+      if (calltypeInfoBtn.dataset.btnType === "share-screen") {
+        if (calltypeInfoBtn.dataset.btnWorkingState === "share-screen-on") {
+          let { getScreenShareVideoTrack } = await import("../call.dev")
+          let screenShareVideoTrack = await getScreenShareVideoTrack()
+
+          if (screenShareVideoTrack) {
+            let videoTracks = myMediaStream.getVideoTracks()
+            videoTracks.forEach(track => {
+              track.stop()
+              myMediaStream.removeTrack(track)
+            })
+            myMediaStream.addTrack(screenShareVideoTrack)
+
+            calltypeInfoBtn.classList.add("calltype-info-btn--selected")
+            calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
+            if (
+              calltypeInfoPreview.classList.contains(
+                "calltype-info__preview--video-off"
+              )
+            )
+              calltypeInfoPreview.classList.remove(
+                "calltype-info__preview--video-off"
+              )
+            if (
+              calltypeInfoPreview.classList.contains(
+                "calltype-info__preview--camera"
+              )
+            )
+              calltypeInfoPreview.classList.remove(
+                "calltype-info__preview--camera"
+              )
+            calltypeInfoBtn.dataset.btnWorkingState = "share-screen-off"
+
+            myStreamTypeData.isScreenShareOn = true
+
+            screenShareVideoTrack.onended = async () => {
+              let videoTracks = myMediaStream.getVideoTracks()
+              videoTracks.forEach(track => {
+                track.stop()
+                myMediaStream.removeTrack(track)
+              })
+
+              if (
+                !calltypeInfoPreview.classList.contains(
+                  "calltype-info__preview--camera"
+                )
+              )
+                calltypeInfoPreview.classList.add(
+                  "calltype-info__preview--camera"
+                )
+
+              if (myStreamTypeData.isCameraOn) {
+                let { getCameraVideoTrack } = await import("../call.dev")
+                let cameraVideoTrack = await getCameraVideoTrack()
+
+                if (cameraVideoTrack) {
+                  myMediaStream.addTrack(cameraVideoTrack)
+                }
+              } else {
+                if (
+                  !calltypeInfoPreview.classList.contains(
+                    "calltype-info__preview--video-off"
+                  )
+                )
+                  calltypeInfoPreview.classList.add(
+                    "calltype-info__preview--video-off"
+                  )
+              }
+              if (
+                calltypeInfoBtn.dataset.btnWorkingState === "share-screen-off"
+              ) {
+                calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+                calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+
+                calltypeInfoBtn.dataset.btnWorkingState = "share-screen-on"
+                myStreamTypeData.isScreenShareOn = false
+              }
+            }
+          }
+        } else if (
+          calltypeInfoBtn.dataset.btnWorkingState === "share-screen-off"
+        ) {
+          let videoTracks = myMediaStream.getVideoTracks()
+          videoTracks.forEach(track => {
+            track.stop()
+            myMediaStream.removeTrack(track)
+          })
+          if (
+            !calltypeInfoPreview.classList.contains(
+              "calltype-info__preview--camera"
+            )
+          )
+            calltypeInfoPreview.classList.add("calltype-info__preview--camera")
+
+          if (myStreamTypeData.isCameraOn) {
+            let { getCameraVideoTrack } = await import("../call.dev")
+            let cameraVideoTrack = await getCameraVideoTrack()
+
+            if (cameraVideoTrack) {
+              myMediaStream.addTrack(cameraVideoTrack)
+            }
+          } else {
+            if (
+              !calltypeInfoPreview.classList.contains(
+                "calltype-info__preview--video-off"
+              )
+            )
+              calltypeInfoPreview.classList.add(
+                "calltype-info__preview--video-off"
+              )
+          }
+          calltypeInfoBtn.classList.remove("calltype-info-btn--selected")
+          calltypeInfoBtn.classList.add("calltype-info-btn--unselected")
+
+          calltypeInfoBtn.dataset.btnWorkingState = "share-screen-on"
+          myStreamTypeData.isScreenShareOn = false
         }
       }
     }
   })
 }
 
-function showCalltypeMessage(title, desc) {
+export function showCalltypeMessage(title, desc) {
   calltypeInfo.classList.add("calltype-info--hide")
   calltypeMessage.classList.remove("calltype-message--hide")
 

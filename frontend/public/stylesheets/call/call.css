@@ -581,36 +581,22 @@ svg {
 
 
 .on-call-user-box__video {
-
     position: relative;
-
     width: 100%;
-
     height: 100%;
-
     /* border: 1px solid green; */
-
-    /* background: rgba(var(--rgba-third-color), 0.1); */
-
+    background: rgba(var(--rgba-first-color), 1);
     overflow: hidden;
 }
 
 .on-call-user-box__video video {
-
     position: absolute;
-
     top: 0;
-
     left: 0;
-
     width: 100%;
-
     height: 100%;
-
     object-fit: cover;
-
     transform: scaleX(-1);
-
     border-radius: 10px;
 }
 
@@ -730,6 +716,11 @@ svg {
     align-items: center;
 
 }
+
+.on-call-user-box--video-off .on-call-user-box__video video {
+    display: none;
+}
+
 
 .on-call-user-box__btn-container {
     position: absolute;
