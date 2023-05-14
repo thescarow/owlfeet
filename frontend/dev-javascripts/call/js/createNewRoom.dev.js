@@ -16,9 +16,11 @@ import "@uppy/webcam/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
 
 import AwsS3Multipart from "@uppy/aws-s3-multipart"
-
-export function createNewRoom() {
-  console.log("called")
+let myMediaStream
+let myStreamTypeData
+export function createNewRoom(mediaStream, streamTypeData) {
+  myMediaStream = mediaStream
+  myStreamTypeData = streamTypeData
   initialiseEventForCreatingNewRoom()
 }
 
@@ -140,19 +142,12 @@ function initialiseEventForCreatingNewRoom() {
           let creatingNewRoomPicKey = creatingNewRoomPic.dataset.roomPic
 
           if (newRoomNameInputValue.trim() !== "") {
-            let calltypeInfoVideoBtn = document.getElementById(
-              "calltypeInfoVideoBtn"
-            )
-            let calltypeInfoAudioBtn = document.getElementById(
-              "calltypeInfoAudioBtn"
-            )
+            let isVideoOn =
+              myStreamTypeData.isScreenShareOn || myStreamTypeData.isCameraOn
+                ? true
+                : false
 
-            let isVideoOn = calltypeInfoVideoBtn.dataset.calltypeVideoValue
-            let isAudioOn = calltypeInfoAudioBtn.dataset.calltypeAudioValue
-            if (isVideoOn === "string")
-              isVideoOn = isVideoOn === "true" ? true : false
-            if (isAudioOn === "string")
-              isAudioOn = isAudioOn === "true" ? true : false
+            let isAudioOn = myStreamTypeData.isAudioOn ? true : false
 
             let callRoomData = {
               isVideoOn: isVideoOn,
@@ -181,7 +176,16 @@ function initialiseEventForCreatingNewRoom() {
                   let { createOnCallSection } = await import(
                     "./onCallSection.dev"
                   )
-                  createOnCallSection(data.callRoom)
+                  createOnCallSection(
+                    data.callRoom,
+                    myMediaStream,
+                    myStreamTypeData
+                  )
+                  history.replaceState(
+                    data.callRoom,
+                    "",
+                    `/call/?room=${data.callRoom._id.toString()}`
+                  )
                 } else {
                   let { createMainNotification } = await import(
                     "../../common/mainNotification.dev"

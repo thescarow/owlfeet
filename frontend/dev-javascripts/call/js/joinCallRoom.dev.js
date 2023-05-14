@@ -5,9 +5,11 @@ let svg_callPermissionLockIcon = `
 `
 let roomInfoContainer = document.getElementById("roomInfoContainer")
 let joiningCallRoom = document.getElementById("joiningCallRoom")
-
-export function joinCallRoom() {
-  console.log("called")
+let myMediaStream
+let myStreamTypeData
+export function joinCallRoom(mediaStream, streamTypeData) {
+  myMediaStream = mediaStream
+  myStreamTypeData = streamTypeData
   initialiseEventForJoinCallRoom()
 }
 
@@ -20,19 +22,12 @@ function initialiseEventForJoinCallRoom() {
         if (callRoomBtn.dataset.btn === "join-call-room") {
           let joiningRoomId = joiningCallRoom.dataset.callRoomId
           if (joiningRoomId !== "") {
-            let calltypeInfoVideoBtn = document.getElementById(
-              "calltypeInfoVideoBtn"
-            )
-            let calltypeInfoAudioBtn = document.getElementById(
-              "calltypeInfoAudioBtn"
-            )
+            let isVideoOn =
+              myStreamTypeData.isScreenShareOn || myStreamTypeData.isCameraOn
+                ? true
+                : false
 
-            let isVideoOn = calltypeInfoVideoBtn.dataset.calltypeVideoValue
-            let isAudioOn = calltypeInfoAudioBtn.dataset.calltypeAudioValue
-            if (isVideoOn === "string")
-              isVideoOn = isVideoOn === "true" ? true : false
-            if (isAudioOn === "string")
-              isAudioOn = isAudioOn === "true" ? true : false
+            let isAudioOn = myStreamTypeData.isAudioOn ? true : false
 
             let callRoomData = {
               isVideoOn: isVideoOn,
@@ -59,7 +54,11 @@ function initialiseEventForJoinCallRoom() {
                   let { createOnCallSection } = await import(
                     "./onCallSection.dev"
                   )
-                  createOnCallSection(data.callRoom)
+                  createOnCallSection(
+                    data.callRoom,
+                    myMediaStream,
+                    myStreamTypeData
+                  )
                 } else {
                   let { createMainNotification } = await import(
                     "../../common/mainNotification.dev"

@@ -5,19 +5,24 @@ let svg_callPermissionLockIcon = `
 `
 
 let myMediaStream = null
-let isScreenShareOn = false
-let isCameraOn = false
-let isAudioOn = false
-
+let myStreamTypeData = {
+  isScreenShareOn: false,
+  isCameraOn: false,
+  isAudioOn: false
+}
 ;(async function () {
   if (!IS_INIT_CALL_MODULE) {
     let data = await createMediaStream()
     if (data.isSuccess) {
       myMediaStream = data.stream
+      myStreamTypeData.isScreenShareOn = false
+      myStreamTypeData.isCameraOn = data.isCameraOn
+      myStreamTypeData.isAudioOn = data.isAudioOn
+
       let { createCalltypeInfoContainer } = await import(
         "./js/calltypeInfoContainer.dev"
       )
-      createCalltypeInfoContainer(myMediaStream)
+      createCalltypeInfoContainer(myMediaStream, myStreamTypeData)
     } else {
       console.log("error message: ", data.error)
       let { showCalltypeMessage } = await import(
@@ -30,18 +35,18 @@ let isAudioOn = false
 
     if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
       let { joinCallRoom } = await import("./js/joinCallRoom.dev")
-      joinCallRoom(myMediaStream, isCameraOn, isScreenShareOn, isAudioOn)
+      joinCallRoom(myMediaStream, myStreamTypeData)
     }
     if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
       let creatingRoomInfo = document.getElementById("creatingRoomInfo")
       if (creatingRoomInfo) {
         if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
           let { createChatRoom } = await import("./js/createChatRoom.dev")
-          createChatRoom(myMediaStream)
+          createChatRoom(myMediaStream, myStreamTypeData)
         }
         if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
           let { createNewRoom } = await import("./js/createNewRoom.dev")
-          createNewRoom(myMediaStream)
+          createNewRoom(myMediaStream, myStreamTypeData)
         }
       }
     }
@@ -65,7 +70,9 @@ async function createMediaStream() {
       })
       return {
         isSuccess: true,
-        stream: stream
+        stream: stream,
+        isCameraOn: true,
+        isAudioOn: true
       }
     } catch (err) {
       console.log("error in accessing camera and mic:", err.message)
@@ -77,7 +84,9 @@ async function createMediaStream() {
         })
         return {
           isSuccess: true,
-          stream: stream
+          stream: stream,
+          isCameraOn: true,
+          isAudioOn: true
         }
       } catch (err) {
         if (e.message === "Permission dismissed") {

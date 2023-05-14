@@ -109,6 +109,8 @@ function initialiseEventForCalltypeInfoContainer() {
               "calltype-info__preview--audio-off"
             )
             calltypeInfoBtn.dataset.btnWorkingState = "audio-off"
+
+            myStreamTypeData.isAudioOn = true
           }
         } else if (calltypeInfoBtn.dataset.btnWorkingState === "audio-off") {
           let audioTracks = myMediaStream.getAudioTracks()
@@ -119,6 +121,7 @@ function initialiseEventForCalltypeInfoContainer() {
           calltypeInfoBtn.classList.remove("calltype-info-btn--unselected")
           calltypeInfoPreview.classList.add("calltype-info__preview--audio-off")
           calltypeInfoBtn.dataset.btnWorkingState = "audio-on"
+          myStreamTypeData.isAudioOn = false
         }
       }
       if (calltypeInfoBtn.dataset.btnType === "share-screen") {
