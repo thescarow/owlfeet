@@ -33,8 +33,22 @@
     border-bottom: 1px solid rgba(var(--rgba-fourth-color), 0.1);
 }
 
+
+
 .calltype-info__preview video {
     width: 100%;
+}
+
+/* 
+.calltype-info__preview--screen-share video {
+    width: 100%;
+    transform: scaleX(-1);
+} */
+
+.calltype-info__preview--camera video {
+
+    transform: scaleX(-1);
+    /* transform: scaleX(-1); */
 }
 
 .video-off-preview {
@@ -121,6 +135,10 @@
     padding: 9px;
     border-radius: 50%;
     cursor: pointer;
+}
+
+.calltype-info-btn--hide {
+    display: none;
 }
 
 .calltype-info-btn__icon {

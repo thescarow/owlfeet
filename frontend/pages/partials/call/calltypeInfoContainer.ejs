@@ -25,7 +25,7 @@
 
     <div class="calltype-info " id="calltypeInfo">
 
-        <div class="calltype-info__preview" id="calltypeInfoPreview">
+        <div class="calltype-info__preview calltype-info__preview--camera" id="calltypeInfoPreview">
 
             <div class="video-off-preview">
                 <%- include("../icons/callVideoOffIcon.svg") _%>
@@ -39,8 +39,17 @@
         </div>
         <div class="calltype-info__btn-container" id="calltypeInfoBtnContainer">
 
-            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="video"
-                id="calltypeInfoVideoBtn" data-calltype-video-value="true">
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-btn-type="share-screen"
+                data-btn-working-state="share-screen-on">
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
+                    <%- include("../icons/callShareScreenIcon.svg") _%>
+                </div>
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--selected">
+                    <%- include("../icons/callCancelShareScreenIcon.svg") _%>
+                </div>
+            </div>
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-btn-type="video"
+                data-btn-working-state="video-off">
                 <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
                     <%- include("../icons/callVideoOnIcon.svg") _%>
                 </div>
@@ -48,8 +57,8 @@
                     <%- include("../icons/callVideoOffIcon.svg") _%>
                 </div>
             </div>
-            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="audio"
-                id="calltypeInfoAudioBtn" data-calltype-audio-value="true">
+            <div class="calltype-info-btn calltype-info-btn--unselected" data-btn-type="audio"
+                data-btn-working-state="audio-off">
                 <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
                     <%- include("../icons/callMicOnIcon.svg") _%>
                 </div>
@@ -57,8 +66,12 @@
                     <%- include("../icons/callMicOffIcon.svg") _%>
                 </div>
             </div>
-            <div class="calltype-info-btn calltype-info-btn--unselected" data-calltype-info-btn="settings">
+            <div class="calltype-info-btn calltype-info-btn--hide calltype-info-btn--unselected"
+                data-calltype-info-btn="settings">
                 <div class="calltype-info-btn__icon calltype-info-btn__icon--unselected">
+                    <%- include("../icons/callSettingsIcon.svg") _%>
+                </div>
+                <div class="calltype-info-btn__icon calltype-info-btn__icon--selected">
                     <%- include("../icons/callSettingsIcon.svg") _%>
                 </div>
             </div>
