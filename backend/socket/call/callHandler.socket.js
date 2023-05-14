@@ -115,7 +115,7 @@ exports.callHandler = async (io, socket) => {
       }
     })
 
-    socket.on("call:toggle-video-stream", async data => {
+    socket.on("call:toggle-camera-stream", async data => {
       if (socket.loginUser) {
         if (
           data.hasOwnProperty("isEnabled") &&
@@ -126,7 +126,7 @@ exports.callHandler = async (io, socket) => {
             user: socket.loginUser.id
           })
           if (callRoomMember) {
-            callRoomMember.isVideoOn = data.isEnabled
+            callRoomMember.isCameraOn = data.isEnabled
             console.log("callRoomMember", callRoomMember)
             await callRoomMember.save()
 
@@ -145,7 +145,55 @@ exports.callHandler = async (io, socket) => {
               if (member.user.toString() !== socket.loginUser.id.toString()) {
                 socket
                   .to(member.user.toString())
-                  .emit("call:toggle-video-stream", eventData)
+                  .emit("call:toggle-camera-stream", eventData)
+              }
+            })
+          }
+        } else {
+          console.log(
+            errorLog("Server Error In Call Handler Socket:"),
+            mainErrorLog("Not send all properties with event")
+          )
+        }
+      } else {
+        console.log(
+          errorLog("Server Error In Call Handler Socket:"),
+          mainErrorLog("User not logged in")
+        )
+      }
+    })
+    socket.on("call:toggle-screen-share-stream", async data => {
+      if (socket.loginUser) {
+        if (
+          data.hasOwnProperty("isEnabled") &&
+          data.hasOwnProperty("callRoomId")
+        ) {
+          let callRoomMember = await CallRoomMember.findOne({
+            callRoom: data.callRoomId,
+            user: socket.loginUser.id
+          })
+          if (callRoomMember) {
+            callRoomMember.isScreenShare = data.isEnabled
+            console.log("callRoomMember", callRoomMember)
+            await callRoomMember.save()
+
+            let allCallRoomMembers = await CallRoomMember.find({
+              callRoom: data.callRoomId
+            })
+              .select({ user: 1 })
+              .lean()
+
+            let eventData = {
+              userId: socket.loginUser.id,
+              callRoomId: data.callRoomId,
+              isEnabled: data.isEnabled,
+              isCameraOn: data.isCameraOn
+            }
+            allCallRoomMembers.forEach(member => {
+              if (member.user.toString() !== socket.loginUser.id.toString()) {
+                socket
+                  .to(member.user.toString())
+                  .emit("call:toggle-screen-share-stream", eventData)
               }
             })
           }

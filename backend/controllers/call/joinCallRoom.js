@@ -24,7 +24,8 @@ exports.joinCallRoom = async (req, res) => {
       if (
         userData.hasOwnProperty("joiningRoomId") &&
         userData.hasOwnProperty("isAudioOn") &&
-        userData.hasOwnProperty("isVideoOn")
+        userData.hasOwnProperty("isCameraOn") &&
+        userData.hasOwnProperty("isScreenShareOn")
       ) {
         let callRoom = await CallRoom.findById(userData.joiningRoomId)
           .populate({
@@ -49,7 +50,8 @@ exports.joinCallRoom = async (req, res) => {
               let callRoomMemberData = {
                 roomId: userData.joiningRoomId,
                 userId: req.user.id,
-                isVideoOn: userData.isVideoOn,
+                isCameraOn: userData.isCameraOn,
+                isScreenShareOn: userData.isScreenShareOn,
                 isAudioOn: userData.isAudioOn
               }
               let isCallRoomMemberCreated = await createCallRoomMember(
@@ -73,7 +75,8 @@ exports.joinCallRoom = async (req, res) => {
             let callRoomMemberData = {
               roomId: userData.joiningRoomId,
               userId: req.user.id,
-              isVideoOn: userData.isVideoOn,
+              isCameraOn: userData.isCameraOn,
+              isScreenShareOn: userData.isScreenShareOn,
               isAudioOn: userData.isAudioOn
             }
             let isCallRoomMemberCreated = await createCallRoomMember(

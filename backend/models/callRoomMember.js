@@ -7,7 +7,11 @@ const callRoomMemberSchema = new mongoose.Schema(
 
     peerId: { type: String, default: "" },
 
-    isVideoOn: {
+    isCameraOn: {
+      type: Boolean,
+      default: false
+    },
+    isScreenShareOn: {
       type: Boolean,
       default: false
     },
