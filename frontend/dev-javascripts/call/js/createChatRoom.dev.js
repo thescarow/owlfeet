@@ -21,15 +21,17 @@ function initialiseEventForCreatingChatRoom() {
           let chatId = creatingChatRoom.dataset.chatId
 
           if (chatId !== "") {
-            let isVideoOn =
-              myStreamTypeData.isScreenShareOn || myStreamTypeData.isCameraOn
-                ? true
-                : false
-
             let isAudioOn = myStreamTypeData.isAudioOn ? true : false
 
+            let isCameraOn = myStreamTypeData.isCameraOn ? true : false
+
+            let isScreenShareOn = myStreamTypeData.isScreenShareOn
+              ? true
+              : false
+
             let callRoomData = {
-              isVideoOn: isVideoOn,
+              isCameraOn: isCameraOn,
+              isScreenShareOn: isScreenShareOn,
               isAudioOn: isAudioOn,
               chatId: chatId
             }

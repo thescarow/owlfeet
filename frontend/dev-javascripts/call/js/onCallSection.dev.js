@@ -244,9 +244,9 @@ function initialiseOnCallMainViewResizeObserver() {
 async function initialiseCall() {
   try {
     if (isCameraOn) {
-      onCallVideoOn()
+      onCallCameraOn()
     } else {
-      onCallVideoOff()
+      onCallCameraOff()
     }
     if (isScreenShareOn) {
       onCallSwitchCameraToScreenShare()
@@ -380,10 +380,12 @@ function initialiseEventForOnCallSection() {
     let onCallBtn = e.target.closest(`.on-call-btn`)
     if (onCallBtn && onCallMainBtnContainer.contains(onCallBtn)) {
       if (onCallBtn.dataset.btnType === "call-video") {
-        if (onCallBtn.dataset.btnWorkingState === "call-video-off") {
-          onCallVideoOff()
-        } else if (onCallBtn.dataset.btnWorkingState === "call-video-on") {
-          onCallVideoOn()
+        if (isScreenShareOn === false) {
+          if (onCallBtn.dataset.btnWorkingState === "call-video-off") {
+            onCallCameraOff()
+          } else if (onCallBtn.dataset.btnWorkingState === "call-video-on") {
+            onCallCameraOn()
+          }
         }
       }
       if (onCallBtn.dataset.btnType === "call-audio") {
@@ -395,10 +397,18 @@ function initialiseEventForOnCallSection() {
       }
       if (onCallBtn.dataset.btnType === "call-share-screen") {
         if (onCallBtn.dataset.btnWorkingState === "call-share-screen-on") {
+          let cameraBtn = document.querySelector(
+            `.on-call-btn[data-btn-type="call-video"]`
+          )
+          if (cameraBtn) cameraBtn.classList.add("on-call-btn--disable")
           onCallSwitchCameraToScreenShare()
         } else if (
           onCallBtn.dataset.btnWorkingState === "call-share-screen-off"
         ) {
+          let cameraBtn = document.querySelector(
+            `.on-call-btn[data-btn-type="call-video"]`
+          )
+          if (cameraBtn) cameraBtn.classList.remove("on-call-btn--disable")
           onCallSwitchScreenShareToCamera()
         }
       }
@@ -642,8 +652,13 @@ function createOnCallUserBox(member) {
       .getElementsByClassName("on-call-user-box__audio")[0]
       .classList.add("on-call-user-box__audio--off")
   }
-  if (!member.isVideoOn) {
+  if (!(member.isCameraOn || member.isScreenShareOn)) {
     onCallUserBox.classList.add("on-call-user-box--video-off")
+  }
+  if (member.isCameraOn) {
+    onCallUserBox
+      .getElementsByClassName("on-call-user-box__video")[0]
+      .classList.add("on-call-user-box__video--camera")
   }
 
   return onCallUserBox
@@ -951,7 +966,7 @@ function switchViewToMultiple() {
   }
 }
 
-function onCallVideoOff() {
+function onCallCameraOff() {
   let onCallBtn = document.querySelector(
     `.on-call-btn[data-btn-type="call-video"]`
   )
@@ -962,11 +977,10 @@ function onCallVideoOff() {
   }
   if (isCameraOn === true) {
     isCameraOn = false
-    changeVideoStream(false, loginUser._id.toString())
+    changeCameraStream(false, loginUser._id.toString())
   }
 }
-
-function onCallVideoOn() {
+function onCallCameraOn() {
   let onCallBtn = document.querySelector(
     `.on-call-btn[data-btn-type="call-video"]`
   )
@@ -977,7 +991,87 @@ function onCallVideoOn() {
   }
   if (isCameraOn === false) {
     isCameraOn = true
-    changeVideoStream(true, loginUser._id.toString())
+    changeCameraStream(true, loginUser._id.toString())
+  }
+}
+async function changeCameraStream(isEnabled, userId) {
+  if (loginUser._id.toString() === userId.toString()) {
+    if (isScreenShareOn === false) {
+      if (isEnabled === true) {
+        let { getCameraVideoTrack } = await import("../call.dev")
+
+        let callVideoTrack = await getCameraVideoTrack()
+        let trackKind = "video"
+        if (callVideoTrack) {
+          isCameraOn = true
+          trackKind = callVideoTrack.kind
+
+          let videoTracks = myMediaStream.getVideoTracks()
+
+          videoTracks.forEach(track => {
+            track.stop()
+            myMediaStream.removeTrack(track)
+          })
+          myMediaStream.addTrack(callVideoTrack)
+
+          let peerId
+          for (peerId in allMediaConnections) {
+            let otherUserConnection = allMediaConnections[peerId].peerConnection
+
+            otherUserConnection.getSenders().forEach(function (sender) {
+              if (sender.track.kind === trackKind) {
+                sender.replaceTrack(callVideoTrack)
+              }
+            })
+          }
+        }
+      } else {
+        isCameraOn = false
+
+        let videoTracks = myMediaStream.getVideoTracks()
+        videoTracks.forEach(track => {
+          track.stop()
+        })
+      }
+    } else {
+      // myMediaStream.getVideoTracks()[0].isEnabled = isEnabled
+    }
+
+    let eventData = {
+      isEnabled: isEnabled,
+      callRoomId: callRoom._id,
+      userId: loginUser._id
+    }
+    socket.emit("call:toggle-camera-stream", eventData)
+  }
+
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId.toString()}"]`
+  )
+
+  if (onCallUserBox) {
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+    if (isEnabled) {
+      if (onCallUserBox.classList.contains("on-call-user-box--video-off"))
+        onCallUserBox.classList.remove("on-call-user-box--video-off")
+
+      if (
+        !onCallUserBoxVideo.classList.contains(
+          "on-call-user-box__video--camera"
+        )
+      )
+        onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
+    } else {
+      if (!onCallUserBox.classList.contains("on-call-user-box--video-off"))
+        onCallUserBox.classList.add("on-call-user-box--video-off")
+
+      if (
+        onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+      )
+        onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
+    }
   }
 }
 
@@ -996,7 +1090,6 @@ function onCallAudioOff() {
     changeAudioStream(false, loginUser._id.toString())
   }
 }
-
 function onCallAudioOn() {
   let onCallBtn = document.querySelector(
     `.on-call-btn[data-btn-type="call-audio"]`
@@ -1009,71 +1102,6 @@ function onCallAudioOn() {
   if (isAudioOn === false) {
     isAudioOn = true
     changeAudioStream(true, loginUser._id.toString())
-  }
-}
-
-function onCallSwitchCameraToScreenShare() {
-  let onCallBtn = document.querySelector(
-    `.on-call-btn[data-btn-type="call-share-screen"]`
-  )
-  if (onCallBtn) {
-    onCallBtn.classList.add("on-call-btn--selected")
-    onCallBtn.classList.remove("on-call-btn--unselected")
-    onCallBtn.dataset.btnWorkingState = "call-share-screen-off"
-  }
-  if (isScreenShareOn === false) {
-    isScreenShareOn = true
-    switchCameraToScreenShareStream()
-  }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
-      onCallUserBox.classList.remove("on-call-user-box--video-off")
-    }
-    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
-      "on-call-user-box__video"
-    )[0]
-    if (
-      onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
-    )
-      onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
-  }
-}
-function onCallSwitchScreenShareToCamera() {
-  let onCallBtn = document.querySelector(
-    `.on-call-btn[data-btn-type="call-share-screen"]`
-  )
-  if (onCallBtn) {
-    onCallBtn.classList.add("on-call-btn--unselected")
-    onCallBtn.classList.remove("on-call-btn--selected")
-    onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
-  }
-  if (isScreenShareOn === true) {
-    isScreenShareOn = false
-    switchScreenShareToCameraStream()
-  }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    if (isCameraOn) {
-      if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
-        onCallUserBox.classList.remove("on-call-user-box--video-off")
-      }
-    } else {
-      if (!onCallUserBox.classList.contains("on-call-user-box--video-off")) {
-        onCallUserBox.classList.add("on-call-user-box--video-off")
-      }
-    }
-    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
-      "on-call-user-box__video"
-    )[0]
-    if (
-      !onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
-    )
-      onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
   }
 }
 async function changeAudioStream(isEnabled, userId) {
@@ -1147,131 +1175,145 @@ async function changeAudioStream(isEnabled, userId) {
   }
 }
 
-async function changeVideoStream(isEnabled, userId) {
-  if (loginUser._id.toString() === userId.toString()) {
-    if (isScreenShareOn === false) {
-      if (isEnabled === true) {
-        let { getCameraVideoTrack } = await import("../call.dev")
-
-        let callVideoTrack = await getCameraVideoTrack()
-        let trackKind = "video"
-        if (callVideoTrack) {
-          isCameraOn = true
-          trackKind = callVideoTrack.kind
-
-          let videoTracks = myMediaStream.getVideoTracks()
-
-          videoTracks.forEach(track => {
-            track.stop()
-            myMediaStream.removeTrack(track)
-          })
-          myMediaStream.addTrack(callVideoTrack)
-
-          let peerId
-          for (peerId in allMediaConnections) {
-            let otherUserConnection = allMediaConnections[peerId].peerConnection
-
-            otherUserConnection.getSenders().forEach(function (sender) {
-              if (sender.track.kind === trackKind) {
-                sender.replaceTrack(callVideoTrack)
-              }
-            })
-          }
-        }
-      } else {
-        isCameraOn = false
-
-        let videoTracks = myMediaStream.getVideoTracks()
-        videoTracks.forEach(track => {
-          track.stop()
-        })
-      }
-    } else {
-      // myMediaStream.getVideoTracks()[0].isEnabled = isEnabled
-    }
-
-    let eventData = {
-      isEnabled: isEnabled,
-      callRoomId: callRoom._id,
-      userId: loginUser._id
-    }
-    socket.emit("call:toggle-video-stream", eventData)
+function onCallSwitchCameraToScreenShare() {
+  let onCallBtn = document.querySelector(
+    `.on-call-btn[data-btn-type="call-share-screen"]`
+  )
+  if (onCallBtn) {
+    onCallBtn.classList.add("on-call-btn--selected")
+    onCallBtn.classList.remove("on-call-btn--unselected")
+    onCallBtn.dataset.btnWorkingState = "call-share-screen-off"
   }
-
+  if (isScreenShareOn === false) {
+    isScreenShareOn = true
+    switchCameraToScreenShareStream(loginUser._id.toString())
+  }
   let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${userId.toString()}"]`
+    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
   )
   if (onCallUserBox) {
-    if (isEnabled) {
-      if (onCallUserBox.classList.contains("on-call-user-box--video-off"))
-        onCallUserBox.classList.remove("on-call-user-box--video-off")
-
-      let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
-        "on-call-user-box__video"
-      )[0]
-      if (
-        !onCallUserBoxVideo.classList.contains(
-          "on-call-user-box__video--camera"
-        )
-      )
-        onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
-    } else {
-      if (!onCallUserBox.classList.contains("on-call-user-box--video-off"))
-        onCallUserBox.classList.add("on-call-user-box--video-off")
-
-      let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
-        "on-call-user-box__video"
-      )[0]
-      if (
-        onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
-      )
-        onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
+    if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+      onCallUserBox.classList.remove("on-call-user-box--video-off")
     }
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+    if (
+      onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+    )
+      onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
   }
 }
+async function switchCameraToScreenShareStream(userId) {
+  if (loginUser._id.toString() === userId.toString()) {
+    let { getScreenShareVideoTrack } = await import("../call.dev")
+    let screenShareVideoTrack = await getScreenShareVideoTrack()
+    let trackKind = "video"
+    if (screenShareVideoTrack) {
+      isScreenShareOn = true
+      trackKind = screenShareVideoTrack.kind
 
-async function switchCameraToScreenShareStream() {
-  let { getScreenShareVideoTrack } = await import("../call.dev")
-  let screenShareVideoTrack = await getScreenShareVideoTrack()
-  let trackKind = "video"
-  if (screenShareVideoTrack) {
-    isScreenShareOn = true
-    trackKind = screenShareVideoTrack.kind
-
-    let videoTracks = myMediaStream.getVideoTracks()
-    videoTracks.forEach(track => {
-      track.stop()
-      myMediaStream.removeTrack(track)
-    })
-
-    myMediaStream.addTrack(screenShareVideoTrack)
-    let peerId
-    for (peerId in allMediaConnections) {
-      let otherUserConnection = allMediaConnections[peerId].peerConnection
-
-      otherUserConnection.getSenders().forEach(function (sender) {
-        if (sender.track.kind === trackKind) {
-          sender.replaceTrack(screenShareVideoTrack)
-        }
+      let videoTracks = myMediaStream.getVideoTracks()
+      videoTracks.forEach(track => {
+        track.stop()
+        myMediaStream.removeTrack(track)
       })
-    }
-    screenShareVideoTrack.onended = () => {
+
+      myMediaStream.addTrack(screenShareVideoTrack)
+      let peerId
+      for (peerId in allMediaConnections) {
+        let otherUserConnection = allMediaConnections[peerId].peerConnection
+
+        otherUserConnection.getSenders().forEach(function (sender) {
+          if (sender.track.kind === trackKind) {
+            sender.replaceTrack(screenShareVideoTrack)
+          }
+        })
+      }
+
+      let eventData = {
+        isEnabled: true,
+        isCameraOn: isCameraOn,
+        callRoomId: callRoom._id,
+        userId: loginUser._id
+      }
+      socket.emit("call:toggle-screen-share-stream", eventData)
+
+      screenShareVideoTrack.onended = () => {
+        isScreenShareOn = false
+        let cameraBtn = document.querySelector(
+          `.on-call-btn[data-btn-type="call-video"]`
+        )
+        if (cameraBtn) cameraBtn.classList.remove("on-call-btn--disable")
+
+        let onCallBtn = document.querySelector(
+          `.on-call-btn[data-btn-type="call-share-screen"]`
+        )
+        if (onCallBtn) {
+          if (onCallBtn.dataset.btnWorkingState === "call-share-screen-off") {
+            onCallBtn.classList.add("on-call-btn--unselected")
+            onCallBtn.classList.remove("on-call-btn--selected")
+            onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+            if (isCameraOn) {
+              changeCameraStream(true, loginUser._id.toString())
+            } else {
+              changeCameraStream(false, loginUser._id.toString())
+            }
+          }
+        }
+
+        let eventData = {
+          isEnabled: false,
+          isCameraOn: isCameraOn,
+          callRoomId: callRoom._id,
+          userId: loginUser._id
+        }
+        socket.emit("call:toggle-screen-share-stream", eventData)
+
+        let onCallUserBox = document.querySelector(
+          `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+        )
+        if (onCallUserBox) {
+          if (isCameraOn) {
+            if (
+              onCallUserBox.classList.contains("on-call-user-box--video-off")
+            ) {
+              onCallUserBox.classList.remove("on-call-user-box--video-off")
+            }
+          } else {
+            if (
+              !onCallUserBox.classList.contains("on-call-user-box--video-off")
+            ) {
+              onCallUserBox.classList.add("on-call-user-box--video-off")
+            }
+          }
+          let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+            "on-call-user-box__video"
+          )[0]
+          if (
+            !onCallUserBoxVideo.classList.contains(
+              "on-call-user-box__video--camera"
+            )
+          )
+            onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
+        }
+      }
+      screenShareVideoTrack.onmute = () => {}
+      screenShareVideoTrack.onunmute = () => {}
+    } else {
       isScreenShareOn = false
+      let cameraBtn = document.querySelector(
+        `.on-call-btn[data-btn-type="call-video"]`
+      )
+      if (cameraBtn) cameraBtn.classList.remove("on-call-btn--disable")
 
       let onCallBtn = document.querySelector(
         `.on-call-btn[data-btn-type="call-share-screen"]`
       )
       if (onCallBtn) {
-        if (onCallBtn.dataset.btnWorkingState === "call-share-screen-off") {
-          onCallBtn.classList.add("on-call-btn--unselected")
-          onCallBtn.classList.remove("on-call-btn--selected")
-          onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
-          if (isCameraOn) {
-            changeVideoStream(true, loginUser._id.toString())
-          } else {
-            changeVideoStream(false, loginUser._id.toString())
-          }
-        }
+        onCallBtn.classList.add("on-call-btn--unselected")
+        onCallBtn.classList.remove("on-call-btn--selected")
+        onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
       }
       let onCallUserBox = document.querySelector(
         `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
@@ -1299,31 +1341,33 @@ async function switchCameraToScreenShareStream() {
       )
         onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
     }
-    screenShareVideoTrack.onmute = () => {}
-    screenShareVideoTrack.onunmute = () => {}
-  } else {
-    isScreenShareOn = false
+  }
+}
 
-    let onCallBtn = document.querySelector(
-      `.on-call-btn[data-btn-type="call-share-screen"]`
-    )
-    if (onCallBtn) {
-      onCallBtn.classList.add("on-call-btn--unselected")
-      onCallBtn.classList.remove("on-call-btn--selected")
-      onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
-    }
-    let onCallUserBox = document.querySelector(
-      `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-    )
-    if (onCallUserBox) {
-      if (isCameraOn) {
-        if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
-          onCallUserBox.classList.remove("on-call-user-box--video-off")
-        }
-      } else {
-        if (!onCallUserBox.classList.contains("on-call-user-box--video-off")) {
-          onCallUserBox.classList.add("on-call-user-box--video-off")
-        }
+function onCallSwitchScreenShareToCamera() {
+  let onCallBtn = document.querySelector(
+    `.on-call-btn[data-btn-type="call-share-screen"]`
+  )
+  if (onCallBtn) {
+    onCallBtn.classList.add("on-call-btn--unselected")
+    onCallBtn.classList.remove("on-call-btn--selected")
+    onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+  }
+  if (isScreenShareOn === true) {
+    isScreenShareOn = false
+    switchScreenShareToCameraStream(loginUser._id.toString())
+  }
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+  )
+  if (onCallUserBox) {
+    if (isCameraOn) {
+      if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+        onCallUserBox.classList.remove("on-call-user-box--video-off")
+      }
+    } else {
+      if (!onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+        onCallUserBox.classList.add("on-call-user-box--video-off")
       }
     }
     let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
@@ -1335,13 +1379,22 @@ async function switchCameraToScreenShareStream() {
       onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
   }
 }
+async function switchScreenShareToCameraStream(userId) {
+  if (loginUser._id.toString() === userId.toString()) {
+    isScreenShareOn = false
+    if (isCameraOn) {
+      changeCameraStream(true, loginUser._id.toString())
+    } else {
+      changeCameraStream(false, loginUser._id.toString())
+    }
 
-async function switchScreenShareToCameraStream() {
-  isScreenShareOn = false
-  if (isCameraOn) {
-    changeVideoStream(true, loginUser._id.toString())
-  } else {
-    changeVideoStream(false, loginUser._id.toString())
+    let eventData = {
+      isEnabled: false,
+      isCameraOn: isCameraOn,
+      callRoomId: callRoom._id,
+      userId: loginUser._id
+    }
+    socket.emit("call:toggle-screen-share-stream", eventData)
   }
 }
 
@@ -1366,9 +1419,46 @@ socket.on("call:end-call-room", async data => {
   let { createAfterCallSection } = await import("./afterCallSection.dev")
   createAfterCallSection(data.callRoom, true)
 })
-socket.on("call:toggle-video-stream", data => {
-  changeVideoStream(data.isEnabled, data.userId)
+socket.on("call:toggle-camera-stream", data => {
+  changeCameraStream(data.isEnabled, data.userId)
 })
 socket.on("call:toggle-audio-stream", data => {
   changeAudioStream(data.isEnabled, data.userId)
+})
+socket.on("call:toggle-screen-share-stream", data => {
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${data.userId.toString()}"]`
+  )
+
+  if (onCallUserBox) {
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+
+    if (data.isEnabled) {
+      if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+        onCallUserBox.classList.remove("on-call-user-box--video-off")
+      }
+
+      if (
+        onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+      )
+        onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
+    } else {
+      if (data.isCameraOn) {
+        if (onCallUserBox.classList.contains("on-call-user-box--video-off"))
+          onCallUserBox.classList.remove("on-call-user-box--video-off")
+      } else {
+        if (!onCallUserBox.classList.contains("on-call-user-box--video-off"))
+          onCallUserBox.classList.add("on-call-user-box--video-off")
+      }
+
+      if (
+        !onCallUserBoxVideo.classList.contains(
+          "on-call-user-box__video--camera"
+        )
+      )
+        onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
+    }
+  }
 })

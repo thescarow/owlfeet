@@ -142,15 +142,17 @@ function initialiseEventForCreatingNewRoom() {
           let creatingNewRoomPicKey = creatingNewRoomPic.dataset.roomPic
 
           if (newRoomNameInputValue.trim() !== "") {
-            let isVideoOn =
-              myStreamTypeData.isScreenShareOn || myStreamTypeData.isCameraOn
-                ? true
-                : false
-
             let isAudioOn = myStreamTypeData.isAudioOn ? true : false
 
+            let isCameraOn = myStreamTypeData.isCameraOn ? true : false
+
+            let isScreenShareOn = myStreamTypeData.isScreenShareOn
+              ? true
+              : false
+
             let callRoomData = {
-              isVideoOn: isVideoOn,
+              isCameraOn: isCameraOn,
+              isScreenShareOn: isScreenShareOn,
               isAudioOn: isAudioOn,
               roomName: newRoomNameInputValue,
               roomAbout: newRoomAboutInputValue,

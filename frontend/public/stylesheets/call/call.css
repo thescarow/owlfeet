@@ -900,6 +900,10 @@ svg {
     background: rgba(var(--rgba-fourth-color), 0.1);
 }
 
+.on-call-btn--disable {
+    opacity: 0.5;
+}
+
 .on-call-btn__icon {
     width: 100%;
     height: 100%;

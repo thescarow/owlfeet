@@ -8,7 +8,8 @@ exports.createCallRoomMember = async userData => {
     let newCallRoomMemberData = {
       callRoom: userData.roomId,
       user: userData.userId,
-      isVideoOn: userData.isVideoOn,
+      isCameraOn: userData.isCameraOn,
+      isScreenShareOn: userData.isScreenShareOn,
       isAudioOn: userData.isAudioOn
     }
     let newCallRoomMember = new CallRoomMember(newCallRoomMemberData)

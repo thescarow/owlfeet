@@ -29,10 +29,14 @@ exports.createNewRoom = async (req, res) => {
         userData.hasOwnProperty("roomAbout") &&
         userData.hasOwnProperty("roomPic") &&
         userData.hasOwnProperty("isAudioOn") &&
-        userData.hasOwnProperty("isVideoOn")
+        userData.hasOwnProperty("isCameraOn") &&
+        userData.hasOwnProperty("isScreenShareOn")
       ) {
-        if (userData.isVideoOn === "string")
-          userData.isVideoOn = userData.isVideoOn === "true" ? true : false
+        if (userData.isCameraOn === "string")
+          userData.isCameraOn = userData.isCameraOn === "true" ? true : false
+        if (userData.isScreenShareOn === "string")
+          userData.isScreenShareOn =
+            userData.isScreenShareOn === "true" ? true : false
         if (userData.isAudioOn === "string")
           userData.isAudioOn = userData.isAudioOn === "true" ? true : false
 
@@ -70,7 +74,8 @@ exports.createNewRoom = async (req, res) => {
         let callRoomMemberData = {
           roomId: createdNewRoom._id,
           userId: req.user.id,
-          isVideoOn: userData.isVideoOn,
+          isCameraOn: userData.isCameraOn,
+          isScreenShareOn: userData.isScreenShareOn,
           isAudioOn: userData.isAudioOn
         }
         let isCallRoomMemberCreated = await createCallRoomMember(
