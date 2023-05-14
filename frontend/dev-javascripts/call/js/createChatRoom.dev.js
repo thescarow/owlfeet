@@ -4,8 +4,11 @@ let svg_callPermissionLockIcon = `<svg width="80" height="100" viewBox="0 0 80 1
 `
 let roomInfoContainer = document.getElementById("roomInfoContainer")
 let creatingChatRoom = document.getElementById("creatingChatRoom")
-
-export function createChatRoom() {
+let myMediaStream
+let myStreamTypeData
+export function createChatRoom(mediaStream, streamTypeData) {
+  myMediaStream = mediaStream
+  myStreamTypeData = streamTypeData
   initialiseEventForCreatingChatRoom()
 }
 
@@ -18,19 +21,12 @@ function initialiseEventForCreatingChatRoom() {
           let chatId = creatingChatRoom.dataset.chatId
 
           if (chatId !== "") {
-            let calltypeInfoVideoBtn = document.getElementById(
-              "calltypeInfoVideoBtn"
-            )
-            let calltypeInfoAudioBtn = document.getElementById(
-              "calltypeInfoAudioBtn"
-            )
+            let isVideoOn =
+              myStreamTypeData.isScreenShareOn || myStreamTypeData.isCameraOn
+                ? true
+                : false
 
-            let isVideoOn = calltypeInfoVideoBtn.dataset.calltypeVideoValue
-            let isAudioOn = calltypeInfoAudioBtn.dataset.calltypeAudioValue
-            if (isVideoOn === "string")
-              isVideoOn = isVideoOn === "true" ? true : false
-            if (isAudioOn === "string")
-              isAudioOn = isAudioOn === "true" ? true : false
+            let isAudioOn = myStreamTypeData.isAudioOn ? true : false
 
             let callRoomData = {
               isVideoOn: isVideoOn,
@@ -55,7 +51,11 @@ function initialiseEventForCreatingChatRoom() {
                   let { createOnCallSection } = await import(
                     "./onCallSection.dev"
                   )
-                  createOnCallSection(data.callRoom)
+                  createOnCallSection(
+                    data.callRoom,
+                    myMediaStream,
+                    myStreamTypeData
+                  )
                   history.replaceState(
                     data.callRoom,
                     "",

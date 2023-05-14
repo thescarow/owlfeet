@@ -107,11 +107,11 @@ import { Peer } from "peerjs"
 
 export async function createOnCallSection(
   callRoomData,
-  stream,
+  mediaStream,
   streamTypeData
 ) {
   callRoom = callRoomData
-  myMediaStream = stream
+  myMediaStream = mediaStream
   isScreenShareOn = streamTypeData.isScreenShareOn
   isCameraOn = streamTypeData.isCameraOn
   isAudioOn = streamTypeData.isAudioOn
@@ -964,12 +964,6 @@ function onCallVideoOff() {
     isCameraOn = false
     changeVideoStream(false, loginUser._id.toString())
   }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    onCallUserBox.classList.add("on-call-user-box--video-off")
-  }
 }
 
 function onCallVideoOn() {
@@ -984,12 +978,6 @@ function onCallVideoOn() {
   if (isCameraOn === false) {
     isCameraOn = true
     changeVideoStream(true, loginUser._id.toString())
-  }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    onCallUserBox.classList.remove("on-call-user-box--video-off")
   }
 }
 
@@ -1007,21 +995,6 @@ function onCallAudioOff() {
     isAudioOn = false
     changeAudioStream(false, loginUser._id.toString())
   }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    let onCallUserBoxAudio = onCallUserBox.getElementsByClassName(
-      "on-call-user-box__audio"
-    )[0]
-
-    while (
-      onCallUserBoxAudio.classList.contains("on-call-user-box__audio--on")
-    ) {
-      onCallUserBoxAudio.classList.remove("on-call-user-box__audio--on")
-    }
-    onCallUserBoxAudio.classList.add("on-call-user-box__audio--off")
-  }
 }
 
 function onCallAudioOn() {
@@ -1037,26 +1010,11 @@ function onCallAudioOn() {
     isAudioOn = true
     changeAudioStream(true, loginUser._id.toString())
   }
-  let onCallUserBox = document.querySelector(
-    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
-  )
-  if (onCallUserBox) {
-    let onCallUserBoxAudio = onCallUserBox.getElementsByClassName(
-      "on-call-user-box__audio"
-    )[0]
-
-    while (
-      onCallUserBoxAudio.classList.contains("on-call-user-box__audio--off")
-    ) {
-      onCallUserBoxAudio.classList.remove("on-call-user-box__audio--off")
-    }
-    onCallUserBoxAudio.classList.add("on-call-user-box__audio--on")
-  }
 }
 
 function onCallSwitchCameraToScreenShare() {
   let onCallBtn = document.querySelector(
-    `.on-call-btn[data-btn-type="call-share-room"]`
+    `.on-call-btn[data-btn-type="call-share-screen"]`
   )
   if (onCallBtn) {
     onCallBtn.classList.add("on-call-btn--selected")
@@ -1067,10 +1025,25 @@ function onCallSwitchCameraToScreenShare() {
     isScreenShareOn = true
     switchCameraToScreenShareStream()
   }
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+  )
+  if (onCallUserBox) {
+    if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+      onCallUserBox.classList.remove("on-call-user-box--video-off")
+    }
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+    if (
+      onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+    )
+      onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
+  }
 }
 function onCallSwitchScreenShareToCamera() {
   let onCallBtn = document.querySelector(
-    `.on-call-btn[data-btn-type="call-share-room"]`
+    `.on-call-btn[data-btn-type="call-share-screen"]`
   )
   if (onCallBtn) {
     onCallBtn.classList.add("on-call-btn--unselected")
@@ -1080,6 +1053,27 @@ function onCallSwitchScreenShareToCamera() {
   if (isScreenShareOn === true) {
     isScreenShareOn = false
     switchScreenShareToCameraStream()
+  }
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+  )
+  if (onCallUserBox) {
+    if (isCameraOn) {
+      if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+        onCallUserBox.classList.remove("on-call-user-box--video-off")
+      }
+    } else {
+      if (!onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+        onCallUserBox.classList.add("on-call-user-box--video-off")
+      }
+    }
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+    if (
+      !onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+    )
+      onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
   }
 }
 async function changeAudioStream(isEnabled, userId) {
@@ -1122,6 +1116,34 @@ async function changeAudioStream(isEnabled, userId) {
       userId: loginUser._id
     }
     socket.emit("call:toggle-audio-stream", eventData)
+  }
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId.toString()}"]`
+  )
+  if (onCallUserBox) {
+    if (isEnabled) {
+      let onCallUserBoxAudio = onCallUserBox.getElementsByClassName(
+        "on-call-user-box__audio"
+      )[0]
+
+      while (
+        onCallUserBoxAudio.classList.contains("on-call-user-box__audio--off")
+      ) {
+        onCallUserBoxAudio.classList.remove("on-call-user-box__audio--off")
+      }
+      onCallUserBoxAudio.classList.add("on-call-user-box__audio--on")
+    } else {
+      let onCallUserBoxAudio = onCallUserBox.getElementsByClassName(
+        "on-call-user-box__audio"
+      )[0]
+
+      while (
+        onCallUserBoxAudio.classList.contains("on-call-user-box__audio--on")
+      ) {
+        onCallUserBoxAudio.classList.remove("on-call-user-box__audio--on")
+      }
+      onCallUserBoxAudio.classList.add("on-call-user-box__audio--off")
+    }
   }
 }
 
@@ -1175,6 +1197,37 @@ async function changeVideoStream(isEnabled, userId) {
     }
     socket.emit("call:toggle-video-stream", eventData)
   }
+
+  let onCallUserBox = document.querySelector(
+    `.on-call-user-box[data-user-id="${userId.toString()}"]`
+  )
+  if (onCallUserBox) {
+    if (isEnabled) {
+      if (onCallUserBox.classList.contains("on-call-user-box--video-off"))
+        onCallUserBox.classList.remove("on-call-user-box--video-off")
+
+      let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+        "on-call-user-box__video"
+      )[0]
+      if (
+        !onCallUserBoxVideo.classList.contains(
+          "on-call-user-box__video--camera"
+        )
+      )
+        onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
+    } else {
+      if (!onCallUserBox.classList.contains("on-call-user-box--video-off"))
+        onCallUserBox.classList.add("on-call-user-box--video-off")
+
+      let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+        "on-call-user-box__video"
+      )[0]
+      if (
+        onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+      )
+        onCallUserBoxVideo.classList.remove("on-call-user-box__video--camera")
+    }
+  }
 }
 
 async function switchCameraToScreenShareStream() {
@@ -1202,39 +1255,85 @@ async function switchCameraToScreenShareStream() {
         }
       })
     }
-  } else {
-    isScreenShareOn = false
+    screenShareVideoTrack.onended = () => {
+      isScreenShareOn = false
 
-    let onCallBtn = document.querySelector(
-      `.on-call-btn[data-btn-type="call-share-room"]`
-    )
-    if (onCallBtn) {
-      onCallBtn.classList.add("on-call-btn--unselected")
-      onCallBtn.classList.remove("on-call-btn--selected")
-      onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+      let onCallBtn = document.querySelector(
+        `.on-call-btn[data-btn-type="call-share-screen"]`
+      )
+      if (onCallBtn) {
+        if (onCallBtn.dataset.btnWorkingState === "call-share-screen-off") {
+          onCallBtn.classList.add("on-call-btn--unselected")
+          onCallBtn.classList.remove("on-call-btn--selected")
+          onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+          if (isCameraOn) {
+            changeVideoStream(true, loginUser._id.toString())
+          } else {
+            changeVideoStream(false, loginUser._id.toString())
+          }
+        }
+      }
+      let onCallUserBox = document.querySelector(
+        `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+      )
+      if (onCallUserBox) {
+        if (isCameraOn) {
+          if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+            onCallUserBox.classList.remove("on-call-user-box--video-off")
+          }
+        } else {
+          if (
+            !onCallUserBox.classList.contains("on-call-user-box--video-off")
+          ) {
+            onCallUserBox.classList.add("on-call-user-box--video-off")
+          }
+        }
+      }
+      let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+        "on-call-user-box__video"
+      )[0]
+      if (
+        !onCallUserBoxVideo.classList.contains(
+          "on-call-user-box__video--camera"
+        )
+      )
+        onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
     }
-  }
-  screenShareVideoTrack.onended = () => {
+    screenShareVideoTrack.onmute = () => {}
+    screenShareVideoTrack.onunmute = () => {}
+  } else {
     isScreenShareOn = false
 
     let onCallBtn = document.querySelector(
       `.on-call-btn[data-btn-type="call-share-screen"]`
     )
     if (onCallBtn) {
-      if (onCallBtn.dataset.btnWorkingState === "call-share-screen-off") {
-        onCallBtn.classList.add("on-call-btn--unselected")
-        onCallBtn.classList.remove("on-call-btn--selected")
-        onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
-        if (isCameraOn) {
-          changeVideoStream(true, loginUser._id.toString())
-        } else {
-          changeVideoStream(false, loginUser._id.toString())
+      onCallBtn.classList.add("on-call-btn--unselected")
+      onCallBtn.classList.remove("on-call-btn--selected")
+      onCallBtn.dataset.btnWorkingState = "call-share-screen-on"
+    }
+    let onCallUserBox = document.querySelector(
+      `.on-call-user-box[data-user-id="${loginUser._id.toString()}"]`
+    )
+    if (onCallUserBox) {
+      if (isCameraOn) {
+        if (onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+          onCallUserBox.classList.remove("on-call-user-box--video-off")
+        }
+      } else {
+        if (!onCallUserBox.classList.contains("on-call-user-box--video-off")) {
+          onCallUserBox.classList.add("on-call-user-box--video-off")
         }
       }
     }
+    let onCallUserBoxVideo = onCallUserBox.getElementsByClassName(
+      "on-call-user-box__video"
+    )[0]
+    if (
+      !onCallUserBoxVideo.classList.contains("on-call-user-box__video--camera")
+    )
+      onCallUserBoxVideo.classList.add("on-call-user-box__video--camera")
   }
-  screenShareVideoTrack.onmute = () => {}
-  screenShareVideoTrack.onunmute = () => {}
 }
 
 async function switchScreenShareToCameraStream() {

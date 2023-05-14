@@ -84,6 +84,10 @@
     align-items: center;
 }
 
+.calltype-info__preview--video-off video {
+    opacity: 0;
+}
+
 .audio-off-preview {
     position: absolute;
     z-index: 2;
