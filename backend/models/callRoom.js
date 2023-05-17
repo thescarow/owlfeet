@@ -3,6 +3,8 @@ const { roomStatusType } = require("./common/roomStatusType")
 
 const callRoomSchema = new mongoose.Schema(
   {
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+
     roomPic: {
       type: String,
       default: ""

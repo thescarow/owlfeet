@@ -34,10 +34,16 @@
         socket.id
       )
     })
+
     //////////////////////////////////////////////////
     //  define socket handler here
     let { createUserSocket } = await import("./event-handler/user-socket")
     createUserSocket(socket)
+
+    if (pageName && pageName === "call") {
+      let { createCallSocket } = await import("./event-handler/call-socket")
+      createCallSocket(socket)
+    }
 
     if (pageName && pageName === "home") {
       let { createHomeSocket } = await import("./event-handler/home-socket")

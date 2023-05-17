@@ -3,7 +3,8 @@
 <script src="/javascripts/call.bundle.js" defer></script>
 
 
-<div class="call-main-container" id="callMainContainer">
+<div class="call-main-container" id="callMainContainer"
+    data-call-room-id='<%=(locals.isJoinCallRoomPage)?locals.callRoom._id:"" _%>'>
     <div class="before-call-section" id="beforeCallSection">
 
         <%- include("../partials/call/calltypeInfoContainer.ejs") _%>
@@ -173,13 +174,18 @@
 
 
 
-
-
                         <div class="after-call-section after-call-section--hide" id="afterCallSection">
 
 
 
                         </div>
 
+
+
+                        <div class="waiting-section waiting-section--hide" id="waitingSection">
+                            <div class="waiting-section__anima-box">Connecting
+                                <span></span>
+                            </div>
+                        </div>
 
             </div>

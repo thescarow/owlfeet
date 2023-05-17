@@ -89,14 +89,14 @@ async function createMediaStream() {
           isAudioOn: true
         }
       } catch (err) {
-        if (e.message === "Permission dismissed") {
+        if (err.message === "Permission dismissed") {
           return {
             isSuccess: false,
             error: err.message,
             problem: "You've blocked access to your camera and microphone",
             solution: `To allow access, Please <span>reload</span> your page and give permission to your <span>camera</span> and <span>microphone</span>`
           }
-        } else if (e.message === "Permission denied") {
+        } else if (err.message === "Permission denied") {
           return {
             isSuccess: false,
             error: err.message,

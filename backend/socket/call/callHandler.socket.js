@@ -21,6 +21,7 @@ const {
 exports.callHandler = async (io, socket) => {
   try {
     let joinedCallRoomId = null
+
     socket.on("call:join-call-room", async data => {
       if (socket.loginUser) {
         if (socket.loginUser.id.toString() === data.userId.toString()) {
@@ -210,7 +211,67 @@ exports.callHandler = async (io, socket) => {
         )
       }
     })
+    socket.on("call:call-ringging", async data => {
+      if (socket.loginUser) {
+        if (data.callRoomId !== null) {
+          // socket.leave(joinedCallRoomId)
+          let callRoom = await CallRoom.findById(data.callRoomId)
+            .populate({
+              path: "roomChat",
+              select: selectChatFieldForCallRoom,
+              options: { lean: true }
+            })
+            .lean()
 
+          if (callRoom) {
+            if (callRoom.roomChat.isGroupChat === false) {
+              let eventData = {
+                callRoomId: callRoom._id
+              }
+              io.to(callRoom.createdBy.toString()).emit(
+                "call:call-ringging",
+                eventData
+              )
+            }
+          }
+        }
+      }
+    })
+    socket.on("call:call-cancelled", async data => {
+      if (socket.loginUser) {
+        if (data.callRoomId !== null) {
+          // socket.leave(joinedCallRoomId)
+          let callRoom = await CallRoom.findById(data.callRoomId)
+            .populate({
+              path: "roomChat",
+              select: selectChatFieldForCallRoom,
+              options: { lean: true }
+            })
+            .lean()
+
+          if (callRoom) {
+            if (callRoom.roomChat.isGroupChat === false) {
+              let isCallEnded = false
+              let leftMembers = []
+              isCallEnded = await endChatCallRoom(
+                io,
+                callRoom,
+                leftMembers,
+                socket.loginUser.id
+              )
+
+              let eventData = {
+                callRoomId: callRoom._id
+              }
+              io.to(callRoom.createdBy.toString()).emit(
+                "call:call-cancelled",
+                eventData
+              )
+            }
+          }
+        }
+      }
+    })
     socket.on("disconnecting", async () => {
       if (socket.loginUser) {
         if (joinedCallRoomId !== null) {
@@ -224,12 +285,19 @@ exports.callHandler = async (io, socket) => {
             .lean()
 
           if (callRoom) {
-            let deletedMemberObj = await CallRoomMember.deleteMany({
-              callRoom: callRoom._id,
-              user: socket.loginUser.id
+            let callRoomMember = await CallRoomMember.findOne({
+              user: socket.loginUser.id,
+              callRoom: callRoom._id
             })
+              .select({ peerId: 1 })
+              .lean()
 
-            if (deletedMemberObj.deletedCount > 0) {
+            if (callRoomMember) {
+              let deletedMemberObj = await CallRoomMember.deleteMany({
+                callRoom: callRoom._id,
+                user: socket.loginUser.id
+              })
+
               let leftMembers = await CallRoomMember.find({
                 callRoom: callRoom._id
               })
@@ -248,7 +316,8 @@ exports.callHandler = async (io, socket) => {
 
               let eventData = {
                 userId: socket.loginUser.id,
-                callRoomId: callRoom._id
+                callRoomId: callRoom._id,
+                peerId: callRoomMember.peerId
               }
               leftMembers.forEach(member => {
                 io.to(member.user.toString()).emit(

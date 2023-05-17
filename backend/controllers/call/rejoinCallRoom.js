@@ -17,7 +17,7 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 const { createCallRoomMember } = require("./common/createCallRoomMember")
 
 // router.post("/join-room", getLoginUser, createChatRoom)
-exports.joinCallRoom = async (req, res) => {
+exports.rejoinCallRoom = async (req, res) => {
   try {
     if (req.user) {
       let userData = req.body
@@ -36,6 +36,36 @@ exports.joinCallRoom = async (req, res) => {
           .lean()
 
         if (callRoom) {
+          let deletingCallRoomMember = await CallRoomMember.findOne({
+            user: req.user.id,
+            callRoom: callRoom._id
+          })
+            .select({ peerId: 1 })
+            .lean()
+          if (deletingCallRoomMember) {
+            await CallRoomMember.deleteMany({
+              callRoom: callRoom._id,
+              user: req.user.id
+            })
+
+            let leftMembers = await CallRoomMember.find({
+              callRoom: callRoom._id
+            })
+              .select({ user: 1 })
+              .lean()
+
+            let eventData = {
+              userId: req.user.id,
+              peerId: deletingCallRoomMember.peerId,
+              callRoomId: callRoom._id
+            }
+            leftMembers.forEach(member => {
+              req.io
+                .to(member.user.toString())
+                .emit("call:disconnect-call-room-member", eventData)
+            })
+          }
+
           let canJoinedCall = false
           if (callRoom.isChatRoom) {
             let chat = Chat.findOne({
@@ -60,7 +90,6 @@ exports.joinCallRoom = async (req, res) => {
               if (!isCallRoomMemberCreated) {
                 return res.json({
                   isSuccess: false,
-                  isAlreadyJoined: true,
                   error:
                     "You have already joined this room, if you want to join here please left from there"
                 })
@@ -86,7 +115,6 @@ exports.joinCallRoom = async (req, res) => {
             if (!isCallRoomMemberCreated) {
               return res.json({
                 isSuccess: false,
-                isAlreadyJoined: true,
                 error:
                   "You have already joined this room, if you want to join here please left from there"
               })
@@ -153,10 +181,10 @@ exports.joinCallRoom = async (req, res) => {
       })
     }
   } catch (err) {
-    console.log(errorLog("Server Error In Joining Room:"), mainErrorLog(err))
+    console.log(errorLog("Server Error In rejoining Room:"), mainErrorLog(err))
     res.status(500).json({
       isSuccess: false,
-      error: "Server error in joining room, Please try again"
+      error: "Server error in rejoining room, Please try again"
     })
   }
 }
