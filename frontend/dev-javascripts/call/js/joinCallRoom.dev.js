@@ -62,10 +62,24 @@ function initialiseEventForJoinCallRoom() {
                     myStreamTypeData
                   )
                 } else {
-                  let { createMainNotification } = await import(
-                    "../../common/mainNotification.dev"
-                  )
-                  createMainNotification(data.error, "error")
+                  if (
+                    data.hasOwnProperty("isAlreadyJoined") &&
+                    data.isAlreadyJoined === true
+                  ) {
+                    let { createConfirmRejoinModal } = await import(
+                      "./confirmRejoinModal.dev"
+                    )
+                    createConfirmRejoinModal(
+                      joiningRoomId,
+                      myMediaStream,
+                      myStreamTypeData
+                    )
+                  } else {
+                    let { createMainNotification } = await import(
+                      "../../common/mainNotification.dev"
+                    )
+                    createMainNotification(data.error, "error")
+                  }
                 }
               })
               .catch(async err => {
@@ -74,7 +88,7 @@ function initialiseEventForJoinCallRoom() {
                   "../../common/mainNotification.dev"
                 )
                 createMainNotification(
-                  "Server error in creating new room, Please try again",
+                  "Server error in joining room, Please try again",
                   "error"
                 )
               })

@@ -47,6 +47,7 @@ exports.createNewRoom = async (req, res) => {
           })
         }
         let newCallRoomData = {
+          createdBy: req.user.id,
           roomPic: userData.roomPic,
           roomName: userData.roomName,
           roomDescription: userData.roomAbout,

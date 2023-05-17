@@ -7,6 +7,7 @@ const mainErrorLog = chalk.white.bgYellow.bold
 const Chat = require("../../../models/chat")
 const User = require("../../../models/user")
 const CallRoomMember = require("../../../models/callRoomMember")
+const CallRoom = require("../../../models/callRoom")
 const { infoMessageType } = require("../../../models/common/infoMessageType")
 
 const {
@@ -23,7 +24,7 @@ exports.endChatCallRoom = async (io, callRoom, leftMembers, loginUserId) => {
   try {
     if (callRoom.isChatRoom) {
       if (leftMembers.length <= 1) {
-        let chat = await Chat.findById(callRoom.roomChat).select(
+        let chat = await Chat.findById(callRoom.roomChat._id).select(
           selectChatFieldForCallRoom
         )
         chat.isOnCall = false
@@ -32,6 +33,10 @@ exports.endChatCallRoom = async (io, callRoom, leftMembers, loginUserId) => {
 
         let deletedAllMembersObj = await CallRoomMember.deleteMany({
           callRoom: callRoom._id
+        })
+
+        await CallRoom.deleteMany({
+          _id: callRoom._id
         })
 
         let eventData = {

@@ -5,6 +5,15 @@ export function createComingCallSocket(socket) {
         "../../../common/comingCallModal.dev"
       )
       createComingCallModal(data.callRoom)
+      let eventData = {
+        callRoomId: data.callRoom._id
+      }
+
+      if (data.callRoom.roomChat.isGroupChat === false) {
+        setTimeout(() => {
+          socket.emit("call:call-ringging", eventData)
+        }, 4000)
+      }
     }
   })
 

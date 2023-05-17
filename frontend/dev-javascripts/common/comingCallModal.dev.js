@@ -175,7 +175,6 @@ export async function createComingCallModal(callRoom) {
 }
 
 function updateComingCallModal(comingCallModal, callRoom) {
-  console.log("coming callRoom: ", callRoom)
   if (comingCallModal) {
     let comingCallAudio =
       comingCallModal.getElementsByClassName("coming-call__audio")[0]
@@ -260,12 +259,22 @@ async function initialiseEventForComingCallModal(comingCallModal) {
       ) {
         if (comingCallMainBtn.dataset.btnType === "accept-call") {
           if (callRoomId !== "") {
+            closeComingCallModal(callRoomId)
+
             openNewTab(`/call/?room=${callRoomId}`)
+
             // location.reload()
           }
         }
         if (comingCallMainBtn.dataset.btnType === "decline-call") {
+          closeComingCallModal(callRoomId)
+          let eventData = {
+            callRoomId: callRoomId
+          }
+
+          socket.emit("call:call-cancelled", eventData)
         }
+
         if (comingCallMainBtn.dataset.btnType === "ignore-call") {
           closeComingCallModal(callRoomId)
         }

@@ -18,7 +18,6 @@ exports.leftCallRoom = async (req, res) => {
   try {
     if (req.user) {
       let userData = req.body
-      console.log("userData:", userData)
       if (userData.hasOwnProperty("callRoomId")) {
         let callRoom = await CallRoom.findById(userData.callRoomId)
           .populate({

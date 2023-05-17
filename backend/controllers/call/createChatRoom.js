@@ -70,6 +70,7 @@ exports.createChatRoom = async (req, res) => {
         if (chat) {
           if (chat.isOnCall === false) {
             let newCallRoomData = {
+              createdBy: req.user.id,
               roomPic: "",
               roomName: "",
               roomDescription: "",
