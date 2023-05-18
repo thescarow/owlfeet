@@ -23,32 +23,32 @@ let myStreamTypeData = {
         "./js/calltypeInfoContainer.dev"
       )
       createCalltypeInfoContainer(myMediaStream, myStreamTypeData)
+
+      let roomInfoContainer = document.getElementById("roomInfoContainer")
+
+      if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
+        let { joinCallRoom } = await import("./js/joinCallRoom.dev")
+        joinCallRoom(myMediaStream, myStreamTypeData)
+      }
+      if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
+        let creatingRoomInfo = document.getElementById("creatingRoomInfo")
+        if (creatingRoomInfo) {
+          if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
+            let { createChatRoom } = await import("./js/createChatRoom.dev")
+            createChatRoom(myMediaStream, myStreamTypeData)
+          }
+          if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
+            let { createNewRoom } = await import("./js/createNewRoom.dev")
+            createNewRoom(myMediaStream, myStreamTypeData)
+          }
+        }
+      }
     } else {
       console.log("error message: ", data.error)
       let { showCalltypeMessage } = await import(
         "./js/calltypeInfoContainer.dev"
       )
       showCalltypeMessage(data.problem, data.solution)
-    }
-
-    let roomInfoContainer = document.getElementById("roomInfoContainer")
-
-    if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
-      let { joinCallRoom } = await import("./js/joinCallRoom.dev")
-      joinCallRoom(myMediaStream, myStreamTypeData)
-    }
-    if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
-      let creatingRoomInfo = document.getElementById("creatingRoomInfo")
-      if (creatingRoomInfo) {
-        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
-          let { createChatRoom } = await import("./js/createChatRoom.dev")
-          createChatRoom(myMediaStream, myStreamTypeData)
-        }
-        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
-          let { createNewRoom } = await import("./js/createNewRoom.dev")
-          createNewRoom(myMediaStream, myStreamTypeData)
-        }
-      }
     }
 
     IS_INIT_CALL_MODULE = true

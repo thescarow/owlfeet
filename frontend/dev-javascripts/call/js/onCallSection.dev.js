@@ -196,6 +196,13 @@ export async function createOnCallSection(
         if (callRoom.roomChat.isGroupChat === false) {
           isNonGroupChatCall = true
           createOnCallCallStatus("Connecting")
+
+          onCallSection.insertAdjacentHTML(
+            "afterbegin",
+            `<audio class="on-call-section-audio" id="onCallCreatingCallAudio" loop>
+                   <source src="/assets/audios/creatingCallAudio.mp3" type="audio/mpeg">
+            </audio>`
+          )
         } else {
           createOnCallCallStatus("Waiting for others to join")
         }
@@ -204,6 +211,19 @@ export async function createOnCallSection(
       }
     }
   }
+
+  onCallSection.insertAdjacentHTML(
+    "afterbegin",
+    `<audio class="on-call-section-audio" id="onCallJoinedNewCallRoomMemberAudio" >
+           <source src="/assets/audios/joinedNewCallRoomMemberAudio.mp3" type="audio/mpeg">
+    </audio>`
+  )
+  onCallSection.insertAdjacentHTML(
+    "afterbegin",
+    `<audio class="on-call-section-audio" id="onCallEndingCallAudio" >
+           <source src="/assets/audios/endingCallAudio.mp3" type="audio/mpeg">
+    </audio>`
+  )
 
   await initialiseCall()
   initialiseOnCallMainViewResizeObserver()
@@ -1370,6 +1390,18 @@ function showOnCallMainViewUserBoxContainer() {
 }
 
 function sendRequestToEndCall() {
+  let onCallCreatingCallAudio = document.getElementById(
+    "onCallCreatingCallAudio"
+  )
+  if (onCallCreatingCallAudio) {
+    onCallCreatingCallAudio.pause()
+    onCallCreatingCallAudio.currentTime = 0
+  }
+  let onCallEndingCallAudio = document.getElementById("onCallEndingCallAudio")
+  if (onCallEndingCallAudio) {
+    onCallEndingCallAudio.play()
+  }
+
   let data = { callRoomId: callRoom._id }
   fetch("/call/left-call-room", {
     method: "POST", // or 'PUT'
@@ -1412,8 +1444,28 @@ function sendRequestToEndCall() {
       createMainNotification("Server error, Please try again", "error")
     })
 }
+
 socket.on("call:joined-new-member", data => {
   isNonGroupChatCallConnected = true
+  let onCallCreatingCallAudio = document.getElementById(
+    "onCallCreatingCallAudio"
+  )
+  if (onCallCreatingCallAudio) {
+    onCallCreatingCallAudio.pause()
+    onCallCreatingCallAudio.currentTime = 0
+  }
+
+  let onCallJoinedNewCallRoomMemberAudio = document.getElementById(
+    "onCallJoinedNewCallRoomMemberAudio"
+  )
+  if (onCallJoinedNewCallRoomMemberAudio) {
+    onCallJoinedNewCallRoomMemberAudio.play()
+  }
+
+  setTimeout(() => {
+    onCallJoinedNewCallRoomMemberAudio.currentTime = 0
+  }, 2000)
+
   hideOnCallCallStatus()
   showOnCallMainViewUserBoxContainer()
 
@@ -1489,10 +1541,28 @@ socket.on("call:toggle-screen-share-stream", data => {
 socket.on("call:call-ringging", async data => {
   if (data.callRoomId === callRoom._id.toString()) {
     updateOnCallCallStatus("Ringging")
+    let onCallCreatingCallAudio = document.getElementById(
+      "onCallCreatingCallAudio"
+    )
+    if (onCallCreatingCallAudio) {
+      onCallCreatingCallAudio.play()
+    }
   }
 })
 socket.on("call:call-cancelled", async data => {
   if (data.callRoomId === callRoom._id.toString()) {
+    let onCallCreatingCallAudio = document.getElementById(
+      "onCallCreatingCallAudio"
+    )
+    if (onCallCreatingCallAudio) {
+      onCallCreatingCallAudio.pause()
+      onCallCreatingCallAudio.currentTime = 0
+    }
+    let onCallEndingCallAudio = document.getElementById("onCallEndingCallAudio")
+    if (onCallEndingCallAudio) {
+      onCallEndingCallAudio.play()
+    }
+
     onCallCallStatus
       .getElementsByClassName("on-call-call-status__room-status-effect")[0]
       .classList.add("on-call-call-status__room-status-effect--hide")

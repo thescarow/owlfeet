@@ -108,7 +108,10 @@ export async function createAfterCallSection(
   }
 
   const feedback = new Feedback(options)
-  feedback.renderButton()
+
+  setTimeout(() => {
+    feedback.renderButton()
+  }, 1500)
 
   initialiseEventForAfterCallSection()
 }
