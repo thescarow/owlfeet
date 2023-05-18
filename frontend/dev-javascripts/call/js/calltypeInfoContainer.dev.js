@@ -36,12 +36,6 @@ export function createCalltypeInfoContainer(stream, streamTypeData) {
 }
 
 function initialiseEventForCalltypeInfoContainer() {
-  if (calltypeMessageReloadBtn) {
-    calltypeMessageReloadBtn.addEventListener("click", () => {
-      location.reload()
-    })
-  }
-
   calltypeInfoBtnContainer.addEventListener("click", async e => {
     let calltypeInfoBtn = e.target.closest(`.calltype-info-btn`)
     if (calltypeInfoBtn && calltypeInfoBtnContainer.contains(calltypeInfoBtn)) {
@@ -252,4 +246,13 @@ export function showCalltypeMessage(title, desc) {
 
   document.getElementById("calltypeMessageTitle").textContent = title
   document.getElementById("calltypeMessageDesc").innerHTML = desc
+  initialiseEventForCalltypeMessage()
+}
+
+function initialiseEventForCalltypeMessage() {
+  if (calltypeMessageReloadBtn) {
+    calltypeMessageReloadBtn.addEventListener("click", () => {
+      location.reload()
+    })
+  }
 }

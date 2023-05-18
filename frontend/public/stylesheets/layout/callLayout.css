@@ -23,6 +23,7 @@
     --second-color: #08af7c;
     --third-color: #ECB365;
     --fourth-color: #ffffff;
+
     --light-color: #ffffff;
     --dark-color: #141615;
     --danger-color: #eb6600;
@@ -70,10 +71,13 @@
     /* for rgba so that we can use the alpha value  */
     /* application rgba color */
     --rgba-page-color: 255, 255, 255;
+
     --rgba-first-color: 22, 37, 39;
     --rgba-second-color: 8, 175, 124;
     --rgba-third-color: 236, 179, 101;
     --rgba-fourth-color: 255, 255, 255;
+
+
     --rgba-light-color: 255, 255, 255;
     --rgba-dark-color: 20, 22, 21;
     --rgba-danger-color: 204, 59, 33;
