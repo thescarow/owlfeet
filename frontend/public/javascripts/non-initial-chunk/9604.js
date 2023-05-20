@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[9604],{9604:(e,n,t)=>{async function o(e){console.log("insideHomeSocket");const n=document.getElementById("userNotificationContainer");e.on("new-user-notification",(async e=>{let{createUserNotification:o}=await t.e(8286).then(t.bind(t,8286));o(n,e)}))}t.r(n),t.d(n,{createHomeSocket:()=>o})}}]);
