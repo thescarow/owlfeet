@@ -49,7 +49,7 @@ app.use(
 )
 app.use(
   cors({
-    origin: "http://localhost:5000",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true
   })
@@ -69,6 +69,6 @@ registerRoutes(app) // register routes
 app.use(notFound)
 app.use(errorHandler)
 
-httpServer.listen(process.env.MAIN_SERVER_PORT || 5000)
+httpServer.listen(process.env.PORT || 5000)
 // const mainServer = app.listen(process.env.MAIN_SERVER_PORT || 5000)
 // companion.socket(httpServer)
