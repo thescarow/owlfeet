@@ -26,6 +26,8 @@ let io = createSocketIOInstance(httpServer) //creating socket io instance and de
 
 connectDB() // connecting to database
 
+//delete
+// console.log("all environments variable:", process.env)
 //setting express app settings
 app.set("view engine", "ejs")
 app.set("views", "../frontend/pages")

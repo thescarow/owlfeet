@@ -121,7 +121,7 @@ exports.deleteMessage = async (req, res) => {
             })
             .sort({ createdAt: -1 })
             .lean()
-          console.log("latest Message: ", latestMessage)
+
           if (latestMessage) {
             if (latestMessage.isDeletedForAll === true) {
               latestMessage = filterMessageFieldForDeletedForAll(latestMessage)

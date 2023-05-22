@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[9033],{9033:(t,e,s)=>{function n(t){let e={chatId:t.toString()};socket.emit("chat:message-start-typing",e)}function a(t){let e={chatId:t.toString()};socket.emit("chat:message-stop-typing",e)}s.r(e),s.d(e,{sendChatMessageStartTypingSocket:()=>n,sendChatMessageStopTypingSocket:()=>a})}}]);

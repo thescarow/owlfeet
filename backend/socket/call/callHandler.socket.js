@@ -39,8 +39,6 @@ exports.callHandler = async (io, socket) => {
               .select({ user: 1 })
               .lean()
 
-            console.log("CallRoomMembers:", callRoomMembers)
-
             let eventData = {
               userId: socket.loginUser.id,
               peerId: data.peerId
@@ -128,7 +126,6 @@ exports.callHandler = async (io, socket) => {
           })
           if (callRoomMember) {
             callRoomMember.isCameraOn = data.isEnabled
-            console.log("callRoomMember", callRoomMember)
             await callRoomMember.save()
 
             let allCallRoomMembers = await CallRoomMember.find({
@@ -175,7 +172,7 @@ exports.callHandler = async (io, socket) => {
           })
           if (callRoomMember) {
             callRoomMember.isScreenShare = data.isEnabled
-            console.log("callRoomMember", callRoomMember)
+
             await callRoomMember.save()
 
             let allCallRoomMembers = await CallRoomMember.find({

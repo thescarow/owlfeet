@@ -24,7 +24,7 @@ exports.sendMobileOtp = async (req, res) => {
         // if result has an error property then its mean there is an error in sending otp
         if (result.error) {
           ///beacuase undefine value result false
-          console.log(errorAndSkipLog(result.error))
+          console.log(errorLog(result.error))
           res.status(500).json({ isSuccess: false, error: "Server Error" })
         } else if (result.returnData.return == false) {
           res.json({

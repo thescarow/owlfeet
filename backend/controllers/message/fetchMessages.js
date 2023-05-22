@@ -97,7 +97,7 @@ exports.fetchMessages = async (req, res) => {
           })
         )
         attachSocketForFetchingMessage(req, chat)
-        // console.log(allMessages)
+
         res.json({
           isSuccess: true,
           allMessages: allMessages

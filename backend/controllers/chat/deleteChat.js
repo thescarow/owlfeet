@@ -21,7 +21,7 @@ exports.deleteChat = async (req, res) => {
   try {
     if (req.user) {
       let deleteChatData = req.body
-      console.log(deleteChatData)
+
       if (deleteChatData.hasOwnProperty("chatId")) {
         let chat = await Chat.findOne({
           _id: deleteChatData.chatId,
@@ -35,7 +35,7 @@ exports.deleteChat = async (req, res) => {
           groupChatAdmin: 1,
           isDeleted: 1
         })
-        console.log(chat)
+
         if (chat) {
           chat.isDeleted = true
           await chat.save()

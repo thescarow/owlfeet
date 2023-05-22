@@ -261,7 +261,7 @@ export function setOwnerSettingContent(modalBox, modalContentBox, profileUser) {
     })
     .use(AwsS3Multipart, {
       limit: 4,
-      companionUrl: "http://localhost:5000/companion"
+      companionUrl: `${location.origin}/companion`
     })
 
   uppy.on("complete", result => {

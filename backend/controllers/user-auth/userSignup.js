@@ -50,7 +50,6 @@ exports.userSignup = async (req, res) => {
       })
     }
 
-    console.log("signupData:", dataLog(signupData))
     if (
       signupData.signupFirstName != "" &&
       signupData.signupPassword != "" &&

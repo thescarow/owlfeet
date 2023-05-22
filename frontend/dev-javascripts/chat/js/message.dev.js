@@ -74,7 +74,7 @@ function createPlyr(element, type) {
     ratio: "16:9",
 
     youtube: {
-      origin: "http://localhost:5000"
+      origin: `${location.origin}`
     }
   })
 }

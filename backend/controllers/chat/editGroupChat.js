@@ -131,21 +131,6 @@ exports.editGroupChat = async (req, res) => {
                 })
               )
 
-              // console.log(savedChat)
-              console.log(
-                "commonCurrentMembers:",
-                commonCurrentMembers,
-                "----",
-                "newCurrentMembers:",
-                newCurrentMembers,
-                "----",
-                "removedCurrentMembers:",
-                removedCurrentMembers,
-                "***************",
-                "setOfCommonCurrentMembers",
-                SetOfCommonCurrentMembers
-              )
-
               attachSocket(
                 req,
                 savedChat,
