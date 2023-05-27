@@ -3,6 +3,8 @@ const dataLog = chalk.blue.bold
 const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
+const linkify = require("linkifyjs")
+
 const Message = require("../../models/message")
 const Chat = require("../../models/chat")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
@@ -63,6 +65,23 @@ exports.fetchMessages = async (req, res) => {
           .limit(100)
           .lean()
 
+        const linkifyOptions = {
+          attributes: null,
+          className: null,
+          defaultProtocol: "http",
+          events: null,
+          format: (value, type) => value,
+          formatHref: (href, type) => href,
+          ignoreTags: [],
+          nl2br: false,
+          rel: null,
+          render: null,
+          tagName: "a",
+          target: null,
+          truncate: Infinity,
+          validate: true
+        }
+
         await Promise.all(
           allMessages.map(async message => {
             if (
@@ -85,13 +104,28 @@ exports.fetchMessages = async (req, res) => {
                   message.sender.profile
                 )
               }
-              if (
-                message.hasMediaContent &&
-                message.mediaContentType !== "youtube"
-              ) {
-                message.mediaContentPath = await signedUrlForGetAwsS3Object(
-                  message.mediaContentPath
-                )
+              if (message.hasMediaContent === true) {
+                if (
+                  message.hasMediaContent &&
+                  message.mediaContentType !== "youtube"
+                ) {
+                  message.mediaContentPath = await signedUrlForGetAwsS3Object(
+                    message.mediaContentPath
+                  )
+                }
+              } else {
+                if (
+                  message.hasOwnProperty("textContent") &&
+                  message.textContent !== ""
+                ) {
+                  // let allLinks = linkify.find(message.textContent)
+                  // if (allLinks.length > 0) {
+                  //   message.hasLinks = true
+                  //   message.linksData = allLinks
+                  // } else {
+                  //   message.hasLinks = false
+                  // }
+                }
               }
             }
           })

@@ -418,6 +418,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
           })
           .then(async data => {
             if (data.isSuccess) {
+              console.log("created message:", data.message)
               activeChatInputAttachmentBox.classList.remove(
                 "active-chat-input-attachment-box--hide"
               )

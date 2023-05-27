@@ -51,9 +51,41 @@ let svg_youtubeIcon = `
 <path d="M99.977 23.9653C100.202 17.6732 98.7797 11.4282 95.8432 5.81006C93.8509 3.50481 91.0858 1.94914 88.03 1.4141C75.3903 0.304237 62.6984 -0.150661 50.0085 0.0513592C37.3649 -0.15983 24.7186 0.280389 12.1233 1.37015C9.63317 1.80849 7.32871 2.9388 5.49115 4.62315C1.40282 8.27179 0.948564 14.514 0.494306 19.7892C-0.164769 29.2737 -0.164769 38.7904 0.494306 48.2749C0.625724 51.244 1.08254 54.1911 1.85708 57.0668C2.4048 59.2871 3.51296 61.3412 5.08232 63.0453C6.93237 64.8189 9.2905 66.0135 11.8508 66.4742C21.6442 67.644 31.5121 68.1288 41.3776 67.9248C57.2766 68.1446 71.2224 67.9248 87.712 66.694C90.3351 66.2616 92.7597 65.0655 94.6621 63.2651C95.9339 62.0339 96.8838 60.5269 97.4331 58.8692C99.0577 54.0451 99.8556 48.9964 99.7953 43.923C99.977 41.4612 99.977 26.6029 99.977 23.9653ZM39.7423 46.5605V19.3496L66.6344 33.021C59.0937 37.0653 49.1454 41.6371 39.7423 46.5605Z" />
 </svg>
 `
+let svg_messageLinkPreviewWebsiteIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M50 8.83032e-07C27.1383 8.83032e-07 7.81718 15.373 1.88079 36.3715C1.77508 36.7245 1.74062 37.0949 1.77943 37.4613C1.81824 37.8276 1.92953 38.1826 2.10683 38.5056C2.28413 38.8285 2.5239 39.113 2.81218 39.3424C3.10046 39.5718 3.43149 39.7416 3.78601 39.8418C4.14052 39.9421 4.51144 39.9708 4.87717 39.9264C5.2429 39.882 5.59614 39.7652 5.91632 39.5829C6.2365 39.4007 6.51723 39.1566 6.74217 38.8648C6.96711 38.573 7.13177 38.2394 7.22656 37.8834C8.80737 32.2917 11.4715 27.1594 14.9523 22.696C17.973 24.9026 21.3239 26.7974 24.9277 28.3456C23.408 34.1209 22.4943 40.4888 22.2946 47.2222H2.77778C2.04109 47.2223 1.33459 47.515 0.813674 48.0359C0.292756 48.5568 7.3658e-05 49.2633 0 50C-5.44555e-05 77.5813 22.4187 100 50 100C77.5813 100 100 77.5813 100 50C100 22.4187 77.5813 8.83032e-07 50 8.83032e-07ZM50 5.55556C55.4857 5.55556 60.9728 9.87808 65.2235 17.9073C66.3445 20.0246 67.3509 22.3893 68.24 24.9385C62.5951 26.7624 56.3923 27.7703 50.0036 27.7778C43.6126 27.7714 37.4046 26.7693 31.7564 24.9457C32.6461 22.3937 33.6545 20.0266 34.7765 17.9073C39.0272 9.87808 44.5143 5.55556 50 5.55556ZM65.502 8.32972C71.5138 10.5617 76.9058 14.0542 81.3621 18.4896C78.9706 20.1881 76.291 21.6544 73.4339 22.9239C72.471 20.2017 71.3694 17.6484 70.1317 15.3103C68.7627 12.7246 67.2118 10.3747 65.502 8.32972ZM34.4727 8.37312C32.7749 10.4099 31.2291 12.7401 29.8683 15.3103C28.6262 17.6566 27.5205 20.2198 26.5553 22.9528C23.7078 21.6891 21.0594 20.2011 18.674 18.5113C23.1175 14.0894 28.4835 10.6071 34.4727 8.37312ZM85.0586 22.678C90.4025 29.5299 93.7826 37.9878 94.3504 47.2222H77.7054C77.5056 40.4832 76.5907 34.1102 75.0687 28.3312C78.6757 26.7793 82.0355 24.889 85.0586 22.678ZM69.8242 30.2915C71.3333 36.2307 72.2222 42.9093 72.2222 50C72.2222 57.09 71.3406 63.7738 69.8315 69.7121C63.644 67.7312 56.915 66.6735 50.0036 66.6667C50.0012 66.6667 49.9988 66.6667 49.9964 66.6667C43.0884 66.6739 36.3624 67.7308 30.1758 69.7085C28.8663 64.5549 28.0488 58.8365 27.8537 52.7778H62.963C63.3311 52.783 63.6965 52.715 64.0381 52.5777C64.3797 52.4405 64.6905 52.2367 64.9527 51.9782C65.2148 51.7198 65.423 51.4118 65.5651 51.0722C65.7071 50.7326 65.7803 50.3681 65.7803 50C65.7803 49.6319 65.7071 49.2674 65.5651 48.9278C65.423 48.5882 65.2148 48.2802 64.9527 48.0218C64.6905 47.7633 64.3797 47.5595 64.0381 47.4223C63.6965 47.285 63.3311 47.217 62.963 47.2222H27.8537C28.0488 41.1649 28.8668 35.4478 30.1758 30.2951C36.3622 32.2725 43.0886 33.3265 49.9964 33.3333C49.9988 33.3333 50.0012 33.3333 50.0036 33.3333C56.9118 33.3261 63.6396 32.2713 69.8242 30.2915ZM5.83406 52.7778H22.2946C22.4943 59.5112 23.408 65.8791 24.9277 71.6544C21.3545 73.1895 18.0324 75.0672 15.0318 77.2497C9.75084 70.4069 6.41035 61.975 5.83406 52.7778ZM77.7091 52.7778H94.3504C93.7828 62.0096 90.4071 70.4675 85.0658 77.3184C82.0461 75.1099 78.6858 73.2231 75.0832 71.6725C76.6039 65.8953 77.5091 59.5132 77.7091 52.7778ZM49.9964 72.2222C56.3855 72.2286 62.5916 73.2327 68.24 75.0543C67.5096 77.1472 66.7031 79.125 65.8131 80.9317C65.6518 81.259 65.5566 81.6148 65.5329 81.9788C65.5091 82.3429 65.5573 82.7081 65.6747 83.0535C65.9118 83.7511 66.4163 84.326 67.0772 84.6517C67.4044 84.8129 67.7603 84.9082 68.1243 84.9319C68.4884 84.9557 68.8535 84.9075 69.199 84.7901C69.8966 84.553 70.4715 84.0485 70.7972 83.3876C71.773 81.4065 72.6445 79.2688 73.4339 77.0327C76.3023 78.3037 78.9628 79.8072 81.3621 81.5104C73.3293 89.5056 62.2516 94.4444 50 94.4444C44.5143 94.4444 39.0272 90.1219 34.7765 82.0927C33.6545 79.9734 32.6461 77.6063 31.7564 75.0543C37.4038 73.2329 43.6084 72.2297 49.9964 72.2222ZM26.5553 77.0399C27.521 79.7753 28.6253 82.3416 29.8683 84.6897C31.227 87.2561 32.7643 89.5951 34.4582 91.6305C28.4821 89.3874 23.1344 85.8875 18.7174 81.4489C21.0925 79.7717 23.7233 78.2953 26.5553 77.0399Z" />
+</svg>
+`
+let svg_messageLinkPreviewImageIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M85 0H15C6.5 0 0 6.5 0 15V85C0 93.5 6.5 100 15 100H85C93.5 100 100 93.5 100 85V15C100 6.5 93.5 0 85 0ZM90 59.5L80.5 50C74.5 44.5 65 44.5 59.5 50L55 54.5L40.5 40C34.5 34.5 25 34.5 19.5 40L10 49.5V15C10 12 12 10 15 10H85C88 10 90 12 90 15V59.5Z" />
+</svg>
+
+`
+let svg_messageLinkPreviewAudioIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M50 12.5V51.1458C48.0417 50.4583 45.9583 50 43.75 50C38.7772 50 34.0081 51.9754 30.4917 55.4917C26.9754 59.0081 25 63.7772 25 68.75C25 73.7228 26.9754 78.4919 30.4917 82.0082C34.0081 85.5246 38.7772 87.5 43.75 87.5C53.3958 87.5 61.25 80.1875 62.2917 70.8333H62.5V25H79.1667V12.5H50Z" />
+</svg
+`
+let svg_messageLinkPreviewVideoIcon = `
+<svg width="100" height="72" viewBox="0 0 100 72"  xmlns="http://www.w3.org/2000/svg">
+<path d="M83.2384 72H16.7616C12.3162 72 8.05279 70.4196 4.90937 67.6066C1.76595 64.7936 0 60.9782 0 57V15C0 11.0218 1.76595 7.20644 4.90937 4.3934C8.05279 1.58035 12.3162 0 16.7616 0H83.2384C87.6838 0 91.9472 1.58035 95.0906 4.3934C98.234 7.20644 100 11.0218 100 15V57C100 60.9782 98.234 64.7936 95.0906 67.6066C91.9472 70.4196 87.6838 72 83.2384 72ZM16.7616 6C14.0944 6 11.5363 6.94821 9.65028 8.63604C7.76423 10.3239 6.70466 12.6131 6.70466 15V57C6.70466 59.3869 7.76423 61.6761 9.65028 63.364C11.5363 65.0518 14.0944 66 16.7616 66H83.2384C85.9056 66 88.4637 65.0518 90.3497 63.364C92.2358 61.6761 93.2953 59.3869 93.2953 57V15C93.2953 12.6131 92.2358 10.3239 90.3497 8.63604C88.4637 6.94821 85.9056 6 83.2384 6H16.7616Z" />
+<path d="M36.3895 54.705C35.5004 54.705 34.6478 54.3889 34.0191 53.8263C33.3904 53.2637 33.0372 52.5006 33.0372 51.705V20.295C33.0387 19.7778 33.1897 19.2697 33.4754 18.8201C33.761 18.3705 34.1718 17.9946 34.6676 17.729C35.1635 17.4633 35.7277 17.3169 36.3055 17.3039C36.8833 17.291 37.455 17.4119 37.9651 17.655L70.7006 33.36C71.2328 33.617 71.6774 33.9981 71.9872 34.4629C72.2971 34.9277 72.4607 35.4588 72.4607 36C72.4607 36.5412 72.2971 37.0723 71.9872 37.5371C71.6774 38.0018 71.2328 38.3829 70.7006 38.64L37.9651 54.345C37.4809 54.5789 36.9398 54.7025 36.3895 54.705ZM39.7419 25.305V46.695L62.0181 36L39.7419 25.305Z" />
+</svg>
+`
+let svg_messageLinkPreviewApplicationIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M81.6197 3.66403C76.7476 -1.22134 68.848 -1.22134 63.9762 3.66403L49.6105 18.069C48.3784 12.4594 43.3914 8.2621 37.4268 8.2621H12.4756C5.58558 8.2621 0 13.8629 0 20.7718V87.4736C0 91.7294 2.11927 95.489 5.35736 97.7491C7.38049 99.1677 9.84284 100 12.499 100H79.0356C85.9254 100 91.5112 94.399 91.5112 87.4903V62.4709C91.5112 56.6412 87.534 51.7428 82.1528 50.3548L96.3459 36.1224C101.218 31.2371 101.218 23.3164 96.3459 18.431L81.6197 3.66403ZM49.9024 36.7772L63.0504 49.9611H49.9024V36.7772ZM41.5854 49.9611H8.31707V20.7718C8.31707 18.4689 10.1789 16.6019 12.4756 16.6019H37.4268C39.7235 16.6019 41.5854 18.4689 41.5854 20.7718V49.9611ZM10.1004 90.8971C9.03559 90.1423 8.34044 88.8972 8.34044 87.4903V58.301H41.5854V91.6435H12.4756C11.5926 91.6435 10.7738 91.3675 10.1004 90.8971ZM49.9024 91.6602V58.301H79.0356C81.3319 58.301 83.1941 60.1679 83.1941 62.4709V87.4903C83.1941 89.7929 81.3319 91.6602 79.0356 91.6602H49.9024Z" />
+</svg>
+
+`
+
 import Plyr from "plyr"
 import { increaseTotalReceivedMessagesCount } from "./showActiveChatSection.dev"
 
+let activeChatMessageContainer = document.getElementById(
+  "activeChatMessageContainer"
+)
 function createPlyr(element, type) {
   let player = new Plyr(element, {
     controls: [
@@ -473,15 +505,28 @@ export function createUserMessage(
         "active-chat-user-message-box__content--text"
       )
 
-      // textMessage.textContent = message.textContent
-      ////////////////////////////////////////////////////////////////////
-      textMessage.insertAdjacentHTML(
-        "beforeend",
-        insertLinksToString(message.textContent)
-      )
+      if (message.hasOwnProperty("hasLinks") && message.hasLinks === true) {
+        insertLinksToTextContent(
+          textMessage,
+          message.textContent,
+          message.linksData
+        )
+      } else {
+        textMessage.textContent = message.textContent
+      }
 
       ////////////////////////////////////////////////////////////////////
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
+      if (
+        message.hasOwnProperty("hasLinkPreview") &&
+        message.hasOwnProperty("linkPreviewData") &&
+        message.hasLinkPreview === true
+      ) {
+        let linkPreview = createLinkPreview(message.linkPreviewData, true)
+        linkPreview.classList.add("link-preview--message")
+
+        messageContentBox.insertAdjacentElement("beforeend", linkPreview)
+      }
     }
     if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
       let repliedMessageContent, repliedMessageUser
@@ -683,6 +728,39 @@ function insertLinksToString(str) {
   })
 
   return container.innerHTML
+}
+function insertLinksToTextContent(textContentContainer, textContent, allLinks) {
+  let nodes = []
+  let textLastPos = 0
+
+  allLinks.forEach(link => {
+    if (link.hasOwnProperty("isLink") && link.isLink) {
+      nodes.push(
+        document.createTextNode(textContent.slice(textLastPos, link.start))
+      )
+      const linkNode = document.createElement("a")
+      linkNode.classList.add("text-message-url")
+
+      linkNode.href = link.href
+      linkNode.target = "_blank"
+      linkNode.setAttribute("rel", "noopener noreferrer")
+      linkNode.textContent = link.value
+      nodes.push(linkNode)
+
+      textLastPos = link.end
+
+      if (link.type === "url") {
+        linkNode.classList.add("text-message-url--link")
+      } else if (link.type === "email") {
+        linkNode.classList.add("text-message-url--email")
+      }
+    }
+  })
+
+  nodes.push(document.createTextNode(textContent.slice(textLastPos)))
+  nodes.forEach(node => {
+    textContentContainer.appendChild(node)
+  })
 }
 
 export function createInfoMessage(message) {
@@ -897,4 +975,121 @@ export function getColorWithPercentage(color1, color2, percent) {
   let g = Math.round(color1.g + (color2.g - color1.g) * percent)
   let b = Math.round(color1.b + (color2.b - color1.b) * percent)
   return { r, g, b }
+}
+
+function createLinkPreview(linkPreviewData, isScrolledToBottom = false) {
+  let linkPreview = document.createElement("div")
+  linkPreview.classList.add("link-preview")
+  linkPreview.innerHTML = ` 
+    <a href="#" class="link-preview__link">
+        <h3 class='link-preview__title'>
+        </h3>
+      
+        <div class='link-preview__pic link-preview__pic--img'>
+        </div>
+  
+         <p class='link-preview__desc'>
+         </p>
+    </a>
+  `
+  linkPreview.getElementsByClassName("link-preview__link")[0].href = "#"
+  // linkPreviewData.url || "#"
+
+  let linkPreviewPic =
+    linkPreview.getElementsByClassName("link-preview__pic")[0]
+
+  let linkPreviewTitle = linkPreview.getElementsByClassName(
+    "link-preview__title"
+  )[0]
+
+  let linkPreviewDesc =
+    linkPreview.getElementsByClassName("link-preview__desc")[0]
+
+  if (linkPreviewData.mediaType === "image") {
+    linkPreviewTitle.textContent = "Image"
+    linkPreviewPic.classList.add("link-preview__pic--svg")
+    linkPreviewPic.innerHTML = `${svg_messageLinkPreviewImageIcon}`
+    linkPreviewDesc.textContent = ""
+  } else if (linkPreviewData.mediaType === "audio") {
+    linkPreviewTitle.textContent = "Audio"
+    linkPreviewPic.classList.add("link-preview__pic--svg")
+    linkPreviewPic.innerHTML = `${svg_messageLinkPreviewAudioIcon}`
+
+    linkPreviewDesc.textContent = ""
+  } else if (linkPreviewData.mediaType === "video") {
+    linkPreviewTitle.textContent = "Video"
+    linkPreviewPic.classList.add("link-preview__pic--svg")
+    linkPreviewPic.innerHTML = `${svg_messageLinkPreviewVideoIcon}`
+    linkPreviewDesc.textContent = ""
+  } else if (linkPreviewData.mediaType === "application") {
+    linkPreviewTitle.textContent = "Application"
+    linkPreviewPic.classList.add("link-preview__pic--svg")
+    linkPreviewPic.innerHTML = `${svg_messageLinkPreviewApplicationIcon}`
+    linkPreviewDesc.textContent = ""
+  } else {
+    if (
+      linkPreviewData.hasOwnProperty("siteName") &&
+      linkPreviewData.siteName &&
+      linkPreviewData.siteName !== ""
+    ) {
+      linkPreviewTitle.insertAdjacentHTML(
+        "afterend",
+        `  
+          <div class='link-preview__site'>
+                 <div class='link-preview__site-icon'>
+                 </div>
+                 <div class='link-preview__site-name'>
+                </div>
+        </div>
+      `
+      )
+      linkPreview.getElementsByClassName(
+        "link-preview__site-name"
+      )[0].textContent = linkPreviewData.siteName
+
+      if (
+        linkPreviewData.hasOwnProperty("favicons") &&
+        linkPreviewData.favicons.length > 0
+      ) {
+        linkPreview
+          .getElementsByClassName("link-preview__site-icon")[0]
+          .classList.add("link-preview__site-icon--img")
+        linkPreview.getElementsByClassName(
+          "link-preview__site-icon"
+        )[0].innerHTML = `<img src="${linkPreviewData.favicons[0]}" alt="Website logo">`
+      } else {
+        linkPreview
+          .getElementsByClassName("link-preview__site-icon")[0]
+          .classList.add("link-preview__site-icon--svg")
+        linkPreview.getElementsByClassName(
+          "link-preview__site-icon"
+        )[0].innerHTML = `${svg_messageLinkPreviewWebsiteIcon}`
+      }
+    }
+    linkPreview.getElementsByClassName("link-preview__title")[0].textContent =
+      linkPreviewData.title || ""
+
+    if (linkPreviewData.images.length > 0) {
+      linkPreviewPic.classList.add("link-preview__pic--img")
+      let img = document.createElement("img")
+      img.src = linkPreviewData.images[0]
+      img.alt = "Image preview"
+      img.onload = () => {
+        if (isScrolledToBottom) {
+          if (activeChatMessageContainer) {
+            activeChatMessageContainer.scrollTop =
+              activeChatMessageContainer.scrollHeight
+          }
+        }
+      }
+      linkPreviewPic.insertAdjacentElement("afterbegin", img)
+    } else {
+      linkPreviewPic.classList.add("link-preview__pic--svg")
+      linkPreviewPic.innerHTML = `${svg_messageLinkPreviewWebsiteIcon}`
+    }
+
+    linkPreview.getElementsByClassName("link-preview__desc")[0].textContent =
+      linkPreviewData.description || ""
+  }
+  return linkPreview
 }
