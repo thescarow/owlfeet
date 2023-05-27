@@ -65,29 +65,18 @@ export async function showActiveChatSection(chat) {
               (totalReceivedMessagesCount - totalUnseenMessagesCount)
             checkTimeAndCreateOldMessages(
               data.allMessages.slice(0, positionForUnseeenMessageTag),
-              activeChatMessageContainer,
               false,
               true
             )
-            createUnseenMessageTagBox(
-              totalUnseenMessagesCount,
-              activeChatMessageContainer,
-              "afterbegin"
-            )
+            createUnseenMessageTagBox(totalUnseenMessagesCount, "afterbegin")
             checkTimeAndCreateOldMessages(
               data.allMessages.slice(positionForUnseeenMessageTag),
-              activeChatMessageContainer,
               false,
               true
             )
             totalUnseenMessagesCount = 0
           } else {
-            checkTimeAndCreateOldMessages(
-              data.allMessages,
-              activeChatMessageContainer,
-              false,
-              true
-            )
+            checkTimeAndCreateOldMessages(data.allMessages, false, true)
           }
 
           setTimeout(() => {
@@ -216,29 +205,18 @@ async function fetchMessageAndCreateUserMessageBox(chatId) {
               (totalReceivedMessagesCount - totalUnseenMessagesCount)
             checkTimeAndCreateOldMessages(
               data.allMessages.slice(0, positionForUnseeenMessageTag),
-              activeChatMessageContainer,
               false,
               false
             )
-            createUnseenMessageTagBox(
-              totalUnseenMessagesCount,
-              activeChatMessageContainer,
-              "afterbegin"
-            )
+            createUnseenMessageTagBox(totalUnseenMessagesCount, "afterbegin")
             checkTimeAndCreateOldMessages(
               data.allMessages.slice(positionForUnseeenMessageTag),
-              activeChatMessageContainer,
               false,
               false
             )
             totalUnseenMessagesCount = 0
           } else {
-            checkTimeAndCreateOldMessages(
-              data.allMessages,
-              activeChatMessageContainer,
-              false,
-              false
-            )
+            checkTimeAndCreateOldMessages(data.allMessages, false, false)
           }
 
           setTimeout(() => {

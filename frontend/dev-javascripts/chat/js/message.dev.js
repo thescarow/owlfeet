@@ -183,7 +183,6 @@ function isMessageDateChanged(messageDate, fromCheckingDate) {
 
 export function checkTimeAndCreateOldMessages(
   allMessages,
-  activeChatMessageContainer,
   isScrolledToTop = false,
   isScrolledToBottom = false
 ) {
@@ -246,7 +245,6 @@ export function checkTimeAndCreateOldMessages(
 
         let userMessageBox = createUserMessage(
           allMessages[i],
-          activeChatMessageContainer,
           isUserChanged,
           isScrolledToBottom
         )
@@ -297,7 +295,6 @@ export function checkTimeAndCreateOldMessages(
 
 export function checkTimeAndCreateNewMessage(
   message,
-  activeChatMessageContainer,
   isScrolledToBottom = false
 ) {
   let isUserChanged
@@ -340,7 +337,6 @@ export function checkTimeAndCreateNewMessage(
     }
     let userMessageBox = createUserMessage(
       message,
-      activeChatMessageContainer,
       isUserChanged,
       isScrolledToBottom
     )
@@ -359,7 +355,6 @@ export function checkTimeAndCreateNewMessage(
 
 export function createUserMessage(
   message,
-  activeChatMessageContainer,
   isUserChanged = true,
   isScrolledToBottom = false
 ) {
@@ -820,7 +815,6 @@ export function createDateMessage(messageDate) {
 
 export function createUnseenMessageTagBox(
   messageCount,
-  activeChatMessageContainer,
   addPosition = "afterbegin"
 ) {
   const unseenMessageTagBox = document.createElement("div")

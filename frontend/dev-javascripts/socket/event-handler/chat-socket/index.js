@@ -59,7 +59,7 @@ export async function createChatSocket(socket) {
         let { checkTimeAndCreateNewMessage } = await import(
           "../../../chat/js/message.dev"
         )
-        checkTimeAndCreateNewMessage(message, activeChatMessageContainer, true)
+        checkTimeAndCreateNewMessage(message, true)
       }
     })
     ////////////////////////////////////////////

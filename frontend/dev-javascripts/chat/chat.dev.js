@@ -281,11 +281,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
         })
         .then(async data => {
           if (data.isSuccess) {
-            checkTimeAndCreateNewMessage(
-              data.message,
-              activeChatMessageContainer,
-              true
-            )
+            checkTimeAndCreateNewMessage(data.message, true)
             closeReplyMessageBox()
             updateAllChatSection(data.message)
           } else {
@@ -344,11 +340,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
             })
             .then(async data => {
               if (data.isSuccess) {
-                checkTimeAndCreateNewMessage(
-                  data.message,
-                  activeChatMessageContainer,
-                  true
-                )
+                checkTimeAndCreateNewMessage(data.message, true)
                 closeReplyMessageBox()
                 document
                   .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
@@ -435,11 +427,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
                 activeChatMessageContainer.style.paddingBottom =
                   activeChatInputTextContent.style.height
               }
-              checkTimeAndCreateNewMessage(
-                data.message,
-                activeChatMessageContainer,
-                true
-              )
+              checkTimeAndCreateNewMessage(data.message, true)
               closeReplyMessageBox()
               updateAllChatSection(data.message)
               activeChatMessageContainer.scrollTop =
