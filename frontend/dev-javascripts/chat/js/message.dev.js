@@ -506,22 +506,25 @@ export function createUserMessage(
           message.textContent,
           message.linksData
         )
+        if (
+          message.hasOwnProperty("hasLinkPreview") &&
+          message.hasOwnProperty("linkPreviewData") &&
+          message.hasLinkPreview === true
+        ) {
+          let linkPreview = createLinkPreview(
+            message.linkPreviewData,
+            isScrolledToBottom
+          )
+          linkPreview.classList.add("link-preview--message")
+
+          messageContentBox.insertAdjacentElement("beforeend", linkPreview)
+        }
       } else {
         textMessage.textContent = message.textContent
       }
 
       ////////////////////////////////////////////////////////////////////
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
-      if (
-        message.hasOwnProperty("hasLinkPreview") &&
-        message.hasOwnProperty("linkPreviewData") &&
-        message.hasLinkPreview === true
-      ) {
-        let linkPreview = createLinkPreview(message.linkPreviewData, true)
-        linkPreview.classList.add("link-preview--message")
-
-        messageContentBox.insertAdjacentElement("beforeend", linkPreview)
-      }
     }
     if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
       let repliedMessageContent, repliedMessageUser
