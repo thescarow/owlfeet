@@ -45,15 +45,14 @@
   --notification-success-border-color: #009400;
 
   /* main notification color  */
-  --main-notification-color: #cae1eb;
-  --main-notification-border-color: #4cb3d4;
-  --main-notification-text-color: #444;
-  --main-notification-error-color: #eee6c9;
-  --main-notification-error-border-color: #e6a700;
-  --main-notification-error-text-color: #444;
-  --main-notification-success-color: #c3ebc3;
-  --main-notification-success-border-color: #009400;
-  --main-notification-success-text-color: #444;
+  --main-notification-info-color: rgb(25, 60, 71);
+  --main-notification-info-text-color: rgb(238, 249, 253);
+
+  --main-notification-error-color: rgb(230, 167, 0);
+  --main-notification-error-text-color: rgb(31, 22, 0);
+
+  --main-notification-success-color: rgb(0, 148, 0);
+  --main-notification-success-text-color: rgb(1, 24, 1);
 
   /* profile color  */
   --profile-text-color: #413F42;
@@ -81,12 +80,14 @@
   --rgba-danger-color: 204, 59, 33;
   --rgba-success-color: 167, 249, 167;
   /* notification rgba color  */
-  --rgba-notification-color: 238, 249, 253;
-  --rgba-notification-border-color: 76, 179, 212;
-  --rgba-notification-error-color: 255, 248, 230;
-  --rgba-notification-error-border-color: 230, 167, 0;
-  --rgba-notification-success-color: 230, 246, 230;
-  --rgba-notification-success-border-color: 0, 148, 0;
+  --rgba-main-notification-info-color: 25, 60, 71;
+  --rgba-main-notification-info-text-color: 238, 249, 253;
+
+  --rgba-main-notification-error-color: 230, 167, 0;
+  --rgba-main-notification-error-text-color: 31, 22, 0;
+
+  --rgba-main-notification-success-color: 0, 148, 0;
+  --rgba-main-notification-success-text-color: 1, 24, 1;
 }
 
 body {

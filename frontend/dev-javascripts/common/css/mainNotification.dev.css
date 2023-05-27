@@ -1,4 +1,6 @@
-/* notification css  */
+/* //////////////////////////////////// */
+
+
 .main-notification {
     position: fixed;
     bottom: calc(var(--main-nav-height) + 2px);
@@ -6,17 +8,36 @@
     transform: translateX(50%);
     width: 90%;
     max-width: calc(var(--main-container-max-width) - 30px);
+    padding: 5px 10px;
     cursor: pointer;
-    border-radius: 15px;
+    border: 1px solid rgba(var(--rgba-first-color), 0.5);
+    border-radius: 12px;
     z-index: 101;
     /* mainNavigation z-index = 100 */
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
-    animation: notification 1s ease-in-out 1 both;
+    align-items: flex-start;
+    animation: mainNotification 1s ease-in-out 1 both;
 }
 
-@keyframes notification {
+.main-notification--info {
+    background: rgba(var(--rgba-main-notification-info-color), 0.4);
+    border-left: 5px solid rgba(var(--rgba-main-notification-info-color), 1);
+}
+
+.main-notification--error {
+    background: rgba(var(--rgba-main-notification-error-color), 0.4);
+    border-left: 5px solid rgba(var(--rgba-main-notification-error-color), 1);
+}
+
+
+.main-notification--success {
+    background: rgba(var(--rgba-main-notification-success-color), 0.4);
+    border-left: 5px solid rgba(var(--rgba-main-notification-success-color), 1);
+}
+
+@keyframes mainNotification {
     0% {
         transform: translateX(2000px);
     }
@@ -33,56 +54,93 @@
 
 }
 
-.main-notification.info {
-    border: 2px solid var(--main-notification-border-color);
-    background-color: var(--main-notification-color);
-    color: var(--main-notification-text-color);
-}
-
-.main-notification.error {
-    border: 2px solid var(--main-notification-error-border-color);
-    background-color: var(--main-notification-error-color);
-    color: var(--main-notification-error-text-color);
-}
-
-.main-notification.success {
-    border: 2px solid var(--main-notification-success-border-color);
-    background-color: var(--main-notification-success-color);
-    color: var(--main-notification-success-text-color);
-}
-
-.main-notification-message {
-    padding: 5px 30px 5px 7px;
-    font-size: 13px;
-    font-weight: 800;
-}
-
-.main-notification-timer-and-close {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 2%;
-    right: 5px;
-}
-
-.main-notification-timer-and-close svg {
+.main-notification__header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     width: 100%;
-    height: 100%;
+}
 
+.main-notification__icon {
+    width: 23px;
+    height: 23px;
+}
 
+.main-notification__icon svg {}
+
+.main-notification--info .main-notification__icon svg {
+    fill: rgba(var(--rgba-main-notification-info-text-color), 1);
+}
+
+.main-notification--error .main-notification__icon svg {
+    fill: rgba(var(--rgba-main-notification-error-text-color), 1);
+
+}
+
+.main-notification--success .main-notification__icon svg {
+    fill: rgba(var(--rgba-main-notification-success-text-color), 1);
+
+}
+
+.main-notification__title {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 0 5px;
+}
+
+.main-notification--info .main-notification__title {
+    color: rgba(var(--rgba-main-notification-info-text-color), 1);
+}
+
+.main-notification--error .main-notification__title {
+    color: rgba(var(--rgba-main-notification-error-text-color), 1);
+}
+
+.main-notification--success .main-notification__title {
+    color: rgba(var(--rgba-main-notification-success-text-color), 1);
+
+}
+
+.main-notification__content {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.main-notification--info .main-notification__content {
+    color: rgba(var(--rgba-main-notification-info-text-color), 1);
+}
+
+.main-notification--error .main-notification__content {
+    color: rgba(var(--rgba-main-notification-error-text-color), 1);
+}
+
+.main-notification--success .main-notification__content {
+    color: rgba(var(--rgba-main-notification-success-text-color), 1);
 }
 
 
 
-.main-notification-timer-and-close svg #timerPath {
-    stroke: var(--first-color);
-    stroke-width: 20px;
+.main-notification__timer-and-close-icon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 30px;
+    height: 30px;
+}
+
+.main-notification__timer-and-close-icon svg {
+    /* fill: rgba(var(--rgba-main-notification-info-color),1); */
+}
+
+.main-notification__timer-and-close-icon svg .timerPath {
+    stroke-width: 20;
     stroke-dasharray: 160px;
     fill: transparent;
-    animation: timer 10s linear 1 both;
+    animation: timerPathAnimation 10s linear 1 both;
 }
 
-@keyframes timer {
+@keyframes timerPathAnimation {
     0% {
 
         stroke-dashoffset: 0px;
@@ -95,6 +153,26 @@
     }
 }
 
-.main-notification-timer-and-close svg #closePath {
-    fill: #aaa;
+.main-notification--info .main-notification__timer-and-close-icon svg .timerPath {
+    stroke: rgba(var(--rgba-main-notification-info-color), 1);
+}
+
+.main-notification--error .main-notification__timer-and-close-icon svg .timerPath {
+    stroke: rgba(var(--rgba-main-notification-error-color), 1);
+}
+
+.main-notification--success .main-notification__timer-and-close-icon svg .timerPath {
+    stroke: rgba(var(--rgba-main-notification-success-color), 1);
+}
+
+.main-notification--info .main-notification__timer-and-close-icon svg .closePath {
+    fill: rgba(var(--rgba-main-notification-info-text-color), 1);
+}
+
+.main-notification--error .main-notification__timer-and-close-icon svg .closePath {
+    fill: rgba(var(--rgba-main-notification-error-text-color), 1);
+}
+
+.main-notification--success .main-notification__timer-and-close-icon svg .closePath {
+    fill: rgba(var(--rgba-main-notification-success-text-color), 1);
 }
