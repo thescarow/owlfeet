@@ -60,12 +60,19 @@ let svg_deletedMessageBlankIcon = `
 
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
+const emptyChatSection = document.getElementById("emptyChatSection")
 
 let allChatChatBoxContainer = document.getElementById("allChatChatBoxContainer")
 
 export function showAllChatSection() {
-  allChatSection.classList.remove("all-chat-section--hide")
+  allChatSection.classList.remove("all-chat-section--open-active-chat")
   activeChatSection.classList.add("active-chat-section--hide")
+
+  if (emptyChatSection.classList.contains("empty-chat-section--hide"))
+    emptyChatSection.classList.remove("empty-chat-section--hide")
+
+  // allChatSection.classList.remove("all-chat-section--hide")
+  // activeChatSection.classList.add("active-chat-section--hide")
 }
 
 export async function updateAllChatSection(message) {

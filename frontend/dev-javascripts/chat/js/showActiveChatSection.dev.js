@@ -1,5 +1,6 @@
 let allChatSection = document.getElementById("allChatSection")
 let activeChatSection = document.getElementById("activeChatSection")
+const emptyChatSection = document.getElementById("emptyChatSection")
 const activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
@@ -115,8 +116,14 @@ export async function showActiveChatSection(chat) {
       )
     })
 
-  allChatSection.classList.add("all-chat-section--hide")
+  allChatSection.classList.add("all-chat-section--open-active-chat")
   activeChatSection.classList.remove("active-chat-section--hide")
+
+  if (!emptyChatSection.classList.contains("empty-chat-section--hide"))
+    emptyChatSection.classList.add("empty-chat-section--hide")
+
+  // allChatSection.classList.add("all-chat-section--hide")
+  // activeChatSection.classList.remove("active-chat-section--hide")
 }
 
 function initializeUserMessageBoxObserver() {

@@ -1,4 +1,5 @@
 const allChatSection = document.getElementById("allChatSection")
+const emptyChatSection = document.getElementById("emptyChatSection")
 const activeChatSection = document.getElementById("activeChatSection")
 const activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
@@ -22,8 +23,12 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
       } else {
         // history.replaceState({}, "", "")
         document.title = "Chats"
-        allChatSection.classList.remove("all-chat-section--hide")
+
+        allChatSection.classList.remove("all-chat-section--open-active-chat")
         activeChatSection.classList.add("active-chat-section--hide")
+
+        if (emptyChatSection.classList.contains("empty-chat-section--hide"))
+          emptyChatSection.classList.remove("empty-chat-section--hide")
       }
     }
 
@@ -85,12 +90,12 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     const activeChatInputEmojiBtn = document.getElementById(
       "activeChatInputEmojiBtn"
     )
-    const activeChatInputEmojiContainer = document.getElementById(
-      "activeChatInputEmojiContainer"
+    const activeChatEmojiContainer = document.getElementById(
+      "activeChatEmojiContainer"
     )
 
     let emojiPickerOptions = {
-      parent: activeChatInputEmojiContainer,
+      parent: activeChatEmojiContainer,
       data: async () => {
         const data = await import("@emoji-mart/data")
         return data
@@ -124,8 +129,8 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     let emojiPicker = new Picker(emojiPickerOptions)
 
     activeChatInputEmojiBtn.addEventListener("click", () => {
-      activeChatInputEmojiContainer.classList.toggle(
-        "active-chat-input-box__emoji-container--hide"
+      activeChatEmojiContainer.classList.toggle(
+        "active-chat-emoji-container--hide"
       )
     })
 

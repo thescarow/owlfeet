@@ -277,10 +277,6 @@
                     </div>
 
                     <div class="active-chat-input-box" id="activeChatInputBox">
-                        <div class="active-chat-input-box__emoji-container active-chat-input-box__emoji-container--hide"
-                            id="activeChatInputEmojiContainer">
-                        </div>
-
                         <textarea class="active-chat-input-box__text" rows="1" placeholder="Message..."
                             id="activeChatInputTextContent"></textarea>
                         <div class="active-chat-input-box__left-btn-container">
@@ -309,7 +305,28 @@
 
         </div>
 
-    </section>
+        <div class="active-chat-emoji-container  active-chat-emoji-container--hide"
+            data-note="insert-it-above-input-textarea-as-a-sibling-so-that-it-will-move-with-text-box"
+            id="activeChatEmojiContainer">
+        </div>
 
+
+
+    </section>
+    <section class="empty-chat-section" id="emptyChatSection">
+
+        <div class="empty-chat-content">
+            <div class="empty-chat-content__illus">
+                <%- include('../partials/illustrations/chatEmptyChat.svg') -%>
+            </div>
+        </div>
+        <div class="empty-chat-header">
+            <div class="empty-chat-header__title">
+                Select a chat to start messaging
+            </div>
+        </div>
+
+
+    </section>
 
 </div>
