@@ -468,7 +468,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     activeChatInputAttachmentBoxBtn.addEventListener("click", () => {
       if (
         activeChatInputAttachmentBoxBtn.classList.contains(
-          "active-chat-input-attachment-box__btn--selected"
+          "active-chat-input-attachment-box-btn--selected"
         )
       ) {
         openActiveChatInputBox()
@@ -498,7 +498,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
 export function openActivechatInputAttachmentBox() {
   document
     .getElementById("activeChatInputAttachmentBoxBtn")
-    .classList.add("active-chat-input-attachment-box__btn--selected")
+    .classList.add("active-chat-input-attachment-box-btn--selected")
 
   const activeChatInputAttachmentBox = document.getElementById(
     "activeChatInputAttachmentBox"
@@ -527,7 +527,7 @@ export function openActivechatInputAttachmentBox() {
 export function openActiveChatInputBox() {
   document
     .getElementById("activeChatInputAttachmentBoxBtn")
-    .classList.remove("active-chat-input-attachment-box__btn--selected")
+    .classList.remove("active-chat-input-attachment-box-btn--selected")
   document
     .getElementById("activeChatInputAttachmentBox")
     .classList.remove("active-chat-input-attachment-box--selected")

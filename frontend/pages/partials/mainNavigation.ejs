@@ -1,61 +1,59 @@
 <link rel="stylesheet" href="/stylesheets/partials/mainNavigation.css">
 
-<nav class="main-navigation" id="mainNavigation">
-  <ul>
 
 
-    <li class="main-navigation-option <%=locals.pageName=='home' ?'active':''_%>">
-      <a class="main-navigation-option-link" href="/">
-        <span class="main-navigation-option-icon">
+<nav class="main-nav-container" id="mainNavContainer">
+  <ul class="main-nav">
+
+    <li class="main-nav-option <%= locals.pageName=='home' ?'main-nav-option--active':''_%>">
+      <a class="main-nav-option__link" href="/">
+        <div class="main-nav-option__icon">
           <%- include('./icons/mainNavHomeIcon.svg') -%>
-        </span>
-        <span class="main-navigation-option-text">Home</span>
+        </div>
+        <div class="main-nav-option__text">Home</div>
       </a>
     </li>
 
-
-    <li class="main-navigation-option <%=locals.pageName=='explore' ?'active':''_%>">
-      <a class="main-navigation-option-link" href="/explore">
-        <span class="main-navigation-option-icon">
+    <li class="main-nav-option <%= locals.pageName=='explore' ?'main-nav-option--active':''_%>">
+      <a class="main-nav-option__link" href="/explore">
+        <div class="main-nav-option__icon">
           <%- include('./icons/mainNavExploreIcon.svg') -%>
-        </span>
-        <span class="main-navigation-option-text">Search</span>
+        </div>
+        <div class="main-nav-option__text">Search</div>
       </a>
     </li>
 
 
-    <li class="main-navigation-option <%=locals.pageName=='add' ?'active':''_%>">
-      <a class="main-navigation-option-link" href="/add">
-        <span class="main-navigation-option-icon">
+    <li class="main-nav-option <%= locals.pageName=='add' ?'main-nav-option--active':''_%>">
+      <a class="main-nav-option__link" href="/add">
+        <div class="main-nav-option__icon">
           <%- include('./icons/mainNavAddIcon.svg') -%>
-        </span>
-        <span class="main-navigation-option-text">Add</span>
+        </div>
+        <div class="main-nav-option__text">Add</div>
       </a>
     </li>
 
 
-    <li class="main-navigation-option <%=locals.pageName=='chat' ?'active':''_%>">
-      <a class="main-navigation-option-link" href="/chat">
-        <span class="main-navigation-option-icon">
+    <li class="main-nav-option <%= locals.pageName=='chat' ?'main-nav-option--active':''_%>">
+      <a class="main-nav-option__link" href="/chat">
+        <div class="main-nav-option__icon">
           <%- include('./icons/mainNavChatIcon.svg') -%>
-        </span>
-        <span class="main-navigation-option-text">Chat</span>
+        </div>
+        <div class="main-nav-option__text">Chat</div>
       </a>
     </li>
 
 
-    <li class="main-navigation-option <%=locals.pageName=='profile'?'active':''_%>">
-      <a class="main-navigation-option-link" href="/user-auth/login">
-        <span class="main-navigation-option-icon">
+    <li class="main-nav-option <%= locals.pageName=='profile'?'main-nav-option--active':''_%>">
+      <a class="main-nav-option__link" href="/user-auth/login">
+        <div class="main-nav-option__icon">
           <%- include('./icons/mainNavProfileIcon.svg') -%>
-        </span>
-        <span class="main-navigation-option-text">Profile</span>
+        </div>
+        <div class="main-nav-option__text">Profile</div>
       </a>
     </li>
 
   </ul>
-
-
 
 
 </nav>

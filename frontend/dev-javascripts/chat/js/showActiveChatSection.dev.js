@@ -4,10 +4,22 @@ const emptyChatSection = document.getElementById("emptyChatSection")
 const activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
+const activeChatMessageLoadingBox = document.getElementById(
+  "activeChatMessageLoadingBox"
+)
 
 let totalReceivedMessagesCount
 let totalUnseenMessagesCount
 export async function showActiveChatSection(chat) {
+  if (
+    activeChatMessageLoadingBox.classList.contains(
+      "active-chat-message-loading-box--hide"
+    )
+  )
+    activeChatMessageLoadingBox.classList.remove(
+      "active-chat-message-loading-box--hide"
+    )
+
   let activeChatInputTextContent = document.getElementById(
     "activeChatInputTextContent"
   )
@@ -50,6 +62,15 @@ export async function showActiveChatSection(chat) {
     })
     .then(async data => {
       if (data.isSuccess) {
+        if (
+          !activeChatMessageLoadingBox.classList.contains(
+            "active-chat-message-loading-box--hide"
+          )
+        )
+          activeChatMessageLoadingBox.classList.add(
+            "active-chat-message-loading-box--hide"
+          )
+
         activeChatMessageContainer.innerHTML = ""
         console.log(data)
 

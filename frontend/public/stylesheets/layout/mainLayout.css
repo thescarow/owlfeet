@@ -18,6 +18,7 @@
 
   /* main navigation height */
   --main-nav-height: 50px;
+  --main-nav-width: 58px;
 
   /* application colors  */
   --page-color: #ffffff;
@@ -101,7 +102,7 @@ body {
   /* we have use flex-direction row so that each container have 100vh height,
   for flex-direction column we have to set height: auto; */
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-end;
   font-family: 'Nunito', Helvetica, Arial, sans-serif;
   /* font-family: 'Mukta', sans-serif; */
   -webkit-font-smoothing: antialiased;

@@ -4,6 +4,7 @@ let emptyChatSection = document.getElementById("emptyChatSection")
 let activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
+
 // activeChatData is define in main layout as global object
 export async function fetchActiveChat(chatId) {
   let activeChatId = activeChatSection.dataset.chatId

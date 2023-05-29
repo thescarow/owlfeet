@@ -133,11 +133,41 @@ function getDateString(date) {
     currentDate.getMonth() === date.getMonth()
   ) {
     if (currentDate.getDate() - date.getDate() === 0) {
-      return "Today"
+      return (
+        "Today" +
+        " ( " +
+        weekDaysArray[date.getDay()] +
+        ", " +
+        date.getDate() +
+        "-" +
+        date.getMonth() +
+        "-" +
+        date.getFullYear() +
+        " )"
+      )
     } else if (currentDate.getDate() - date.getDate() === 1) {
-      return "Yesterday"
+      return (
+        "Yesterday" +
+        " ( " +
+        weekDaysArray[date.getDay()] +
+        ", " +
+        date.getDate() +
+        "-" +
+        date.getMonth() +
+        "-" +
+        date.getFullYear() +
+        " )"
+      )
     } else if (currentDate.getDate() - date.getDate() === 2) {
-      return weekDaysArray[date.getDay()]
+      return (
+        weekDaysArray[date.getDay()] +
+        ", " +
+        date.getDate() +
+        "-" +
+        date.getMonth() +
+        "-" +
+        date.getFullYear()
+      )
     } else {
       return (
         weekDaysArray[date.getDay()] +
@@ -531,7 +561,12 @@ export function createUserMessage(
 
       messageContentBox.insertAdjacentHTML(
         "afterbegin",
-        `<div class="active-chat-user-message-reply-box">
+        `<div class='active-chat-user-message-reply-box ${
+          message.sender._id.toString() ===
+          message.repliedTo.sender._id.toString()
+            ? "active-chat-user-message-reply-box--self-replied"
+            : ""
+        }'>
             <div class="active-chat-user-message-reply-box__user">
             </div>
            <div class="active-chat-user-message-reply-box__user-message">

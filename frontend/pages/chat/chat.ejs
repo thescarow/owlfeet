@@ -14,8 +14,8 @@
         <div class="all-chat-header all-chat-section__header " id="allChatHeader">
             <div class="all-chat-header__title" id="allChatHeaderTitle">Chat</div>
             <div class="all-chat-header__btn-container" id="allChatHeaderBtnContainer">
-                <div class="all-chat-header__btn" id="createNewGroupChatBtn">
-                    <%- include("../partials/icons/addGroup.svg") _%>
+                <div class="all-chat-header__btn all-chat-header__btn--create-new-group" id="createNewGroupChatBtn">
+                    <%- include("../partials/icons/chatCreateNewChatGroupIcon.svg") _%>
                 </div>
             </div>
         </div>
@@ -183,7 +183,8 @@
 
         <div class="active-chat-header" id="activeChatHeader">
             <div class="active-chat-header__left-btn-container">
-                <div class="active-chat-header__btn" id="ActiveChatToAllChatBtn">
+                <div class="active-chat-header__btn active-chat-header__btn--back-to-all-chat"
+                    id="ActiveChatToAllChatBtn">
                     <%- include("../partials/icons/backBtn.svg") _%>
                 </div>
             </div>
@@ -201,7 +202,7 @@
                 </div>
             </div>
             <div class="active-chat-header__right-btn-container">
-                <div class="active-chat-header__btn " id="activeChatCallBtn">
+                <div class="active-chat-header__btn active-chat-header__btn--call" id="activeChatCallBtn">
                     <%- include('../partials/icons/audioCallBtn.svg') -%>
                 </div>
 
@@ -215,8 +216,11 @@
             </div>
         </div>
 
-        <div class="active-chat-message-container" id="activeChatMessageContainer">
+        <div class="active-chat-message-loading-box" id="activeChatMessageLoadingBox">
+            loading<span>.</span> <span>.</span> <span>.</span>
+        </div>
 
+        <div class="active-chat-message-container" id="activeChatMessageContainer">
         </div>
 
         <div class="active-chat-input-container" id="activeChatInputContainer" data-replied-to="">
@@ -239,6 +243,9 @@
 
 
                 <div class="active-chat-input-main">
+                    <div class="active-chat-input-attachment-box-btn" id="activeChatInputAttachmentBoxBtn">
+                        <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
+                    </div>
                     <div class="active-chat-input-attachment-box" id="activeChatInputAttachmentBox">
 
                         <div class="input-attachment-btn-container input-attachment-btn-container--hide"
@@ -268,10 +275,7 @@
                                 </div>
 
                             </div>
-                        </div>
 
-                        <div class="active-chat-input-attachment-box__btn" id="activeChatInputAttachmentBoxBtn">
-                            <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
                         </div>
 
                     </div>
@@ -284,22 +288,22 @@
                                 <%- include('../partials/icons/emojiBtn.svg') -%>
                             </div>
                         </div>
+                        <div class="active-chat-input-send-box" id="activeChatInputSendBox">
 
-                    </div>
-
-                    <div class="active-chat-input-send-box" id="activeChatInputSendBox">
-
-                        <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
-                            <%- include('../partials/icons/sendBtn.svg') -%>
+                            <div class="active-chat-input-send-box__btn " id="activeChatInputSendBtn">
+                                <%- include('../partials/icons/chatMessageSendBtnIcon.svg') -%>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
 
 
             </div>
             <div class="active-chat-input-container__disable-box">
                 <div class="active-chat-input-disable-title">
-                    You are not allowed to send message in this group.
+                    You are not allowed to send message in this chat.
                 </div>
             </div>
 
