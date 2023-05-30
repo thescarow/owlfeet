@@ -1,4 +1,26 @@
 .main-nav-container {
+  /* notification rgba color  */
+  /* main notification color  */
+  --main-notification-info-color: rgb(25, 60, 71);
+  --main-notification-info-text-color: rgb(238, 249, 253);
+
+  --main-notification-error-color: rgb(230, 167, 0);
+  --main-notification-error-text-color: rgb(31, 22, 0);
+
+  --main-notification-success-color: rgb(0, 148, 0);
+  --main-notification-success-text-color: rgb(1, 24, 1);
+  /* rgba  */
+  --rgba-main-notification-info-color: 25, 60, 71;
+  --rgba-main-notification-info-text-color: 238, 249, 253;
+
+  --rgba-main-notification-error-color: 230, 167, 0;
+  --rgba-main-notification-error-text-color: 31, 22, 0;
+
+  --rgba-main-notification-success-color: 0, 148, 0;
+  --rgba-main-notification-success-text-color: 1, 24, 1;
+}
+
+.main-nav-container {
   position: fixed;
   z-index: 100;
 }

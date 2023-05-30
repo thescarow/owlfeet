@@ -95,7 +95,7 @@ function initialiseEventForMainSearchSectionModal() {
           if (userInput !== "") {
             fetchSearchedUserAndAddThem(userInput, 8)
           } else {
-            searchedUserBox.innerHTML = ""
+            fetchSearchedUserAndAddThem("", 5)
           }
         }.bind(this),
         1000
@@ -117,9 +117,7 @@ function initialiseEventForMainSearchSectionModal() {
 }
 
 async function fetchSearchedUserAndAddThem(userInput, userCount) {
-  fetch(
-    `/user/data/fetch-main-users?userInput=${userInput}&userCount=${userCount}`
-  )
+  fetch(`/user/data/main-users?userInput=${userInput}&userCount=${userCount}`)
     .then(response => {
       if (response.ok) {
         return response.json()

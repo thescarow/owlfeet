@@ -76,8 +76,9 @@
         data-user-follow-status='<%= locals.profileUser.userFollowStatus || "" %>'>
         <% if(locals.profileUser.userFollowStatus==='send-follow-request' ){ _%>FOLLOW <% } else
             if(locals.profileUser.userFollowStatus==='cancel-sent-follow-request' ){ -%>CANCEL REQUEST
-            <% } else { _%>UNFOLLOW
-              <% } %>
+            <% } else if(locals.profileUser.userFollowStatus==='unfollow' ){ -%>UNFOLLOW
+              <% } else { _%>FOLLOW
+                <% } %>
       </button>
       <button id="profileMessageBtn" class="profile-btn">
         MESSAGE

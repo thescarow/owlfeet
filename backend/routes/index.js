@@ -1,4 +1,5 @@
 const indexRouter = require("./index.route")
+const exploreRouter = require("./explore.route")
 const userRouter = require("./user.route")
 const userAuthRouter = require("./userAuth.route")
 const followRouter = require("./follow.route")
@@ -16,6 +17,7 @@ const testRouter = require("./test.route")
 
 exports.registerRoutes = app => {
   app.use("/", indexRouter)
+  app.use("/explore", exploreRouter)
   app.use("/user", userRouter)
   app.use("/user-auth", userAuthRouter)
   app.use("/follow", followRouter)

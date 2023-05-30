@@ -6,22 +6,37 @@ svg {
 
 
 .home-main-container {
-  width: 100%;
-  max-width: var(--main-container-max-width);
-  height: calc(100% - var(--main-nav-height));
+  position: relative;
   overflow-x: hidden;
-  overflow-y: auto;
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* Internet Explorer 10+ */
-  background-color: var(-light-color);
+
 }
 
-.home-main-container::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
+@media screen and (min-width: 800px) {
+  .home-main-container {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: calc(100% - var(--main-nav-width));
+    height: 100%;
+    /* align-self: flex-end; */
+    background: rgba(var(--rgba-light-color), 1);
+  }
+
+}
+
+@media screen and (max-width: 800px) {
+  .home-main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - var(--main-nav-height));
+    /* align-self: flex-end; */
+    background: rgba(var(--rgba-light-color), 1);
+  }
 }
 
 
