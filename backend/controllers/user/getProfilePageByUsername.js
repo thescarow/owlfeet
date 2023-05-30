@@ -34,7 +34,7 @@ exports.getProfilePageByUsername = async (req, res) => {
     if (user) {
       if (req.user) {
         isLogin = true
-        if (req.user.username == user.username) {
+        if (req.user.username.toString() === user.username.toString()) {
           isOwner = true
           user.receivedFollowRequestTotalCount =
             await getReceivedFollowRequestTotalCount(user._id)

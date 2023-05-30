@@ -13,6 +13,11 @@ module.exports = {
 
     home: path.resolve(__dirname, "./dev-javascripts/index/home.dev.js"),
 
+    explore: path.resolve(
+      __dirname,
+      "./dev-javascripts/explore/explore.dev.js"
+    ),
+
     account: path.resolve(
       __dirname,
       "./dev-javascripts/user-auth/account.dev.js"

@@ -3,6 +3,7 @@ const router = express.Router()
 const {
   getProfilePageByUsername,
   fetchFollowingUsers,
+  fetchMainUsersData,
   getLoginUserData,
   getProfileUserData,
   checkLoginStatus
@@ -12,6 +13,7 @@ const { getLoginUser } = require("../middleware/auth.middleware")
 // /user/
 router.get("/fetch-following-users", getLoginUser, fetchFollowingUsers)
 
+router.get("/data/main-users", getLoginUser, fetchMainUsersData)
 router.get("/data/login-user", getLoginUser, getLoginUserData)
 router.post("/data/profile-user", getLoginUser, getProfileUserData)
 

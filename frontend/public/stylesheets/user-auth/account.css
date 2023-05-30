@@ -19,6 +19,33 @@
 	height: 0;
 }
 
+@media screen and (min-width: 800px) {
+	.explore-main-container {
+
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		width: calc(100% - var(--main-nav-width));
+		height: 100%;
+		/* align-self: flex-end; */
+		background: rgba(var(--rgba-dark-color), 1);
+	}
+
+}
+
+@media screen and (max-width: 800px) {
+	.explore-main-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		height: calc(100% - var(--main-nav-height));
+		/* align-self: flex-end; */
+		background: rgba(var(--rgba-dark-color), 1);
+	}
+}
 
 .form-structor {
 	background-color: var(--light-color);

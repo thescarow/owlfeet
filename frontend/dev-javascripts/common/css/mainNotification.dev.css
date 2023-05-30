@@ -1,5 +1,31 @@
 /* //////////////////////////////////// */
+.main-notification {
+    /* notification rgba color  */
+    /* main notification color  */
+    --main-notification-info-color: rgb(139, 219, 243);
+    --main-notification-info-border-color: rgb(4, 82, 105);
+    --main-notification-info-text-color: rgb(2, 24, 32);
 
+    --main-notification-error-color: rgb(240, 200, 92);
+    --main-notification-error-border-color: rgb(187, 114, 4);
+    --main-notification-error-text-color: rgb(31, 22, 0);
+
+    --main-notification-success-color: rgb(118, 248, 118);
+    --main-notification-success-border-color: rgb(0, 122, 0);
+    --main-notification-success-text-color: rgb(1, 24, 1);
+    /* rgba  */
+    --rgba-main-notification-info-color: 139, 219, 243;
+    --rgba-main-notification-info-border-color: 4, 82, 105;
+    --rgba-main-notification-info-text-color: 2, 24, 32;
+
+    --rgba-main-notification-error-color: 240, 200, 92;
+    --rgba-main-notification-error-border-color: 187, 114, 4;
+    --rgba-main-notification-error-text-color: 31, 22, 0;
+
+    --rgba-main-notification-success-color: 118, 248, 118;
+    --rgba-main-notification-success-border-color: 0, 122, 0;
+    --rgba-main-notification-success-text-color: 1, 24, 1;
+}
 
 .main-notification {
     position: fixed;
@@ -22,19 +48,19 @@
 }
 
 .main-notification--info {
-    background: rgba(var(--rgba-main-notification-info-color), 0.4);
-    border-left: 5px solid rgba(var(--rgba-main-notification-info-color), 1);
+    background: rgba(var(--rgba-main-notification-info-color), 1);
+    border-left: 5px solid rgba(var(--rgba-main-notification-info-border-color), 1);
 }
 
 .main-notification--error {
-    background: rgba(var(--rgba-main-notification-error-color), 0.4);
-    border-left: 5px solid rgba(var(--rgba-main-notification-error-color), 1);
+    background: rgba(var(--rgba-main-notification-error-color), 1);
+    border-left: 5px solid rgba(var(--rgba-main-notification-error-border-color), 1);
 }
 
 
 .main-notification--success {
-    background: rgba(var(--rgba-main-notification-success-color), 0.4);
-    border-left: 5px solid rgba(var(--rgba-main-notification-success-color), 1);
+    background: rgba(var(--rgba-main-notification-success-color), 1);
+    border-left: 5px solid rgba(var(--rgba-main-notification-success-border-color), 1);
 }
 
 @keyframes mainNotification {
@@ -154,15 +180,15 @@
 }
 
 .main-notification--info .main-notification__timer-and-close-icon svg .timerPath {
-    stroke: rgba(var(--rgba-main-notification-info-color), 1);
+    stroke: rgba(var(--rgba-main-notification-info-border-color), 1);
 }
 
 .main-notification--error .main-notification__timer-and-close-icon svg .timerPath {
-    stroke: rgba(var(--rgba-main-notification-error-color), 1);
+    stroke: rgba(var(--rgba-main-notification-error-border-color), 1);
 }
 
 .main-notification--success .main-notification__timer-and-close-icon svg .timerPath {
-    stroke: rgba(var(--rgba-main-notification-success-color), 1);
+    stroke: rgba(var(--rgba-main-notification-success-border-color), 1);
 }
 
 .main-notification--info .main-notification__timer-and-close-icon svg .closePath {

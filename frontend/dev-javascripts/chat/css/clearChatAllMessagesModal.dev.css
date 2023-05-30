@@ -1,6 +1,8 @@
 .inner-modal--clear-chat-all-messages {}
 
-.inner-modal-content--clear-chat-all-messages {}
+.inner-modal-content--clear-chat-all-messages {
+        max-width: 300px;
+}
 
 .clear-chat-all-messages-for-all-container {
     width: 100%;
