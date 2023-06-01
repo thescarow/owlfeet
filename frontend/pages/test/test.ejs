@@ -1,0 +1,102 @@
+<link rel="stylesheet" href="/stylesheets/test/test.css" />
+
+<script defer src="/javascripts/test.bundle.js"></script>
+
+<div class="main-account-container" id='mainAccountContainer'>
+    <div class="account-box" id="accountBox">
+        <div id="signupBox"
+            class="signup-box <%= (locals.accountType.toString() === 'signup')?'signup-box--open':''%> ">
+            <div class="signup-box__title" id="openSignupBoxBtn">
+                <span>or</span>
+                Register
+            </div>
+            <div class="signup-form">
+                <div class="signup-form__illus">
+                    <%- include('../partials/illustrations/connectedWorldIllus.svg') -%>
+                </div>
+
+                <div class="signup-mobile">
+                    <label class="signup-mobile__label" for="signupMobile">Mobile No:
+                    </label>
+                    <input class="signup-mobile__input" id="signupMobile" type="number" size="10" maxlength="10"
+                        oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                        required placeholder="987XXX1234" min="0" max="9999999999" pattern="[56789]\d{9}">
+
+
+                    <div class="signup-mobile__btn" id="signupSendOtpField">
+                        <div class="signup-mobile__otp-timer" id="signupSendOtpTimer">
+                            <span id="signupSendOtpTimerMinute">02:
+                            </span>
+                            <span id="signupSendOtpTimerSecond">52
+                            </span>
+                        </div>
+                        <button class="signup-mobile__otp-btn " id="signupSendOtpBtn">
+                            <span id="signupSendOtpText">Send
+                                OTP</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="signup-otp" id="otpField">
+                    <label class="signup-otp__label" for="signupOtpFirst">OTP:
+                    </label>
+                    <div class="signup-otp__input" id="signupOtp">
+                        <input id="signupOtpFirst" type="number" maxlength="1" min="0" max="9" />
+                        <input type="number" maxlength="1" min="0" max="9" />
+                        <input class="space" type="number" maxlength="1" min="0" max="9" />
+                        <input type="number" maxlength="1" min="0" max="9" />
+                        <input type="number" maxlength="1" min="0" max="9" />
+                        <input type="number" maxlength="1" min="0" max="9" />
+                    </div>
+
+
+                </div>
+                <div class="signup-submit" id="checkSignupOtpBtn">
+                    <%- include('../partials/icons/authNextIcon.svg') -%>
+                        <span>Submit</span>
+                </div>
+                <a class="signup-have-account" href="/login">already have an account ?</a>
+            </div>
+
+
+        </div>
+        <div id="loginBox" class="login-box <%=(locals.accountType.toString()==='login' )?'login-box--open':''%>">
+
+            <div id="loginBoxInner" class="login-box__inner">
+                <div class="login-box__title" id="openLoginBoxBtn">
+                    <span>or</span>
+                    Log in
+                </div>
+
+                <div class="login-form">
+                    <div class="login-user" id="loginUserField">
+                        <label class="login-user__label" for="loginUser">Username/Mobile</label>
+                        <input class="login-user__input" type="text" id="loginUser" autocomplete="off"
+                            placeholder="Username / Mobile">
+                    </div>
+                    <div class="login-password" id="loginPasswordField">
+                        <label class="login-password__label" for="loginPassword">Password</label>
+                        <div class="login-password__input">
+                            <input class="" type="password" id="loginPassword" autocomplete="off"
+                                placeholder="Password">
+                            <div class="login-password__btn login-password__btn--unselected"
+                                id="toggleLoginPasswordBtn">
+                                <div class="login-password__btn-icon login-password__btn-icon--unselected ">
+                                    <%- include('../partials/icons/authPasswordHideIcon.svg') -%>
+                                </div>
+                                <div class="login-password__btn-icon login-password__btn-icon--selected ">
+                                    <%- include('../partials/icons/authPasswordShowIcon.svg') -%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="login-submit" id="loginSubmitBtn">
+                        <%- include('../partials/icons/authNextIcon.svg') -%>
+                            <span>Login</span>
+                    </div>
+                    <a class="login-reset-password" href="/user-auth/reset-password">Forgot
+                        password ?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

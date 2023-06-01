@@ -191,8 +191,8 @@ checkSignupOtpBtn.addEventListener("click", () => {
         if (data.isSuccess) {
           // used this value in signup javascript
           mainAccountContainer.dataset.mobileNumber = signupMobile.value
-          import("./html/signupHtml.dev")
-          import("./js/signup.dev")
+          import("./html/testSignupHtml.dev")
+          import("./js/testSignup.dev")
         } else {
           createMainNotification(data.error, "error")
         }

@@ -1,35 +1,14 @@
-svg {
-    width: 100%;
-    height: 100%;
-}
-
 .chat-main-container {
     position: relative;
-    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-@media screen and (min-width: 800px) {
-    .chat-main-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        width: calc(100% - var(--main-nav-width));
-        height: 100%;
-        /* align-self: flex-end; */
-    }
 
-}
-
-@media screen and (max-width: 800px) {
-    .chat-main-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        width: 100%;
-        height: calc(100% - var(--main-nav-height));
-        /* align-self: flex-end; */
-    }
-}
 
 /* all chat section  */
 .all-chat-section {

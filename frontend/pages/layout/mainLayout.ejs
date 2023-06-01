@@ -47,14 +47,16 @@
   </script>
 
   <%- include('../partials/mainNavigation.ejs') _%>
-    <%- body %>
+    <div class="main-content-container" id="mainContentContainer">
+      <%- body %>
+    </div>
 
-      <script src="/javascripts/mainLayout.bundle.js" defer></script>
-      <script src="/javascripts/indexSocket.bundle.js" defer></script>
+    <script src="/javascripts/mainLayout.bundle.js" defer></script>
+    <script src="/javascripts/indexSocket.bundle.js" defer></script>
 
 
 
-      <%- script %>
+    <%- script %>
 </body>
 
 </html>
