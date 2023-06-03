@@ -24,7 +24,7 @@ exports.getLoginUser = async (req, res, next) => {
 
 exports.checkNewMobile = async (req, res, next) => {
   const mobile = req.body.mobile
-  const user = await User.find({ mobile: mobile }).lean()
+  const user = await User.find({ mobile: mobile }).select({ _id: 1 }).lean()
   if (user.length) {
     res.json({
       success: false,
@@ -37,7 +37,7 @@ exports.checkNewMobile = async (req, res, next) => {
 }
 exports.checkRegisterMobile = async (req, res, next) => {
   const mobile = req.body.mobile
-  const user = await User.find({ mobile: mobile }).lean()
+  const user = await User.find({ mobile: mobile }).select({ _id: 1 }).lean()
   if (user.length) {
     next()
   } else {

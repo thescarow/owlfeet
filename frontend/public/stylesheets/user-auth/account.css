@@ -103,7 +103,7 @@ label::selection {
 	display: none;
 }
 
-.signup-form {
+.signup-initial-form {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
@@ -113,29 +113,29 @@ label::selection {
 	transition: all 1s;
 }
 
-.signup-box--open .signup-form {
+.signup-box--open .signup-initial-form {
 	opacity: 1;
 }
 
-.signup-form__illus {
+.signup-initial-form__illus {
 	width: 95%;
 	max-width: 325px;
 	margin: 10px 0 0 0;
 }
 
-.signup-form__illus svg {}
+.signup-initial-form__illus svg {}
 
-.signup-form__illus svg .part {
+.signup-initial-form__illus svg .part {
 	fill: rgba(var(--rgba-first-color), 1);
 }
 
-.signup-form__illus svg #line1 {
+.signup-initial-form__illus svg #line1 {
 	stroke-width: 5px;
 	stroke: rgba(var(--rgba-third-color), 1);
 	animation: svgMapLineAnimation 5s linear infinite forwards;
 }
 
-.signup-form__illus svg #line2 {
+.signup-initial-form__illus svg #line2 {
 	stroke-width: 5px;
 	stroke: rgba(var(--rgba-third-color), 1);
 	animation: svgMapLineAnimation 5s linear infinite forwards -2.5s;
@@ -160,14 +160,14 @@ label::selection {
 
 }
 
-.signup-form__illus svg .dot2 {
+.signup-initial-form__illus svg .dot2 {
 
 	fill: rgba(var(--rgba-fourth-color), 1);
 	animation: svgMapDotAnimation 3s linear infinite alternate forwards;
 
 }
 
-.signup-form__illus svg .dot1 {
+.signup-initial-form__illus svg .dot1 {
 	fill: rgba(var(--rgba-fourth-color), 1);
 	transform-box: fill-box;
 	animation: svgMapDotAnimation 3s linear infinite -2s alternate forwards;
@@ -590,8 +590,8 @@ label::selection {
 	top: 50%;
 	right: 11px;
 	transform: translate(0, -50%);
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 	cursor: pointer;
 }
 

@@ -60,7 +60,7 @@
     .all-chat-section--open-active-chat {}
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
     .all-chat-section {
         width: 100%;
     }
@@ -95,7 +95,7 @@
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
 
     .empty-chat-section {
         display: none;
@@ -470,7 +470,7 @@
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
     .active-chat-section {
         width: 100%;
     }
@@ -719,7 +719,7 @@ svg {
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
 
     .active-chat-message-container {
         padding-right: 5px;
@@ -1961,7 +1961,7 @@ em-emoji-picker {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 799px;
     animation: inputAttachmentBtnBoxInputBoxAnimation 0.5s 1 both;
 }
 

@@ -112,7 +112,7 @@ svg {
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
   .main-content-container {
     display: flex;
     flex-direction: column;

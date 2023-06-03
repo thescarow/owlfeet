@@ -16,14 +16,26 @@ openLoginBoxBtn.addEventListener("click", e => {
   signupBox.classList.remove("signup-box--open")
   loginBox.classList.add("login-box--open")
   signupBox.scrollTop = 0
+  history.pushState({}, "", `/user-auth/login`)
 })
 
 openSignupBoxBtn.addEventListener("click", e => {
   loginBox.classList.remove("login-box--open")
   signupBox.classList.add("signup-box--open")
   loginBoxInner.scrollTop = 0
+  history.pushState({}, "", `/user-auth/signup`)
 })
-
+window.addEventListener("popstate", async () => {
+  if (location.pathname === "/user-auth/signup") {
+    loginBox.classList.remove("login-box--open")
+    signupBox.classList.add("signup-box--open")
+    loginBoxInner.scrollTop = 0
+  } else if (location.pathname === "/user-auth/login") {
+    signupBox.classList.remove("signup-box--open")
+    loginBox.classList.add("login-box--open")
+    signupBox.scrollTop = 0
+  }
+})
 // /////////////////////////////////////////////////
 // ///////////////////////////////////////////////
 

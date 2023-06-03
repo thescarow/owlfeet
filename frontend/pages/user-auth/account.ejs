@@ -1,16 +1,16 @@
-<link rel="stylesheet" href="/stylesheets/test/test.css" />
+<link rel="stylesheet" href="/stylesheets/user-auth/account.css" />
 
-<script defer src="/javascripts/test.bundle.js"></script>
+<script defer src="/javascripts/account.bundle.js"></script>
 
-<div class="main-account-container" id='mainAccountContainer'>
+<div class="main-account-container" id='mainAccountContainer' data-mobile-number="">
   <div class="account-box" id="accountBox">
     <div id="signupBox" class="signup-box <%= (locals.accountType.toString() === 'signup')?'signup-box--open':''%> ">
       <div class="signup-box__title" id="openSignupBoxBtn">
         <span>or</span>
         Register
       </div>
-      <div class="signup-form">
-        <div class="signup-form__illus">
+      <div class="signup-initial-form">
+        <div class="signup-initial-form__illus">
           <%- include('../partials/illustrations/connectedWorldIllus.svg') -%>
         </div>
 
@@ -41,7 +41,7 @@
           <div class="signup-otp__input" id="signupOtp">
             <input id="signupOtpFirst" type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
-            <input class="space" type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />

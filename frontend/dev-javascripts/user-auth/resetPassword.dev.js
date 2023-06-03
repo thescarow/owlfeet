@@ -1,138 +1,221 @@
-const forgotPasswordForm = document.getElementById("forgotPasswordForm")
+import { createMainNotification } from "../common/mainNotification.dev"
 /////////////////////////////////////////////////////////////
-// notification field
-const otpNotification = document.getElementById("otpNotification")
-const mobileNotification = document.getElementById("mobileNotification")
-const forgotPasswordFormPage1 = document.getElementById(
-  "forgotPasswordFormPage1"
-)
-const forgotPasswordFormPage2 = document.getElementById(
-  "forgotPasswordFormPage2"
-)
-const forgotPasswordFormPage3 = document.getElementById(
-  "forgotPasswordFormPage3"
-)
+
+const resetFormContainer = document.getElementById("resetFormContainer")
+const resetForm = document.getElementById("resetForm")
+const resetFormPage1 = document.getElementById("resetFormPage1")
+const resetFormPage2 = document.getElementById("resetFormPage2")
+const resetFormPage3 = document.getElementById("resetFormPage3")
 ////////////////////////////////////////////////////////////////////
 // reset password progress
-const forgotPasswordProgressInfoStep = document.getElementById(
-  "forgotPasswordProgressInfoStep"
+const resetProgressInfoStep = document.getElementById("resetProgressInfoStep")
+
+const resetProgressInfoStepInfo = document.getElementById(
+  "resetProgressInfoStepInfo"
 )
-const forgotPasswordProgressInfoStepInfo = document.getElementById(
-  "forgotPasswordProgressInfoStepInfo"
-)
-const forgotPasswordProgressBarhighlighter = document.getElementById(
-  "forgotPasswordProgressBarhighlighter"
+const resetProgressBarhighlighter = document.getElementById(
+  "resetProgressBarhighlighter"
 )
 
 // mobile page
-const mobileData = document.getElementById("mobileData") //from otp page
-const mobileNumber = document.getElementById("mobileNumber")
-const sendOtp = document.getElementById("sendOtp")
+const resetMobileNumber = document.getElementById("resetMobileNumber")
+
+const resetMobileData = document.getElementById("resetMobileData") //from otp page
+const sendResetOtpBtn = document.getElementById("sendResetOtpBtn")
+let resetOtpActivityBtn = document.getElementById("resetOtpActivityBtn")
+
+let resetOtpActivityTimer = document.getElementById("resetOtpActivityTimer")
+
+let resetOtpActivityMinute = document.getElementById("resetOtpActivityMinute")
+
+let resetOtpActivitySecond = document.getElementById("resetOtpActivitySecond")
+
+let resetOtpTimerCounter = 0
+
+let currentResetMobileNumber = 0
+function startResetOtpTimer() {
+  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--disabled")
+  resetOtpActivityTimer.classList.add("reset-otp-activity-field__timer--show")
+
+  resetOtpTimerCounter = 120
+  let timerId
+
+  timerId = setInterval(() => {
+    resetOtpActivityMinute.textContent =
+      "0" + Math.floor(resetOtpTimerCounter / 60) + ":"
+    let seconds = resetOtpTimerCounter % 60
+    seconds = seconds < 10 ? "0" + seconds : seconds
+    resetOtpActivitySecond.textContent = seconds
+    resetOtpTimerCounter--
+    if (resetOtpTimerCounter == 0) {
+      clearInterval(timerId)
+      resetOtpActivityMinute.textContent = "02:"
+      resetOtpActivitySecond.textContent = "00"
+      resetOtpActivityBtn.classList.remove(
+        "reset-otp-activity-field__btn--disabled"
+      )
+      resetOtpActivityTimer.classList.remove(
+        "reset-otp-activity-field__timer--show"
+      )
+    }
+  }, 1000)
+}
 
 const mobileValidator = /^[5-9][0-9]{9}$/
-sendOtp.addEventListener("click", () => {
-  if (mobileValidator.test(mobileNumber.value)) {
-    fetch("/user-auth/send-reset-password-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ mobile: mobileNumber.value })
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        } else throw new Error("Server Error,Please try again")
-      })
-      .then(data => {
-        if (data.isSuccess) {
-          forgotPasswordFormPage1.style.left = "-150%"
-          forgotPasswordFormPage2.style.left = "0%"
-          forgotPasswordForm.scrollTop = 0
-          mobileData.textContent = mobileNumber.value
-          forgotPasswordProgressBarhighlighter.style.width = "66%"
-          forgotPasswordProgressInfoStepInfo.textContent = "OTP"
-          forgotPasswordProgressInfoStep.textContent = "STEP: 2 OF 3"
-          otpNotification.textContent =
-            "Otp send Successfully,Please check your inbox"
-          otpNotification.classList.add("show", "success")
-          setTimeout(() => {
-            otpNotification.classList.remove("show", "success")
-          }, 5000)
-        } else {
-          mobileNotification.textContent = data.error
-          mobileNotification.classList.add("show", "error")
-          setTimeout(() => {
-            mobileNotification.classList.remove("show", "error")
-          }, 5000)
-        }
-      })
-      .catch(err => {
-        mobileNotification.textContent = "Server Error"
-        mobileNotification.classList.add("show", "error")
-        setTimeout(() => {
-          mobileNotification.classList.remove("show", "error")
-        }, 5000)
-      })
-  } else {
-    mobileNotification.textContent = "Invalid Mobile Number, Please Change It"
-    mobileNotification.classList.add("show")
+sendResetOtpBtn.addEventListener("click", () => {
+  if (
+    resetMobileNumber.value.length === 10 &&
+    mobileValidator.test(resetMobileNumber.value)
+  ) {
+    if (
+      currentResetMobileNumber.toString() !== resetMobileNumber.value.toString()
+    ) {
+      currentResetMobileNumber = resetMobileNumber.value
 
-    setTimeout(() => {
-      mobileNotification.classList.remove("show")
-    }, 5000)
+      fetch("/user-auth/send-reset-password-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mobile: resetMobileNumber.value })
+      })
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          } else throw new Error("Server Error,Please try again")
+        })
+        .then(data => {
+          if (data.isSuccess) {
+            startResetOtpTimer()
+            resetFormPage1.style.left = "-150%"
+            resetFormPage2.style.left = "0%"
+            resetForm.scrollTop = 0
+            resetMobileData.textContent = resetMobileNumber.value
+            resetProgressBarhighlighter.style.width = "66%"
+            resetProgressInfoStepInfo.textContent = "OTP"
+            resetProgressInfoStep.textContent = "STEP: 2 OF 3"
+            createMainNotification(
+              "Otp send Successfully,Please check your inbox",
+              "success"
+            )
+          } else {
+            createMainNotification(data.error, "error")
+          }
+        })
+        .catch(err => {
+          console.log("Server error", err)
+          createMainNotification("Server error", "error")
+        })
+    } else {
+      resetFormPage1.style.left = "-150%"
+      resetFormPage2.style.left = "0%"
+      resetForm.scrollTop = 0
+      resetMobileData.textContent = resetMobileNumber.value
+      resetProgressBarhighlighter.style.width = "66%"
+      resetProgressInfoStepInfo.textContent = "OTP"
+      resetProgressInfoStep.textContent = "STEP: 2 OF 3"
+    }
+  } else {
+    createMainNotification("Invalid Mobile Number, Please Change It", "info")
+  }
+})
+
+resetOtpActivityBtn.addEventListener("click", e => {
+  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--click")
+  setTimeout(() => {
+    resetOtpActivityBtn.classList.remove("reset-otp-activity-field__btn--click")
+  }, 500)
+
+  if (mobileValidator.test(resetMobileNumber.value)) {
+    if (
+      !resetOtpActivityBtn.classList.contains(
+        "reset-otp-activity-field__btn--disabled"
+      )
+    ) {
+      let data = { mobile: resetMobileNumber.value }
+
+      fetch("/user-auth/send-reset-password-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          if (res.ok) return res.json()
+          else throw new Error("Server Error")
+        })
+        .then(data => {
+          if (data.isSuccess) {
+            startResetOtpTimer()
+            createMainNotification(
+              "Otp sent successfully,please check your inbox",
+              "success"
+            )
+          } else {
+            createMainNotification(data.error, "error")
+          }
+        })
+        .catch(err => {
+          console.log("server error: ", err)
+          createMainNotification(
+            "Server error,please refresh your page and try again",
+            "error"
+          )
+        })
+    }
+  } else {
+    createMainNotification("Invalid mobile number,please check it", "info")
   }
 })
 
 /////////////////////////////////////////////////
 // reset password Otp form
-const backToMobilePage = document.getElementById("backToMobilePage")
-const getNewPasswordForm = document.getElementById("getNewPasswordForm")
-const inputs = document.querySelectorAll("#otp input")
-inputs.forEach((input, index) => {
+const backToMobilePageBtn = document.getElementById("backToMobilePageBtn")
+const getNewPasswordFormBtn = document.getElementById("getNewPasswordFormBtn")
+const resetOtpInputs = document.querySelectorAll("#resetOtpInputs input")
+resetOtpInputs.forEach((input, index) => {
   input.dataset.index = index
   input.addEventListener("paste", handleOnPasteOtp)
   input.addEventListener("keyup", handleOtp)
 })
 
 function handleOnPasteOtp(e) {
-  const data = e.clipboardData.getData("text")
-  const value = data.split("")
-  if (value.length == inputs.length) {
-    inputs.forEach((input, index) => (input.value = value[index]))
+  const otpData = e.clipboardData.getData("text")
+  const otpArr = otpData.split("")
+  if (otpArr.length == resetOtpInputs.length) {
+    resetOtpInputs.forEach((input, index) => (input.value = otpArr[index]))
   } else {
-    otpNotification.textContent =
-      "You have copied incomplete otp,please go and copy again"
-    otpNotification.classList.add("show")
-    setTimeout(() => {
-      otpNotification.classList.remove("show")
-    }, 5000)
+    createMainNotification(
+      "You have copied incomplete otp,please go and copy again",
+      "info"
+    )
   }
 }
-
 function handleOtp(e) {
-  const input = e.target
-  let value = input.value
-  input.value = ""
-  input.value = value ? value[0] : ""
+  const inputBox = e.target
+  let inputBoxValue = inputBox.value.toString()
+  inputBox.value = ""
+  inputBox.value = inputBoxValue ? inputBoxValue[0] : ""
 
-  let fieldIndex = input.dataset.index
-  if (value.length > 0 && fieldIndex < inputs.length - 1) {
-    input.nextElementSibling.focus()
+  let fieldIndex = inputBox.dataset.index
+  if (inputBoxValue.length > 0 && fieldIndex < resetOtpInputs.length - 1) {
+    inputBox.nextElementSibling.focus()
   }
 
   if (e.key == "Backspace" && fieldIndex > 0) {
-    input.previousElementSibling.focus()
+    inputBox.previousElementSibling.focus()
   }
 }
-getNewPasswordForm.addEventListener("click", () => {
-  let otp = ""
-  inputs.forEach(input => {
-    otp += input.value
+
+getNewPasswordFormBtn.addEventListener("click", () => {
+  let resetOtp = ""
+  resetOtpInputs.forEach(input => {
+    resetOtp += input.value
   })
-  console.log(otp)
-  if (mobileNumber.value.length == 10 && otp.length == 6) {
-    let data = { otp: otp, mobile: mobileNumber.value }
+
+  if (resetMobileNumber.value.length == 10 && resetOtp.length == 6) {
+    let data = { otp: resetOtp, mobile: resetMobileNumber.value }
     fetch("/user-auth/check-mobile-otp", {
       method: "POST",
       headers: {
@@ -146,59 +229,85 @@ getNewPasswordForm.addEventListener("click", () => {
       })
       .then(data => {
         if (data.isSuccess) {
-          forgotPasswordFormPage2.style.left = "-150%"
-          forgotPasswordFormPage3.style.left = "0%"
-          forgotPasswordForm.scrollTop = 0
-          forgotPasswordProgressBarhighlighter.style.width = "100%"
-          forgotPasswordProgressInfoStepInfo.textContent = "Set New Password"
-          forgotPasswordProgressInfoStep.textContent = "STEP: 3 OF 3"
+          resetFormPage2.style.left = "-150%"
+          resetFormPage3.style.left = "0%"
+          resetForm.scrollTop = 0
+          resetProgressBarhighlighter.style.width = "100%"
+          resetProgressInfoStepInfo.textContent = "Set New Password"
+          resetProgressInfoStep.textContent = "STEP: 3 OF 3"
         } else {
-          otpNotification.textContent = data.error
-          otpNotification.classList.add("show", "error")
-          setTimeout(() => {
-            otpNotification.classList.remove("show", "error")
-          }, 5000)
+          createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
-        otpNotification.textContent = "Server Error"
-        otpNotification.classList.add("show", "error")
-        setTimeout(() => {
-          otpNotification.classList.remove("show", "error")
-        }, 5000)
+        console.log("Server error", err)
+        createMainNotification("Server error", "error")
       })
   } else {
-    otpNotification.textContent = "Error: Please type correct otp"
-    otpNotification.classList.add("show", "error")
-    setTimeout(() => {
-      otpNotification.classList.remove("show", "error")
-    }, 5000)
+    createMainNotification("Error: Please type correct otp", "error")
   }
 })
 
-backToMobilePage.addEventListener("click", () => {
-  forgotPasswordFormPage2.style.left = "150%"
-  forgotPasswordFormPage1.style.left = "0%"
-  forgotPasswordForm.scrollTop = 0
-  forgotPasswordProgressBarhighlighter.style.width = "33%"
-  forgotPasswordProgressInfoStepInfo.textContent = "Your Mobile Number"
-  forgotPasswordProgressInfoStep.textContent = "STEP: 1 OF 3"
+backToMobilePageBtn.addEventListener("click", () => {
+  resetFormPage2.style.left = "150%"
+  resetFormPage1.style.left = "0%"
+  resetForm.scrollTop = 0
+  resetProgressBarhighlighter.style.width = "33%"
+  resetProgressInfoStepInfo.textContent = "Your Mobile Number"
+  resetProgressInfoStep.textContent = "STEP: 1 OF 3"
 })
+//////////////////////////////////////////
+// new password page
 
-//////////////////////////////////////////////////////////////
-// reset password form
-const password = document.getElementById("password")
-const passwordStrengthDivs = [
-  ...document.querySelectorAll("#passwordStrength div")
+let resetPassword = document.getElementById("resetPassword")
+let resetConfirmPassword = document.getElementById("resetConfirmPassword")
+
+const resetPasswordBtn = [
+  ...document.getElementsByClassName("reset-input-field__btn")
 ]
-const passwordStrengthtext = document.getElementsByClassName(
-  "password-strength-text"
+
+resetPasswordBtn.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (btn.classList.contains("reset-input-field__btn--unselected")) {
+      btn.classList.remove("reset-input-field__btn--unselected")
+      btn.classList.add("reset-input-field__btn--selected")
+      if (btn.classList.contains("reset-input-field__btn--password"))
+        resetPassword.type = "text"
+      else if (
+        btn.classList.contains("reset-input-field__btn--confirm-password")
+      )
+        resetConfirmPassword.type = "text"
+    } else if (btn.classList.contains("reset-input-field__btn--selected")) {
+      btn.classList.remove("reset-input-field__btn--selected")
+      btn.classList.add("reset-input-field__btn--unselected")
+      if (btn.classList.contains("reset-input-field__btn--password"))
+        resetPassword.type = "password"
+      else if (
+        btn.classList.contains("reset-input-field__btn--confirm-password")
+      )
+        resetConfirmPassword.type = "password"
+    }
+  })
+})
+//////////////////////////////////////////////////////////////
+// password strenth
+
+// traversing the DOM and getting the input and span using their IDs
+const resetPasswordStrengthDivs = [
+  ...document.querySelectorAll("#resetPasswordStrength div")
+]
+const resetPasswordStrengthtext = document.getElementsByClassName(
+  "reset-password-strength-text"
 )[0]
 
-const passwordRule8List = document.getElementById("passwordRule8")
-const passwordRuleNumberList = document.getElementById("passwordRuleNumber")
-const passwordRuleUpperList = document.getElementById("passwordRuleUpper")
-const passwordRuleSpecialList = document.getElementById("passwordRuleSpecial")
+const resetPasswordRule8 = document.getElementById("resetPasswordRule8")
+const resetPasswordRuleNumber = document.getElementById(
+  "resetPasswordRuleNumber"
+)
+const resetPasswordRuleUpper = document.getElementById("resetPasswordRuleUpper")
+const resetPasswordRuleSpecial = document.getElementById(
+  "resetPasswordRuleSpecial"
+)
 
 // The strong and weak password Regex pattern checker
 
@@ -214,41 +323,37 @@ let passwordRuleUpper = new RegExp("[A-Z]")
 let passwordRuleSpecial = new RegExp("[^A-Za-z0-9]")
 function passwordStrengthChecker(PasswordParameter) {
   // We then change the badge's color and text based on the password strength
-  passwordRule8List.classList.toggle(
+  resetPasswordRule8.classList.toggle(
     "true",
     passwordRule8.test(PasswordParameter)
   )
-  passwordRuleNumberList.classList.toggle(
+  resetPasswordRuleNumber.classList.toggle(
     "true",
     passwordRuleNumber.test(PasswordParameter)
   )
-  passwordRuleUpperList.classList.toggle(
+  resetPasswordRuleUpper.classList.toggle(
     "true",
     passwordRuleUpper.test(PasswordParameter)
   )
-  passwordRuleSpecialList.classList.toggle(
+  resetPasswordRuleSpecial.classList.toggle(
     "true",
     passwordRuleSpecial.test(PasswordParameter)
   )
   if (strongPassword.test(PasswordParameter)) {
-    for (let i = 0; i < passwordStrengthDivs.length; i++) {
-      passwordStrengthDivs[i].classList.remove("weak", "medium")
-      passwordStrengthDivs[i].classList.add("strong")
-    }
-    passwordStrengthtext.textContent = "Strong"
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#61f743"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "#61f743"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "#61f743"
+    resetPasswordStrengthtext.textContent = "Good"
   } else if (mediumPassword.test(PasswordParameter)) {
-    for (let i = 0; i < passwordStrengthDivs.length; i++) {
-      passwordStrengthDivs[i].classList.remove("weak", "medium", "strong")
-    }
-    passwordStrengthDivs[0].classList.add("medium")
-    passwordStrengthDivs[1].classList.add("medium")
-    passwordStrengthtext.textContent = "Medium"
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#f7f143"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "#f7f143"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "Fair"
   } else {
-    for (let i = 0; i < passwordStrengthDivs.length; i++) {
-      passwordStrengthDivs[i].classList.remove("weak", "medium", "strong")
-    }
-    passwordStrengthDivs[0].classList.add("weak")
-    passwordStrengthtext.textContent = "Low"
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#fc4444"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "Week"
   }
 }
 
@@ -256,83 +361,61 @@ function passwordStrengthChecker(PasswordParameter) {
 // passwordTimeout before a callback is called
 
 let passwordTimeout
-password.addEventListener("input", () => {
+resetPassword.addEventListener("input", () => {
   //The badge is hidden by default, so we show it
   clearTimeout(passwordTimeout)
 
   //We then call the passwordStrengthChecker function as a callback then pass the typed password to it
 
-  passwordTimeout = setTimeout(
-    () => passwordStrengthChecker(password.value),
-    500
-  )
-
   //Incase a user clears the text, the badge is transparent again
 
-  if (password.value.length == 0) {
-    passwordStrengthDivs[0].style.backgroundColor = "transparent"
-    passwordStrengthDivs[1].style.backgroundColor = "transparent"
-    passwordStrengthDivs[2].style.backgroundColor = "transparent"
-    passwordStrengthtext.textContent = "None"
+  if (resetPassword.value.length === 0) {
+    resetPasswordStrengthDivs[0].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "None"
+  } else {
+    passwordTimeout = setTimeout(
+      () => passwordStrengthChecker(resetPassword.value),
+      500
+    )
   }
 })
 
-password.addEventListener("keyup", e => {
-  password.value = password.value.replace(/\s/g, "")
+resetPassword.addEventListener("keyup", e => {
+  resetPassword.value = resetPassword.value.replace(/\s/g, "")
 })
-///////////////////////////////////////////////////////////////
 // confirm password
-const confirmPasswordCheck = document.getElementById("confirmPasswordCheck")
-
-const confirmPassword = document.getElementById("confirmPassword")
+const resetConfirmPasswordText = document.getElementById(
+  "resetConfirmPasswordText"
+)
 let confirmPasswordTimeout
-confirmPassword.addEventListener("input", () => {
+resetConfirmPassword.addEventListener("input", () => {
   clearTimeout(confirmPasswordTimeout)
   confirmPasswordTimeout = setTimeout(() => {
-    if (confirmPassword.value == password.value) {
-      confirmPasswordCheck.textContent = "match"
+    if (resetConfirmPassword.value === resetPassword.value) {
+      resetConfirmPasswordText.textContent = "Match"
     } else {
-      confirmPasswordCheck.textContent = "no match"
+      resetConfirmPasswordText.textContent = "Not match"
     }
   }, 500)
-  if (confirmPassword.value.length == 0) {
-    confirmPasswordCheck.textContent = "no match"
+  if (resetConfirmPassword.value.length === 0) {
+    resetConfirmPasswordText.textContent = "Not match"
   }
 })
-confirmPassword.addEventListener("keyup", e => {
-  confirmPassword.value = confirmPassword.value.replace(/\s/g, "")
+resetConfirmPassword.addEventListener("keyup", e => {
+  resetConfirmPassword.value = resetConfirmPassword.value.replace(/\s/g, "")
 })
 
-//////////////////////////////////////////////////////////////////
-// password show
-const passwordShow = [...document.getElementsByClassName("password-show")]
-passwordShow.forEach(btn => {
-  btn.addEventListener("click", () => {
-    passwordShow.forEach(eachSvg => {
-      eachSvg.classList.toggle("show")
-    })
-    let type = password.getAttribute("type")
+const submitResetPasswordBtn = document.getElementById("submitResetPasswordBtn")
 
-    if (type == "password") {
-      password.type = "text"
-      confirmPassword.type = "text"
-    } else {
-      password.type = "password"
-      confirmPassword.type = "password"
-    }
-  })
-})
-
-const submitForgotPassword = document.getElementById("submitForgotPassword")
-const submitNotification = document.getElementById("submitNotification")
-
-submitForgotPassword.addEventListener("click", () => {
-  if (password.value == confirmPassword.value) {
+submitResetPasswordBtn.addEventListener("click", () => {
+  if (resetPassword.value === resetConfirmPassword.value) {
     let data = {
-      mobile: mobileNumber.value,
-      password: password.value
+      mobile: resetMobileNumber.value,
+      password: resetPassword.value
     }
-    console.log(data)
+
     fetch("/user-auth/reset-password", {
       method: "POST",
       headers: {
@@ -346,26 +429,17 @@ submitForgotPassword.addEventListener("click", () => {
       })
       .then(data => {
         if (data.isSuccess) {
-          submitNotification.textContent = "Password Changed Successfully"
-          submitNotification.classList.add("show", "success")
+          createMainNotification("Password Changed Successfully", "success")
           setTimeout(() => {
-            submitNotification.classList.remove("show", "success")
             location.replace("/user-auth/login")
           }, 2000)
         } else {
-          submitNotification.textContent = data.error
-          submitNotification.classList.add("show", "error")
-          setTimeout(() => {
-            submitNotification.classList.remove("show", "error")
-          }, 5000)
+          createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
-        submitNotification.textContent = "Server Error"
-        submitNotification.classList.add("show", "error")
-        setTimeout(() => {
-          submitNotification.classList.remove("show", "error")
-        }, 5000)
+        console.log("Server error: " + err)
+        createMainNotification("Server error", "error")
       })
   }
 })

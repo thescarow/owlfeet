@@ -1,101 +1,140 @@
-// import { checkKeyboard } from "../common/keyboardDetector.dev"
-
 import { createMainNotification } from "../common/mainNotification.dev"
-//build login and signup switching system between login box and signup box
-let mainAccountContainer = document.getElementById("mainAccountContainer")
-const openLoginBoxBtn = document.getElementById("openLoginBoxBtn")
-const openSignupBoxBtn = document.getElementById("openSignupBoxBtn")
-const accountBox = document.getElementById("accountBox")
-const signupBox = document.getElementById("signupBox")
-const loginBox = document.getElementById("loginBox")
-const loginBoxInner = document.getElementById("loginBoxInner")
+/////////////////////////////////////////////////////////////
 
-// const signupFormHolder = document.getElementById("signupFormHolder")
+const resetFormContainer = document.getElementById("resetFormContainer")
+const resetForm = document.getElementById("resetForm")
+const resetFormPage1 = document.getElementById("resetFormPage1")
+const resetFormPage2 = document.getElementById("resetFormPage2")
+const resetFormPage3 = document.getElementById("resetFormPage3")
+////////////////////////////////////////////////////////////////////
+// reset password progress
+const resetProgressInfoStep = document.getElementById("resetProgressInfoStep")
 
-openLoginBoxBtn.addEventListener("click", e => {
-  signupBox.classList.remove("signup-box--open")
-  loginBox.classList.add("login-box--open")
-  signupBox.scrollTop = 0
-})
-
-openSignupBoxBtn.addEventListener("click", e => {
-  loginBox.classList.remove("login-box--open")
-  signupBox.classList.add("signup-box--open")
-  loginBoxInner.scrollTop = 0
-})
-
-// /////////////////////////////////////////////////
-// ///////////////////////////////////////////////
-
-// // start keyboard on off logic
-// // import { checkKeyboard } from "../../public/javascripts/common/keyboardDetector";
-// const mainNavigation = document.getElementById("mainNavigation")
-// /// this is main navigation
-// function onKeyboard(keyboardHeight) {
-//   console.log("keyboard is Open:", keyboardHeight)
-//   if (loginBox.classList.contains("slide-up")) {
-//     loginBox.style.display = "none"
-//   }
-//   mainNavigation.style.display = "none"
-
-//   document.body.style.height = 'calc(100% + keyboardHeight + "px")'
-// }
-// function offKeyboard(keyboardHeight) {
-//   console.log("keyboard is off:", keyboardHeight)
-//   loginBox.style.display = "initial"
-//   mainNavigation.style.display = "flex"
-//   document.body.style.height = "100vh"
-// }
-// checkKeyboard(onKeyboard, offKeyboard)
-// ///////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////
-
-const signupSendOtpBtn = document.getElementById("signupSendOtpBtn")
-const signupMobile = document.getElementById("signupMobile")
-const signupSendOtpTimer = document.getElementById("signupSendOtpTimer")
-const signupSendOtpTimerMinute = document.getElementById(
-  "signupSendOtpTimerMinute"
+const resetProgressInfoStepInfo = document.getElementById(
+  "resetProgressInfoStepInfo"
 )
-const signupSendOtpTimerSecond = document.getElementById(
-  "signupSendOtpTimerSecond"
+const resetProgressBarhighlighter = document.getElementById(
+  "resetProgressBarhighlighter"
 )
 
-function startSignupOtpTimer() {
-  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--disabled")
-  signupSendOtpTimer.classList.add("signup-mobile__otp-timer--show")
+// mobile page
+const resetMobileNumber = document.getElementById("resetMobileNumber")
 
-  let counter = 120
+const resetMobileData = document.getElementById("resetMobileData") //from otp page
+const sendResetOtpBtn = document.getElementById("sendResetOtpBtn")
+let resetOtpActivityBtn = document.getElementById("resetOtpActivityBtn")
+
+let resetOtpActivityTimer = document.getElementById("resetOtpActivityTimer")
+
+let resetOtpActivityMinute = document.getElementById("resetOtpActivityMinute")
+
+let resetOtpActivitySecond = document.getElementById("resetOtpActivitySecond")
+
+let resetOtpTimerCounter = 0
+
+let currentResetMobileNumber = 0
+function startResetOtpTimer() {
+  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--disabled")
+  resetOtpActivityTimer.classList.add("reset-otp-activity-field__timer--show")
+
+  resetOtpTimerCounter = 120
   let timerId
 
   timerId = setInterval(() => {
-    signupSendOtpTimerMinute.textContent = "0" + Math.floor(counter / 60) + ":"
-    let seconds = counter % 60
+    resetOtpActivityMinute.textContent =
+      "0" + Math.floor(resetOtpTimerCounter / 60) + ":"
+    let seconds = resetOtpTimerCounter % 60
     seconds = seconds < 10 ? "0" + seconds : seconds
-    signupSendOtpTimerSecond.textContent = seconds
-    counter--
-    if (counter == 0) {
+    resetOtpActivitySecond.textContent = seconds
+    resetOtpTimerCounter--
+    if (resetOtpTimerCounter == 0) {
       clearInterval(timerId)
-      signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--disabled ")
-      signupSendOtpTimer.classList.remove("signup-mobile__otp-timer--show")
+      resetOtpActivityMinute.textContent = "02:"
+      resetOtpActivitySecond.textContent = "00"
+      resetOtpActivityBtn.classList.remove(
+        "reset-otp-activity-field__btn--disabled"
+      )
+      resetOtpActivityTimer.classList.remove(
+        "reset-otp-activity-field__timer--show"
+      )
     }
   }, 1000)
 }
 
 const mobileValidator = /^[5-9][0-9]{9}$/
+sendResetOtpBtn.addEventListener("click", () => {
+  if (
+    resetMobileNumber.value.length === 10 &&
+    mobileValidator.test(resetMobileNumber.value)
+  ) {
+    if (
+      currentResetMobileNumber.toString() !== resetMobileNumber.value.toString()
+    ) {
+      currentResetMobileNumber = resetMobileNumber.value
 
-signupSendOtpBtn.addEventListener("click", e => {
-  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--click")
+      fetch("/user-auth/send-reset-password-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mobile: resetMobileNumber.value })
+      })
+        .then(res => {
+          if (res.ok) {
+            return res.json()
+          } else throw new Error("Server Error,Please try again")
+        })
+        .then(data => {
+          if (data.isSuccess) {
+            startResetOtpTimer()
+            resetFormPage1.style.left = "-150%"
+            resetFormPage2.style.left = "0%"
+            resetForm.scrollTop = 0
+            resetMobileData.textContent = resetMobileNumber.value
+            resetProgressBarhighlighter.style.width = "66%"
+            resetProgressInfoStepInfo.textContent = "OTP"
+            resetProgressInfoStep.textContent = "STEP: 2 OF 3"
+            createMainNotification(
+              "Otp send Successfully,Please check your inbox",
+              "success"
+            )
+          } else {
+            createMainNotification(data.error, "error")
+          }
+        })
+        .catch(err => {
+          console.log("Server error", err)
+          createMainNotification("Server error", "error")
+        })
+    } else {
+      resetFormPage1.style.left = "-150%"
+      resetFormPage2.style.left = "0%"
+      resetForm.scrollTop = 0
+      resetMobileData.textContent = resetMobileNumber.value
+      resetProgressBarhighlighter.style.width = "66%"
+      resetProgressInfoStepInfo.textContent = "OTP"
+      resetProgressInfoStep.textContent = "STEP: 2 OF 3"
+    }
+  } else {
+    createMainNotification("Invalid Mobile Number, Please Change It", "info")
+  }
+})
+
+resetOtpActivityBtn.addEventListener("click", e => {
+  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--click")
   setTimeout(() => {
-    signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--click")
+    resetOtpActivityBtn.classList.remove("reset-otp-activity-field__btn--click")
   }, 500)
 
-  if (mobileValidator.test(signupMobile.value)) {
+  if (mobileValidator.test(resetMobileNumber.value)) {
     if (
-      !signupSendOtpBtn.classList.contains("signup-mobile__otp-btn--disabled")
+      !resetOtpActivityBtn.classList.contains(
+        "reset-otp-activity-field__btn--disabled"
+      )
     ) {
-      let data = { mobile: signupMobile.value }
+      let data = { mobile: resetMobileNumber.value }
 
-      fetch("/user-auth/send-signup-mobile-otp", {
+      fetch("/user-auth/send-reset-password-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -108,7 +147,7 @@ signupSendOtpBtn.addEventListener("click", e => {
         })
         .then(data => {
           if (data.isSuccess) {
-            startSignupOtpTimer()
+            startResetOtpTimer()
             createMainNotification(
               "Otp sent successfully,please check your inbox",
               "success"
@@ -129,11 +168,13 @@ signupSendOtpBtn.addEventListener("click", e => {
     createMainNotification("Invalid mobile number,please check it", "info")
   }
 })
+
 /////////////////////////////////////////////////
-// send otp to server and verify it and server send back the submit form
-const checkSignupOtpBtn = document.getElementById("checkSignupOtpBtn")
-const otpInputs = document.querySelectorAll("#signupOtp input")
-otpInputs.forEach((input, index) => {
+// reset password Otp form
+const backToMobilePageBtn = document.getElementById("backToMobilePageBtn")
+const getNewPasswordFormBtn = document.getElementById("getNewPasswordFormBtn")
+const resetOtpInputs = document.querySelectorAll("#resetOtpInputs input")
+resetOtpInputs.forEach((input, index) => {
   input.dataset.index = index
   input.addEventListener("paste", handleOnPasteOtp)
   input.addEventListener("keyup", handleOtp)
@@ -142,16 +183,15 @@ otpInputs.forEach((input, index) => {
 function handleOnPasteOtp(e) {
   const otpData = e.clipboardData.getData("text")
   const otpArr = otpData.split("")
-  if (otpArr.length === otpInputs.length) {
-    otpInputs.forEach((input, index) => (input.value = otpArr[index]))
+  if (otpArr.length == resetOtpInputs.length) {
+    resetOtpInputs.forEach((input, index) => (input.value = otpArr[index]))
   } else {
     createMainNotification(
-      "You have copied incomplete otp, Please copy again and paste here",
+      "You have copied incomplete otp,please go and copy again",
       "info"
     )
   }
 }
-
 function handleOtp(e) {
   const inputBox = e.target
   let inputBoxValue = inputBox.value.toString()
@@ -159,7 +199,7 @@ function handleOtp(e) {
   inputBox.value = inputBoxValue ? inputBoxValue[0] : ""
 
   let fieldIndex = inputBox.dataset.index
-  if (inputBoxValue.length > 0 && fieldIndex < otpInputs.length - 1) {
+  if (inputBoxValue.length > 0 && fieldIndex < resetOtpInputs.length - 1) {
     inputBox.nextElementSibling.focus()
   }
 
@@ -168,63 +208,15 @@ function handleOtp(e) {
   }
 }
 
-checkSignupOtpBtn.addEventListener("click", () => {
-  let signupOtp = ""
-  otpInputs.forEach(input => {
-    signupOtp += input.value
+getNewPasswordFormBtn.addEventListener("click", () => {
+  let resetOtp = ""
+  resetOtpInputs.forEach(input => {
+    resetOtp += input.value
   })
 
-  if (signupMobile.value.length === 10 && signupOtp.length === 6) {
-    let data = { otp: signupOtp, mobile: signupMobile.value }
+  if (resetMobileNumber.value.length == 10 && resetOtp.length == 6) {
+    let data = { otp: resetOtp, mobile: resetMobileNumber.value }
     fetch("/user-auth/check-mobile-otp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => {
-        if (res.ok) return res.json()
-        else throw new Error("Server error")
-      })
-      .then(data => {
-        if (data.isSuccess) {
-          // used this value in signup javascript
-          mainAccountContainer.dataset.mobileNumber = signupMobile.value
-          import("./html/testSignupHtml.dev")
-          import("./js/testSignup.dev")
-        } else {
-          createMainNotification(data.error, "error")
-        }
-      })
-      .catch(err => {
-        createMainNotification("Server error", "error")
-      })
-  } else if (signupMobile.value.length != 10 && signupOtp.length == 6) {
-    createMainNotification("Incorrect Mobile number", "error")
-  } else if (signupMobile.value.length == 10 && signupOtp.length != 6) {
-    createMainNotification("Incorrect OTP", "error")
-  } else {
-    createMainNotification(
-      "First enter your mobile number and send OTP to your number",
-      "info"
-    )
-  }
-})
-
-// login form start here
-
-const loginUser = document.getElementById("loginUser")
-const loginPassword = document.getElementById("loginPassword")
-const loginSubmitBtn = document.getElementById("loginSubmitBtn")
-
-loginSubmitBtn.addEventListener("click", () => {
-  if (loginUser.value !== "" && loginPassword.value !== "") {
-    let data = {
-      loginUser: loginUser.value,
-      loginPassword: loginPassword.value
-    }
-    fetch("/user-auth/user-login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -237,53 +229,217 @@ loginSubmitBtn.addEventListener("click", () => {
       })
       .then(data => {
         if (data.isSuccess) {
-          location.replace(`/user/${data.username}`)
+          resetFormPage2.style.left = "-150%"
+          resetFormPage3.style.left = "0%"
+          resetForm.scrollTop = 0
+          resetProgressBarhighlighter.style.width = "100%"
+          resetProgressInfoStepInfo.textContent = "Set New Password"
+          resetProgressInfoStep.textContent = "STEP: 3 OF 3"
+        } else {
+          createMainNotification(data.error, "error")
+        }
+      })
+      .catch(err => {
+        console.log("Server error", err)
+        createMainNotification("Server error", "error")
+      })
+  } else {
+    createMainNotification("Error: Please type correct otp", "error")
+  }
+})
+
+backToMobilePageBtn.addEventListener("click", () => {
+  resetFormPage2.style.left = "150%"
+  resetFormPage1.style.left = "0%"
+  resetForm.scrollTop = 0
+  resetProgressBarhighlighter.style.width = "33%"
+  resetProgressInfoStepInfo.textContent = "Your Mobile Number"
+  resetProgressInfoStep.textContent = "STEP: 1 OF 3"
+})
+//////////////////////////////////////////
+// new password page
+
+let resetPassword = document.getElementById("resetPassword")
+let resetConfirmPassword = document.getElementById("resetConfirmPassword")
+
+const resetPasswordBtn = [
+  ...document.getElementsByClassName("reset-input-field__btn")
+]
+
+resetPasswordBtn.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (btn.classList.contains("reset-input-field__btn--unselected")) {
+      btn.classList.remove("reset-input-field__btn--unselected")
+      btn.classList.add("reset-input-field__btn--selected")
+      if (btn.classList.contains("reset-input-field__btn--password"))
+        resetPassword.type = "text"
+      else if (
+        btn.classList.contains("reset-input-field__btn--confirm-password")
+      )
+        resetConfirmPassword.type = "text"
+    } else if (btn.classList.contains("reset-input-field__btn--selected")) {
+      btn.classList.remove("reset-input-field__btn--selected")
+      btn.classList.add("reset-input-field__btn--unselected")
+      if (btn.classList.contains("reset-input-field__btn--password"))
+        resetPassword.type = "password"
+      else if (
+        btn.classList.contains("reset-input-field__btn--confirm-password")
+      )
+        resetConfirmPassword.type = "password"
+    }
+  })
+})
+//////////////////////////////////////////////////////////////
+// password strenth
+
+// traversing the DOM and getting the input and span using their IDs
+const resetPasswordStrengthDivs = [
+  ...document.querySelectorAll("#resetPasswordStrength div")
+]
+const resetPasswordStrengthtext = document.getElementsByClassName(
+  "reset-password-strength-text"
+)[0]
+
+const resetPasswordRule8 = document.getElementById("resetPasswordRule8")
+const resetPasswordRuleNumber = document.getElementById(
+  "resetPasswordRuleNumber"
+)
+const resetPasswordRuleUpper = document.getElementById("resetPasswordRuleUpper")
+const resetPasswordRuleSpecial = document.getElementById(
+  "resetPasswordRuleSpecial"
+)
+
+// The strong and weak password Regex pattern checker
+
+let strongPassword = new RegExp(
+  "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})"
+)
+let mediumPassword = new RegExp(
+  "((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))|((?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,}))" //if missing number or missing special character or missing upper case or char length is 6
+)
+let passwordRule8 = new RegExp("(?=.{8,})")
+let passwordRuleNumber = new RegExp("\\d")
+let passwordRuleUpper = new RegExp("[A-Z]")
+let passwordRuleSpecial = new RegExp("[^A-Za-z0-9]")
+function passwordStrengthChecker(PasswordParameter) {
+  // We then change the badge's color and text based on the password strength
+  resetPasswordRule8.classList.toggle(
+    "true",
+    passwordRule8.test(PasswordParameter)
+  )
+  resetPasswordRuleNumber.classList.toggle(
+    "true",
+    passwordRuleNumber.test(PasswordParameter)
+  )
+  resetPasswordRuleUpper.classList.toggle(
+    "true",
+    passwordRuleUpper.test(PasswordParameter)
+  )
+  resetPasswordRuleSpecial.classList.toggle(
+    "true",
+    passwordRuleSpecial.test(PasswordParameter)
+  )
+  if (strongPassword.test(PasswordParameter)) {
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#61f743"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "#61f743"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "#61f743"
+    resetPasswordStrengthtext.textContent = "Good"
+  } else if (mediumPassword.test(PasswordParameter)) {
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#f7f143"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "#f7f143"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "Fair"
+  } else {
+    resetPasswordStrengthDivs[0].style.backgroundColor = "#fc4444"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "Week"
+  }
+}
+
+// Adding an input event listener when a user types to the  password input
+// passwordTimeout before a callback is called
+
+let passwordTimeout
+resetPassword.addEventListener("input", () => {
+  //The badge is hidden by default, so we show it
+  clearTimeout(passwordTimeout)
+
+  //We then call the passwordStrengthChecker function as a callback then pass the typed password to it
+
+  //Incase a user clears the text, the badge is transparent again
+
+  if (resetPassword.value.length === 0) {
+    resetPasswordStrengthDivs[0].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[1].style.backgroundColor = "transparent"
+    resetPasswordStrengthDivs[2].style.backgroundColor = "transparent"
+    resetPasswordStrengthtext.textContent = "None"
+  } else {
+    passwordTimeout = setTimeout(
+      () => passwordStrengthChecker(resetPassword.value),
+      500
+    )
+  }
+})
+
+resetPassword.addEventListener("keyup", e => {
+  resetPassword.value = resetPassword.value.replace(/\s/g, "")
+})
+// confirm password
+const resetConfirmPasswordText = document.getElementById(
+  "resetConfirmPasswordText"
+)
+let confirmPasswordTimeout
+resetConfirmPassword.addEventListener("input", () => {
+  clearTimeout(confirmPasswordTimeout)
+  confirmPasswordTimeout = setTimeout(() => {
+    if (resetConfirmPassword.value === resetPassword.value) {
+      resetConfirmPasswordText.textContent = "Match"
+    } else {
+      resetConfirmPasswordText.textContent = "Not match"
+    }
+  }, 500)
+  if (resetConfirmPassword.value.length === 0) {
+    resetConfirmPasswordText.textContent = "Not match"
+  }
+})
+resetConfirmPassword.addEventListener("keyup", e => {
+  resetConfirmPassword.value = resetConfirmPassword.value.replace(/\s/g, "")
+})
+
+const submitResetPasswordBtn = document.getElementById("submitResetPasswordBtn")
+
+submitResetPasswordBtn.addEventListener("click", () => {
+  if (resetPassword.value === resetConfirmPassword.value) {
+    let data = {
+      mobile: resetMobileNumber.value,
+      password: resetPassword.value
+    }
+
+    fetch("/user-auth/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => {
+        if (res.ok) return res.json()
+        else throw new Error("Server Error")
+      })
+      .then(data => {
+        if (data.isSuccess) {
+          createMainNotification("Password Changed Successfully", "success")
+          setTimeout(() => {
+            location.replace("/user-auth/login")
+          }, 2000)
         } else {
           createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
         console.log("Server error: " + err)
-        createMainNotification("Server error:", "error")
+        createMainNotification("Server error", "error")
       })
-  } else if (loginUser.value === "" && loginPassword.value !== "") {
-    createMainNotification(
-      "Please fill Username/mobile anything, Don't leave it blank",
-      "info"
-    )
-  } else if (loginUser.value !== "" && loginPassword.value === "") {
-    createMainNotification(
-      "Please fill password to unlock this security wall",
-      "info"
-    )
-  } else {
-    createMainNotification(
-      "First enter your username or mobile number and then your password to break this security wall",
-      "info"
-    )
-  }
-})
-
-loginPassword.addEventListener("keyup", e => {
-  loginPassword.value = loginPassword.value.replace(/\s/g, "")
-})
-
-// password show
-const toggleLoginPasswordBtn = document.getElementById("toggleLoginPasswordBtn")
-
-toggleLoginPasswordBtn.addEventListener("click", () => {
-  //   let loginPasswordType = loginPassword.getAttribute("type")
-  if (
-    toggleLoginPasswordBtn.classList.contains("login-password__btn--unselected")
-  ) {
-    toggleLoginPasswordBtn.classList.remove("login-password__btn--unselected")
-    toggleLoginPasswordBtn.classList.add("login-password__btn--selected")
-    loginPassword.type = "text"
-  } else if (
-    toggleLoginPasswordBtn.classList.contains("login-password__btn--selected")
-  ) {
-    toggleLoginPasswordBtn.classList.remove("login-password__btn--selected")
-    toggleLoginPasswordBtn.classList.add("login-password__btn--unselected")
-    loginPassword.type = "password"
   }
 })
