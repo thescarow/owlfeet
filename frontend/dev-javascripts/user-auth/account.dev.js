@@ -1,85 +1,110 @@
-import { checkKeyboard } from "../common/keyboardDetector.dev"
+// import { checkKeyboard } from "../common/keyboardDetector.dev"
 
+import { createMainNotification } from "../common/mainNotification.dev"
 //build login and signup switching system between login box and signup box
 let mainAccountContainer = document.getElementById("mainAccountContainer")
-const openLogin = document.getElementById("openLogin")
-const openSignup = document.getElementById("openSignup")
+const openLoginBoxBtn = document.getElementById("openLoginBoxBtn")
+const openSignupBoxBtn = document.getElementById("openSignupBoxBtn")
+const accountBox = document.getElementById("accountBox")
 const signupBox = document.getElementById("signupBox")
 const loginBox = document.getElementById("loginBox")
 const loginBoxInner = document.getElementById("loginBoxInner")
 
-const fromStructor = document.getElementById("fromStructor")
 // const signupFormHolder = document.getElementById("signupFormHolder")
 
-openLogin.addEventListener("click", e => {
-  signupBox.classList.add("slide-up")
-  loginBox.classList.remove("slide-up")
-  fromStructor.scrollTop = 0
+openLoginBoxBtn.addEventListener("click", e => {
+  signupBox.classList.remove("signup-box--open")
+  loginBox.classList.add("login-box--open")
+  signupBox.scrollTop = 0
+  history.pushState({}, "", `/user-auth/login`)
 })
 
-openSignup.addEventListener("click", e => {
-  loginBox.classList.add("slide-up")
-  signupBox.classList.remove("slide-up")
+openSignupBoxBtn.addEventListener("click", e => {
+  loginBox.classList.remove("login-box--open")
+  signupBox.classList.add("signup-box--open")
   loginBoxInner.scrollTop = 0
+  history.pushState({}, "", `/user-auth/signup`)
 })
-
-/////////////////////////////////////////////////
-///////////////////////////////////////////////
-
-// start keyboard on off logic
-// import { checkKeyboard } from "../../public/javascripts/common/keyboardDetector";
-const mainNavigation = document.getElementById("mainNavigation")
-/// this is main navigation
-function onKeyboard(keyboardHeight) {
-  console.log("keyboard is Open:", keyboardHeight)
-  if (loginBox.classList.contains("slide-up")) {
-    loginBox.style.display = "none"
+window.addEventListener("popstate", async () => {
+  if (location.pathname === "/user-auth/signup") {
+    loginBox.classList.remove("login-box--open")
+    signupBox.classList.add("signup-box--open")
+    loginBoxInner.scrollTop = 0
+  } else if (location.pathname === "/user-auth/login") {
+    signupBox.classList.remove("signup-box--open")
+    loginBox.classList.add("login-box--open")
+    signupBox.scrollTop = 0
   }
-  mainNavigation.style.display = "none"
+})
+// /////////////////////////////////////////////////
+// ///////////////////////////////////////////////
 
-  document.body.style.height = 'calc(100% + keyboardHeight + "px")'
-}
-function offKeyboard(keyboardHeight) {
-  console.log("keyboard is off:", keyboardHeight)
-  loginBox.style.display = "initial"
-  mainNavigation.style.display = "flex"
-  document.body.style.height = "100vh"
-}
-checkKeyboard(onKeyboard, offKeyboard)
+// // start keyboard on off logic
+// // import { checkKeyboard } from "../../public/javascripts/common/keyboardDetector";
+// const mainNavigation = document.getElementById("mainNavigation")
+// /// this is main navigation
+// function onKeyboard(keyboardHeight) {
+//   console.log("keyboard is Open:", keyboardHeight)
+//   if (loginBox.classList.contains("slide-up")) {
+//     loginBox.style.display = "none"
+//   }
+//   mainNavigation.style.display = "none"
+
+//   document.body.style.height = 'calc(100% + keyboardHeight + "px")'
+// }
+// function offKeyboard(keyboardHeight) {
+//   console.log("keyboard is off:", keyboardHeight)
+//   loginBox.style.display = "initial"
+//   mainNavigation.style.display = "flex"
+//   document.body.style.height = "100vh"
+// }
+// checkKeyboard(onKeyboard, offKeyboard)
 // ///////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////
 
-// access mobile number and send to server so that their we can send the otp to this number
-const signupNotification = document.getElementById("signupNotification")
-const sendOtpBtn = document.getElementById("sendOtp")
+const signupSendOtpBtn = document.getElementById("signupSendOtpBtn")
 const signupMobile = document.getElementById("signupMobile")
-const sendOtpCounter = document.getElementById("sendOtpCounter")
-const sendOtpCounterMinute = document.getElementById("sendOtpCounterMinute")
-const sendOtpCounterSecond = document.getElementById("sendOtpCounterSecond")
-function otpTimeCounter() {
+const signupSendOtpTimer = document.getElementById("signupSendOtpTimer")
+const signupSendOtpTimerMinute = document.getElementById(
+  "signupSendOtpTimerMinute"
+)
+const signupSendOtpTimerSecond = document.getElementById(
+  "signupSendOtpTimerSecond"
+)
+
+function startSignupOtpTimer() {
+  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--disabled")
+  signupSendOtpTimer.classList.add("signup-mobile__otp-timer--show")
+
   let counter = 120
   let timerId
+
   timerId = setInterval(() => {
-    sendOtpCounterMinute.textContent = "0" + Math.floor(counter / 60) + ":"
+    signupSendOtpTimerMinute.textContent = "0" + Math.floor(counter / 60) + ":"
     let seconds = counter % 60
     seconds = seconds < 10 ? "0" + seconds : seconds
-    sendOtpCounterSecond.textContent = seconds
+    signupSendOtpTimerSecond.textContent = seconds
     counter--
     if (counter == 0) {
       clearInterval(timerId)
+      signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--disabled ")
+      signupSendOtpTimer.classList.remove("signup-mobile__otp-timer--show")
     }
   }, 1000)
 }
+
 const mobileValidator = /^[5-9][0-9]{9}$/
 
-sendOtpBtn.addEventListener("click", e => {
-  sendOtpBtn.classList.add("click")
+signupSendOtpBtn.addEventListener("click", e => {
+  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--click")
   setTimeout(() => {
-    sendOtpBtn.classList.remove("click")
+    signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--click")
   }, 500)
 
   if (mobileValidator.test(signupMobile.value)) {
-    if (!sendOtpBtn.classList.contains("disabled")) {
+    if (
+      !signupSendOtpBtn.classList.contains("signup-mobile__otp-btn--disabled")
+    ) {
       let data = { mobile: signupMobile.value }
 
       fetch("/user-auth/send-signup-mobile-otp", {
@@ -95,93 +120,74 @@ sendOtpBtn.addEventListener("click", e => {
         })
         .then(data => {
           if (data.isSuccess) {
-            sendOtpBtn.classList.add("disabled")
-            sendOtpCounter.classList.add("show")
-            otpTimeCounter()
-            setTimeout(() => {
-              sendOtpBtn.classList.remove("disabled")
-              sendOtpCounter.classList.remove("show")
-            }, 120 * 1000)
-            signupNotification.textContent =
-              "Otp Sent Successfully,Please Check Your Inbox"
-            signupNotification.classList.add("show", "success")
-            setTimeout(() => {
-              signupNotification.classList.remove("show", "success")
-            }, 5000)
+            startSignupOtpTimer()
+            createMainNotification(
+              "Otp sent successfully,please check your inbox",
+              "success"
+            )
           } else {
-            signupNotification.textContent = data.error
-            signupNotification.classList.add("show", "error")
-            setTimeout(() => {
-              signupNotification.classList.remove("show", "error")
-            }, 5000)
+            createMainNotification(data.error, "error")
           }
         })
         .catch(err => {
-          signupNotification.textContent = "Server Error"
-          signupNotification.classList.add("show", "error")
-          setTimeout(() => {
-            signupNotification.classList.remove("show", "error")
-          }, 5000)
+          console.log("server error: ", err)
+          createMainNotification(
+            "Server error,please refresh your page and try again",
+            "error"
+          )
         })
     }
   } else {
-    signupNotification.textContent = "Invalid Mobile Number,Please Check It"
-    signupNotification.classList.add("show", "error")
-    setTimeout(() => {
-      signupNotification.classList.remove("show", "error")
-    }, 5000)
+    createMainNotification("Invalid mobile number,please check it", "info")
   }
 })
-///////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // send otp to server and verify it and server send back the submit form
-const checkSignupOtp = document.getElementById("checkSignupOtp")
-const inputs = document.querySelectorAll("#signupOtp input")
-inputs.forEach((input, index) => {
+const checkSignupOtpBtn = document.getElementById("checkSignupOtpBtn")
+const otpInputs = document.querySelectorAll("#signupOtp input")
+otpInputs.forEach((input, index) => {
   input.dataset.index = index
   input.addEventListener("paste", handleOnPasteOtp)
   input.addEventListener("keyup", handleOtp)
 })
 
 function handleOnPasteOtp(e) {
-  const data = e.clipboardData.getData("text")
-  const value = data.split("")
-  if (value.length == inputs.length) {
-    inputs.forEach((input, index) => (input.value = value[index]))
+  const otpData = e.clipboardData.getData("text")
+  const otpArr = otpData.split("")
+  if (otpArr.length === otpInputs.length) {
+    otpInputs.forEach((input, index) => (input.value = otpArr[index]))
   } else {
-    signupNotification.textContent =
-      "You have copied incomplete otp, Please copy again and paste here"
-    signupNotification.classList.add("show")
-    setTimeout(() => {
-      signupNotification.classList.remove("show")
-    }, 5000)
+    createMainNotification(
+      "You have copied incomplete otp, Please copy again and paste here",
+      "info"
+    )
   }
 }
 
 function handleOtp(e) {
-  const input = e.target
-  let value = input.value
-  input.value = ""
-  input.value = value ? value[0] : ""
+  const inputBox = e.target
+  let inputBoxValue = inputBox.value.toString()
+  inputBox.value = ""
+  inputBox.value = inputBoxValue ? inputBoxValue[0] : ""
 
-  let fieldIndex = input.dataset.index
-  if (value.length > 0 && fieldIndex < inputs.length - 1) {
-    input.nextElementSibling.focus()
+  let fieldIndex = inputBox.dataset.index
+  if (inputBoxValue.length > 0 && fieldIndex < otpInputs.length - 1) {
+    inputBox.nextElementSibling.focus()
   }
 
   if (e.key == "Backspace" && fieldIndex > 0) {
-    input.previousElementSibling.focus()
+    inputBox.previousElementSibling.focus()
   }
 }
-checkSignupOtp.addEventListener("click", () => {
-  let otp = ""
-  inputs.forEach(input => {
-    otp += input.value
-  })
-  console.log(otp)
 
-  if (signupMobile.value.length == 10 && otp.length == 6) {
-    let data = { otp: otp, mobile: signupMobile.value }
+checkSignupOtpBtn.addEventListener("click", () => {
+  let signupOtp = ""
+  otpInputs.forEach(input => {
+    signupOtp += input.value
+  })
+
+  if (signupMobile.value.length === 10 && signupOtp.length === 6) {
+    let data = { otp: signupOtp, mobile: signupMobile.value }
     fetch("/user-auth/check-mobile-otp", {
       method: "POST",
       headers: {
@@ -191,56 +197,41 @@ checkSignupOtp.addEventListener("click", () => {
     })
       .then(res => {
         if (res.ok) return res.json()
-        else throw new Error("Signup server failure")
+        else throw new Error("Server error")
       })
       .then(data => {
         if (data.isSuccess) {
           // used this value in signup javascript
           mainAccountContainer.dataset.mobileNumber = signupMobile.value
-          console.log("signup successfully")
           import("./html/signupHtml.dev")
           import("./js/signup.dev")
         } else {
-          signupNotification.textContent = data.error
-          signupNotification.classList.add("show", "error")
-          setTimeout(() => {
-            signupNotification.classList.remove("show", "error")
-          }, 5000)
+          createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
-        signupNotification.textContent = "Server Error"
-        signupNotification.classList.add("show", "error")
-        setTimeout(() => {
-          signupNotification.classList.remove("show", "error")
-        }, 5000)
+        createMainNotification("Server error", "error")
       })
-  } else if (signupMobile.value.length != 10 && otp.length == 6) {
-    signupNotification.textContent = "Incorrect Mobile Number"
-    signupNotification.classList.add("show", "error")
-    setTimeout(() => {
-      signupNotification.classList.remove("show", "error")
-    }, 5000)
-  } else if (signupMobile.value.length == 10 && otp.length != 6) {
-    signupNotification.textContent = "Incorrect Otp"
-    signupNotification.classList.add("show", "error")
-    setTimeout(() => {
-      signupNotification.classList.remove("show", "error")
-    }, 5000)
+  } else if (signupMobile.value.length != 10 && signupOtp.length == 6) {
+    createMainNotification("Incorrect Mobile number", "error")
+  } else if (signupMobile.value.length == 10 && signupOtp.length != 6) {
+    createMainNotification("Incorrect OTP", "error")
+  } else {
+    createMainNotification(
+      "First enter your mobile number and send OTP to your number",
+      "info"
+    )
   }
 })
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // login form start here
 
 const loginUser = document.getElementById("loginUser")
 const loginPassword = document.getElementById("loginPassword")
-const loginSubmit = document.getElementById("loginSubmit")
-const loginNotification = document.getElementById("loginNotification")
+const loginSubmitBtn = document.getElementById("loginSubmitBtn")
 
-loginSubmit.addEventListener("click", () => {
-  if (loginUser.value != "" && loginPassword.value != "") {
+loginSubmitBtn.addEventListener("click", () => {
+  if (loginUser.value !== "" && loginPassword.value !== "") {
     let data = {
       loginUser: loginUser.value,
       loginPassword: loginPassword.value
@@ -258,54 +249,53 @@ loginSubmit.addEventListener("click", () => {
       })
       .then(data => {
         if (data.isSuccess) {
-          console.log(data)
           location.replace(`/user/${data.username}`)
         } else {
-          loginNotification.textContent = data.error
-          loginNotification.classList.add("show", "error")
-          setTimeout(() => {
-            loginNotification.classList.remove("show", "error")
-          }, 5000)
+          createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
-        loginNotification.textContent = "Server Error"
-        loginNotification.classList.add("show", "error")
-        setTimeout(() => {
-          loginNotification.classList.remove("show", "error")
-        }, 5000)
+        console.log("Server error: " + err)
+        createMainNotification("Server error:", "error")
       })
-  } else if (loginUser.value == "" && loginPassword.value != "") {
-    loginNotification.textContent =
-      "Please fill Username/mobile anything, Don't leave it blank"
-    loginNotification.classList.add("show")
-    setTimeout(() => {
-      loginNotification.classList.remove("show")
-    }, 5000)
-  } else if (loginUser.value != "" && loginPassword.value == "") {
-    loginNotification.textContent =
-      "Please fill password to unlock this secret wall"
-    loginNotification.classList.add("show")
-    setTimeout(() => {
-      loginNotification.classList.remove("show")
-    }, 5000)
+  } else if (loginUser.value === "" && loginPassword.value !== "") {
+    createMainNotification(
+      "Please fill Username/mobile anything, Don't leave it blank",
+      "info"
+    )
+  } else if (loginUser.value !== "" && loginPassword.value === "") {
+    createMainNotification(
+      "Please fill password to unlock this security wall",
+      "info"
+    )
+  } else {
+    createMainNotification(
+      "First enter your username or mobile number and then your password to break this security wall",
+      "info"
+    )
   }
 })
 
 loginPassword.addEventListener("keyup", e => {
   loginPassword.value = loginPassword.value.replace(/\s/g, "")
 })
+
 // password show
-const passwordShow = document.getElementsByClassName("password-show")[0]
+const toggleLoginPasswordBtn = document.getElementById("toggleLoginPasswordBtn")
 
-passwordShow.addEventListener("click", () => {
-  passwordShow.classList.toggle("show")
-
-  let type = loginPassword.getAttribute("type")
-
-  if (type == "password") {
+toggleLoginPasswordBtn.addEventListener("click", () => {
+  //   let loginPasswordType = loginPassword.getAttribute("type")
+  if (
+    toggleLoginPasswordBtn.classList.contains("login-password__btn--unselected")
+  ) {
+    toggleLoginPasswordBtn.classList.remove("login-password__btn--unselected")
+    toggleLoginPasswordBtn.classList.add("login-password__btn--selected")
     loginPassword.type = "text"
-  } else {
+  } else if (
+    toggleLoginPasswordBtn.classList.contains("login-password__btn--selected")
+  ) {
+    toggleLoginPasswordBtn.classList.remove("login-password__btn--selected")
+    toggleLoginPasswordBtn.classList.add("login-password__btn--unselected")
     loginPassword.type = "password"
   }
 })

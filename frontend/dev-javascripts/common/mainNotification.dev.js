@@ -81,10 +81,10 @@ export function createMainNotification(message, type = "info") {
       clearTimeout(mainNotificationCloseTimeout)
     })
 
-  // // delete after 10s automatically
-  // mainNotificationCloseTimeout = setTimeout(() => {
-  //   mainNotification.remove()
-  // }, 10000)
+  // delete after 10s automatically
+  mainNotificationCloseTimeout = setTimeout(() => {
+    mainNotification.remove()
+  }, 10000)
 
-  document.body.insertAdjacentElement("afterbegin", mainNotification)
+  document.body.insertAdjacentElement("beforeend", mainNotification)
 }

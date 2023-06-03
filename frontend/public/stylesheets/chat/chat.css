@@ -1,35 +1,14 @@
-svg {
-    width: 100%;
-    height: 100%;
-}
-
 .chat-main-container {
     position: relative;
-    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-@media screen and (min-width: 800px) {
-    .chat-main-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        width: calc(100% - var(--main-nav-width));
-        height: 100%;
-        /* align-self: flex-end; */
-    }
 
-}
-
-@media screen and (max-width: 800px) {
-    .chat-main-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        width: 100%;
-        height: calc(100% - var(--main-nav-height));
-        /* align-self: flex-end; */
-    }
-}
 
 /* all chat section  */
 .all-chat-section {
@@ -81,7 +60,7 @@ svg {
     .all-chat-section--open-active-chat {}
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
     .all-chat-section {
         width: 100%;
     }
@@ -116,7 +95,7 @@ svg {
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
 
     .empty-chat-section {
         display: none;
@@ -491,7 +470,7 @@ svg {
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
     .active-chat-section {
         width: 100%;
     }
@@ -740,7 +719,7 @@ svg {
 
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 799px) {
 
     .active-chat-message-container {
         padding-right: 5px;
@@ -1982,7 +1961,7 @@ em-emoji-picker {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 800px;
+    max-width: 799px;
     animation: inputAttachmentBtnBoxInputBoxAnimation 0.5s 1 both;
 }
 

@@ -15,12 +15,12 @@ exports.getAccountPage = async (req, res) => {
     )
       res.render("./user-auth/account", {
         pageName: "profile",
-        accountType: "signup"
+        accountType: "login"
       })
     else {
       res.render("./user-auth/account", {
         pageName: "profile",
-        accountType: "login"
+        accountType: "signup"
       })
     }
   }

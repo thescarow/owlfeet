@@ -35,6 +35,8 @@ exports.getExplorePage = async (req, res) => {
         isLogin: true
         // layout: "layout/callLayout.ejs",
       })
+    } else {
+      res.redirect("user-auth/login")
     }
   } catch (err) {
     console.log(

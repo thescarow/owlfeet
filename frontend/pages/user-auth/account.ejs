@@ -2,35 +2,46 @@
 
 <script defer src="/javascripts/account.bundle.js"></script>
 
-<div class="main-account-container" id='mainAccountContainer'>
-  <div class="form-structor" id="fromStructor">
-    <div id="signupBox" class="signup-box <% if(locals.accountType == 'signup'){ -%> slide-up <% }-%>">
-      <h2 class="form-title" id="openSignup"><span>or</span>Register</h2>
-      <div class="form-holder">
-        <div class="svg-field">
-          <%- include('../partials/illustrations/connectedWorld.svg') -%>
-        </div>
-        <div class="notification-field " id="signupNotification">this is notification
-        </div>
-
-        <div class="input-field signup">
-          <label for="signupMobile">Mobile No:</label>
-          <input id="signupMobile" type="number" size="10" maxlength="10" required placeholder="987XXX1234" min="0"
-            max="9999999999" pattern="[56789]\d{9}">
-
-        </div>
-        <div class="btn-field" id="sendOtpField">
-          <span class="" id="sendOtpCounter"><span id="sendOtpCounterMinute"></span><span
-              id="sendOtpCounterSecond"></span></span>
-          <button class="" id="sendOtp"><span id="sendOtpText">Send OTP</span></button>
+<div class="main-account-container" id='mainAccountContainer' data-mobile-number="">
+  <div class="account-box" id="accountBox">
+    <div id="signupBox" class="signup-box <%= (locals.accountType.toString() === 'signup')?'signup-box--open':''%> ">
+      <div class="signup-box__title" id="openSignupBoxBtn">
+        <span>or</span>
+        Register
+      </div>
+      <div class="signup-initial-form">
+        <div class="signup-initial-form__illus">
+          <%- include('../partials/illustrations/connectedWorldIllus.svg') -%>
         </div>
 
-        <div class="input-field signup" id="otpField">
-          <label for="signupOtpFirst">OTP:</label>
-          <div id="signupOtp">
+        <div class="signup-mobile">
+          <label class="signup-mobile__label" for="signupMobile">Mobile No:
+          </label>
+          <input class="signup-mobile__input" id="signupMobile" type="number" size="10" maxlength="10"
+            oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required
+            placeholder="987XXX1234" min="0" max="9999999999" pattern="[56789]\d{9}">
+
+
+          <div class="signup-mobile__btn" id="signupSendOtpField">
+            <div class="signup-mobile__otp-timer" id="signupSendOtpTimer">
+              <span id="signupSendOtpTimerMinute">02:
+              </span>
+              <span id="signupSendOtpTimerSecond">52
+              </span>
+            </div>
+            <button class="signup-mobile__otp-btn " id="signupSendOtpBtn">
+              <span id="signupSendOtpText">Send
+                OTP</span>
+            </button>
+          </div>
+        </div>
+        <div class="signup-otp" id="otpField">
+          <label class="signup-otp__label" for="signupOtpFirst">OTP:
+          </label>
+          <div class="signup-otp__input" id="signupOtp">
             <input id="signupOtpFirst" type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
-            <input class="space" type="number" maxlength="1" min="0" max="9" />
+            <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
             <input type="number" maxlength="1" min="0" max="9" />
@@ -38,47 +49,51 @@
 
 
         </div>
-        <div class="submit-field" id="checkSignupOtp">
-          <%- include('../partials/icons/next.svg') -%>
+        <div class="signup-submit" id="checkSignupOtpBtn">
+          <%- include('../partials/icons/authNextIcon.svg') -%>
+            <span>Submit</span>
         </div>
-        <a class="have-account-field" href="/login">already have an account ?</a>
-        <div class="empty-space-field"></div>
-
+        <a class="signup-have-account" href="/login">already have an account ?</a>
       </div>
 
 
     </div>
-    <div id="loginBox" class="login-box <% if(locals.accountType == 'login'){ -%> slide-up <% }-%>">
-      <div id="loginBoxInner" class="login-box-inner">
-        <h2 class="form-title" id="openLogin"><span>or</span>Log in</h2>
+    <div id="loginBox" class="login-box <%=(locals.accountType.toString()==='login' )?'login-box--open':''%>">
 
-        <div class="form-holder">
-          <div class="notification-field" id="loginNotification">error: Number is already register
-          </div>
-          <div class="input-field login">
-            <label for="loginUsername">Username/Mobile</label>
-            <input type="text" id="loginUser" autocomplete="off" placeholder="Username / Mobile">
-          </div>
-          <div class="input-field login" id="loginPasswordField">
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" autocomplete="off" placeholder="Password">
-            <span class="password-show">
-              <%- include('../partials/icons/index_account_passwordShow.svg') -%>
-            </span>
-          </div>
-          <div class="btn-field">
-            <button id="loginSubmit">Login</button>
-          </div>
-          <a class="reset-password-field" href="/user-auth/reset-password">Forgot password ?</a>
-          <div class="empty-space-field"></div>
+      <div id="loginBoxInner" class="login-box__inner">
+        <div class="login-box__title" id="openLoginBoxBtn">
+          <span>or</span>
+          Log in
+        </div>
 
-
+        <div class="login-form">
+          <div class="login-user" id="loginUserField">
+            <label class="login-user__label" for="loginUser">Username/Mobile</label>
+            <input class="login-user__input" type="text" id="loginUser" autocomplete="off"
+              placeholder="Username / Mobile">
+          </div>
+          <div class="login-password" id="loginPasswordField">
+            <label class="login-password__label" for="loginPassword">Password</label>
+            <div class="login-password__input">
+              <input class="" type="password" id="loginPassword" autocomplete="off" placeholder="Password">
+              <div class="login-password__btn login-password__btn--unselected" id="toggleLoginPasswordBtn">
+                <div class="login-password__btn-icon login-password__btn-icon--unselected ">
+                  <%- include('../partials/icons/authPasswordHideIcon.svg') -%>
+                </div>
+                <div class="login-password__btn-icon login-password__btn-icon--selected ">
+                  <%- include('../partials/icons/authPasswordShowIcon.svg') -%>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="login-submit" id="loginSubmitBtn">
+            <%- include('../partials/icons/authNextIcon.svg') -%>
+              <span>Login</span>
+          </div>
+          <a class="login-reset-password" href="/user-auth/reset-password">Forgot
+            password ?</a>
         </div>
       </div>
     </div>
   </div>
-
-
-
-
 </div>

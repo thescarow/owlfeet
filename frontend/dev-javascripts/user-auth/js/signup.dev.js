@@ -4,7 +4,7 @@ import { createMainNotification } from "../../common/mainNotification.dev.js"
 window.addEventListener("keydown", e => {
   if (e.key == "Tab") e.preventDefault()
 })
-const signupProfileBtn = document.getElementById("signupProfileBtn")
+
 import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
 import Webcam from "@uppy/webcam"
@@ -18,12 +18,12 @@ import "@uppy/image-editor/dist/style.css"
 ////////////////////////////////////////////////////////////////
 
 const uppy = new Uppy({
-  id: "profile",
+  id: "signupProfile",
   autoProceed: false,
   allowMultipleUploadBatches: false,
   debug: false,
   onBeforeFileAdded: (currentFile, files) => {
-    currentFile.name = signupProfileBtn.dataset.profileKey
+    currentFile.name = signupProfile.dataset.profileKey
     return currentFile
   },
   restrictions: {
@@ -35,7 +35,7 @@ const uppy = new Uppy({
   infoTimeout: 5000
 })
   .use(Dashboard, {
-    trigger: "#signupProfileBtn",
+    trigger: "#signupProfile",
     target: "body",
     inline: false,
     // plugins: ['Webcam'],
@@ -66,12 +66,11 @@ const uppy = new Uppy({
   })
 
 uppy.on("complete", result => {
-  console.log("Upload complete! We’ve uploaded these files:", result.successful)
   const image = document.createElement("img")
   image.src = result.successful[0].preview
-  signupProfileImg.innerHTML = ""
-  signupProfileImg.appendChild(image)
-  signupProfileBtn.dataset.profileKey = result.successful[0].s3Multipart.key
+  signupProfile.innerHTML = ""
+  signupProfile.appendChild(image)
+  signupProfile.dataset.profileKey = result.successful[0].s3Multipart.key
 })
 /////////////////////////////////////////////////////
 
@@ -79,6 +78,7 @@ const signupFormPage1 = document.getElementById("signupFormPage1")
 const signupFormPage2 = document.getElementById("signupFormPage2")
 const signupFormPage3 = document.getElementById("signupFormPage3")
 const signupFormPage4 = document.getElementById("signupFormPage4")
+
 const signupForm = document.getElementById("signupForm")
 
 const signupProgressInfoStep = document.getElementById("signupProgressInfoStep")
@@ -89,16 +89,16 @@ const signupProgressBarhighlighter = document.getElementById(
   "signupProgressBarhighlighter"
 )
 
-const next1 = document.getElementById("next1")
-const next2 = document.getElementById("next2")
-const next3 = document.getElementById("next3")
-const prev1 = document.getElementById("prev1")
-const prev2 = document.getElementById("prev2")
-const prev3 = document.getElementById("prev3")
-const signupSubmit = document.getElementById("signupSubmit")
+const signupNext1Btn = document.getElementById("signupNext1Btn")
+const signupNext2Btn = document.getElementById("signupNext2Btn")
+const signupNext3Btn = document.getElementById("signupNext3Btn")
+const signupPrev1Btn = document.getElementById("signupPrev1Btn")
+const signupPrev2Btn = document.getElementById("signupPrev2Btn")
+const signupPrev3Btn = document.getElementById("signupPrev3Btn")
+const signupSubmitBtn = document.getElementById("signupSubmitBtn")
 //////////////////////////////////
 //////////////////////////////////
-const signupProfileImg = document.getElementById("signupProfile")
+const signupProfile = document.getElementById("signupProfile")
 const signupFirstName = document.getElementById("signupFirstName")
 const signupLastName = document.getElementById("signupLastName")
 const signupEmail = document.getElementById("signupEmail")
@@ -114,8 +114,8 @@ const signupState = document.getElementById("signupState")
 
 const signupBio = document.getElementById("signupBio")
 
-next1.addEventListener("click", () => {
-  if (signupFirstName.value != "") {
+signupNext1Btn.addEventListener("click", () => {
+  if (signupFirstName.value !== "") {
     signupFormPage1.style.left = "-150%"
     signupFormPage2.style.left = "0%"
     signupForm.scrollTop = 0
@@ -127,7 +127,7 @@ next1.addEventListener("click", () => {
     signupFirstName.focus()
   }
 })
-prev1.addEventListener("click", () => {
+signupPrev1Btn.addEventListener("click", () => {
   signupFormPage1.style.left = "0%"
   signupFormPage2.style.left = "150%"
   signupForm.scrollTop = 0
@@ -135,11 +135,11 @@ prev1.addEventListener("click", () => {
   signupProgressInfoStepInfo.textContent = "Your Profile"
   signupProgressInfoStep.textContent = "STEP: 1 OF 4"
 })
-next2.addEventListener("click", () => {
-  if (signupPassword.value != "") {
+signupNext2Btn.addEventListener("click", () => {
+  if (signupPassword.value !== "") {
     if (
-      signupConfirmPassword.value != "" &&
-      signupConfirmPassword.value == signupPassword.value
+      signupConfirmPassword.value !== "" &&
+      signupConfirmPassword.value === signupPassword.value
     ) {
       signupFormPage2.style.left = "-150%"
       signupFormPage3.style.left = "0%"
@@ -160,7 +160,7 @@ next2.addEventListener("click", () => {
   }
 })
 
-prev2.addEventListener("click", () => {
+signupPrev2Btn.addEventListener("click", () => {
   signupFormPage2.style.left = "0%"
   signupFormPage3.style.left = "150%"
   signupForm.scrollTop = 0
@@ -168,7 +168,7 @@ prev2.addEventListener("click", () => {
   signupProgressInfoStepInfo.textContent = "Password"
   signupProgressInfoStep.textContent = "STEP: 2 OF 4"
 })
-next3.addEventListener("click", () => {
+signupNext3Btn.addEventListener("click", () => {
   if (signupUsername.value != "") {
     signupFormPage3.style.left = "-150%"
     signupFormPage4.style.left = "0%"
@@ -184,7 +184,7 @@ next3.addEventListener("click", () => {
   }
 })
 
-prev3.addEventListener("click", () => {
+signupPrev3Btn.addEventListener("click", () => {
   signupFormPage3.style.left = "0%"
   signupFormPage4.style.left = "150%"
   signupForm.scrollTop = 0
@@ -194,25 +194,26 @@ prev3.addEventListener("click", () => {
 })
 
 //////////////////////////////////////////////////////////////////////////////
-const passwordSvgSpans = [
-  ...document.getElementsByClassName("signup-password-show")
+const signupPasswordBtns = [
+  ...document.getElementsByClassName("signup-password__btn")
 ]
-const passwordInputs = [...document.getElementsByClassName("signup-password")]
-passwordSvgSpans.forEach(span => {
-  span.addEventListener("click", () => {
-    passwordSvgSpans.forEach(eachSpan => {
-      eachSpan.classList.toggle("show")
-    })
-    let type = passwordInputs[0].getAttribute("type")
 
-    if (type == "password") {
-      passwordInputs.forEach(input => {
-        input.type = "text"
-      })
-    } else {
-      passwordInputs.forEach(input => {
-        input.type = "password"
-      })
+signupPasswordBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (btn.classList.contains("signup-password__btn--unselected")) {
+      btn.classList.remove("signup-password__btn--unselected")
+      btn.classList.add("signup-password__btn--selected")
+      if (btn.classList.contains("signup-password__btn--password"))
+        signupPassword.type = "text"
+      else if (btn.classList.contains("signup-password__btn--confirm-password"))
+        signupConfirmPassword.type = "text"
+    } else if (btn.classList.contains("signup-password__btn--selected")) {
+      btn.classList.remove("signup-password__btn--selected")
+      btn.classList.add("signup-password__btn--unselected")
+      if (btn.classList.contains("signup-password__btn--password"))
+        signupPassword.type = "password"
+      else if (btn.classList.contains("signup-password__btn--confirm-password"))
+        signupConfirmPassword.type = "password"
     }
   })
 })
@@ -269,20 +270,20 @@ function passwordStrengthChecker(PasswordParameter) {
     passwordRuleSpecial.test(PasswordParameter)
   )
   if (strongPassword.test(PasswordParameter)) {
-    signupPasswordStrengthDivs[0].style.backgroundColor = "#b1ffa3"
-    signupPasswordStrengthDivs[1].style.backgroundColor = "#b1ffa3"
-    signupPasswordStrengthDivs[2].style.backgroundColor = "#b1ffa3"
-    signupPasswordStrengthtext.textContent = "Strong"
+    signupPasswordStrengthDivs[0].style.backgroundColor = "#61f743"
+    signupPasswordStrengthDivs[1].style.backgroundColor = "#61f743"
+    signupPasswordStrengthDivs[2].style.backgroundColor = "#61f743"
+    signupPasswordStrengthtext.textContent = "Good"
   } else if (mediumPassword.test(PasswordParameter)) {
-    signupPasswordStrengthDivs[0].style.backgroundColor = "#ffffa5"
-    signupPasswordStrengthDivs[1].style.backgroundColor = "#ffffa5"
+    signupPasswordStrengthDivs[0].style.backgroundColor = "#f7f143"
+    signupPasswordStrengthDivs[1].style.backgroundColor = "#f7f143"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
-    signupPasswordStrengthtext.textContent = "Medium"
+    signupPasswordStrengthtext.textContent = "Fair"
   } else {
-    signupPasswordStrengthDivs[0].style.backgroundColor = "#ffcad3"
+    signupPasswordStrengthDivs[0].style.backgroundColor = "#fc4444"
     signupPasswordStrengthDivs[1].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
-    signupPasswordStrengthtext.textContent = "Low"
+    signupPasswordStrengthtext.textContent = "Week"
   }
 }
 
@@ -296,18 +297,18 @@ signupPassword.addEventListener("input", () => {
 
   //We then call the passwordStrengthChecker function as a callback then pass the typed password to it
 
-  passwordTimeout = setTimeout(
-    () => passwordStrengthChecker(signupPassword.value),
-    500
-  )
-
   //Incase a user clears the text, the badge is transparent again
 
-  if (signupPassword.value.length == 0) {
+  if (signupPassword.value.length === 0) {
     signupPasswordStrengthDivs[0].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[1].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
     signupPasswordStrengthtext.textContent = "None"
+  } else {
+    passwordTimeout = setTimeout(
+      () => passwordStrengthChecker(signupPassword.value),
+      500
+    )
   }
 })
 
@@ -322,13 +323,13 @@ let confirmPasswordTimeout
 signupConfirmPassword.addEventListener("input", () => {
   clearTimeout(confirmPasswordTimeout)
   confirmPasswordTimeout = setTimeout(() => {
-    if (signupConfirmPassword.value == signupPassword.value) {
+    if (signupConfirmPassword.value === signupPassword.value) {
       signupPasswordConfirmText.textContent = "Match"
     } else {
       signupPasswordConfirmText.textContent = "Not match"
     }
   }, 500)
-  if (signupConfirmPassword.value.length == 0) {
+  if (signupConfirmPassword.value.length === 0) {
     signupPasswordConfirmText.textContent = "Not match"
   }
 })
@@ -338,13 +339,10 @@ signupConfirmPassword.addEventListener("keyup", e => {
 
 //////////////////////////////////////////////////////////////
 // username input
-// const signupUsernameNotification = document.getElementById(
-//   "signupUsernameNotification"
-// )
 
 signupUsername.addEventListener("change", () => {
   let checkUsername = signupUsername.value
-  if (signupUsername.value != "") {
+  if (signupUsername.value !== "") {
     fetch(
       "/user-auth/check-username?checkUsername=" +
         checkUsername +
@@ -357,7 +355,6 @@ signupUsername.addEventListener("change", () => {
         } else throw new Error("server error in generating username")
       })
       .then(data => {
-        console.log(data)
         if (data.isUnique) {
           if (data.isChange) {
             signupUsername.value = data.newUsername
@@ -373,7 +370,7 @@ signupUsername.addEventListener("change", () => {
         } else {
           signupUsername.value = data.newUsername
           createMainNotification(
-            "Your Username Is Already registered, You Can Use This Server Generated Username Or Try Diffrent.",
+            "Your username is already registered, You can use this server generated username or try diffrent one.",
             "error"
           )
         }
@@ -388,14 +385,16 @@ signupUsername.addEventListener("change", () => {
     signupUsername.classList.remove("valid")
   }
 })
-const signupUsernameRefresh = document.getElementById("signupUsernameRefresh")
+const signupUsernameRefreshBtn = document.getElementById(
+  "signupUsernameRefreshBtn"
+)
 let degree = 0
-signupUsernameRefresh.addEventListener("click", () => {
-  if (!signupUsernameRefresh.classList.contains("disable")) {
+signupUsernameRefreshBtn.addEventListener("click", () => {
+  if (!signupUsernameRefreshBtn.classList.contains("disabled")) {
     degree += 360
-    signupUsernameRefresh.style.rotate = `${degree}deg`
+    signupUsernameRefreshBtn.style.rotate = `${degree}deg`
     let firstName = signupFirstName.value
-    signupUsernameRefresh.classList.add("disable")
+    signupUsernameRefreshBtn.classList.add("disabled")
 
     fetch("/user-auth/generate-username?firstName=" + firstName)
       .then(res => {
@@ -407,7 +406,7 @@ signupUsernameRefresh.addEventListener("click", () => {
         console.log(data)
         signupUsername.value = data.newUsername
         signupUsername.classList.add("valid")
-        signupUsernameRefresh.classList.remove("disable")
+        signupUsernameRefreshBtn.classList.remove("disabled")
       })
       .catch(error => {
         createMainNotification("Server Error, Please try Again", "error")
@@ -446,54 +445,60 @@ signupState.addEventListener("change", e => {
 // signup submit form
 
 let mainAccountContainer = document.getElementById("mainAccountContainer")
-signupSubmit.addEventListener("click", e => {
-  if (signupBirthday.value != "") {
-    if (signupState.value != "" && signupCity.value != "") {
-      let signupGender
-      if (signupGenderMale.checked) signupGender = "male"
-      else if (signupGenderFemale.checked) signupGender = "female"
-      else signupGender = "other"
-      let signupData = {
-        signupMobile: mainAccountContainer.dataset.mobileNumber,
-        signupFirstName: signupFirstName.value,
-        signupLastName: signupLastName.value,
-        signupEmail: signupEmail.value,
-        signupPassword: signupPassword.value,
-        signupUsername: signupUsername.value,
-        signupGender: signupGender,
-        signupBirthday: signupBirthday.value,
-        signupCountry: "IN",
-        signupState: signupState.value,
-        signupCity: signupCity.value,
-        signupBio: signupBio.value,
-        signupProfile: signupProfileBtn.dataset.profileKey
+signupSubmitBtn.addEventListener("click", e => {
+  if (signupBirthday.value !== "") {
+    if (signupState.value !== "" && signupCity.value !== "") {
+      if (
+        mainAccountContainer.dataset.mobileNumber !== "" &&
+        mainAccountContainer.dataset.mobileNumber.length === 10
+      ) {
+        let signupGender
+        if (signupGenderMale.checked) signupGender = "male"
+        else if (signupGenderFemale.checked) signupGender = "female"
+        else signupGender = "other"
+        let signupData = {
+          signupMobile: mainAccountContainer.dataset.mobileNumber,
+          signupFirstName: signupFirstName.value,
+          signupLastName: signupLastName.value,
+          signupEmail: signupEmail.value,
+          signupPassword: signupPassword.value,
+          signupUsername: signupUsername.value,
+          signupGender: signupGender,
+          signupBirthday: signupBirthday.value,
+          signupCountry: "IN",
+          signupState: signupState.value,
+          signupCity: signupCity.value,
+          signupBio: signupBio.value,
+          signupProfile: signupProfile.dataset.profileKey
+        }
+        fetch("/user-auth/user-signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(signupData)
+        })
+          .then(res => {
+            if (res.ok) return res.json()
+            throw new Error("Error in signing up user")
+          })
+          .then(data => {
+            if (data.isSuccess) {
+              location.replace(`/user/${data.username}`)
+            } else {
+              createMainNotification(data.error, "error")
+            }
+          })
+          .catch(err => {
+            console.log(err)
+            createMainNotification(
+              "Server Error In Sign Up, Please try Again",
+              "error"
+            )
+          })
+      } else {
+        createMainNotification("Server error ", "error")
       }
-      fetch("/user-auth/user-signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(signupData)
-      })
-        .then(res => {
-          if (res.ok) return res.json()
-          throw new Error("Error in signing up user")
-        })
-        .then(data => {
-          if (data.isSuccess) {
-            console.log(data)
-            location.replace(`/user/${data.username}`)
-          } else {
-            createMainNotification(data.error, "error")
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          createMainNotification(
-            "Server Error In Sign Up, Please try Again",
-            "error"
-          )
-        })
     } else {
       if (signupState.value == "") {
         createMainNotification("Please Select A state")

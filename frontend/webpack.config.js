@@ -11,6 +11,10 @@ module.exports = {
       "./dev-javascripts/layout/callLayout.dev.js"
     ),
 
+    test: path.resolve(__dirname, "./dev-javascripts/test/test.dev.js"),
+
+    test2: path.resolve(__dirname, "./dev-javascripts/test/test2.dev.js"),
+
     home: path.resolve(__dirname, "./dev-javascripts/index/home.dev.js"),
 
     explore: path.resolve(
