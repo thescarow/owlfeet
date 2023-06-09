@@ -1,4 +1,4 @@
-import { createMainNotification } from "../common/mainNotification.dev"
+import { createMainNotification } from "../../common/mainNotification.dev"
 /////////////////////////////////////////////////////////////
 
 const resetFormContainer = document.getElementById("resetFormContainer")

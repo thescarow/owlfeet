@@ -14,12 +14,12 @@ exports.changeUserPassword = async (req, res) => {
     if (req.user) {
       let user = await User.findById(req.user.id)
       let changePasswordData = req.body
-
       if (
         await bcrypt.compare(changePasswordData.currentPassword, user.password)
       ) {
         let newPassword = await bcrypt.hash(changePasswordData.newPassword, 10)
         user.password = newPassword
+        user.allPassword.push(newPassword)
         user.save()
         res.status(200).json({
           isSuccess: true

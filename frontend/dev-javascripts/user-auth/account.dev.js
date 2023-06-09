@@ -1,39 +1,83 @@
 // import { checkKeyboard } from "../common/keyboardDetector.dev"
 
 import { createMainNotification } from "../common/mainNotification.dev"
-//build login and signup switching system between login box and signup box
+//build login and register switching system between login box and register box
 let mainAccountContainer = document.getElementById("mainAccountContainer")
 const openLoginBoxBtn = document.getElementById("openLoginBoxBtn")
-const openSignupBoxBtn = document.getElementById("openSignupBoxBtn")
+const openRegisterBoxBtn = document.getElementById("openRegisterBoxBtn")
 const accountBox = document.getElementById("accountBox")
-const signupBox = document.getElementById("signupBox")
+const registerBox = document.getElementById("registerBox")
 const loginBox = document.getElementById("loginBox")
 const loginBoxInner = document.getElementById("loginBoxInner")
 
-// const signupFormHolder = document.getElementById("signupFormHolder")
+// const registerFormHolder = document.getElementById("registerFormHolder")
 
 openLoginBoxBtn.addEventListener("click", e => {
-  signupBox.classList.remove("signup-box--open")
+  registerBox.classList.remove("register-box--open")
   loginBox.classList.add("login-box--open")
-  signupBox.scrollTop = 0
-  history.pushState({}, "", `/user-auth/login`)
+  registerBox.scrollTop = 0
+  const urlParams = new URLSearchParams(window.location.search)
+  const nextUrl = urlParams.get("next")
+  if (nextUrl !== null && nextUrl.trim() !== "") {
+    history.pushState({}, "", `/user-auth/login?next=${nextUrl}`)
+  } else {
+    history.pushState({}, "", `/user-auth/login`)
+  }
 })
 
-openSignupBoxBtn.addEventListener("click", e => {
+openRegisterBoxBtn.addEventListener("click", e => {
   loginBox.classList.remove("login-box--open")
-  signupBox.classList.add("signup-box--open")
+  registerBox.classList.add("register-box--open")
   loginBoxInner.scrollTop = 0
-  history.pushState({}, "", `/user-auth/signup`)
+  const urlParams = new URLSearchParams(window.location.search)
+  const nextUrl = urlParams.get("next")
+  if (nextUrl !== null && nextUrl.trim() !== "") {
+    history.pushState({}, "", `/user-auth/register?next=${nextUrl}`)
+  } else {
+    history.pushState({}, "", `/user-auth/register`)
+  }
 })
+
+let alreadyHaveAnAccountBtn = document.getElementById("alreadyHaveAnAccountBtn")
+alreadyHaveAnAccountBtn.addEventListener("click", () => {
+  if (registerBox.classList.contains("register-box--open")) {
+    registerBox.classList.remove("register-box--open")
+    registerBox.scrollTop = 0
+  }
+  if (!loginBox.classList.contains("login-box--open"))
+    loginBox.classList.add("login-box--open")
+  const urlParams = new URLSearchParams(window.location.search)
+  const nextUrl = urlParams.get("next")
+  if (nextUrl !== null && nextUrl.trim() !== "") {
+    history.pushState({}, "", `/user-auth/login?next=${nextUrl}`)
+  } else {
+    history.pushState({}, "", `/user-auth/login`)
+  }
+})
+
 window.addEventListener("popstate", async () => {
-  if (location.pathname === "/user-auth/signup") {
+  if (location.pathname === "/user-auth/register") {
     loginBox.classList.remove("login-box--open")
-    signupBox.classList.add("signup-box--open")
+    registerBox.classList.add("register-box--open")
     loginBoxInner.scrollTop = 0
   } else if (location.pathname === "/user-auth/login") {
-    signupBox.classList.remove("signup-box--open")
+    let resetFormContainer = document.getElementById("resetFormContainer")
+    if (
+      resetFormContainer &&
+      !resetFormContainer.classList.contains("reset-form-container--hide")
+    ) {
+      resetFormContainer.classList.add("reset-form-container--hide")
+    }
+    if (accountBox.classList.contains("account-box--hide")) {
+      accountBox.classList.remove("account-box--hide")
+    }
+    registerBox.classList.remove("register-box--open")
     loginBox.classList.add("login-box--open")
-    signupBox.scrollTop = 0
+    registerBox.scrollTop = 0
+  } else if (location.pathname === "/user-auth/reset-password") {
+    let { createResetForm } = await import("./js/createResetForm.dev")
+    createResetForm()
+    await import("./js/resetForm.dev")
   }
 })
 // /////////////////////////////////////////////////
@@ -62,50 +106,51 @@ window.addEventListener("popstate", async () => {
 // ///////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////////
 
-const signupSendOtpBtn = document.getElementById("signupSendOtpBtn")
-const signupMobile = document.getElementById("signupMobile")
-const signupSendOtpTimer = document.getElementById("signupSendOtpTimer")
-const signupSendOtpTimerMinute = document.getElementById(
-  "signupSendOtpTimerMinute"
-)
-const signupSendOtpTimerSecond = document.getElementById(
-  "signupSendOtpTimerSecond"
-)
+const sendRegisterOtpBtn = document.getElementById("sendRegisterOtpBtn")
+const registerMobile = document.getElementById("registerMobile")
+const registerOtpTimer = document.getElementById("registerOtpTimer")
+const registerOtpTimerMinute = document.getElementById("registerOtpTimerMinute")
+const registerOtpTimerSecond = document.getElementById("registerOtpTimerSecond")
 
-function startSignupOtpTimer() {
-  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--disabled")
-  signupSendOtpTimer.classList.add("signup-mobile__otp-timer--show")
+function startRegisterOtpTimer() {
+  sendRegisterOtpBtn.classList.add("account-otp-activity__btn--disabled")
+  registerOtpTimer.classList.add("account-otp-activity__timer--show")
 
   let counter = 120
   let timerId
 
   timerId = setInterval(() => {
-    signupSendOtpTimerMinute.textContent = "0" + Math.floor(counter / 60) + ":"
+    registerOtpTimerMinute.textContent = "0" + Math.floor(counter / 60) + ":"
     let seconds = counter % 60
     seconds = seconds < 10 ? "0" + seconds : seconds
-    signupSendOtpTimerSecond.textContent = seconds
+    registerOtpTimerSecond.textContent = seconds
     counter--
     if (counter == 0) {
       clearInterval(timerId)
-      signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--disabled ")
-      signupSendOtpTimer.classList.remove("signup-mobile__otp-timer--show")
+      sendRegisterOtpBtn.classList.remove("account-otp-activity__btn--disabled")
+      registerOtpTimer.classList.remove("account-otp-activity__timer--show")
     }
   }, 1000)
 }
 
 const mobileValidator = /^[5-9][0-9]{9}$/
 
-signupSendOtpBtn.addEventListener("click", e => {
-  signupSendOtpBtn.classList.add("signup-mobile__otp-btn--click")
+sendRegisterOtpBtn.addEventListener("click", e => {
+  sendRegisterOtpBtn.classList.add("account-otp-activity__btn--click")
   setTimeout(() => {
-    signupSendOtpBtn.classList.remove("signup-mobile__otp-btn--click")
+    sendRegisterOtpBtn.classList.remove("account-otp-activity__btn--click")
   }, 500)
 
-  if (mobileValidator.test(signupMobile.value)) {
+  if (
+    registerMobile.value.length === 10 &&
+    mobileValidator.test(registerMobile.value)
+  ) {
     if (
-      !signupSendOtpBtn.classList.contains("signup-mobile__otp-btn--disabled")
+      !sendRegisterOtpBtn.classList.contains(
+        "account-otp-activity__btn--disabled"
+      )
     ) {
-      let data = { mobile: signupMobile.value }
+      let data = { mobile: registerMobile.value }
 
       fetch("/user-auth/send-signup-mobile-otp", {
         method: "POST",
@@ -120,7 +165,7 @@ signupSendOtpBtn.addEventListener("click", e => {
         })
         .then(data => {
           if (data.isSuccess) {
-            startSignupOtpTimer()
+            startRegisterOtpTimer()
             createMainNotification(
               "Otp sent successfully,please check your inbox",
               "success"
@@ -143,8 +188,8 @@ signupSendOtpBtn.addEventListener("click", e => {
 })
 /////////////////////////////////////////////////
 // send otp to server and verify it and server send back the submit form
-const checkSignupOtpBtn = document.getElementById("checkSignupOtpBtn")
-const otpInputs = document.querySelectorAll("#signupOtp input")
+const checkRegisterOtpBtn = document.getElementById("checkRegisterOtpBtn")
+const otpInputs = document.querySelectorAll("#registerOtp input")
 otpInputs.forEach((input, index) => {
   input.dataset.index = index
   input.addEventListener("paste", handleOnPasteOtp)
@@ -180,14 +225,14 @@ function handleOtp(e) {
   }
 }
 
-checkSignupOtpBtn.addEventListener("click", () => {
-  let signupOtp = ""
+checkRegisterOtpBtn.addEventListener("click", () => {
+  let registerOtp = ""
   otpInputs.forEach(input => {
-    signupOtp += input.value
+    registerOtp += input.value
   })
 
-  if (signupMobile.value.length === 10 && signupOtp.length === 6) {
-    let data = { otp: signupOtp, mobile: signupMobile.value }
+  if (registerMobile.value.length === 10 && registerOtp.length === 6) {
+    let data = { otp: registerOtp, mobile: registerMobile.value }
     fetch("/user-auth/check-mobile-otp", {
       method: "POST",
       headers: {
@@ -199,22 +244,25 @@ checkSignupOtpBtn.addEventListener("click", () => {
         if (res.ok) return res.json()
         else throw new Error("Server error")
       })
-      .then(data => {
+      .then(async data => {
         if (data.isSuccess) {
-          // used this value in signup javascript
-          mainAccountContainer.dataset.mobileNumber = signupMobile.value
-          import("./html/signupHtml.dev")
-          import("./js/signup.dev")
+          // used this value in register javascript
+          mainAccountContainer.dataset.mobileNumber = registerMobile.value
+          mainAccountContainer.dataset.accessToken = data.accessToken
+          let { createSignupForm } = await import("./js/createSignupForm.dev")
+          createSignupForm()
+          await import("./js/signupForm.dev")
         } else {
           createMainNotification(data.error, "error")
         }
       })
       .catch(err => {
+        console.log("server error: " + err)
         createMainNotification("Server error", "error")
       })
-  } else if (signupMobile.value.length != 10 && signupOtp.length == 6) {
+  } else if (registerMobile.value.length != 10 && registerOtp.length == 6) {
     createMainNotification("Incorrect Mobile number", "error")
-  } else if (signupMobile.value.length == 10 && signupOtp.length != 6) {
+  } else if (registerMobile.value.length == 10 && registerOtp.length != 6) {
     createMainNotification("Incorrect OTP", "error")
   } else {
     createMainNotification(
@@ -249,7 +297,13 @@ loginSubmitBtn.addEventListener("click", () => {
       })
       .then(data => {
         if (data.isSuccess) {
-          location.replace(`/user/${data.username}`)
+          const urlParams = new URLSearchParams(window.location.search)
+          const nextUrl = urlParams.get("next")
+          if (nextUrl !== null && nextUrl.trim() !== "") {
+            location.replace(`/${nextUrl}`)
+          } else {
+            location.replace(`/user/${data.username}`)
+          }
         } else {
           createMainNotification(data.error, "error")
         }
@@ -286,16 +340,32 @@ const toggleLoginPasswordBtn = document.getElementById("toggleLoginPasswordBtn")
 toggleLoginPasswordBtn.addEventListener("click", () => {
   //   let loginPasswordType = loginPassword.getAttribute("type")
   if (
-    toggleLoginPasswordBtn.classList.contains("login-password__btn--unselected")
+    toggleLoginPasswordBtn.classList.contains(
+      "account-input-field__btn--unselected"
+    )
   ) {
-    toggleLoginPasswordBtn.classList.remove("login-password__btn--unselected")
-    toggleLoginPasswordBtn.classList.add("login-password__btn--selected")
+    toggleLoginPasswordBtn.classList.remove(
+      "account-input-field__btn--unselected"
+    )
+    toggleLoginPasswordBtn.classList.add("account-input-field__btn--selected")
     loginPassword.type = "text"
   } else if (
-    toggleLoginPasswordBtn.classList.contains("login-password__btn--selected")
+    toggleLoginPasswordBtn.classList.contains(
+      "account-input-field__btn--selected"
+    )
   ) {
-    toggleLoginPasswordBtn.classList.remove("login-password__btn--selected")
-    toggleLoginPasswordBtn.classList.add("login-password__btn--unselected")
+    toggleLoginPasswordBtn.classList.remove(
+      "account-input-field__btn--selected"
+    )
+    toggleLoginPasswordBtn.classList.add("account-input-field__btn--unselected")
     loginPassword.type = "password"
   }
+})
+
+let forgotPasswordBtn = document.getElementById("forgotPasswordBtn")
+forgotPasswordBtn.addEventListener("click", async () => {
+  let { createResetForm } = await import("./js/createResetForm.dev")
+  createResetForm()
+  await import("./js/resetForm.dev")
+  history.pushState({}, "", `/user-auth/reset-password`)
 })

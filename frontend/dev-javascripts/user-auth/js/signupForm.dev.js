@@ -2,7 +2,7 @@ import { createMainNotification } from "../../common/mainNotification.dev.js"
 
 /////for preventing default tab behavior
 window.addEventListener("keydown", e => {
-  if (e.key == "Tab") e.preventDefault()
+  if (e.key === "Tab") e.preventDefault()
 })
 
 import Uppy from "@uppy/core"
@@ -104,6 +104,7 @@ const signupLastName = document.getElementById("signupLastName")
 const signupEmail = document.getElementById("signupEmail")
 const signupPassword = document.getElementById("signupPassword")
 const signupConfirmPassword = document.getElementById("signupConfirmPassword")
+const signupUsernameBox = document.getElementById("signupUsernameBox")
 const signupUsername = document.getElementById("signupUsername")
 const signupGenderMale = document.getElementById("signupGenderMale")
 const signupGenderFemale = document.getElementById("signupGenderFemale")
@@ -194,25 +195,26 @@ signupPrev3Btn.addEventListener("click", () => {
 })
 
 //////////////////////////////////////////////////////////////////////////////
+
 const signupPasswordBtns = [
-  ...document.getElementsByClassName("signup-password__btn")
+  ...document.getElementsByClassName("input-field__btn--toggle-password-view")
 ]
 
 signupPasswordBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    if (btn.classList.contains("signup-password__btn--unselected")) {
-      btn.classList.remove("signup-password__btn--unselected")
-      btn.classList.add("signup-password__btn--selected")
-      if (btn.classList.contains("signup-password__btn--password"))
+    if (btn.classList.contains("input-field__btn--unselected")) {
+      btn.classList.remove("input-field__btn--unselected")
+      btn.classList.add("input-field__btn--selected")
+      if (btn.classList.contains("input-field__btn--password"))
         signupPassword.type = "text"
-      else if (btn.classList.contains("signup-password__btn--confirm-password"))
+      else if (btn.classList.contains("input-field__btn--confirm-password"))
         signupConfirmPassword.type = "text"
-    } else if (btn.classList.contains("signup-password__btn--selected")) {
-      btn.classList.remove("signup-password__btn--selected")
-      btn.classList.add("signup-password__btn--unselected")
-      if (btn.classList.contains("signup-password__btn--password"))
+    } else if (btn.classList.contains("input-field__btn--selected")) {
+      btn.classList.remove("input-field__btn--selected")
+      btn.classList.add("input-field__btn--unselected")
+      if (btn.classList.contains("input-field__btn--password"))
         signupPassword.type = "password"
-      else if (btn.classList.contains("signup-password__btn--confirm-password"))
+      else if (btn.classList.contains("input-field__btn--confirm-password"))
         signupConfirmPassword.type = "password"
     }
   })
@@ -224,9 +226,9 @@ signupPasswordBtns.forEach(btn => {
 const signupPasswordStrengthDivs = [
   ...document.querySelectorAll("#signupPasswordStrength div")
 ]
-const signupPasswordStrengthtext = document.getElementsByClassName(
-  "signup-password-strength-text"
-)[0]
+const signupPasswordStrengthText = document.getElementById(
+  "signupPasswordStrengthText"
+)
 
 const signupPasswordRule8 = document.getElementById("signupPasswordRule8")
 const signupPasswordRuleNumber = document.getElementById(
@@ -273,17 +275,17 @@ function passwordStrengthChecker(PasswordParameter) {
     signupPasswordStrengthDivs[0].style.backgroundColor = "#61f743"
     signupPasswordStrengthDivs[1].style.backgroundColor = "#61f743"
     signupPasswordStrengthDivs[2].style.backgroundColor = "#61f743"
-    signupPasswordStrengthtext.textContent = "Good"
+    signupPasswordStrengthText.textContent = "Good"
   } else if (mediumPassword.test(PasswordParameter)) {
     signupPasswordStrengthDivs[0].style.backgroundColor = "#f7f143"
     signupPasswordStrengthDivs[1].style.backgroundColor = "#f7f143"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
-    signupPasswordStrengthtext.textContent = "Fair"
+    signupPasswordStrengthText.textContent = "Fair"
   } else {
     signupPasswordStrengthDivs[0].style.backgroundColor = "#fc4444"
     signupPasswordStrengthDivs[1].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
-    signupPasswordStrengthtext.textContent = "Week"
+    signupPasswordStrengthText.textContent = "Week"
   }
 }
 
@@ -303,12 +305,17 @@ signupPassword.addEventListener("input", () => {
     signupPasswordStrengthDivs[0].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[1].style.backgroundColor = "transparent"
     signupPasswordStrengthDivs[2].style.backgroundColor = "transparent"
-    signupPasswordStrengthtext.textContent = "None"
+    signupPasswordStrengthText.textContent = "None"
   } else {
-    passwordTimeout = setTimeout(
-      () => passwordStrengthChecker(signupPassword.value),
-      500
-    )
+    passwordTimeout = setTimeout(() => {
+      if (signupConfirmPassword.value !== "")
+        if (signupConfirmPassword.value === signupPassword.value) {
+          signupPasswordConfirmText.textContent = "Match"
+        } else {
+          signupPasswordConfirmText.textContent = "Not match"
+        }
+      passwordStrengthChecker(signupPassword.value)
+    }, 500)
   }
 })
 
@@ -323,14 +330,15 @@ let confirmPasswordTimeout
 signupConfirmPassword.addEventListener("input", () => {
   clearTimeout(confirmPasswordTimeout)
   confirmPasswordTimeout = setTimeout(() => {
-    if (signupConfirmPassword.value === signupPassword.value) {
-      signupPasswordConfirmText.textContent = "Match"
-    } else {
-      signupPasswordConfirmText.textContent = "Not match"
-    }
+    if (signupConfirmPassword.value !== "")
+      if (signupConfirmPassword.value === signupPassword.value) {
+        signupPasswordConfirmText.textContent = "Match"
+      } else {
+        signupPasswordConfirmText.textContent = "Not match"
+      }
   }, 500)
   if (signupConfirmPassword.value.length === 0) {
-    signupPasswordConfirmText.textContent = "Not match"
+    signupPasswordConfirmText.textContent = ""
   }
 })
 signupConfirmPassword.addEventListener("keyup", e => {
@@ -339,52 +347,75 @@ signupConfirmPassword.addEventListener("keyup", e => {
 
 //////////////////////////////////////////////////////////////
 // username input
+let specialRegex = new RegExp(`[^A-Za-z.0-9_\\s]`, "g") //special character, space is also excluded from special character
+let spaceRegex = new RegExp("\\s", "g") //space character
 
-signupUsername.addEventListener("change", () => {
-  let checkUsername = signupUsername.value
-  if (signupUsername.value !== "") {
-    fetch(
-      "/user-auth/check-username?checkUsername=" +
-        checkUsername +
-        "&firstName" +
-        signupFirstName.value
-    )
-      .then(res => {
-        if (res.ok) {
-          return res.json()
-        } else throw new Error("server error in generating username")
-      })
-      .then(data => {
-        if (data.isUnique) {
-          if (data.isChange) {
-            signupUsername.value = data.newUsername
-            createMainNotification(
-              "Your Username Changed Because Your Username Contains Special Characters"
-            )
+let alphaRegex = new RegExp("[a-zA-Z]", "g") // alphabate character
+signupUsername.addEventListener("keyup", e => {
+  signupUsername.value = signupUsername.value.replace(specialRegex, "")
+  signupUsername.value = signupUsername.value.replace(spaceRegex, "")
+})
 
-            signupUsername.classList.add("valid")
-          } else {
-            signupUsername.value = data.newUsername
-            signupUsername.classList.add("valid")
-          }
-        } else {
-          signupUsername.value = data.newUsername
-          createMainNotification(
-            "Your username is already registered, You can use this server generated username or try diffrent one.",
-            "error"
-          )
-        }
-      })
-      .catch(error => {
-        createMainNotification(
-          "Server Error, Please type Username Again",
-          "error"
-        )
-      })
-  } else {
-    signupUsername.classList.remove("valid")
+signupUsername.addEventListener("change", e => {
+  if (signupUsername.value.toString() === "") {
+    signupUsernameBox.classList.remove("valid")
   }
 })
+
+let usernameTimeout
+signupUsername.addEventListener("input", () => {
+  let username = signupUsername.value.toString()
+  if (username.search(specialRegex) !== -1) {
+    createMainNotification(
+      "Special characters (except .) are not allowed in username,Please remove them from your username",
+      "error"
+    )
+  } else if (username.search(spaceRegex) !== -1) {
+    createMainNotification(
+      "Spaces are not allowed in username ,Please remove space from your username",
+      "error"
+    )
+  } else {
+    if (username !== "") {
+      clearTimeout(usernameTimeout)
+      usernameTimeout = setTimeout(() => {
+        if (username.search(alphaRegex) === -1) {
+          createMainNotification(
+            "Please use atleast one alphabet (a-z or A-Z) in your username",
+            "error"
+          )
+        } else {
+          fetch("/user-auth/check-username?username=" + username)
+            .then(res => {
+              if (res.ok) {
+                return res.json()
+              } else throw new Error("server error in checking username")
+            })
+            .then(data => {
+              if (data.isSuccess) {
+                signupUsernameBox.classList.add("valid")
+              } else {
+                if (signupUsernameBox.classList.contains("valid"))
+                  signupUsernameBox.classList.remove("valid")
+                createMainNotification(data.error, "error")
+              }
+            })
+            .catch(err => {
+              if (signupUsernameBox.classList.contains("valid"))
+                signupUsernameBox.classList.remove("valid")
+              createMainNotification(
+                "Server Error, Please type Username Again",
+                "error"
+              )
+            })
+        }
+      }, 1000)
+    } else {
+      signupUsernameBox.classList.remove("valid")
+    }
+  }
+})
+
 const signupUsernameRefreshBtn = document.getElementById(
   "signupUsernameRefreshBtn"
 )
@@ -393,22 +424,28 @@ signupUsernameRefreshBtn.addEventListener("click", () => {
   if (!signupUsernameRefreshBtn.classList.contains("disabled")) {
     degree += 360
     signupUsernameRefreshBtn.style.rotate = `${degree}deg`
-    let firstName = signupFirstName.value
+    let firstName = signupFirstName.value.toString()
+
     signupUsernameRefreshBtn.classList.add("disabled")
 
-    fetch("/user-auth/generate-username?firstName=" + firstName)
+    fetch("/user-auth/generate-username?name=" + firstName)
       .then(res => {
         if (res.ok) {
           return res.json()
         } else throw new Error("server error in generating username")
       })
       .then(data => {
-        console.log(data)
-        signupUsername.value = data.newUsername
-        signupUsername.classList.add("valid")
-        signupUsernameRefreshBtn.classList.remove("disabled")
+        if (data.isSuccess) {
+          signupUsername.value = data.username
+          signupUsernameBox.classList.add("valid")
+          signupUsernameRefreshBtn.classList.remove("disabled")
+        } else {
+          signupUsernameRefreshBtn.classList.remove("disabled")
+          createMainNotification(data.error, "error")
+        }
       })
-      .catch(error => {
+      .catch(err => {
+        signupUsernameRefreshBtn.classList.remove("disabled")
         createMainNotification("Server Error, Please try Again", "error")
       })
   }
@@ -425,11 +462,15 @@ signupState.addEventListener("change", e => {
         throw new Error("error in generating cities")
       })
       .then(data => {
-        let options = `<option value="" selected disabled hidden>-- select city -- </option>`
-        data.citiesName.forEach(city => {
-          options += `<option value="${city}">${city}</option>`
-        })
-        signupCity.innerHTML = options
+        if (data.isSuccess) {
+          let options = `<option value="" selected disabled hidden>-- select city -- </option>`
+          data.citiesName.forEach(city => {
+            options += `<option value="${city}">${city}</option>`
+          })
+          signupCity.innerHTML = options
+        } else {
+          createMainNotification(data.error, "error")
+        }
       })
       .catch(err => {
         createMainNotification(
@@ -448,68 +489,77 @@ let mainAccountContainer = document.getElementById("mainAccountContainer")
 signupSubmitBtn.addEventListener("click", e => {
   if (signupBirthday.value !== "") {
     if (signupState.value !== "" && signupCity.value !== "") {
-      if (
-        mainAccountContainer.dataset.mobileNumber !== "" &&
-        mainAccountContainer.dataset.mobileNumber.length === 10
-      ) {
-        let signupGender
-        if (signupGenderMale.checked) signupGender = "male"
-        else if (signupGenderFemale.checked) signupGender = "female"
-        else signupGender = "other"
-        let signupData = {
-          signupMobile: mainAccountContainer.dataset.mobileNumber,
-          signupFirstName: signupFirstName.value,
-          signupLastName: signupLastName.value,
-          signupEmail: signupEmail.value,
-          signupPassword: signupPassword.value,
-          signupUsername: signupUsername.value,
-          signupGender: signupGender,
-          signupBirthday: signupBirthday.value,
-          signupCountry: "IN",
-          signupState: signupState.value,
-          signupCity: signupCity.value,
-          signupBio: signupBio.value,
-          signupProfile: signupProfile.dataset.profileKey
+      if (mainAccountContainer.dataset.accessToken !== "") {
+        const mobileValidator = /^[5-9][0-9]{9}$/
+        if (mobileValidator.test(mainAccountContainer.dataset.mobileNumber)) {
+          let signupGender
+          if (signupGenderMale.checked) signupGender = "male"
+          else if (signupGenderFemale.checked) signupGender = "female"
+          else signupGender = "other"
+          let signupData = {
+            signupAccessToken: mainAccountContainer.dataset.accessToken,
+            signupMobile: mainAccountContainer.dataset.mobileNumber,
+            signupFirstName: signupFirstName.value,
+            signupLastName: signupLastName.value || "",
+            signupEmail: signupEmail.value || "",
+            signupPassword: signupPassword.value,
+            signupUsername: signupUsername.value,
+            signupGender: signupGender || "male",
+            signupBirthday: signupBirthday.value || new Date(),
+            signupCountry: "IN",
+            signupState: signupState.value,
+            signupCity: signupCity.value,
+            signupBio: signupBio.value || "",
+            signupProfile: signupProfile.dataset.profileKey || ""
+          }
+          fetch("/user-auth/user-signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(signupData)
+          })
+            .then(res => {
+              if (res.ok) return res.json()
+              throw new Error("Server error in signing up")
+            })
+            .then(data => {
+              if (data.isSuccess) {
+                location.replace(`/user/${data.username}`)
+              } else {
+                createMainNotification(data.error, "error")
+              }
+            })
+            .catch(err => {
+              console.log(err)
+              createMainNotification(
+                "Server error in signing up, Please try again",
+                "error"
+              )
+            })
+        } else {
+          createMainNotification(
+            "Invalid Mobile Number, Please check it and send Otp again",
+            "error"
+          )
         }
-        fetch("/user-auth/user-signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(signupData)
-        })
-          .then(res => {
-            if (res.ok) return res.json()
-            throw new Error("Error in signing up user")
-          })
-          .then(data => {
-            if (data.isSuccess) {
-              location.replace(`/user/${data.username}`)
-            } else {
-              createMainNotification(data.error, "error")
-            }
-          })
-          .catch(err => {
-            console.log(err)
-            createMainNotification(
-              "Server Error In Sign Up, Please try Again",
-              "error"
-            )
-          })
       } else {
-        createMainNotification("Server error ", "error")
+        createMainNotification(
+          "There are some problem, Please send OTP again",
+          "error"
+        )
       }
     } else {
-      if (signupState.value == "") {
-        createMainNotification("Please Select A state")
+      if (signupState.value === "") {
+        createMainNotification("Please select a state")
         signupState.focus()
-      } else if (signupCity.value == "") {
-        createMainNotification("Please Select A city")
+      } else if (signupCity.value === "") {
+        createMainNotification("Please select a city")
         signupCity.focus()
       }
     }
   } else {
-    createMainNotification("Please Enter Your BirthDay")
+    createMainNotification("Please enter your birthDay")
     signupBirthday.focus()
   }
 })

@@ -1024,8 +1024,8 @@ function createLinkPreview(linkPreviewData, isScrolledToBottom = false) {
          </p>
     </a>
   `
-  linkPreview.getElementsByClassName("link-preview__link")[0].href = "#"
-  // linkPreviewData.url || "#"
+  linkPreview.getElementsByClassName("link-preview__link")[0].href =
+    linkPreviewData.url
 
   let linkPreviewPic =
     linkPreview.getElementsByClassName("link-preview__pic")[0]

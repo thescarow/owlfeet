@@ -28,8 +28,6 @@ router.get("/login", getLoginUser, getAccountPage)
 router.get("/signin", getLoginUser, getAccountPage)
 router.get("/signup", getLoginUser, getAccountPage)
 router.get("/register", getLoginUser, getAccountPage)
-router.get("/account", getLoginUser, getAccountPage)
-router.get("/profile", getLoginUser, getAccountPage)
 ///////////////////////////////////////////////////////
 
 router.post("/send-signup-mobile-otp", checkNewMobile, sendMobileOtp)
