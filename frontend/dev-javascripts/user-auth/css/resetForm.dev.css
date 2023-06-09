@@ -8,21 +8,6 @@ label::selection {
     background-color: transparent;
 }
 
-.main-reset-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    /* align-self: flex-end; */
-    background: rgba(var(--rgba-dark-color), 1);
-}
-
-
-
 .reset-form-container {
     display: flex;
     flex-direction: column;
@@ -30,6 +15,23 @@ label::selection {
     align-items: center;
     overflow: hidden;
     position: relative;
+
+    animation: resetFormContainerAnim 1s 1 cubic-bezier(0, 0.96, 0.67, 0.52) both;
+}
+
+.reset-form-container--hide {
+    display: none;
+}
+
+@keyframes resetFormContainerAnim {
+    0% {
+        transform: translate(0, -100%);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+
 }
 
 @media screen and (min-width: 400px) {

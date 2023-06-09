@@ -24,27 +24,45 @@ exports.getLoginUser = async (req, res, next) => {
 
 exports.checkNewMobile = async (req, res, next) => {
   const mobile = req.body.mobile
-  const user = await User.find({ mobile: mobile }).select({ _id: 1 }).lean()
-  if (user.length) {
-    res.json({
-      success: false,
-      error:
-        "User already registered with this number, please try diffrent number"
-    })
+  if (mobile) {
+    const user = await User.findOne({ mobile: mobile })
+      .select({ _id: 1 })
+      .lean()
+    if (user) {
+      res.json({
+        isSuccess: false,
+        error:
+          "User already registered with this number, please try diffrent number"
+      })
+    } else {
+      next()
+    }
   } else {
-    next()
+    res.json({
+      isSuccess: false,
+      error: "Please send all the required data with the request"
+    })
   }
 }
 exports.checkRegisterMobile = async (req, res, next) => {
   const mobile = req.body.mobile
-  const user = await User.find({ mobile: mobile }).select({ _id: 1 }).lean()
-  if (user.length) {
-    next()
+  if (mobile) {
+    const user = await User.findOne({ mobile: mobile })
+      .select({ _id: 1 })
+      .lean()
+    if (user) {
+      next()
+    } else {
+      res.json({
+        isSuccess: false,
+        error:
+          "This mobile number is not registered,please check your number and try again"
+      })
+    }
   } else {
     res.json({
-      success: false,
-      error:
-        "Error: This mobile number is not registered,please try with registered number"
+      isSuccess: false,
+      error: "Please send all the required data with the request"
     })
   }
 }

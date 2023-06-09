@@ -22,7 +22,7 @@ const resetMobileNumber = document.getElementById("resetMobileNumber")
 
 const resetMobileData = document.getElementById("resetMobileData") //from otp page
 const sendResetOtpBtn = document.getElementById("sendResetOtpBtn")
-let resetOtpActivityBtn = document.getElementById("resetOtpActivityBtn")
+let sendResetOtpAgainBtn = document.getElementById("sendResetOtpAgainBtn")
 
 let resetOtpActivityTimer = document.getElementById("resetOtpActivityTimer")
 
@@ -34,8 +34,8 @@ let resetOtpTimerCounter = 0
 
 let currentResetMobileNumber = 0
 function startResetOtpTimer() {
-  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--disabled")
-  resetOtpActivityTimer.classList.add("reset-otp-activity-field__timer--show")
+  sendResetOtpAgainBtn.classList.add("otp-activity__btn--disabled")
+  resetOtpActivityTimer.classList.add("otp-activity__timer--show")
 
   resetOtpTimerCounter = 120
   let timerId
@@ -51,12 +51,8 @@ function startResetOtpTimer() {
       clearInterval(timerId)
       resetOtpActivityMinute.textContent = "02:"
       resetOtpActivitySecond.textContent = "00"
-      resetOtpActivityBtn.classList.remove(
-        "reset-otp-activity-field__btn--disabled"
-      )
-      resetOtpActivityTimer.classList.remove(
-        "reset-otp-activity-field__timer--show"
-      )
+      sendResetOtpAgainBtn.classList.remove("otp-activity__btn--disabled")
+      resetOtpActivityTimer.classList.remove("otp-activity__timer--show")
     }
   }, 1000)
 }
@@ -120,17 +116,15 @@ sendResetOtpBtn.addEventListener("click", () => {
   }
 })
 
-resetOtpActivityBtn.addEventListener("click", e => {
-  resetOtpActivityBtn.classList.add("reset-otp-activity-field__btn--click")
+sendResetOtpAgainBtn.addEventListener("click", e => {
+  sendResetOtpAgainBtn.classList.add("otp-activity__btn--click")
   setTimeout(() => {
-    resetOtpActivityBtn.classList.remove("reset-otp-activity-field__btn--click")
+    sendResetOtpAgainBtn.classList.remove("otp-activity__btn--click")
   }, 500)
 
   if (mobileValidator.test(resetMobileNumber.value)) {
     if (
-      !resetOtpActivityBtn.classList.contains(
-        "reset-otp-activity-field__btn--disabled"
-      )
+      !sendResetOtpAgainBtn.classList.contains("otp-activity__btn--disabled")
     ) {
       let data = { mobile: resetMobileNumber.value }
 
@@ -263,28 +257,24 @@ let resetPassword = document.getElementById("resetPassword")
 let resetConfirmPassword = document.getElementById("resetConfirmPassword")
 
 const resetPasswordBtn = [
-  ...document.getElementsByClassName("reset-input-field__btn")
+  ...document.getElementsByClassName("input-field__btn--toggle-password-view")
 ]
 
 resetPasswordBtn.forEach(btn => {
   btn.addEventListener("click", () => {
-    if (btn.classList.contains("reset-input-field__btn--unselected")) {
-      btn.classList.remove("reset-input-field__btn--unselected")
-      btn.classList.add("reset-input-field__btn--selected")
-      if (btn.classList.contains("reset-input-field__btn--password"))
+    if (btn.classList.contains("input-field__btn--unselected")) {
+      btn.classList.remove("input-field__btn--unselected")
+      btn.classList.add("input-field__btn--selected")
+      if (btn.classList.contains("input-field__btn--password"))
         resetPassword.type = "text"
-      else if (
-        btn.classList.contains("reset-input-field__btn--confirm-password")
-      )
+      else if (btn.classList.contains("input-field__btn--confirm-password"))
         resetConfirmPassword.type = "text"
-    } else if (btn.classList.contains("reset-input-field__btn--selected")) {
-      btn.classList.remove("reset-input-field__btn--selected")
-      btn.classList.add("reset-input-field__btn--unselected")
-      if (btn.classList.contains("reset-input-field__btn--password"))
+    } else if (btn.classList.contains("input-field__btn--selected")) {
+      btn.classList.remove("input-field__btn--selected")
+      btn.classList.add("input-field__btn--unselected")
+      if (btn.classList.contains("input-field__btn--password"))
         resetPassword.type = "password"
-      else if (
-        btn.classList.contains("reset-input-field__btn--confirm-password")
-      )
+      else if (btn.classList.contains("input-field__btn--confirm-password"))
         resetConfirmPassword.type = "password"
     }
   })

@@ -6,15 +6,15 @@
     <div class="reset-form-container" id="resetFormContainer">
 
         <header>Reset Password</header>
-        <div class="reset-progress" id="resetProgress">
-            <div class="reset-progress__info">
-                <div class="reset-progress__info-step" id="resetProgressInfoStep">STEP: 1 OF 3</div>
-                <div class="reset-progress__info-step-info" id="resetProgressInfoStepInfo">Your Mobile
+        <div class="activity-progress activity-progress--reset" id="resetProgress">
+            <div class="activity-progress__info">
+                <div class="activity-progress__info-step" id="resetProgressInfoStep">STEP: 1 OF 3</div>
+                <div class="activity-progress__info-step-info" id="resetProgressInfoStepInfo">Your Mobile
                     Number
                 </div>
             </div>
-            <div class="reset-progress__bar">
-                <div class="reset-progress__bar-highlighter" id="resetProgressBarhighlighter"></div>
+            <div class="activity-progress__bar">
+                <div class="activity-progress__bar-highlighter" id="resetProgressBarhighlighter"></div>
             </div>
 
         </div>
@@ -25,15 +25,16 @@
 
             <div class="reset-form-page reset-form-page--mobile" id="resetFormPage1">
 
-                <div class="reset-input-field ">
-                    <label class="reset-input-field__label" for="resetMobile">Mobile</label>
-                    <div class="reset-input-field__input-box reset-input-field__input-box--mobile">
-                        <input class="reset-input-field__input reset-input-field__input--mobile" type="number"
+                <div class="input-field">
+                    <label class="input-field__label" for="resetMobile">Mobile</label>
+                    <div class="input-field__input-box input-field__input-box--mobile">
+                        <input class="input-field__input input-field__input--mobile" type="number"
                             id="resetMobileNumber" placeholder="Your mobile number..." autocomplete="off" size="10"
                             maxlength="10" required min="0" max="9999999999" pattern="[56789]\d{9}"
                             oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 
-                        <div id="sendResetOtpBtn" class="reset-input-field__btn reset-input-field__btn--send-reset-otp">
+                        <div id="sendResetOtpBtn"
+                            class="input-field__btn input-field__btn--single-icon input-field__btn--send-reset-otp">
                             <%- include('../partials/icons/resetPasswordSendOtpIcon.svg') -%>
                         </div>
                     </div>
@@ -52,9 +53,9 @@
                 </div>
 
 
-                <div class="reset-input-field reset-input-field--reset-otp" id="otp">
-                    <label class="reset-input-field__label" for="resetMobile">OTP</label>
-                    <div class="reset-input-field__otp" id="resetOtpInputs">
+                <div class="input-field input-field--reset-otp" id="otp">
+                    <label class="input-field__label" for="resetMobile">OTP</label>
+                    <div class="input-field__otp" id="resetOtpInputs">
                         <input type="number" maxlength="1" min="0" max="9" />
                         <input type="number" maxlength="1" min="0" max="9" />
                         <input type="number" maxlength="1" min="0" max="9" />
@@ -65,21 +66,21 @@
 
                 </div>
 
-                <div class="reset-otp-activity-field" id="resetOtpActivityField">
-                    <div class="reset-otp-activity-field__timer" id="resetOtpActivityTimer">
+                <div class="otp-activity otp-activity--reset" id="resetOtpActivityField">
+                    <div class="otp-activity__timer" id="resetOtpActivityTimer">
                         <span id="resetOtpActivityMinute">02:
                         </span>
                         <span id="resetOtpActivitySecond">00
                         </span>
                     </div>
 
-                    <button class="reset-otp-activity-field__btn" id="resetOtpActivityBtn">
+                    <button class="otp-activity__btn" id="sendResetOtpAgainBtn">
                         <span>Send OTP</span>
                     </button>
                 </div>
 
-                <div class="reset-btn-field reset-btn-field--center-align">
-                    <div class="reset-btn" id="getNewPasswordFormBtn">
+                <div class="input-btn-field input-btn-field--center-align">
+                    <div class="input-btn" id="getNewPasswordFormBtn">
                         <%- include('../partials/icons/authNextIcon.svg') -%>
                             </span>
                     </div>
@@ -89,28 +90,28 @@
 
             <div class="reset-form-page" id="resetFormPage3">
 
-                <div class="reset-input-field">
-                    <label class="reset-input-field__label" for="Password">Set up password<span>*</span>
+                <div class="input-field">
+                    <label class="input-field__label" for="Password">Set up password<span>*</span>
                     </label>
-                    <h2 class="reset-input-field__title reset-input-field__title--reset">Please create a secure password
+                    <h2 class="input-field__title input-field__title--reset">Please create a secure password
                         including the following
                         criteria below.</h2>
-                    <ul class="reset-input-field__desc-list  reset-input-field__desc-list--reset">
+                    <ul class="input-field__desc-list  input-field__desc-list--reset">
                         <li class="password-rules" id="resetPasswordRule8">atleast 8 letters</li>
                         <li class="password-rules" id="resetPasswordRuleNumber">numbers</li>
                         <li class="password-rules" id="resetPasswordRuleUpper">capital letters</li>
                         <li class="password-rules" id="resetPasswordRuleSpecial">special characters</li>
                     </ul>
-                    <div class="reset-input-field__input-box">
-                        <input class="reset-input-field__input reset-input-field__input--password" type="password"
+                    <div class="input-field__input-box">
+                        <input class="input-field__input input-field__input--password" type="password"
                             name="resetPassword" id="resetPassword" autocomplete="off">
-                        <div
-                            class="reset-input-field__btn reset-input-field__btn--password   reset-input-field__btn--unselected">
-                            <div class="reset-input-field__btn-icon reset-input-field__btn-icon--unselected ">
+                        <div class="input-field__btn input-field__btn--toggle-password-view
+                         input-field__btn--password   input-field__btn--unselected">
+                            <div class="input-field__btn-icon input-field__btn-icon--unselected ">
                                 <%- include('../partials/icons/authPasswordHideIcon.svg') _%>
 
                             </div>
-                            <div class="reset-input-field__btn-icon reset-input-field__btn-icon--selected ">
+                            <div class="input-field__btn-icon input-field__btn-icon--selected ">
                                 <%- include('../partials/icons/authPasswordShowIcon.svg') _%>
 
                             </div>
@@ -126,19 +127,19 @@
 
 
                 </div>
-                <div class="reset-input-field">
-                    <label class="reset-input-field__label" for="ConfirmPassword">Confirm password
+                <div class="input-field">
+                    <label class="input-field__label" for="ConfirmPassword">Confirm password
                     </label>
-                    <div class="reset-input-field__input-box reset-input-field__input-box--confirm-box">
-                        <input class="reset-input-field__input reset-input-field__input--confirm-password"
-                            type="password" name="cPassword" id="resetConfirmPassword" autocomplete="off">
+                    <div class="input-field__input-box input-field__input-box--confirm-box">
+                        <input class="input-field__input input-field__input--confirm-password" type="password"
+                            name="cPassword" id="resetConfirmPassword" autocomplete="off">
                         <div
-                            class="reset-input-field__btn reset-input-field__btn--confirm-password reset-input-field__btn--unselected">
-                            <div class="reset-input-field__btn-icon reset-input-field__btn-icon--unselected ">
+                            class="input-field__btn input-field__btn--toggle-password-view input-field__btn--confirm-password input-field__btn--unselected">
+                            <div class="input-field__btn-icon input-field__btn-icon--unselected ">
                                 <%- include('../partials/icons/authPasswordHideIcon.svg') _%>
 
                             </div>
-                            <div class="reset-input-field__btn-icon reset-input-field__btn-icon--selected ">
+                            <div class="input-field__btn-icon input-field__btn-icon--selected ">
                                 <%- include('../partials/icons/authPasswordShowIcon.svg') _%>
 
                             </div>
@@ -151,13 +152,11 @@
 
                 </div>
 
-                <div class="reset-btn-field reset-btn-field--right-align">
-                    <div class="reset-btn reset-btn--text" id="submitResetPasswordBtn">Submit</div>
+                <div class="input-btn-field input-btn-field--right-align">
+                    <div class="input-btn input-btn--text" id="submitResetPasswordBtn">Submit</div>
                 </div>
 
             </div>
         </div>
-
     </div>
-</div>
 </div>

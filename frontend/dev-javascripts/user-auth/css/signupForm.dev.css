@@ -8,6 +8,7 @@ label::selection {
     background-color: transparent;
 }
 
+/* 
 .main-account-container {
     position: relative;
     overflow: hidden;
@@ -17,9 +18,8 @@ label::selection {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    /* align-self: flex-end; */
     background: rgba(var(--rgba-dark-color), 1);
-}
+} */
 
 
 
@@ -30,6 +30,19 @@ label::selection {
     align-items: center;
     overflow: hidden;
     position: relative;
+    animation: signupFormContainerAnim 1s 1 cubic-bezier(0, 0.96, 0.67, 0.52) both;
+}
+
+
+@keyframes signupFormContainerAnim {
+    0% {
+        transform: translate(0, -100%);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+
 }
 
 @media screen and (min-width: 400px) {
@@ -59,7 +72,7 @@ label::selection {
     color: rgba(var(--rgba-light-color), 1);
 }
 
-.signup-progress {
+.activity-progress {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -70,7 +83,7 @@ label::selection {
     /* border-bottom: 1px solid rgba(var(--rgba-third-color), 0.2); */
 }
 
-.signup-progress::after {
+.activity-progress::after {
     content: '';
     width: 100%;
     height: 4px;
@@ -81,37 +94,39 @@ label::selection {
     background: linear-gradient(rgba(var(--rgba-third-color), 1), transparent);
 }
 
-.signup-progress__info {
+.activity-progress__info {
     align-self: flex-start;
     /* margin-left: 15px; */
 }
 
-.signup-progress__info-step {
+.activity-progress__info-step {
     font-size: 15px;
     font-weight: 800;
     color: rgba(var(--rgba-light-color), 0.6);
 }
 
-.signup-progress__info-step-info {
+.activity-progress__info-step-info {
     font-size: 18px;
     font-weight: 800;
     color: rgba(var(--rgba-light-color), 1);
 }
 
-.signup-progress__bar {
+.activity-progress__bar {
     width: 100%;
     height: 8px;
     border-radius: 20px;
     border: 2px solid rgba(var(--rgba-third-color), 0.9);
 }
 
-.signup-progress__bar-highlighter {
+.activity-progress__bar-highlighter {
     height: 100%;
     width: 25%;
     border-radius: 20px 0 0 20px;
     background-color: rgba(var(--rgba-third-color), 0.9);
     transition: all 0.8s;
 }
+
+/* .activity-progress--signup {} */
 
 
 /* signup form start  */
@@ -171,7 +186,7 @@ label::selection {
 }
 
 
-.signup-profile {
+.profile-field {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -180,7 +195,7 @@ label::selection {
     margin-top: 14px;
 }
 
-.signup-profile__pic {
+.profile-field__pic {
 
     width: 120px;
     height: 120px;
@@ -194,12 +209,12 @@ label::selection {
 
 }
 
-.signup-profile__pic svg {
+.profile-field__pic svg {
     fill: rgba(var(--rgba-first-color), 1);
     padding: 15px;
 }
 
-.signup-profile__pic img {
+.profile-field__pic img {
     width: 100%;
     height: 100%;
     background-position: center;
@@ -208,7 +223,7 @@ label::selection {
 
 }
 
-.signup-profile__title {
+.profile-field__title {
     margin-top: 5px;
     text-decoration: underline;
     font-size: 15px;
@@ -218,7 +233,9 @@ label::selection {
     cursor: pointer;
 }
 
-.signup-input-field {
+/* .profile-field--signup {} */
+
+.input-field {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -227,9 +244,8 @@ label::selection {
     padding: 25px 10px 0 10px;
 }
 
-/* .signup-input-field--half {} */
-
-.signup-input-field__label {
+/* .input-field--signup{} */
+.input-field__label {
     width: 100%;
     font-size: 18px;
     font-weight: 800;
@@ -237,7 +253,7 @@ label::selection {
     color: rgba(var(--rgba-first-color), 0.8);
 }
 
-.signup-input-field__label span {
+.input-field__label span {
     /* related to parent font size  */
     font-size: 1.1em;
     position: relative;
@@ -246,12 +262,12 @@ label::selection {
     color: rgba(var(--rgba-third-color), 0.5);
 }
 
-.signup-input-field__input-box {
+.input-field__input-box {
     width: 100%;
     position: relative;
 }
 
-.signup-input-field__input {
+.input-field__input {
     position: relative;
     width: 100%;
     font-size: 18px;
@@ -261,17 +277,20 @@ label::selection {
     outline: none;
     border-radius: 10px;
     letter-spacing: 1.4px;
-    box-shadow: 1px 3px 13px rgba(var(--rgba-third-color), 1);
+    box-shadow: 0px 2px 6px rgba(var(--rgba-first-color), 1);
     background: rgba(var(--rgba-first-color), 1);
     color: rgba(var(--rgba-fourth-color), 1);
 }
 
-.signup-input-field__input:focus {
-    /* border: 1px solid rgba(var(--rgba-third-color), 0.2); */
-    box-shadow: 0px 2px 6px rgba(var(--rgba-third-color), 0.8);
+
+
+.input-field__input:focus {
+    /* border: 1px solid rgba(var(--rgba-third-color), 0.8); */
+    box-shadow: 0px 2px 6px rgba(var(--rgba-first-color), 1);
 }
 
-.signup-btn-field {
+
+.input-btn-field {
     position: relative;
     width: 100%;
     margin: 20px 0 0 0;
@@ -282,39 +301,42 @@ label::selection {
     align-items: center;
 }
 
-.signup-btn-field--right-align {
+
+
+.input-btn-field--right-align {
     justify-content: flex-end;
 }
 
-.signup-btn-field--center-align {
+.input-btn-field--center-align {
     justify-content: center;
 }
 
-.signup-btn {
+.input-btn {
     width: 50px;
     height: 50px;
     cursor: pointer;
 }
 
-.signup-btn svg {
+.input-btn svg {
     fill: rgba(var(--rgba-first-color), 1);
 }
 
-.signup-btn--next {}
 
-.signup-btn--next svg {
+.input-btn--next-page {}
+
+.input-btn--next-page svg {
     /* fill: rgba(var(--rgba-second-color), 1); */
 }
 
-.signup-btn--prev {}
+.input-btn--prev-page {}
 
-.signup-btn--prev svg {
+.input-btn--prev-page svg {
     /*     fill: rgba(var(--rgba-third-color), 1); */
 }
 
 /* page second */
 
-.signup-input-field__title {
+.input-field__title {
     margin-top: 10px;
     width: 100%;
     font-size: 18px;
@@ -322,12 +344,13 @@ label::selection {
     color: rgba(var(--rgba-first-color), 0.5);
 }
 
-.signup-input-field__desc-list {
+
+.input-field__desc-list {
     margin: 10px 0 15px 22px;
     width: 100%;
 }
 
-.signup-input-field__desc-list li {
+.input-field__desc-list li {
     margin: 0px 0 0 0;
     width: 100%;
     font-size: 17px;
@@ -335,18 +358,22 @@ label::selection {
     color: rgba(var(--rgba-first-color), 0.6);
 }
 
-.signup-input-field__desc-list li.true {
+
+
+.input-field__desc-list li.true {
     color: rgba(var(--rgba-second-color), 1);
 }
 
-.signup-input-field__input-box--confirm-box {
+
+
+.input-field__input-box--confirm-box {
     margin: 7px 0 0 0;
 }
 
 
 
 
-.signup-password__btn {
+.input-field__btn {
     position: absolute;
     top: 50%;
     right: 11px;
@@ -356,28 +383,28 @@ label::selection {
     cursor: pointer;
 }
 
-.signup-password__btn-icon {
+.input-field__btn-icon {
     width: 100%;
     height: 100%;
 }
 
-.signup-password__btn-icon svg {
+.input-field__btn-icon svg {
     fill: rgba(var(--rgba-fourth-color), 1);
 }
 
-.signup-password__btn-icon--selected {
+.input-field__btn-icon--selected {
     display: none;
 }
 
-.signup-password__btn-icon--unselected {
+.input-field__btn-icon--unselected {
     display: none;
 }
 
-.signup-password__btn--selected .signup-password__btn-icon--selected {
+.input-field__btn--selected .input-field__btn-icon--selected {
     display: inline-block;
 }
 
-.signup-password__btn--unselected .signup-password__btn-icon--unselected {
+.input-field__btn--unselected .input-field__btn-icon--unselected {
     display: inline-block;
 }
 
@@ -385,7 +412,7 @@ label::selection {
 
 
 
-.signup-password-strength {
+.password-strength {
 
     width: 100%;
     /* bcs input field is 90% */
@@ -395,7 +422,7 @@ label::selection {
     margin-top: 10px;
 }
 
-.signup-password-strength div {
+.password-strength div {
     width: 25%;
     height: 10px;
     background: rgba(var(--rgba-light-color), 0.1);
@@ -404,7 +431,8 @@ label::selection {
     transition: all 0.5s;
 }
 
-.signup-password-strength div:last-child {
+
+.password-strength div:last-child {
     width: 25%;
     text-align: center;
     background: transparent;
@@ -415,7 +443,8 @@ label::selection {
     color: rgba(var(--rgba-first-color), 0.6);
 }
 
-.signup-password-confirm {
+
+.password-confirm {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -424,7 +453,7 @@ label::selection {
 
 }
 
-.signup-password-confirm-text {
+.password-confirm-text {
     width: 100%;
     text-align: right;
     background: transparent;
@@ -435,21 +464,50 @@ label::selection {
     color: rgba(var(--rgba-first-color), 0.6);
 }
 
-
 /* signup page 3  */
 
-
-.signup-input-field__desc-list li.not-use {
+.input-field__desc-list li.not-use {
     color: #cf7d7d;
 }
 
-.signup-input-field__input--username {}
 
-.signup-input-field__input--username.valid {
-    box-shadow: 0px 2px 6px rgba(var(--rgba-second-color), 0.5);
+.input-field__input-box--username {
+       border-radius: 10px;
+    box-shadow: 0px 2px 6px rgba(var(--rgba-first-color), 1);
+
 }
 
-.signup-username__btn {
+.input-field__input-box--username.valid {
+    box-shadow: 0px 0px 0px 3px rgba(var(--rgba-second-color), 1);
+}
+
+.input-field__input-info--username {
+    position: absolute;
+    top: 50%;
+    right: 42px;
+    transform: translate(0, -50%);
+    width: 22px;
+    height: 22px;
+    display: none;
+}
+
+.input-field__input-info--username svg {
+    fill: rgba(var(--rgba-second-color), 1);
+}
+
+.input-field__input-box--username.valid .input-field__input-info--username {
+    display: inline-block;
+}
+
+.input-field__input--username {
+    box-shadow: none;
+}
+
+.input-field__input--username:focus {
+    box-shadow: none;
+}
+
+.input-field__btn--single-icon {
     position: absolute;
     width: 23px;
     height: 23px;
@@ -461,11 +519,11 @@ label::selection {
     cursor: pointer;
 }
 
-.signup-username__btn.disabled {
+.input-field__btn--single-icon.disabled {
     cursor: auto;
 }
 
-.signup-username__btn svg {
+.input-field__btn--single-icon svg {
     fill: rgba(var(--rgba-fourth-color), 0.7);
 }
 
@@ -544,20 +602,25 @@ label::selection {
 
 
 
-.signup-input-field__input--select {}
+.input-field__input--select {}
 
 #signupCity {
     display: none;
     margin: 15px 0 0 0;
 }
 
-.signup-input-field__input--select option {
+.input-field__input--select option {
     text-align: left;
     color: rgba(var(--rgba-light-color), 0.5);
     background: rgba(var(--rgba-first-color), 1);
 }
 
-.signup-input-field__input--select option:first-child {
+.input-field__input--select option:first-child {
+    text-align: center;
+
+}
+
+.input-field__input--select .input-field__input--select option:first-child {
     text-align: center;
 
 }
@@ -576,14 +639,13 @@ select::-ms-expand {
     display: none;
 }
 
-.signup-input-field__input--textarea {
+.input-field__input--textarea {
     height: 88px;
 
 }
 
 
-
-.signup-btn--submit {
+.input-btn--submit {
     background: rgba(var(--rgba-third-color), 1);
     width: auto;
     height: auto;
@@ -594,7 +656,9 @@ select::-ms-expand {
     color: rgba(var(--rgba-first-color), 1);
 }
 
-.signup-btn--submit:hover {
+
+
+.input-btn--submit:hover {
     background: rgba(var(--rgba-first-color), 1);
     color: rgba(var(--rgba-third-color), 1);
 }

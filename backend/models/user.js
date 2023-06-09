@@ -81,6 +81,11 @@ const userSchema = new mongoose.Schema(
       trim: true
     },
 
+    allPassword: {
+      type: [{ type: String, trim: true }],
+      default: []
+    },
+
     email: {
       type: String,
       trim: true,
