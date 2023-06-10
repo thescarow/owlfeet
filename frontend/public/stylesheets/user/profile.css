@@ -20,11 +20,35 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background-color: var(--light-color);
+    background-color: rgba(var(--rgba-light-color), 1);
+
 }
 
 
+.profile-content-box {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 100%;
+    border: 2px solid rgba(var(--rgba-dark-color), 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(var(--rgba-light-color), 1);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
 
+.profile-content-box::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
 
 
 
@@ -329,13 +353,15 @@
 
 .profilePosts {
     width: 33%;
-    height: 65px;
+    height: 200px;
     border: 1px solid #fff;
 }
 
 .profilePosts img {
+    /* object-fit: contain; */
     width: 100%;
     height: 100%;
+
 }
 
 /* private profile content */
