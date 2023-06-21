@@ -18,51 +18,57 @@ exports.userFeedbackReport = async (req, res) => {
   try {
     if (req.user) {
       let { userFeedbackReportType, userFeedbackReportValue } = req.body
+      if (userFeedbackReportValue && userFeedbackReportType) {
+        userFeedbackReportValue = DOMPurify.sanitize(
+          userFeedbackReportValue
+        ).trim()
 
-      userFeedbackReportValue = DOMPurify.sanitize(
-        userFeedbackReportValue
-      ).trim()
+        if (userFeedbackReportValue !== "" && userFeedbackReportType !== "") {
+          if (userFeedbackReportType === "feedback") {
+            const feedback = new Feedback({
+              user: req.user.id,
+              username: req.user.username || "",
+              feedback: userFeedbackReportValue
+            })
+            await feedback.save()
+            res.json({
+              isSuccess: true
+            })
+          } else if (userFeedbackReportType == "report") {
+            const report = new Report({
+              user: req.user.id,
+              username: req.user.username || "",
+              report: userFeedbackReportValue
+            })
+            await report.save()
 
-      if (userFeedbackReportValue != "" && userFeedbackReportType != "") {
-        if (userFeedbackReportType == "feedback") {
-          const feedback = new Feedback({
-            user: req.user.id,
-            username: req.user.username || " ",
-            feedback: userFeedbackReportValue
-          })
-          await feedback.save()
-          res.json({
-            isSuccess: true
-          })
-        } else if (userFeedbackReportType == "report") {
-          const report = new Report({
-            user: req.user.id,
-            username: req.user.username || " ",
-            report: userFeedbackReportValue
-          })
-          await report.save()
-
-          res.json({
-            isSuccess: true
-          })
+            res.json({
+              isSuccess: true
+            })
+          } else {
+            res.json({
+              isSuccess: false,
+              error: "You are not allowed to do this operation"
+            })
+          }
         } else {
           res.json({
             isSuccess: false,
-            error: "You Are Not Allowed To Do This Operation"
+            error: `Please fill all the fields, Before submitting your ${
+              userFeedbackReportType == "feedback" ? "Feedback" : "Report"
+            }`
           })
         }
       } else {
         res.json({
           isSuccess: false,
-          error: `Please Fill All The Fields, Before Submitting The ${
-            userFeedbackReportType == "feedback" ? "Feedback" : "Report"
-          }`
+          error: "Please send all the required data with the request"
         })
       }
     } else {
       res.json({
         isSuccess: false,
-        error: `You Are Not Logged In, Please Login First To Send Your ${
+        error: `You are not logged in, Please login first to send your ${
           userFeedbackReportType == "feedback" ? "Feedback" : "Report"
         }`
       })
@@ -74,7 +80,7 @@ exports.userFeedbackReport = async (req, res) => {
     )
     res.status(500).json({
       isSuccess: false,
-      error: "Server Error In Your Feedback/Report,Please Try Again"
+      error: "Server error in your Feedback/Report,Please try again"
     })
   }
 }

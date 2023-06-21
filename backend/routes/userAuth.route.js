@@ -21,7 +21,8 @@ const {
   editUserProfile,
   changeUserPassword,
   userFeedbackReport,
-  switchUserPrivacy
+  switchUserPrivacy,
+  sendEmailVerification
 } = require("../controllers/user-auth")
 
 router.get("/login", getLoginUser, getAccountPage)
@@ -40,11 +41,12 @@ router.post("/user-signup", userSignup)
 router.post("/user-login", userLogin)
 router.get("/reset-password", getLoginUser, getResetPasswordPage)
 router.post("/reset-password", resetPassword)
-router.get("/user-logout", getLoginUser, userLogout)
+router.post("/user-logout", getLoginUser, userLogout)
 //////////////////////////////////////////////////
 router.patch("/edit-user-profile", getLoginUser, editUserProfile)
 router.patch("/change-user-password", getLoginUser, changeUserPassword)
+router.patch("/switch-user-privacy", getLoginUser, switchUserPrivacy)
+router.post("/send-email-verification", getLoginUser, sendEmailVerification)
 router.post("/user-feedback-report", getLoginUser, userFeedbackReport)
-router.post("/switch-user-privacy", getLoginUser, switchUserPrivacy)
 
 module.exports = router

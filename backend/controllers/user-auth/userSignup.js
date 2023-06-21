@@ -30,16 +30,18 @@ exports.userSignup = async (req, res) => {
       signupData.signupProfile && signupData.signupProfile.toString() !== ""
         ? signupData.signupProfile.toString()
         : ""
+    // because signup profile is already check here
     if (
-      signupData.signupProfile &&
-      signupData.signupMobile &&
-      signupData.signupFirstName &&
-      signupData.signupPassword &&
-      signupData.signupUsername &&
-      signupData.signupState &&
-      signupData.signupCity &&
-      signupData.signupBirthday &&
-      signupData.signupAccessToken
+      !(
+        signupData.signupMobile &&
+        signupData.signupFirstName &&
+        signupData.signupPassword &&
+        signupData.signupUsername &&
+        signupData.signupState &&
+        signupData.signupCity &&
+        signupData.signupBirthday &&
+        signupData.signupAccessToken
+      )
     ) {
       deleteAwsKey(signupData.signupProfile)
       return res.json({
@@ -116,7 +118,6 @@ exports.userSignup = async (req, res) => {
                     signupData.signupPassword,
                     10
                   )
-
                   const createdUser = new User({
                     firstName: signupData.signupFirstName,
                     lastName: signupData.signupLastName || "",
@@ -129,6 +130,7 @@ exports.userSignup = async (req, res) => {
                     "location.state": signupData.signupState || "",
                     birthday: new Date(signupData.signupBirthday) || new Date(),
                     password: signupHashedPassword,
+                    allPassword: [signupHashedPassword],
                     profile: signupData.signupProfile,
                     gender: signupData.signupGender || "male"
                   })

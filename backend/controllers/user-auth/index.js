@@ -1,5 +1,6 @@
 const { getAccountPage } = require("./getAccountPage")
 const { sendMobileOtp } = require("./sendMobileOtp")
+const { sendEmailVerification } = require("./sendEmailVerification")
 const { checkMobileOtp } = require("./checkMobileOtp")
 const { checkUsername } = require("./checkUsername")
 const { generateUsername } = require("./generateUsername")
@@ -29,5 +30,6 @@ module.exports = {
   editUserProfile,
   changeUserPassword,
   userFeedbackReport,
-  switchUserPrivacy
+  switchUserPrivacy,
+  sendEmailVerification
 }

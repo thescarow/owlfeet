@@ -20,7 +20,7 @@ exports.resetPassword = async (req, res) => {
     } else {
       let passwordResult = checkValidPassword(password)
       if (!passwordResult.isValid) {
-        res.json({
+        return res.json({
           isSuccess: false,
           error: passwordResult.error
         })

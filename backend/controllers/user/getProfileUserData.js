@@ -64,7 +64,8 @@ exports.getProfileUserData = async (req, res) => {
         filterOtherUserField(profileUser)
       }
       if (profileUser.hasOwnProperty("profile") && profileUser.profile !== "") {
-        profileUser.profileUrl = await signedUrlForGetAwsS3Object(
+        profileUser.profileKey = profileUser.profile
+        profileUser.profile = await signedUrlForGetAwsS3Object(
           profileUser.profile
         )
       }
