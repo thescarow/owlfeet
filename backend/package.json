@@ -24,6 +24,7 @@
     "country-state-city": "^3.1.2",
     "dompurify": "^2.4.0",
     "ejs": "^2.6.1",
+    "email-validator": "^2.0.4",
     "express": "^4.16.4",
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.17.3",

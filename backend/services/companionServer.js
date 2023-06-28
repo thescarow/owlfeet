@@ -2,7 +2,9 @@ const fs = require("fs")
 const path = require("path")
 const { v4: uuidv4 } = require("uuid")
 const companion = require("@uppy/companion")
-require("dotenv").config()
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 
 const DATA_DIR = path.join(__dirname, "companion-tmp-file")
 

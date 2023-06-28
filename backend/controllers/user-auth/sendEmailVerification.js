@@ -3,52 +3,99 @@ const dataLog = chalk.blue.bold
 const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
-const MobileOtp = require("../../models/mobileOtp")
-const { mobileOtpProcess } = require("../../common/mobileOtpProcess.common")
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+
+const EmailVerificationToken = require("../../models/emailVerificationToken")
+const jwt = require("jsonwebtoken")
+const emailValidator = require("email-validator")
+const { sendEmailLink } = require("../../services/sendEmailLink")
 
 exports.sendEmailVerification = async (req, res) => {
-  // res.json({ isSuccess: true })
   try {
-    const { mobile } = req.body
-    if (!mobile) {
+    if (!req.user) {
       return res.json({
         isSuccess: false,
-        error: "Please send all the required data with the request"
+        error: "You Are Not Logged In, Please Log In First"
       })
     } else {
-      const mobileValidator = /^[5-9][0-9]{9}$/
-      if (!mobileValidator.test(mobile)) {
+      let { userId, email } = req.body
+      if (!(userId && email)) {
         return res.json({
           isSuccess: false,
-          error: "Invalid Mobile Number, Please check it and send Otp again"
+          error: "Please send all the required data with the request"
         })
       } else {
-        let otpExist = await MobileOtp.findOne({ mobile: mobile })
-          .sort({ createdAt: -1 })
-          .lean()
-        if (otpExist && Date.now() - otpExist.createdAt.getTime() < 120000) {
+        userId = userId.trim()
+        email = email.trim()
+
+        if (req.user.id.toString() !== userId.toString()) {
           return res.json({
             isSuccess: false,
-            error: `Otp already sent,Please wait for ${
-              120 -
-              Math.floor((Date.now() - otpExist.createdAt.getTime()) / 1000)
-            } seconds after that resend it again`
+            error: "You are not authorized to verify this user's email address"
           })
         } else {
-          const resultOtp = await mobileOtpProcess(mobile)
-          if (!resultOtp.isSuccess) {
+          if (!emailValidator.validate(email)) {
             return res.json({
               isSuccess: false,
-              error: resultOtp.error
+              error:
+                "This email address is not valid, Please enter a valid email address"
             })
           } else {
-            res.json({ isSuccess: true })
+            let oldToken = await EmailVerificationToken.findOne({
+              userId: req.user.id
+            })
+              .sort({ createdAt: -1 })
+              .lean()
+            if (
+              oldToken &&
+              Date.now() - oldToken.createdAt.getTime() < 2 * 60 * 1000
+            ) {
+              return res.json({
+                isSuccess: false,
+                error: `Email Verification Link already sent to your email box,Please wait for ${
+                  2 * 60 -
+                  Math.floor((Date.now() - oldToken.createdAt.getTime()) / 1000)
+                } seconds after that resend it again`
+              })
+            } else {
+              await EmailVerificationToken.deleteMany({ userId: req.user.id })
+              const token = jwt.sign(
+                {
+                  userId: req.user.id,
+                  email: email
+                },
+                process.env.JWT_SECRET,
+                {
+                  expiresIn: 15 * 60 //15 minutes
+                }
+              )
+              let emailVerificationToken = new EmailVerificationToken({
+                userId: req.user.id,
+                email: email,
+                token: token
+              })
+              await emailVerificationToken.save()
+
+              let verificationUrl = `http://localhost:5000/user-auth/verify-user-email/?token=${token}`
+
+              sendEmailLink(
+                email,
+                "email-verification",
+                verificationUrl,
+                req.user.username
+              )
+              res.json({ isSuccess: true })
+            }
           }
         }
       }
     }
   } catch (err) {
-    console.log(errorLog("Server Error in send Mobile Otp:", mainErrorLog(err)))
+    console.log(
+      errorLog("Server Error in Sending Email Verification:", mainErrorLog(err))
+    )
     res
       .status(500)
       .json({ isSuccess: false, error: "Server Error, Please try again" })

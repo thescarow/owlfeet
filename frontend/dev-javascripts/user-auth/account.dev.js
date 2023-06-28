@@ -68,6 +68,15 @@ window.addEventListener("popstate", async () => {
     ) {
       resetFormContainer.classList.add("reset-form-container--hide")
     }
+
+    let emailLoginContainer = document.getElementById("emailLoginContainer")
+    if (
+      emailLoginContainer &&
+      !emailLoginContainer.classList.contains("email-login--hide")
+    ) {
+      emailLoginContainer.classList.add("email-login--hide")
+    }
+
     if (accountBox.classList.contains("account-box--hide")) {
       accountBox.classList.remove("account-box--hide")
     }
@@ -78,6 +87,10 @@ window.addEventListener("popstate", async () => {
     let { createResetForm } = await import("./js/createResetForm.dev")
     createResetForm()
     await import("./js/resetForm.dev")
+  } else if (location.pathname === "/user-auth/email-login") {
+    let { createEmailLoginForm } = await import("./js/createEmailLoginForm.dev")
+    createEmailLoginForm()
+    await import("./js/emailLoginForm.dev")
   }
 })
 // /////////////////////////////////////////////////
@@ -272,7 +285,7 @@ checkRegisterOtpBtn.addEventListener("click", () => {
   }
 })
 
-// login form start here
+// Login Form started here
 
 const loginUser = document.getElementById("loginUser")
 const loginPassword = document.getElementById("loginPassword")
@@ -368,4 +381,12 @@ forgotPasswordBtn.addEventListener("click", async () => {
   createResetForm()
   await import("./js/resetForm.dev")
   history.pushState({}, "", `/user-auth/reset-password`)
+})
+
+let loginWithoutPasswordBtn = document.getElementById("loginWithoutPasswordBtn")
+loginWithoutPasswordBtn.addEventListener("click", async () => {
+  let { createEmailLoginForm } = await import("./js/createEmailLoginForm.dev")
+  createEmailLoginForm()
+  await import("./js/emailLoginForm.dev")
+  history.pushState({}, "", `/user-auth/email-login`)
 })

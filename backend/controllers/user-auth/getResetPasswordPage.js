@@ -8,7 +8,9 @@ exports.getResetPasswordPage = (req, res) => {
     if (req.user) {
       res.redirect(`/user/${req.user.username}`)
     } else {
-      res.render("./user-auth/resetPassword")
+      res.render("./user-auth/resetPassword", {
+        pageName: "profile"
+      })
     }
   } catch (err) {
     console.log(errorLog("Server Error In Reset Page:"), mainErrorLog(err))

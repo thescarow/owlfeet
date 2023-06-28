@@ -7,6 +7,9 @@ const {
 } = require("../middleware/auth.middleware")
 
 const {
+  getAccountPage,
+  getResetPasswordPage,
+  getEmailLoginPage,
   sendMobileOtp,
   checkMobileOtp,
   checkUsername,
@@ -15,14 +18,16 @@ const {
   userSignup,
   userLogin,
   userLogout,
-  getResetPasswordPage,
   resetPassword,
-  getAccountPage,
   editUserProfile,
   changeUserPassword,
   userFeedbackReport,
   switchUserPrivacy,
-  sendEmailVerification
+  sendEmailVerification,
+  removeUserEmail,
+  verifyUserEmail,
+  sendEmailLogin,
+  verifyEmailLogin
 } = require("../controllers/user-auth")
 
 router.get("/login", getLoginUser, getAccountPage)
@@ -30,6 +35,16 @@ router.get("/signin", getLoginUser, getAccountPage)
 router.get("/signup", getLoginUser, getAccountPage)
 router.get("/register", getLoginUser, getAccountPage)
 ///////////////////////////////////////////////////////
+router.post("/send-email-login", sendEmailLogin)
+router.get("/verify-email-login", verifyEmailLogin)
+
+router.get("/reset-password", getLoginUser, getResetPasswordPage)
+router.post("/reset-password", resetPassword)
+router.get("/email-login", getLoginUser, getEmailLoginPage)
+
+router.post("/send-email-verification", getLoginUser, sendEmailVerification)
+router.patch("/remove-user-email", getLoginUser, removeUserEmail)
+router.get("/verify-user-email", verifyUserEmail)
 
 router.post("/send-signup-mobile-otp", checkNewMobile, sendMobileOtp)
 router.post("/send-reset-password-otp", checkRegisterMobile, sendMobileOtp)
@@ -39,8 +54,6 @@ router.get("/generate-username", generateUsername)
 router.get("/generate-cities", generateCities)
 router.post("/user-signup", userSignup)
 router.post("/user-login", userLogin)
-router.get("/reset-password", getLoginUser, getResetPasswordPage)
-router.post("/reset-password", resetPassword)
 router.post("/user-logout", getLoginUser, userLogout)
 //////////////////////////////////////////////////
 router.patch("/edit-user-profile", getLoginUser, editUserProfile)

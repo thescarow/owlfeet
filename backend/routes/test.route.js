@@ -33,6 +33,15 @@ const { getLoginUser } = require("../middleware/auth.middleware")
 //     accountType: "register"
 //   })
 // })
+router.get("/", getLoginUser, async (req, res) => {
+  // toEmail, emailType, emailLink, emailUser
+  sendEmailLink(
+    "rithikpathak123@gmail.com",
+    "email-login",
+    "http://localhost:5000/user/lala"
+  )
+  res.send("sent")
+})
 router.get("/2/:username", getLoginUser, async (req, res) => {
   try {
     let isLogin = false
@@ -101,12 +110,20 @@ router.get("/2/:username", getLoginUser, async (req, res) => {
   }
 })
 router.get("/3", getLoginUser, async (req, res) => {
-  res.render("./test/test3", {
+  res.render("./test/test3.ejs", {
     pageName: "profile",
     accountType: "register"
   })
   // sendEmailLink("rithikpathak123@gmail.com", "link")
   // res.send("sent")
+})
+router.get("/4", getLoginUser, async (req, res) => {
+  res.render("./test/test4.ejs", {
+    status: "failed",
+    errorTitle: "Link Expired",
+    errorDesc:
+      "This link is expired and you can use another link to access this account"
+  })
 })
 
 module.exports = router

@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* main container max width  */
+    --main-container-max-width: 700px;
+    /* we have used this value in index/account.css in login box so that we can't get the transition effect on loading if i use left:50% and translateX(-50%) media rule  */
+
+    /* main navigation height */
+    --main-nav-height: 50px;
+    --main-nav-width: 58px;
+
+    /* application colors  */
+    --page-color: #ffffff;
+    --first-color: #162527;
+    --second-color: #08af7c;
+    --third-color: #ECB365;
+    --fourth-color: #ffffff;
+    --light-color: #ffffff;
+    --dark-color: #141615;
+    --danger-color: #eb6600;
+    --success-color: #a7f9a7;
+    /* information color  */
+    --information-light-color: #bbbbbb;
+    --information-dark-color: #444444;
+    /* password strength color  */
+    --password-strong-color: #a7f9a7;
+    --password-medium-color: #a1d8eb;
+    --password-weak-color: #e0c67d;
+    /* notification color  */
+    --notification-color: #a1d8eb;
+    --notification-border-color: #4cb3d4;
+    --notification-error-color: #e0c67d;
+    --notification-error-border-color: #e6a700;
+    --notification-success-color: #97dd97;
+    --notification-success-border-color: #009400;
+
+
+
+    /* profile color  */
+    --profile-text-color: #413F42;
+    /* --profile-text-light-color: #f2f2f2; */
+    /* --profile-text-medium-color: #aaa; */
+
+
+
+
+
+
+
+    /* error page color  */
+    --error-page-title-color: #413F42;
+    --error-page-message-color: #aaa;
+    /* for rgba so that we can use the alpha value  */
+    /* application rgba color */
+    --rgba-page-color: 255, 255, 255;
+    --rgba-first-color: 22, 37, 39;
+    --rgba-second-color: 8, 175, 124;
+    --rgba-third-color: 236, 179, 101;
+    --rgba-fourth-color: 255, 255, 255;
+    --rgba-light-color: 255, 255, 255;
+    --rgba-dark-color: 20, 22, 21;
+    --rgba-danger-color: 204, 59, 33;
+    --rgba-success-color: 167, 249, 167;
+
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--page-color);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    font-family: 'Nunito', Helvetica, Arial, sans-serif;
+    /* font-family: 'Mukta', sans-serif; */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+.main-status-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    /* align-self: flex-end; */
+    background: rgba(var(--rgba-dark-color), 1);
+}
+
+.status-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* .status-box--email-verified {}
+
+.status-box--failed {} */
+
+.status__icon {
+    margin: 30px 0 0 0;
+    width: 40%;
+    max-width: 300px;
+}
+
+.status__icon svg {
+    fill: rgba(var(--rgba-light-color), 0.8);
+}
+
+.status-box--email-verified .status__icon svg {
+    fill: rgba(var(--rgba-second-color), 0.8);
+}
+
+.status-box--failed .status__icon svg {
+    fill: rgba(var(--rgba-third-color), 0.7);
+}
+
+.status__title {
+    font-size: 35px;
+    font-weight: 900;
+    text-align: center;
+    margin: 5px 0 0 0;
+    padding: 0 10px;
+    color: rgba(var(--rgba-light-color), 0.6);
+}
+
+.status__desc {
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    margin: 5px 0 0 0;
+    padding: 0 10px;
+    color: rgba(var(--rgba-light-color), 0.4);
+    max-width: 800px;
+}
+
+.status__btn-field {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .status__btn {} */

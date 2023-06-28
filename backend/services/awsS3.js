@@ -3,6 +3,9 @@ const dataLog = chalk.blue.bold
 const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 const {
   S3Client,
   DeleteObjectCommand,

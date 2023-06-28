@@ -469,14 +469,13 @@ label::selection {
 }
 
 .main-text-link {
-	margin: 15px 0 260px 0;
 	text-decoration: underline;
 	font-size: 17px;
 	font-weight: 400;
 	padding: 0 10px;
 	width: 100%;
 	text-align: center;
-	color: rgba(var(--rgba-second-color), 1);
+	/* color: rgba(var(--rgba-second-color), 1); */
 	cursor: pointer;
 }
 
@@ -687,8 +686,27 @@ label::selection {
 	color: rgba(var(--rgba-third-color), 1);
 }
 
+.main-text-link--login-without-password {
+	text-decoration: none;
+	width: auto;
+	font-size: 18px;
+	font-weight: 800;
+	padding: 6px 8px;
+	background: rgba(var(--rgba-first-color), 1);
+	border: 1px solid rgba(var(--rgba-light-color), 0.1);
+	border-radius: 8px;
+	color: rgba(var(--rgba-third-color), 0.8);
+	margin: 30px 0 0 0;
+	cursor: pointer;
+}
+
+.main-text-link--login-without-password:hover {
+	font-weight: 800;
+	background: rgba(var(--rgba-third-color), 0.4);
+	color: rgba(var(--rgba-first-color), 1);
+}
 
 .main-text-link--forgot-password {
-	color: rgba(var(--rgba-second-color), 1);
-	margin: 40px 0 0 0;
+	color: rgba(var(--rgba-third-color), 0.6);
+	margin: 20px 0 260px 0;
 }

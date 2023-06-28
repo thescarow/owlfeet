@@ -83,7 +83,7 @@ exports.editUserProfile = async (req, res) => {
 
             user.firstName = editData.editFirstName
             user.lastName = editData.editLastName || ""
-            user.email = editData.editEmail || ""
+            // user.email = editData.editEmail || ""
             user.username = editData.editUsername
             user.birthday = new Date(editData.editBirthday) || new Date()
             user.bio = editData.editBio || ""

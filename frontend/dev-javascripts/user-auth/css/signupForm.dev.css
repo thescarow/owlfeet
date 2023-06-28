@@ -640,7 +640,8 @@ select::-ms-expand {
 }
 
 .input-field__input--textarea {
-    height: 88px;
+        height: 88px;
+    resize: vertical;
 
 }
 
