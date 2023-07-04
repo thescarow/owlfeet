@@ -1,157 +1,188 @@
-// owner settings section modal
-const profileOwnerSettingSection = document.getElementById(
-  "profileOwnerSettingSection"
+// settingInnerModal
+const profileInnerModal = document.getElementById("profileInnerModal")
+const profileInnerModalContent = document.getElementById(
+  "profileInnerModalContent"
 )
-// Get the button that opens the ownerSettingSection
-const ownerSettingIcon = document.getElementById("ownerSettingIcon")
+const profileInnerModalCloseBtn = document.getElementById(
+  "profileInnerModalCloseBtn"
+)
+profileInnerModalCloseBtn.addEventListener("click", () => {
+  if (!profileInnerModal.classList.contains("hide"))
+    profileInnerModal.classList.add("hide")
+})
+
+const ownerSettingOptionsModal = document.getElementById(
+  "ownerSettingOptionsModal"
+)
+const settingOptionsContent = document.getElementById("settingOptionsContent")
+
+const openOwnerSettingBtn = document.getElementById("openOwnerSettingBtn")
 
 const cancleSettingOption = document.getElementById("cancleSettingOption")
 
 // When the user clicks on the button, open the modal
-ownerSettingIcon.onclick = function () {
-  profileOwnerSettingSection.classList.add("show")
+openOwnerSettingBtn.onclick = function () {
+  if (ownerSettingOptionsModal.classList.contains("hide"))
+    ownerSettingOptionsModal.classList.remove("hide")
 }
 
-cancleSettingOption.onclick = function () {
-  profileOwnerSettingSection.classList.remove("show")
-}
+settingOptionsContent.addEventListener("click", async e => {
+  let settingOption = e.target.closest(`.setting-option`)
 
-// profileOwnerSettingContentModal
-//profileOwnerSettingContentModalContent
-const profileOwnerSettingContentModal = document.getElementById(
-  "profileOwnerSettingContentModal"
-)
-const profileOwnerSettingContentModalContent = document.getElementById(
-  "profileOwnerSettingContentModalContent"
-)
+  if (settingOption && settingOptionsContent.contains(settingOption)) {
+    if (settingOption.dataset.settingOption === "edit-profile") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
 
-// change password setting action
-const changePasswordOption = document.getElementById("changePasswordOption")
-changePasswordOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileChangePasswordOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--edit-profile"
+
+      let { setEditProfileContent } = await import(
+        "../html/profileEditProfileOptionHtml.dev.js"
+      )
+      setEditProfileContent(profileInnerModalContent, profileUser)
+    }
+    if (settingOption.dataset.settingOption === "change-password") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--change-password"
+
+      let { setChangePasswordContent } = await import(
+        "../html/profileChangePasswordOptionHtml.dev.js"
+      )
+      setChangePasswordContent(profileInnerModal, profileInnerModalContent)
+    }
+
+    if (settingOption.dataset.settingOption === "verify-email") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--verify-email"
+
+      let { setVerifyEmailContent } = await import(
+        "../html/profileVerifyUserEmailOptionHtml.dev.js"
+      )
+      setVerifyEmailContent(
+        profileInnerModal,
+        profileInnerModalContent,
+        loginUser
       )
     }
-  )
-})
-// edit profile setting action
-const editProfileOption = document.getElementById("editProfileOption")
-editProfileOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileEditProfileOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent,
-        profileUser
+    if (settingOption.dataset.settingOption === "switch-account-privacy") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--account-privacy"
+
+      let { setAccountPrivacyContent } = await import(
+        "../html/profileSwitchUserPrivacyOptionHtml.dev.js"
+      )
+      setAccountPrivacyContent(
+        profileInnerModal,
+        profileInnerModalContent,
+        loginUser
       )
     }
-  )
-})
-// Switched User Privacy action
-const switchUserPrivacyOption = document.getElementById(
-  "switchUserPrivacyOption"
-)
-switchUserPrivacyOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileSwitchUserPrivacyOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent,
-        profileUser
+    if (settingOption.dataset.settingOption === "sent-follow-request") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--sent-follow-request"
+
+      let { setSentFollowRequestContent } = await import(
+        "../html/profileSentFollowRequestOptionHtml.dev.js"
+      )
+      setSentFollowRequestContent(
+        profileInnerModal,
+        profileInnerModalContent,
+        loginUser
       )
     }
-  )
+
+    if (settingOption.dataset.settingOption === "feedback") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--feedback"
+
+      let { setFeedbackContent } = await import(
+        "../html/profileUserFeedbackReportOptionHtml.dev.js"
+      )
+      setFeedbackContent(profileInnerModal, profileInnerModalContent)
+    }
+    if (settingOption.dataset.settingOption === "logout") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+
+      if (profileInnerModal.classList.contains("hide"))
+        profileInnerModal.classList.remove("hide")
+      profileInnerModalContent.className =
+        "inner-modal-content inner-modal-content--logout"
+
+      let { setLogoutContent } = await import(
+        "../html/profileLogoutUserOptionHtml.dev.js"
+      )
+      setLogoutContent(profileInnerModal, profileInnerModalContent, profileUser)
+    }
+    if (settingOption.dataset.settingOption === "close-modal") {
+      if (!ownerSettingOptionsModal.classList.contains("hide"))
+        ownerSettingOptionsModal.classList.add("hide")
+    }
+  }
 })
 
-// logout user setting action
-const logoutUserOption = document.getElementById("logoutUserOption")
-logoutUserOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileLogoutUserOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent,
-        profileUser
-      )
-    }
-  )
-})
-//Verify User Email action
-const verifyUserEmailOption = document.getElementById("verifyUserEmailOption")
-verifyUserEmailOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileVerifyUserEmailOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent,
-        profileUser
-      )
-    }
-  )
-})
-//User  Feedback/Report action
-const userFeedbackReportOption = document.getElementById(
-  "userFeedbackReportOption"
-)
-userFeedbackReportOption.addEventListener("click", () => {
-  profileOwnerSettingContentModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  import("../html/profileUserFeedbackReportOptionHtml.dev.js").then(
-    ({ setOwnerSettingContent }) => {
-      setOwnerSettingContent(
-        profileOwnerSettingContentModal,
-        profileOwnerSettingContentModalContent,
-        profileUser
-      )
-    }
-  )
-})
+const ownerEditProfileBtn = document.getElementById("ownerEditProfileBtn")
 
-// create sent follow requests option
-const sentFollowRequest = document.getElementById("sentFollowRequest")
-sentFollowRequest.addEventListener("click", async () => {
-  profileOtherUserModal.style.display = "block"
-  profileOwnerSettingSection.classList.remove("show")
-  let { createSentFollowRequestContainer } = await import(
-    "../html/createSentFollowRequestHtml.dev.js"
+ownerEditProfileBtn.addEventListener("click", async () => {
+  if (profileInnerModal.classList.contains("hide"))
+    profileInnerModal.classList.remove("hide")
+  profileInnerModalContent.className =
+    "inner-modal-content inner-modal-content--edit-profile"
+
+  let { setEditProfileContent } = await import(
+    "../html/profileEditProfileOptionHtml.dev.js"
   )
-  let sentFollowRequestUserBoxContainer = createSentFollowRequestContainer(
-    profileOtherUserModal,
-    profileOtherUserModalContent,
-    profileUser
-  )
-  let { fetchUserAndCreateUserBox } = await import("./createUserBox.dev.js")
-  fetchUserAndCreateUserBox(
-    sentFollowRequestUserBoxContainer,
-    "sent-follow-request",
-    profileUser
-  )
+  setEditProfileContent(profileInnerModalContent, profileUser)
 })
 
 // When the user clicks anywhere outside of the modal, close it
 
-window.onclick = function (event) {
-  if (event.target == profileOwnerSettingContentModal) {
-    profileOwnerSettingContentModal.style.display = "none"
+window.addEventListener("click", event => {
+  if (event.target === profileInnerModal) {
+    if (!profileInnerModal.classList.contains("hide"))
+      profileInnerModal.classList.add("hide")
   }
-  if (event.target == profileOwnerSettingSection) {
-    profileOwnerSettingSection.classList.remove("show")
+  if (event.target === ownerSettingOptionsModal) {
+    if (!ownerSettingOptionsModal.classList.contains("hide"))
+      ownerSettingOptionsModal.classList.add("hide")
   }
-  if (event.target == document.body) {
-    profileOwnerSettingSection.classList.remove("show")
-    profileOwnerSettingContentModal.style.display = "none"
-  }
-}
+})
+
+// export function updateProfileUserEmailToVerified(userId, verifiedEmail) {
+//   console.log("profile user:", profileUser, "loginUser:", loginUser)
+
+//   if (loginUser._id.toString() === userId.toString()) {
+//     profileUser.email = verifiedEmail
+//     profileUser.email = verifiedEmail
+//     loginUser.isEmailVerified = true
+//     loginUser.isEmailVerified = true
+//   }
+// }

@@ -1,8 +1,9 @@
 <title>
-  <%= locals.profileUser.firstName + ' ' + locals.profileUser.lastName + ' ' + 'Profile' -%>
+  <%= locals.profileUser.firstName + ' ' + locals.profileUser.lastName -%>
 </title>
 <!-- stylesheets and scripts  -->
 <link rel="stylesheet" href="/stylesheets/user/profile.css">
+
 
 <script src="/javascripts/profile.bundle.js" defer></script>
 
@@ -14,88 +15,188 @@
 
   <div class="profile-content-box" id="profileContentBox">
 
-
-
-
     <section class="profile-check-received-follow-request"></section>
 
-    <section id="profileImageSection" class="">
-      <img id="profileImage" src="<%= locals.profileUser.profile -%>" alt="profileImage">
-      <% if(locals.isOwner==true){ -%>
-        <div id="ownerSettingIcon">
-          <%- include('../partials/icons/settings.svg') -%>
+
+
+    <section class="profile-info-section">
+      <div id="profileImageSection" class='profile-pic <%= (locals.profileUser.hasOwnProperty("profile") &&
+            locals.profileUser.profile !== "" )?"profile-pic--img":"profile-pic--svg"  _%>'>
+        <img id="profileImage" src='<%= (locals.profileUser.hasOwnProperty("profile") &&
+                    locals.profileUser.profile !=="" ) ?locals.profileUser.profile : "" -%>' alt="profileImage">
+
+        <%- include("../partials/icons/profileDefaultProfileImageIcon.svg") _%>
+      </div>
+
+
+
+      <div class="profile-info">
+
+        <div class="profile-info__row profile-info__row--username">
+          <div class="profile-info__username" id="profileUsername">
+            @<%= locals.profileUser.username-%>
+          </div>
+
+          <% if(locals.isLogin==true &&locals.isOwnerProfile==true ){ -%>
+
+            <div class="profile-info__btn-container">
+              <div id="ownerEditProfileBtn" class="profile-info__btn">
+                <%- include('../partials/icons/profileEditProfileIcon.svg') _%> Edit profile
+              </div>
+              <div id="openOwnerSettingBtn" class="profile-info__btn">
+                <%- include('../partials/icons/profileSettingIcon.svg') _%>
+              </div>
+            </div>
+
+
+
+            <% } else if(locals.isLogin==true &&locals.isOwnerProfile==false){ _%>
+
+              <div class="profile-info__btn-container">
+
+
+                <section class="profile-btn-section profile-btn-section--profile-info" id="profileButtonSection">
+
+                  <div data-btn-type="follow-action" class="profile-btn <%= (locals.profileUser.userFollowStatus == 'send-follow-request')? 'profile-btn--follow': '' _%> <%= (locals.profileUser.userFollowStatus == 'cancel-sent-follow-request')? 'profile-btn--cancel-sent-follow-request': '' _%>
+                              <%= (locals.profileUser.userFollowStatus == 'unfollow')? 'profile-btn--unfollow': '' _%>"
+                    data-user-follow-status='<%= locals.profileUser.userFollowStatus || "" %>'>
+
+
+
+
+                    <% if(locals.profileUser.userFollowStatus==='send-follow-request' ){ _%>
+                      <%- include('../partials/icons/profileFollowIcon.svg') _%>FOLLOW
+                        <% } else if(locals.profileUser.userFollowStatus==='cancel-sent-follow-request' ){ -%>
+                          <%- include('../partials/icons/profileCancelFollowRequestIcon.svg') _%>CANCEL
+                            REQUEST
+                            <% } else if(locals.profileUser.userFollowStatus==='unfollow' ){ -%>
+                              <%- include('../partials/icons/profileUnfollowIcon.svg') _%>UNFOLLOW
+                                <% } else { _%>
+                                  <%- include('../partials/icons/profileFollowIcon.svg') _%>FOLLOW
+                                    <% } %>
+                  </div>
+
+                  <div data-btn-type="message-action" class="profile-btn">
+                    <%- include("../partials/icons/profileMessageIcon.svg") _%> MESSAGE
+                  </div>
+
+                </section>
+
+              </div>
+              <% } _%>
         </div>
-        <% } -%>
+
+        <div class="profile-info__data" id="profileDataInfo">
+          <div class="profile-info__data-count">
+            <span>
+              19
+            </span>posts
+          </div>
+          <div class="profile-info__data-count">
+            <span>
+              <%= locals.profileUser.followerLength _%>
+            </span>followers
+          </div>
+          <div class="profile-info__data-count">
+            <span>
+              <%= locals.profileUser.followingLength-%>
+            </span>following
+          </div>
+
+        </div>
+        <div class="profile-info__fullname" id="profileFullName">
+          <%= locals.profileUser.firstName + ' ' + locals.profileUser.lastName -%>
+        </div>
+
+        <div class="profile-info__bio" id="profileBio">
+          <%= locals.profileUser.bio -%>
+        </div>
+
+      </div>
+
     </section>
 
-    <section id="profileAboutSection">
-      <div id="profileFullName">
-        <%= locals.profileUser.firstName + ' ' + locals.profileUser.lastName -%>
-      </div>
-      <div id="profileUsername">@<%= locals.profileUser.username-%>
-      </div>
-      <div id="profileBio" class="">
-        <%= locals.profileUser.bio -%>
-      </div>
-    </section>
 
-    <section id="profileDataSection">
+
+
+
+
+    <section class="profile-data-section" id="profileDataSection">
       <div id="profilePosts" class="profile-data">
-        <div class="data-count">19</div>
-        <div class="data-info">Posts</div>
+        <div class="profile-data__count data-count">19</div>
+        <div class="profile-data__info data-info">Posts</div>
       </div>
-      <div id="profileFollowerBtn" class="profile-data">
-        <% if(locals.isOwner===true ){ _%>
-          <span id="profileUserReceivedFollowRequestCount">
+      <div id="profileViewFollowerBtn" class="profile-data">
+        <% if(locals.isOwnerProfile===true ){ _%>
+          <div class="profile-data__label profile-data__label--request-count"
+            id="profileUserReceivedFollowRequestCount">
             <%= locals.profileUser.receivedFollowRequestTotalCount -%>
-          </span>
+          </div>
           <% } _%>
-            <div class="data-count" id="profileUserFollowerCount">
+            <div class="profile-data__count data-count" id="profileUserFollowerCount">
               <%= locals.profileUser.followerLength _%>
             </div>
-            <div class="data-info">Followers</div>
+            <div class="profile-data__info data-info">Followers</div>
       </div>
-      <div id="profileFollowingBtn" class="profile-data">
-        <div class="data-count" id="profileUserFollowingCount">
+      <div id="profileViewFollowingBtn" class="profile-data">
+        <div class="profile-data__count data-count" id="profileUserFollowingCount">
           <%= locals.profileUser.followingLength-%>
         </div>
-        <div class="data-info">Following</div>
+        <div class="profile-data__info data-info">Following</div>
       </div>
     </section>
 
 
-    <% if(locals.isOwner==false){ -%>
-      <section id="profileButtonSection">
+    <% if(locals.isLogin==true && locals.isOwnerProfile==false){ -%>
+      <section class="profile-btn-section profile-btn-section--main" id="profileButtonSection">
 
-        <button id="profileFollowActionBtn" class="profile-btn <%= (locals.profileUser.userFollowStatus == 'send-follow-request')? 'profile-btn--follow': '' _%> <%= (locals.profileUser.userFollowStatus == 'cancel-sent-follow-request')? 'profile-btn--cancel-sent-follow-request': '' _%>
-        <%= (locals.profileUser.userFollowStatus == 'unfollow')? 'profile-btn--unfollow': '' _%>"
+
+
+        <div data-btn-type="follow-action" class="profile-btn <%= (locals.profileUser.userFollowStatus == 'send-follow-request')? 'profile-btn--follow': '' _%> <%= (locals.profileUser.userFollowStatus == 'cancel-sent-follow-request')? 'profile-btn--cancel-sent-follow-request': '' _%>
+          <%= (locals.profileUser.userFollowStatus == 'unfollow')? 'profile-btn--unfollow': '' _%>"
           data-user-follow-status='<%= locals.profileUser.userFollowStatus || "" %>'>
-          <% if(locals.profileUser.userFollowStatus==='send-follow-request' ){ _%>FOLLOW <% } else
-              if(locals.profileUser.userFollowStatus==='cancel-sent-follow-request' ){ -%>CANCEL REQUEST
-              <% } else if(locals.profileUser.userFollowStatus==='unfollow' ){ -%>UNFOLLOW
-                <% } else { _%>FOLLOW
-                  <% } %>
-        </button>
-        <button id="profileMessageBtn" class="profile-btn">
-          MESSAGE
-        </button>
+
+
+
+
+          <% if(locals.profileUser.userFollowStatus==='send-follow-request' ){ _%>
+            <%- include('../partials/icons/profile/followIcon.svg') _%>FOLLOW
+              <% } else if(locals.profileUser.userFollowStatus==='cancel-sent-follow-request' ){ -%>
+                <%- include('../partials/icons/profile/cancelFollowRequestIcon.svg') _%>CANCEL
+                  REQUEST
+                  <% } else if(locals.profileUser.userFollowStatus==='unfollow' ){ -%>
+                    <%- include('../partials/icons/profile/unfollowIcon.svg') _%>UNFOLLOW
+                      <% } else { _%>
+                        <%- include('../partials/icons/profile/followIcon.svg') _%>FOLLOW
+                          <% } %>
+        </div>
+
+        <div data-btn-type="message-action" class="profile-btn">
+          <%- include('../partials/icons/profile/messageIcon.svg') _%> MESSAGE
+        </div>
 
       </section>
       <% } -%>
 
-        <% if(locals.isOwner==true || locals.profileUser.privacy=='public' ||
-          locals.profileUser.hasLoginUserAccessToUserContent ){%>
-          <section id="profileContentSection">
 
-            <div id="profileContentNavigation">
-              <span id="profileContentInfo">Posts</span>
-              <div id="profileContentIcons">
-                <span id="profilePostIcon" class="profile-content-icon">
-                  <%- include('../partials/icons/post.svg') -%>
-                </span>
-                <span id="profileSavedPostIcon" class="profile-content-icon">
-                  <%- include('../partials/icons/savedPost.svg') -%>
-                </span>
+        <% if(locals.isOwnerProfile==true || locals.profileUser.privacy=='public' ||
+          (locals.profileUser.hasOwnProperty("hasLoginUserAccessToUserContent") &&
+          locals.profileUser.hasLoginUserAccessToUserContent===true) ){%>
+          <section class="profile-content-section" id="profileContentSection">
+
+            <div class="profile-content-nav" id="">
+              <div class="profile-content-nav__info" id="profileContentNavInfo">Posts</div>
+              <div class="profile-content-nav__btn-container" id="profileContentNavBtnContainer">
+                <div class="profile-content-nav__btn profile-content-nav__btn--active" id=""
+                  data-btn-type="open-post-content">
+                  <%- include('../partials/icons/profilePostIcon.svg') -%>
+                </div>
+                <div class="profile-content-nav__btn " id="" data-btn-type="open-trend-content">
+                  <%- include('../partials/icons/profileTrendIcon.svg') -%>
+                </div>
+                <div class="profile-content-nav__btn " id="" data-btn-type="open-user-tagged-content">
+                  <%- include('../partials/icons/profileUserTaggedIcon.svg') -%>
+                </div>
               </div>
             </div>
 
@@ -103,46 +204,46 @@
 
 
 
-            <div id="profileContentData">
-              <div class="profilePosts">
+            <div class="profile-content-data" id="profileContentData">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ89SOjYZq1iDOe7oIyft8OiTvo7i1nOYz_Hg&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img src="https://c.wallhere.com/photos/d2/1f/nature_plants_square-1489305.jpg!d" alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDUZglpc7Mr6L4vypHGiUCBNowFhnrdaZIgA&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCtyw1YnOC1oIqpvE0OCTVyfw8twPK6EEztg&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLjOsw7TztlJZE20Pm0C7heWR2zH3GJl1mpQ&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9iVPofAEWAinKWTCxFc3xA-kWUBppC8WLFw&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMc5gEl5a0Y2Jjsf0yAq4IRE4ZdsuAXTd7tw&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkxiz3jryrIH0ySjXu5oK1cUdNbTOVFqtbDQ&usqp=CAU"
                   alt="profilePost">
               </div>
-              <div class="profilePosts">
+              <div class="profile-post">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4tD6VQxGPZ80knxlbJ5jtYZLagHd6XatmxA&usqp=CAU"
                   alt="profilePost">
@@ -151,12 +252,12 @@
             </div>
           </section>
           <% } else{ %>
-            <section id="profileContentSection">
-              <div id="privateUserProfileContent">
-                <div id="privateUserProfileContentTitle">
+            <section class="profile-content-section" id="profileContentSection">
+              <div class="private-content-data" id="privateUserProfileContent">
+                <div class="private-content-data__title" id="privateUserProfileContentTitle">
                   This Account Is Private
                 </div>
-                <div id="privateUserProfileContentDesc">
+                <div class="private-content-data__desc" id="privateUserProfileContentDesc">
                   Follow to see their Posts and Trends.
                 </div>
 
@@ -165,70 +266,112 @@
             <% } %>
 
 
-              <% if(locals.isOwner==true) {-%>
-                <div id="profileOwnerSettingSection" class="">
 
-                  <div id="settingContent">
-                    <ul id="settingOptions">
-                      <li id="editProfileOption">Edit Profile</li>
-                      <li id="changePasswordOption">Change Password</li>
-                      <li id="verifyUserEmailOption">Verify Your Email</li>
-                      <li id='switchUserPrivacyOption'>Account Privacy
-                      </li>
-                      <li id='sentFollowRequest'>Sent Follow Requests
-                      </li>
-                      <li id="userFeedbackReportOption">Give Your Feedback</li>
-                      <li id="logoutUserOption">Log Out</li>
-                      <li id="cancleSettingOption">Cancle</li>
-                    </ul>
+
+              <% if(locals.isLogin==true && locals.isOwnerProfile==true) {-%>
+                <div class="owner-setting-options-modal hide" id="ownerSettingOptionsModal">
+
+                  <div class="setting-options-content" id="settingOptionsContent">
+
+                    <div class="setting-option" id="editProfileOption" data-setting-option="edit-profile">Edit Profile
+                    </div>
+
+                    <div class="setting-option" id="changePasswordOption" data-setting-option="change-password">Change
+                      Password
+                    </div>
+
+                    <div class="setting-option" id="verifyUserEmailOption" data-setting-option="verify-email">Verify
+                      Your Email
+                    </div>
+
+                    <div class="setting-option" id='switchUserPrivacyOption'
+                      data-setting-option="switch-account-privacy">Account Privacy
+                    </div>
+
+                    <div class="setting-option" id='sentFollowRequest' data-setting-option="sent-follow-request">Sent
+                      Follow Requests
+                    </div>
+
+                    <div class="setting-option" id="userFeedbackReportOption" data-setting-option="feedback">Give Your
+                      Feedback
+                    </div>
+
+                    <div class="setting-option" id="logoutUserOption" data-setting-option="logout">
+                      Log Out
+                    </div>
+
+                    <div class="setting-option" id="cancleSettingOption" data-setting-option="close-modal">Cancle
+                    </div>
                   </div>
+
+
                 </div>
 
 
-                <div id='profileOwnerSettingContentModal' class="owner-setting-content-modal">
-                  <div class="owner-setting-content-content" id="profileOwnerSettingContentModalContent">
 
+                <div class="inner-modal hide" id='profileInnerModal'>
+                  <div class="inner-modal__close-btn " id="profileInnerModalCloseBtn">X
+                  </div>
+
+                  <div class="inner-modal-content " id="profileInnerModalContent">
                   </div>
 
                 </div>
-
-
-
                 <% }-%>
 
-                  <div class="other-user-modal" id="profileOtherUserModal">
 
-                    <span class="other-user-modal__close-btn" id="otherUserModalCloseBtn">close</span>
+                  <div class="other-user-modal hide" id="profileOtherUserModal">
 
-                    <div class="other-user-modal-content other-user-modal__content" id="profileOtherUserModalContent">
+                    <div class="other-user-modal__close-btn" id="profileOtherUserModalCloseBtn">X
+                    </div>
 
-                      <div class="other-user-modal-content__switch-btn-container" id="otherUserSwitchBtnContainer">
-                        <div id="followerOtherUserSwitchBtn"
-                          class="other-user-modal-content__switch-btn other-user-modal-content__switch-btn--active">
-                          Followers</div>
-                        <div id="followingOtherUserSwitchBtn" class="other-user-modal-content__switch-btn ">
+                    <div class="other-user-modal-content" id="profileOtherUserModalContent">
+
+
+
+                      <div class="switch-btn-container" id="otherUserSwitchBtnContainer">
+                        <div id="followerOtherUserSwitchBtn" class="switch-btn switch-btn--active">
+                          Followers
+                        </div>
+                        <div id="followingOtherUserSwitchBtn" class="switch-btn">
                           Following
                         </div>
 
                       </div>
-                      <div class="other-user-container" id="followerOtherUserContainer">
-                        <% if(locals.isOwner==true){ _%>
-                          <div class="other-user-container__title">Follow Requests :</div>
-                          <div class="user-box-container other-user-container__user-box-container"
+
+
+                      <div class="other-user-container other-user-container--follower" id="followerOtherUserContainer">
+                        <% if(locals.isOwnerProfile==true){ _%>
+                          <div class="other-user-container__title">Follow Requests :
+                          </div>
+                          <div class="user-box-container user-box-container--received-follow-request"
                             id="receivedFollowRequestUserBoxContainer">
 
                           </div>
-                          <div class="other-user-container__see-all-follow-request">See all follow requests >>
+                          <div class="other-user-container-btn-field">
+
+                            <div class="other-user-container-btn other-user-container-btn--unselected"
+                              id="toggleReceivedFollowRequestUserBoxContainerBtn">
+                              <div class="other-user-container-btn__icon other-user-container-btn__icon--unselected ">
+                                <%- include('../partials/icons/profile/downArrowIcon.svg') _%>
+                              </div>
+                              <div class="other-user-container-btn__icon other-user-container-btn__icon--selected">
+                                <%- include('../partials/icons/profile/upArrowIcon.svg') _%>
+                              </div>
+                            </div>
+
                           </div>
                           <% } -%>
-                            <div class="other-user-container__title">Followers :</div>
-                            <div class="user-box-container" id="followerUserBoxContainer"> </div>
+                            <div class="other-user-container__title">Followers :
+                            </div>
+                            <div class="user-box-container user-box-container--follower" id="followerUserBoxContainer">
+                            </div>
                       </div>
 
-                      <div class="other-user-container other-user-container--active" id="followingOtherUserContainer">
+                      <div class="other-user-container other-user-container--following hide"
+                        id="followingOtherUserContainer">
                         <div class="other-user-container__title">Followings</div>
-                        <div class="user-box-container other-user-container__user-box-container"
-                          id="followingUserBoxContainer">
+                        <div class="user-box-container user-box-container--following" id="followingUserBoxContainer">
                         </div>
                       </div>
 

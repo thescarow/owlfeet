@@ -13,17 +13,24 @@ const { checkValidUsername } = require("./common/checkValidUsername")
 exports.checkUsername = async (req, res) => {
   try {
     let { username } = req.query
-    console.log("checkUsername:", username)
-    let result = await checkValidUsername(username)
-    if (!result.isValid) {
-      res.json({
-        isSuccess: false,
-        error: result.error
-      })
-    } else {
-      res.json({
+    username = username.trim()
+
+    if (req.user && req.user.username.toString() === username.toString()) {
+      return res.json({
         isSuccess: true
       })
+    } else {
+      let result = await checkValidUsername(username)
+      if (!result.isValid) {
+        res.json({
+          isSuccess: false,
+          error: result.error
+        })
+      } else {
+        res.json({
+          isSuccess: true
+        })
+      }
     }
   } catch (err) {
     console.log(errorLog("error in checkUsername:"), mainErrorLog(err))

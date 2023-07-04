@@ -1,9 +1,9 @@
-let svg_defaultUserImage = `
+let svg_defaultUserImageIcon = ` 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="Layer 2"><circle cx="16" cy="6.96" r="6"/><path d="M30.86,26.84a15.07,15.07,0,0,0-4.11-7.47A12.47,12.47,0,0,0,25.13,18,15,15,0,0,0,16,15,15.24,15.24,0,0,0,5.24,19.37a15.07,15.07,0,0,0-4.11,7.47,3.42,3.42,0,0,0,.69,2.88A3.52,3.52,0,0,0,4.58,31H27.42a3.52,3.52,0,0,0,2.75-1.32A3.42,3.42,0,0,0,30.86,26.84Z"/></g></svg>
 `
-
 import { createMainNotification } from "../../common/mainNotification.dev"
 import "../css/createUserBox.dev.css"
+
 let profileUserReceivedFollowRequestCount = document.getElementById(
   "profileUserReceivedFollowRequestCount"
 )
@@ -220,17 +220,28 @@ export function createUserBox(userBoxContainer, userBoxType, userBoxUser) {
   let userBoxInnerHtml = `
     <div class="user-box__column">
 
-      <div class="user-box__pic user-box__pic--svg">
-         <a class="user-box__link" href="/user/${userBoxUser.username}">
-           ${svg_defaultUserImage}
-               </a>
-         </div>
+      <div class='user-box__pic  ${
+        userBoxUser.hasOwnProperty("profile") && userBoxUser.profile !== ""
+          ? "user-box__pic--img"
+          : "user-box__pic--svg"
+      }' >
+           <a class="user-box__link" href="/user/${userBoxUser.username}">
+           
+           ${svg_defaultUserImageIcon}
+           <img src="${userBoxUser.profile}" alt="${
+    userBoxUser.firstName
+  }'s pic}">
+
+          </a>
+      </div>
 
     </div>
 
     <div class="user-box__column user-box__column--left-margin">
       <div class="user-box__username">${userBoxUser.username}</div>
-      <div class="user-box__full-name">${userBoxUser.firstName} ${userBoxUser.lastName}</div>
+      <div class="user-box__full-name">${userBoxUser.firstName} ${
+    userBoxUser.lastName
+  }</div>
     </div>
     <div class="user-box__column">
       <div class="user-box__btns">
@@ -240,7 +251,7 @@ export function createUserBox(userBoxContainer, userBoxType, userBoxUser) {
       </div>
     </div>`
   userBox.insertAdjacentHTML("beforeend", userBoxInnerHtml)
-  if (isOwner === true) {
+  if (isOwnerProfile === true) {
     if (userBoxType === "follower") {
       createRemoveFollowerBtn(userBox, userBoxUser._id)
     } else if (userBoxType === "following") {
@@ -256,10 +267,11 @@ export function createUserBox(userBoxContainer, userBoxType, userBoxUser) {
     }
   }
 
-  userBoxContainer.insertAdjacentElement("afterbegin", userBox)
+  userBoxContainer.insertAdjacentElement("beforeend", userBox)
 }
+
 export function fetchUserAndCreateUserBox(userBoxContainer, userBoxType) {
-  let userId = isOwner === true ? "" : profileUser._id
+  let userId = isOwnerProfile === true ? "" : profileUser._id
   let skipNumber = userBoxContainer.childElementCount
   fetch(`/follow/${userBoxType}/${userId}?skipNumber=${skipNumber}`)
     .then(response => {

@@ -1,91 +1,100 @@
 import { createMainNotification } from "../../common/mainNotification.dev.js"
 import "../css/profileUserFeedbackReportOption.dev.css"
-export function setOwnerSettingContent(modalBox, modalBoxContent, profileUser) {
-  modalBoxContent.innerHTML = `
-  <div id="UserfeedbackReportBox">
+export function setFeedbackContent(modalBox, modalContentBox) {
+  modalContentBox.innerHTML = ""
+  let userFeedback = document.createElement("div")
+  userFeedback.classList.add("user-feedback")
+  userFeedback.setAttribute("id", "userFeedback")
 
-  <span id="userFeedbackReportTitle">Feedback/Report</span>
+  userFeedback.innerHTML = `
 
-   <select  id="userFeedbackReportType">
-       <option value="feedback"> I want to share feedback.
-       </option>
-      <option value="report">I want to report a problem.</option>
-  </select>
+       <div class="user-feedback__title">
+          User Feedback or Report
+       </div>
+  
+      <select class="user-feedback__type" id="userFeedbackType">
 
-   <textarea id="userFeedbackReportValue" placeholder="Write your feedback..."></textarea>
+        <option value="feedback"> I want to share feedback.    </option>
+        <option value="report">I want to report a problem.    </option>
 
-      <div id="userFeedBackReportBtns" >
-          <button id="cancleUserFeedbackReport" class="btn"> Cancle </button>
-          <button id="userFeedbackReport" class="btn">Submit</button>
-      </div>
-  </div>
-  `
-  const cancleUserFeedbackReport = document.getElementById(
-    "cancleUserFeedbackReport"
-  )
-  cancleUserFeedbackReport.addEventListener("click", () => {
-    modalBox.style.display = "none"
-  })
+      </select>
 
-  const userFeedbackReportType = document.getElementById(
-    "userFeedbackReportType"
-  )
+    <textarea class="user-feedback__textarea" id="userFeedbackInput" placeholder="Write your feedback..."></textarea>
 
-  const userFeedbackReportValue = document.getElementById(
-    "userFeedbackReportValue"
-  )
 
-  userFeedbackReportType.addEventListener("change", () => {
-    if (userFeedbackReportType.value == "feedback") {
-      userFeedbackReportValue.setAttribute(
-        "placeholder",
-        "Write your feedback..."
-      )
-    } else if (userFeedbackReportType.value == "report") {
-      userFeedbackReportValue.setAttribute(
-        "placeholder",
-        "Write your report..."
-      )
+    <div class="user-feedback__btn-container" >
+   
+         <div class="user-feedback__btn" id="submitUserFeedbackBtn">Submit</div>
+
+    </div> 
+`
+  modalContentBox.insertAdjacentElement("beforeend", userFeedback)
+  attachScript(modalBox)
+}
+
+function attachScript(modalBox) {
+  const userFeedbackType = document.getElementById("userFeedbackType")
+
+  const userFeedbackInput = document.getElementById("userFeedbackInput")
+
+  userFeedbackType.addEventListener("change", () => {
+    if (userFeedbackType.value == "feedback") {
+      userFeedbackInput.setAttribute("placeholder", "Write your feedback...")
+    } else if (userFeedbackType.value == "report") {
+      userFeedbackInput.setAttribute("placeholder", "Write your report...")
     }
   })
-  const userFeedbackReport = document.getElementById("userFeedbackReport")
+  const submitUserFeedbackBtn = document.getElementById("submitUserFeedbackBtn")
 
-  userFeedbackReport.addEventListener("click", () => {
-    let userFeedbackReportData = {
-      userFeedbackReportType: userFeedbackReportType.value,
-      userFeedbackReportValue: userFeedbackReportValue.value
-    }
-    fetch("/user-auth/user-feedback-report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(userFeedbackReportData)
-    })
-      .then(res => {
-        if (res.ok) return res.json()
-        throw new Error("Server Error in Sending Your Feedback/Report")
+  submitUserFeedbackBtn.addEventListener("click", () => {
+    if (userFeedbackInput.value.trim() !== "") {
+      let data = {
+        userFeedbackReportType: userFeedbackType.value,
+        userFeedbackReportValue: userFeedbackInput.value
+      }
+      fetch("/user-auth/user-feedback-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
       })
-      .then(data => {
-        if (data.isSuccess) {
+        .then(res => {
+          if (res.ok) return res.json()
+          throw new Error("Server error in sending your Feedback/Report")
+        })
+        .then(data => {
+          if (data.isSuccess) {
+            createMainNotification(
+              `Your ${
+                userFeedbackType.value === "feedback" ? "Feedback" : "Report"
+              } is sent successfully`,
+              "success"
+            )
+            userFeedbackInput.value = ""
+            setTimeout(() => {
+              if (!modalBox.classList.contains("hide"))
+                modalBox.classList.add("hide")
+            }, 2000)
+          } else {
+            createMainNotification(data.error, "error")
+          }
+        })
+        .catch(err => {
           createMainNotification(
-            `Your ${
-              userFeedbackReportType.value == "feedback" ? "Feedback" : "Report"
-            } Is Sent Successfully`,
-            "success"
+            `Server error in sending your ${
+              userFeedbackType.value == "feedback" ? "Feedback" : "Report"
+            }, Please try again`,
+            "error"
           )
-          userFeedbackReportValue.value = ""
-        } else {
-          createMainNotification(data.error, "error")
-        }
-      })
-      .catch(err => {
-        createMainNotification(
-          `Server Error In Sending Your ${
-            userFeedbackReportType.value == "feedback" ? "Feedback" : "Report"
-          }, Please Try Again`,
-          "error"
-        )
-      })
+        })
+    } else {
+      createMainNotification(
+        `Please write something in your ${
+          userFeedbackType.value == "feedback" ? "Feedback" : "Report"
+        }, Don't leave it empty`,
+        "error"
+      )
+    }
   })
 }

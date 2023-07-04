@@ -1,31 +1,50 @@
 import { createMainNotification } from "../../common/mainNotification.dev.js"
 import "../css/profileLogoutUserOption.dev.css"
-export function setOwnerSettingContent(modalBox, modalBoxContent, profileUser) {
-  modalBoxContent.innerHTML = `
-  <div id="logoutUserBox">
-      <span>Do You Want To Logout ?</span>
-      <div id="logoutBtns" >
-        <button id="cancleLogoutUser" class="btn">Cancle</button>
-       <button id="logoutUser" class="btn">Logout</button>
-          
-      </div>
-  </div>
+export function setLogoutContent(modalBox, modalContentBox, profileUser) {
+  modalContentBox.innerHTML = ""
+  let logoutBox = document.createElement("div")
+  logoutBox.classList.add("logout-box")
+  logoutBox.setAttribute("id", "logoutBox")
+
+  logoutBox.innerHTML = `
+     <div class="logout-box__title">
+     Do You Want To Logout ?
+     </div>
+    
+    <div class="logout-box__btn-container">
+
+        <button class="logout-box__btn" id="cancleLogoutUserBtn">Cancle</button>
+        
+        <button class="logout-box__btn logout-box__btn--logout" id="logoutUserBtn">Logout</button>
+
+    </div>
   `
-  const logoutUser = document.getElementById("logoutUser")
-  const cancleLogoutUser = document.getElementById("cancleLogoutUser")
-  cancleLogoutUser.addEventListener("click", () => {
-    modalBox.style.display = "none"
+  modalContentBox.insertAdjacentElement("beforeend", logoutBox)
+  attachScript(modalBox, profileUser)
+}
+function attachScript(modalBox, profileUser) {
+  const cancleLogoutUserBtn = document.getElementById("cancleLogoutUserBtn")
+
+  const logoutUserBtn = document.getElementById("logoutUserBtn")
+
+  cancleLogoutUserBtn.addEventListener("click", () => {
+    if (!modalBox.classList.contains("hide")) modalBox.classList.add("hide")
   })
 
-  logoutUser.addEventListener("click", () => {
-    fetch("/user-auth/user-logout")
+  logoutUserBtn.addEventListener("click", () => {
+    fetch("/user-auth/user-logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId: profileUser._id })
+    })
       .then(res => {
         if (res.ok) return res.json()
         throw new Error("Error in Logout user")
       })
       .then(data => {
         if (data.isSuccess) {
-          createMainNotification("You Are Logged Out SuccessFully", "success")
           location.replace(`/user-auth/login`)
         } else {
           createMainNotification(data.error, "error")
@@ -33,7 +52,7 @@ export function setOwnerSettingContent(modalBox, modalBoxContent, profileUser) {
       })
       .catch(err => {
         createMainNotification(
-          "Server Error In Logout user,Please Try Again",
+          "Server error in Logout user,Please try again",
           "error"
         )
       })
