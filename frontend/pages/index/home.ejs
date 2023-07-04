@@ -6,7 +6,7 @@
 
 <div class="home-main-container" id="homeMainContainer">
   <div class="home-header" id="homeHeader">
-    <div class="home-header__main-menu-icon main-menu-icon" id="mainMenuIcon">
+    <div class="home-header__main-menu-icon main-menu-icon" id="mainMenuBtn">
       <%- include('../partials/icons/mainMenu.svg') -%>
     </div>
     <div class="main-logo main-logo--header" id="mainLogo">
@@ -18,50 +18,30 @@
       </div>
 
     </div>
-    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationIcon">
+    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationBtn">
       <%- include('../partials/icons/userNotification.svg') -%>
 
     </div>
-    <div class="user-notification-modal" id="userNotificationModal">
 
-      <div class="user-notification-content user-notification-modal__content">
-
-        <div class="user-notification-content__row ">
-          <div class="user-notification-content__title">Notification</div>
-          <span class="user-notification-modal__close-btn" id="userNotificationModalCloseBtn">close</span>
-        </div>
-
-        <div id="userNotificationContainer" class="user-notification-container">
-          <div class="user-notification user-notification-container__notification">
-            <a href="user-auth/login" class="user-notification__link">
-              <div class="user-notification__column">
-
-                <div class="user-notification__pic">
-                  <img
-                    src="https://learn.microsoft.com/en-us/answers/storage/attachments/209536-360-f-364211147-1qglvxv1tcq0ohz3fawufrtonzz8nq3e.jpg"
-                    alt="Rithik's profile">
-                </div>
-              </div>
-              <div class="user-notification__column user-notification__column--left-margin">
-
-
-                <div class="user-notification__content"> <span class="user-notification__username">User1</span> has sent
-                  you friend request.<span class="user-notification__time">2w</span>
-                </div>
-                <div class="user-notification__second-content">"hello how are you"</div>
-              </div>
-            </a>
-          </div>
-
-
-        </div>
-        <a href="#" class="user-notification-content__see-all-notification">See all notification >></a>
-      </div>
-    </div>
 
   </div>
 
+  <div class="user-notification-modal hide" id="userNotificationModal">
+    <span class="user-notification-modal__close-btn" id="userNotificationModalCloseBtn">X</span>
 
+    <div class="user-notification-modal-content user-notification-modal__content" id="userNotificationModalContent">
+
+      <div class="user-notification-content__title">Notification</div>
+
+
+
+      <div id="userNotificationContainer" class="user-notification-container ">
+      </div>
+
+      <a href="#" class="user-notification-content__see-all-notification">See all notification >></a>
+
+    </div>
+  </div>
 </div>
 
 

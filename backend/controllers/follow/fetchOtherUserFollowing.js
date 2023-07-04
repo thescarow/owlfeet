@@ -35,9 +35,13 @@ exports.fetchOtherUserFollowing = async (req, res) => {
         ) {
           if (user.followings.length) {
             for (let i = 0; i < user.followings.length; i++) {
-              user.followings[i].profileUrl = await signedUrlForGetAwsS3Object(
-                user.followings[i].profile
+              if (
+                user.followings[i].hasOwnProperty("profile") &&
+                user.followings[i].profile !== ""
               )
+                user.followings[i].profile = await signedUrlForGetAwsS3Object(
+                  user.followings[i].profile
+                )
             }
             res.json({ isSuccess: true, user: user.followings })
           } else {

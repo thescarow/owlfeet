@@ -23,7 +23,7 @@ export async function createUserNotification(
   
           <div class="user-notification__pic">
             <img
-              src="${userNotificationData.fromUser.profileUrl}"
+              src="${userNotificationData.fromUser.profile}"
               alt="${
                 userNotificationData.fromUser.firstName + " " + "profile"
               }">

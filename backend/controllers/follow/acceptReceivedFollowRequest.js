@@ -50,9 +50,13 @@ exports.acceptReceivedFollowRequest = async (req, res) => {
             const listOwnerUser = await User.findById(ownerUser._id)
               .select(selectListUserField)
               .lean()
-            listOwnerUser.profileUrl = await signedUrlForGetAwsS3Object(
-              listOwnerUser.profile
+            if (
+              listOwnerUser.hasOwnProperty("profile") &&
+              listOwnerUser.profile !== ""
             )
+              listOwnerUser.profile = await signedUrlForGetAwsS3Object(
+                listOwnerUser.profile
+              )
             //////////////////////
             req.io.to(user._id.toString()).emit("add-following", listOwnerUser)
             req.io
@@ -80,9 +84,10 @@ exports.acceptReceivedFollowRequest = async (req, res) => {
             const listUser = await User.findById(user._id)
               .select(selectListUserField)
               .lean()
-            listUser.profileUrl = await signedUrlForGetAwsS3Object(
-              listUser.profile
-            )
+            if (listUser.hasOwnProperty("profile") && listUser.profile !== "")
+              listUser.profile = await signedUrlForGetAwsS3Object(
+                listUser.profile
+              )
             res.json({
               isSuccess: true,
               acceptReceivedFollowRequestUser: listUser

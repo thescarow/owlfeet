@@ -43,7 +43,7 @@ export function setOwnerSettingContent(modalBox, modalContentBox, profileUser) {
     <div class="editProfile-form-page" id="editProfileFormPage1">
         <div class="profile-field">
             <div id="editProfileProfile">
-                      <img src="${profileUser.profileUrl}" alt="${profileUser.firstName}'s profile image" >                     
+                      <img src="${profileUser.profile}" alt="${profileUser.firstName}'s profile image" >                     
             </div>
             <p id="editProfileProfileBtn">Click to change profile picture</p>
         </div>

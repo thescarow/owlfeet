@@ -26,9 +26,13 @@ exports.fetchFollowSuggestion = async (req, res) => {
         .lean()
       if (suggestionUser.length) {
         for (let i = 0; i < suggestionUser.length; i++) {
-          suggestionUser[i].profileUrl = await signedUrlForGetAwsS3Object(
-            suggestionUser[i].profile
+          if (
+            suggestionUser[i].hasOwnProperty("profile") &&
+            suggestionUser[i].profile !== ""
           )
+            suggestionUser[i].profile = await signedUrlForGetAwsS3Object(
+              suggestionUser[i].profile
+            )
         }
         res.json({ isSuccess: true, user: users })
       } else {

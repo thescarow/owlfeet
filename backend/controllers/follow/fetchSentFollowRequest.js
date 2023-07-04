@@ -25,8 +25,13 @@ exports.fetchSentFollowRequest = async (req, res) => {
         })
 
         for (let i = 0; i < sentFollowRequestUser.length; i++) {
-          sentFollowRequestUser[i].profileUrl =
-            await signedUrlForGetAwsS3Object(sentFollowRequestUser[i].profile)
+          if (
+            sentFollowRequestUser[i].hasOwnProperty("profile") &&
+            sentFollowRequestUser[i].profile !== ""
+          )
+            sentFollowRequestUser[i].profile = await signedUrlForGetAwsS3Object(
+              sentFollowRequestUser[i].profile
+            )
         }
         res.json({ isSuccess: true, user: sentFollowRequestUser })
       } else {

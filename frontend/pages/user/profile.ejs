@@ -20,7 +20,7 @@
     <section class="profile-check-received-follow-request"></section>
 
     <section id="profileImageSection" class="">
-      <img id="profileImage" src="<%= locals.profileUser.profileUrl -%>" alt="profileImage">
+      <img id="profileImage" src="<%= locals.profileUser.profile -%>" alt="profileImage">
       <% if(locals.isOwner==true){ -%>
         <div id="ownerSettingIcon">
           <%- include('../partials/icons/settings.svg') -%>

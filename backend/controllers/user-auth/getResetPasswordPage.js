@@ -5,13 +5,9 @@ const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
 exports.getResetPasswordPage = (req, res) => {
   try {
-    if (req.user) {
-      res.redirect(`/user/${req.user.username}`)
-    } else {
-      res.render("./user-auth/resetPassword", {
-        pageName: "profile"
-      })
-    }
+    res.render("./user-auth/resetPassword", {
+      pageName: "profile"
+    })
   } catch (err) {
     console.log(errorLog("Server Error In Reset Page:"), mainErrorLog(err))
     res.status(500).json({

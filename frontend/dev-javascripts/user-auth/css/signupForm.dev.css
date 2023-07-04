@@ -501,6 +501,7 @@ label::selection {
 
 .input-field__input--username {
     box-shadow: none;
+    /* text-transform: lowercase; */
 }
 
 .input-field__input--username:focus {

@@ -10,12 +10,13 @@ exports.createUsername = async name => {
   try {
     name = name.toString()
     name = name.trim()
+    name = name.toLowerCase()
 
     let specialReg = new RegExp(`[^A-Za-z.0-9_\\s]`, "g") //special character
     let spaceReg = new RegExp("\\s", "g") //space character
-
-    let alphaReg = new RegExp("[a-zA-Z]", "g") // alphabate character
-    let alpha = [
+    let capitalRegex = new RegExp("[A-Z]", "g") // capital letters(A-Z)
+    let smallRegex = new RegExp("[a-z]", "g") // small alphabet(a-z)
+    let smallAlpha = [
       "a",
       "b",
       "c",
@@ -41,33 +42,7 @@ exports.createUsername = async name => {
       "w",
       "x",
       "y",
-      "z",
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z"
+      "z"
     ]
 
     let newUsername
@@ -75,11 +50,11 @@ exports.createUsername = async name => {
     name = name !== "" ? name : "user"
     name = name.replace(specialReg, "")
     name = name.replace(spaceReg, "")
-
+    name = name.replace(capitalRegex, match => match.toLowerCase())
     while (!isUnique) {
       newUsername = name + Math.floor(Math.random() * 10000)
-      if (newUsername.search(alphaReg) === -1) {
-        let randomAlpha = alpha[Math.floor(Math.random() * 20)]
+      if (newUsername.search(smallRegex) === -1) {
+        let randomAlpha = smallAlpha[Math.floor(Math.random() * 20)]
         newUsername = name + randomAlpha + Math.floor(Math.random() * 10000)
       }
       let user = await User.countDocuments({ username: newUsername })

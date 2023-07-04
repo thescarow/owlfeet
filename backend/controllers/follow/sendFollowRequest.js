@@ -57,7 +57,7 @@ exports.sendFollowRequest = async (req, res) => {
                   lean: true
                 }
               })
-              savedNewFollowRequest.from.profileUrl =
+              savedNewFollowRequest.from.profile =
                 await signedUrlForGetAwsS3Object(
                   savedNewFollowRequest.from.profile
                 )
@@ -85,7 +85,7 @@ exports.sendFollowRequest = async (req, res) => {
               const listOwnerUser = await User.findById(ownerUser._id)
                 .select(selectListUserField)
                 .lean()
-              listOwnerUser.profileUrl = await signedUrlForGetAwsS3Object(
+              listOwnerUser.profile = await signedUrlForGetAwsS3Object(
                 listOwnerUser.profile
               )
               ////////////////////////////////////

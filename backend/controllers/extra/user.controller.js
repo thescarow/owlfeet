@@ -30,7 +30,7 @@ exports.getProfilePageByUsername = async (req, res) => {
       })
       .lean()
     if (user) {
-      user.profileUrl = await signedUrlForGetAwsS3Object(user.profile)
+      user.profile = await signedUrlForGetAwsS3Object(user.profile)
       if (req.user) {
         isLogin = true
         if (req.user.username == user.username) {
