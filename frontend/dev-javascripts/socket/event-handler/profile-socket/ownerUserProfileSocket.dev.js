@@ -20,7 +20,6 @@ export async function createOwnerUserProfileSocket(socket) {
         "../../../user/js/createUserBox.dev.js"
       )
       createUserBox(followerUserBoxContainer, "follower", user)
-      console.log(followerUserBoxContainer)
     }
     if (profileUserFollowerCount) {
       profileUserFollowerCount.textContent = (
@@ -117,6 +116,7 @@ export async function createOwnerUserProfileSocket(socket) {
       })
     }
   })
+
   //send-follow-request
   socket.on("add-received-follow-request", async user => {
     const receivedFollowRequestUserBoxContainer = document.getElementById(
@@ -139,6 +139,7 @@ export async function createOwnerUserProfileSocket(socket) {
       ).toString()
     }
   })
+
   //cancel-sent-follow-request
   socket.on("remove-received-follow-request", userId => {
     if (receivedFollowRequestUserBoxContainer) {

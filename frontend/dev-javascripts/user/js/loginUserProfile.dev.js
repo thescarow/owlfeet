@@ -1,6 +1,3 @@
-//other user modal-//////////////////////////////
-
-import { createMainNotification } from "../../common/mainNotification.dev.js"
 let svg_followIcon = `
 <svg width="94" height="100" viewBox="0 0 94 100"  xmlns="http://www.w3.org/2000/svg">
 <path d="M43.6393 50.0018C50.1291 50.0018 55.3901 44.7787 55.3901 38.3356C55.3901 31.8925 50.1291 26.6693 43.6393 26.6693C37.1495 26.6693 31.8884 31.8925 31.8884 38.3356C31.8884 44.7787 37.1495 50.0018 43.6393 50.0018Z" />
@@ -24,6 +21,8 @@ let svg_cancelFollowRequestIcon = `
 </svg>
 
 `
+import { createMainNotification } from "../../common/mainNotification.dev.js"
+
 const profileViewFollowerBtn = document.getElementById("profileViewFollowerBtn")
 const profileViewFollowingBtn = document.getElementById(
   "profileViewFollowingBtn"
@@ -32,9 +31,9 @@ const profileViewFollowingBtn = document.getElementById(
 
 const profileOtherUserModal = document.getElementById("profileOtherUserModal")
 
-const profileOtherUserModalContent = document.getElementById(
-  "profileOtherUserModalContent"
-)
+// const profileOtherUserModalContent = document.getElementById(
+//   "profileOtherUserModalContent"
+// )
 ///////
 const followingOtherUserSwitchBtn = document.getElementById(
   "followingOtherUserSwitchBtn"
@@ -65,7 +64,7 @@ const otherUserSwitchBtnContainer = document.getElementById(
   "otherUserSwitchBtnContainer"
 )
 
-function setOtherUserModalContent(otherUser = "follower") {
+function switchOtherUserModalContent(otherUser = "follower") {
   let followerFlag = otherUser === "follower" ? true : false
   let followingFlag = otherUser === "following" ? true : false
 
@@ -86,7 +85,7 @@ profileViewFollowerBtn.addEventListener("click", async () => {
   if (profileOtherUserModal.classList.contains("hide"))
     profileOtherUserModal.classList.remove("hide")
 
-  setOtherUserModalContent("follower")
+  switchOtherUserModalContent("follower")
   let { fetchUserAndCreateUserBox } = await import("./createUserBox.dev.js")
 
   fetchUserAndCreateUserBox(followerUserBoxContainer, "follower")
@@ -104,14 +103,14 @@ profileViewFollowingBtn.addEventListener("click", async () => {
   if (profileOtherUserModal.classList.contains("hide"))
     profileOtherUserModal.classList.remove("hide")
 
-  setOtherUserModalContent("following")
+  switchOtherUserModalContent("following")
 
   let { fetchUserAndCreateUserBox } = await import("./createUserBox.dev.js")
   fetchUserAndCreateUserBox(followingUserBoxContainer, "following")
 })
 
 followerOtherUserSwitchBtn.addEventListener("click", async () => {
-  setOtherUserModalContent("follower")
+  switchOtherUserModalContent("follower")
   let { fetchUserAndCreateUserBox } = await import("./createUserBox.dev.js")
 
   fetchUserAndCreateUserBox(followerUserBoxContainer, "follower")
@@ -126,7 +125,7 @@ followerOtherUserSwitchBtn.addEventListener("click", async () => {
   }
 })
 followingOtherUserSwitchBtn.addEventListener("click", async () => {
-  setOtherUserModalContent("following")
+  switchOtherUserModalContent("following")
   let { fetchUserAndCreateUserBox } = await import("./createUserBox.dev.js")
   fetchUserAndCreateUserBox(followingUserBoxContainer, "following")
 })

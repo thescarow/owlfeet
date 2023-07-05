@@ -267,7 +267,7 @@ export function createUserBox(userBoxContainer, userBoxType, userBoxUser) {
     }
   }
 
-  userBoxContainer.insertAdjacentElement("beforeend", userBox)
+  userBoxContainer.insertAdjacentElement("afterbegin", userBox)
 }
 
 export function fetchUserAndCreateUserBox(userBoxContainer, userBoxType) {

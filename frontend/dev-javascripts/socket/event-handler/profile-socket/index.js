@@ -7,14 +7,14 @@ export async function createProfileSocket(socket) {
     )
     createLoginUserProfileSocket(socket)
 
-    if (isOwner && isOwner === true) {
+    if (isOwnerProfile && isOwnerProfile === true) {
       let { createOwnerUserProfileSocket } = await import(
         "./ownerUserProfileSocket.dev"
       )
       createOwnerUserProfileSocket(socket)
     }
   }
-  if (isOwner === false) {
+  if (isOwnerProfile === false) {
     let { createUpdateForAllUserSocket } = await import(
       "./updateForAllUserSocket.dev"
     )

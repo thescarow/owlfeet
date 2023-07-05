@@ -1226,7 +1226,7 @@
 }
 
 .other-user-container--follower .user-box-container--received-follow-request {
-    max-height: 60px;
+    max-height: 120px;
     overflow: hidden;
     transition: all 0.5s;
 }
