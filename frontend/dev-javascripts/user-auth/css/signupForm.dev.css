@@ -501,6 +501,7 @@ label::selection {
 
 .input-field__input--username {
     box-shadow: none;
+    /* text-transform: lowercase; */
 }
 
 .input-field__input--username:focus {
@@ -640,7 +641,8 @@ select::-ms-expand {
 }
 
 .input-field__input--textarea {
-    height: 88px;
+        height: 88px;
+    resize: vertical;
 
 }
 

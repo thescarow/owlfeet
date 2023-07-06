@@ -20,7 +20,7 @@ exports.resetPassword = async (req, res) => {
     } else {
       let passwordResult = checkValidPassword(password)
       if (!passwordResult.isValid) {
-        res.json({
+        return res.json({
           isSuccess: false,
           error: passwordResult.error
         })
@@ -43,7 +43,6 @@ exports.resetPassword = async (req, res) => {
                 "You have used this password before, Please use new one for security purpose"
             })
           } else {
-            console.log("reached here")
             let tokenResult = await checkValidAccessToken(
               user.mobile,
               resetAccessToken

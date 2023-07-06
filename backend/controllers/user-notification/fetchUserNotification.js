@@ -4,7 +4,9 @@ const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////\
 const UserNotification = require("../../models/userNotification")
-const { selectListUserField } = require("../../common/userData")
+const {
+  selectListUserField
+} = require("../../common/filter-field/filterUserField")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 
 exports.fetchUserNotification = async (req, res) => {
@@ -22,11 +24,15 @@ exports.fetchUserNotification = async (req, res) => {
         })
         .lean()
 
-      userNotification[0].fromUser.profileUrl =
-        await signedUrlForGetAwsS3Object(userNotification[0].fromUser.profile)
       for (let i = 0; i < userNotification.length; i++) {
-        userNotification[i].fromUser.profileUrl =
-          await signedUrlForGetAwsS3Object(userNotification[i].fromUser.profile)
+        if (
+          userNotification[i].fromUser.hasOwnProperty("profile") &&
+          userNotification[i].fromUser.profile !== ""
+        )
+          userNotification[i].fromUser.profile =
+            await signedUrlForGetAwsS3Object(
+              userNotification[i].fromUser.profile
+            )
       }
 
       res.json({ isSuccess: true, userNotification: userNotification })

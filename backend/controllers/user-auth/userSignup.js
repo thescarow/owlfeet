@@ -11,6 +11,7 @@ const createDOMPurify = require("dompurify")
 const { JSDOM } = require("jsdom")
 const window = new JSDOM("").window
 const DOMPurify = createDOMPurify(window)
+const emailValidator = require("email-validator")
 const { deleteAwsS3Object } = require("../../services/awsS3")
 const {
   cookieExpireDays,
@@ -30,16 +31,18 @@ exports.userSignup = async (req, res) => {
       signupData.signupProfile && signupData.signupProfile.toString() !== ""
         ? signupData.signupProfile.toString()
         : ""
+    // because signup profile is already check here
     if (
-      signupData.signupProfile &&
-      signupData.signupMobile &&
-      signupData.signupFirstName &&
-      signupData.signupPassword &&
-      signupData.signupUsername &&
-      signupData.signupState &&
-      signupData.signupCity &&
-      signupData.signupBirthday &&
-      signupData.signupAccessToken
+      !(
+        signupData.signupMobile &&
+        signupData.signupFirstName &&
+        signupData.signupPassword &&
+        signupData.signupUsername &&
+        signupData.signupState &&
+        signupData.signupCity &&
+        signupData.signupBirthday &&
+        signupData.signupAccessToken
+      )
     ) {
       deleteAwsKey(signupData.signupProfile)
       return res.json({
@@ -48,7 +51,7 @@ exports.userSignup = async (req, res) => {
       })
     } else {
       for (let key in signupData) {
-        if (key != "signupPassword") {
+        if (key !== "signupPassword" || key !== "signupEmail") {
           signupData[key] = DOMPurify.sanitize(signupData[key])
           signupData[key] = signupData[key].trim()
         }
@@ -101,68 +104,86 @@ exports.userSignup = async (req, res) => {
                     "This Mobile Number is already taken, Please choose diffrent one"
                 })
               } else {
-                let resultToken = await checkValidAccessToken(
-                  signupData.signupMobile,
-                  signupData.signupAccessToken
-                )
-                if (!resultToken.isValid) {
-                  deleteAwsKey(signupData.signupProfile)
+                let isEmailInvalid = false
+                if (
+                  signupData.hasOwnProperty("signupEmail") &&
+                  signupData.signupEmail.trim() !== ""
+                ) {
+                  isEmailInvalid = !emailValidator.validate(
+                    signupData.signupEmail
+                  )
+                }
+                if (isEmailInvalid) {
                   return res.json({
                     isSuccess: false,
-                    error: resultToken.error
+                    error:
+                      "Your email address is invalid, Please check it or You can just remove it."
                   })
                 } else {
-                  const signupHashedPassword = await bcrypt.hash(
-                    signupData.signupPassword,
-                    10
+                  let resultToken = await checkValidAccessToken(
+                    signupData.signupMobile,
+                    signupData.signupAccessToken
                   )
+                  if (!resultToken.isValid) {
+                    deleteAwsKey(signupData.signupProfile)
+                    return res.json({
+                      isSuccess: false,
+                      error: resultToken.error
+                    })
+                  } else {
+                    const signupHashedPassword = await bcrypt.hash(
+                      signupData.signupPassword,
+                      10
+                    )
+                    const createdUser = new User({
+                      firstName: signupData.signupFirstName,
+                      lastName: signupData.signupLastName || "",
+                      username: signupData.signupUsername,
+                      mobile: signupData.signupMobile,
+                      email: signupData.signupEmail || "",
+                      bio: signupData.signupBio || "",
+                      "location.country": signupData.signupCountry || "IN",
+                      "location.city": signupData.signupCity || "",
+                      "location.state": signupData.signupState || "",
+                      birthday:
+                        new Date(signupData.signupBirthday) || new Date(),
+                      password: signupHashedPassword,
+                      allPassword: [signupHashedPassword],
+                      profile: signupData.signupProfile,
+                      gender: signupData.signupGender || "male"
+                    })
+                    const savedUser = await createdUser.save()
 
-                  const createdUser = new User({
-                    firstName: signupData.signupFirstName,
-                    lastName: signupData.signupLastName || "",
-                    username: signupData.signupUsername,
-                    mobile: signupData.signupMobile,
-                    email: signupData.signupEmail || "",
-                    bio: signupData.signupBio || "",
-                    "location.country": signupData.signupCountry || "IN",
-                    "location.city": signupData.signupCity || "",
-                    "location.state": signupData.signupState || "",
-                    birthday: new Date(signupData.signupBirthday) || new Date(),
-                    password: signupHashedPassword,
-                    profile: signupData.signupProfile,
-                    gender: signupData.signupGender || "male"
-                  })
-                  const savedUser = await createdUser.save()
+                    const accessToken = jwt.sign(
+                      {
+                        username: savedUser.username,
+                        userId: savedUser._id,
+                        userRole: savedUser.role
+                      },
+                      process.env.JWT_SECRET,
+                      {
+                        expiresIn: jwtExpireDays
+                      }
+                    )
 
-                  const accessToken = jwt.sign(
-                    {
-                      username: savedUser.username,
-                      userId: savedUser._id,
-                      userRole: savedUser.role
-                    },
-                    process.env.JWT_SECRET,
-                    {
-                      expiresIn: jwtExpireDays
-                    }
-                  )
+                    res.cookie("user", accessToken, {
+                      expires: new Date(
+                        Date.now() + 84600 * 1000 * cookieExpireDays
+                      ),
+                      httpOnly: true,
+                      secure: true, //for https connection only
+                      sameSite: "Lax",
+                      signed: true
+                      // domain: '' // default exclude all subdomain
+                      // path: '/' // Path for the cookie
+                    })
+                    res.json({
+                      isSuccess: true,
+                      username: savedUser.username
+                    })
 
-                  res.cookie("user", accessToken, {
-                    expires: new Date(
-                      Date.now() + 84600 * 1000 * cookieExpireDays
-                    ),
-                    httpOnly: true,
-                    secure: true, //for https connection only
-                    sameSite: "Lax",
-                    signed: true
-                    // domain: '' // default exclude all subdomain
-                    // path: '/' // Path for the cookie
-                  })
-                  res.json({
-                    isSuccess: true,
-                    username: savedUser.username
-                  })
-
-                  ////////end
+                    ////////end
+                  }
                 }
               }
             }

@@ -1,6 +1,6 @@
 export async function createUpdateForAllUserSocket(socket) {
   socket.on("update-follower-for-all", (userId, data) => {
-    if (profileUser._id == userId) {
+    if (profileUser._id.toString() === userId.toString()) {
       let profileUserFollowerCount = document.getElementById(
         "profileUserFollowerCount"
       )
@@ -12,7 +12,7 @@ export async function createUpdateForAllUserSocket(socket) {
     }
   })
   socket.on("update-following-for-all", (userId, data) => {
-    if (profileUser._id == userId) {
+    if (profileUser._id.toString() === userId.toString()) {
       let profileUserFollowingCount = document.getElementById(
         "profileUserFollowingCount"
       )

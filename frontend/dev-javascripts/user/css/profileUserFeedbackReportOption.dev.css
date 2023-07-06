@@ -1,86 +1,131 @@
-#UserfeedbackReportBox {
+label {
+    cursor: pointer;
+
+}
+
+label::selection {
+    /* color: transparent; */
+    background-color: transparent;
+}
+
+.inner-modal-content--feedback {
+    /*     height: 90%;
+    max-height: 321px; */
+}
+
+
+.user-feedback {
     width: 100%;
+    height: 100%;
+    padding: 10px 10px 25px 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 12px;
+    animation: userFeedbackAnim 1s 1 cubic-bezier(0, 0.96, 0.67, 0.52) both;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
 
+.user-feedback::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
 
 }
 
-#userFeedbackReportTitle {
-    font-size: 17px;
-    border-bottom: 2px solid var(--light-color);
-    color: var(--light-color);
+@keyframes userFeedbackAnim {
+    0% {
+        transform: translate(0, -100%);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+
 }
 
-select#userFeedbackReportType {
+.user-feedback__title {
+
+
+
+    /*     width: 100%; */
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(var(--rgba-light-color), 0.9);
+    border-bottom: 1px solid rgba(var(--rgba-light-color), 1);
+
+}
+
+.user-feedback__type {
+    margin: 20px 0 0 0;
     width: 100%;
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    padding: 10px 5px;
+    padding: 4px 6px;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(var(--rgba-dark-color), 1);
+    background: rgba(var(--rgba-light-color), 0.9);
     border: none;
     outline: none;
-    border-radius: 5px;
-    color: var(--dark-color);
-    background-color: var(--light-color);
+    border-radius: 4px;
 }
 
-/* select#userFeedbackReportType option {} */
+.user-feedback__type option {    background: rgba(var(--rgba-light-color),0.8);
+    color: rgba(var(--rgba-dark-color),1);}
 
-textarea#userFeedbackReportValue {
+.user-feedback__textarea {
+    resize: vertical;
+    margin: 20px 0 0 0;
     width: 100%;
-    height: 150px;
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    padding: 10px 5px;
-    border: none;
+    height: 100px;
+    padding: 4px 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(var(--rgba-light-color), 0.9);
+    background: rgba(var(--rgba-dark-color), 0.9);
+    border: 1px solid rgba(var(--rgba-light-color), 0.3);
     outline: none;
-    border-radius: 5px;
-    color: var(--dark-color);
-    background-color: var(--light-color);
+    border-radius: 4px;
+    resize: vertical;
+    margin: 20px 0 0 0;
+    width: 100%;
+    height: 100px;
+    padding: 4px 6px;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(var(--rgba-light-color), 0.9);
+    background: rgba(var(--rgba-dark-color), 0.9);
+    border: 1px solid rgba(var(--rgba-light-color), 0.3);
+    outline: none;
+    border-radius: 4px;
 }
 
-::placeholder {
-    color: var(--dark-color);
-    opacity: 0.3;
-}
-
-:-ms-input-placeholder {
-    color: var(--dark-color);
-    opacity: 0.3;
-}
-
-::-ms-input-placeholder {
-    color: var(--dark-color);
-    opacity: 0.3;
-}
-
-div#userFeedBackReportBtns {
-    margin-top: 20px;
+.user-feedback__btn-container {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
+    margin: 20px 0 0 0;
 }
 
-div#userFeedBackReportBtns button.btn {
-    background-color: var(--light-color);
-    padding: 5px 8px;
-    color: #413F42;
-    border: none;
-    outline: none;
+.user-feedback__btn {
+    background: rgba(var(--rgba-dark-color), 1);
+    border: 1px solid rgba(var(--rgba-light-color), 0.4);
+    color: rgba(var(--rgba-third-color), 1);
     font-size: 16px;
-    font-weight: 700;
-    border-radius: 6px;
+    font-weight: 800;
+    padding: 4px 6px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-div#userFeedBackReportBtns button#userFeedbackReport {
-    background-color: var(--second-color);
-
+.user-feedback__btn:hover {
+    background: rgba(var(--rgba-third-color), 1);
+    border: 1px solid rgba(var(--rgba-light-color), 0.4);
+    color: rgba(var(--rgba-dark-color), 1);
 }

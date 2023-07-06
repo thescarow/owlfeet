@@ -9,8 +9,8 @@ exports.checkValidUsername = async username => {
   try {
     let specialReg = new RegExp(`[^A-Za-z.0-9_\\s]`, "g") //special character, space is also excluded from special character
     let spaceReg = new RegExp("\\s", "g") //space character
-
-    let alphaReg = new RegExp("[a-zA-Z]", "g") // alphabate character
+    let capitalRegex = new RegExp("[A-Z]", "g") // capital letters (A-Z)
+    let smallRegex = new RegExp("[a-z]", "g") // small character(a-z)
 
     if (username.search(spaceReg) !== -1) {
       return {
@@ -23,13 +23,20 @@ exports.checkValidUsername = async username => {
       return {
         isValid: false,
         error:
+          "Capital letters(A-Z) are not allowed in username, Please use small letters(a-z) for your username"
+      }
+    }
+    if (username.search(capitalRegex) !== -1) {
+      return {
+        isValid: false,
+        error:
           "Special characters (except .) are not allowed in username,Please remove them from your username"
       }
     }
-    if (username.search(alphaReg) === -1) {
+    if (username.search(smallRegex) === -1) {
       return {
         isValid: false,
-        error: "Please use atleast one alphabet (a-z or A-Z) in your username"
+        error: "Please use atleast one small alphabet (a-z) in your username"
       }
     }
 

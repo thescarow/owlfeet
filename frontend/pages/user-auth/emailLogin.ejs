@@ -1,0 +1,39 @@
+<link rel="stylesheet" href="/stylesheets/user-auth/emailLogin.css" />
+
+<script defer src="/javascripts/emailLogin.bundle.js"></script>
+
+<div class="main-email-login-container" id='mainEmailLoginContainer'>
+    <div class="email-login" id="emailLoginContainer">
+
+        <div class="email-login__title">Email Login</div>
+        <div class="email-login__desc">Login without password</div>
+        <!-- Form Begins -->
+        <div class="email-login-form" id="emailLoginForm">
+            <div class="email-login__note email-login__note--pre">
+                Enter your registerd email address and click on login button. We will send a secure link to
+                your
+                registered email
+                address. You can use this link to login your account securely.
+            </div>
+            <div class="input-field">
+                <label class="input-field__label" for="emailLoginInput">Registerd Email<span>*</span></label>
+                <input class="input-field__input" type="email" id="emailLoginInput" placeholder="Email"
+                    autocomplete="off">
+            </div>
+
+            <div class="email-login__note email-login__note--hide email-login__note--post" id='emailLoginPostNote'>
+                We've sent a secure link to your registered email address, go and check your inbox. You can
+                use this link to access your account only once. If you don't use this link within 15 min, link will
+                expire automatically.
+            </div>
+
+
+            <div class="input-btn-field">
+                <div class="input-btn input-btn--send-email" id="emailLoginActionBtn">
+                    <%- include('../partials/icons/user-auth/secureLoginLinkIcon.svg') -%> Send Secure Login Link
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

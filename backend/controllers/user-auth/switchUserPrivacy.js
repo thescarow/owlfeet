@@ -11,34 +11,41 @@ const User = require("../../models/user")
 //@access          private // getLoginUser
 exports.switchUserPrivacy = async (req, res) => {
   try {
-    if (req.user) {
-      let { userPrivacySwitchedTo } = req.body
-      if (Object.values(userPrivacy).includes(userPrivacySwitchedTo)) {
-        let user = await User.findById(req.user.id)
-        user.privacy = userPrivacySwitchedTo
-        await user.save()
-        res.json({
-          isSuccess: true,
-          switchedTo: userPrivacySwitchedTo
-        })
-      } else {
-        res.json({
-          isSuccess: false,
-          error: "You Are Not Allowed To Set This Privacy"
-        })
-      }
-    } else {
-      res.json({
+    if (!req.user) {
+      return res.json({
         isSuccess: false,
         error:
-          "You Are Not Logged in, First Login Then Try To Change Your User Privacy"
+          "You are not logged in, First login then try to change your user privacy"
       })
+    } else {
+      let { switchedUserPrivacyTo } = req.body
+      if (!switchedUserPrivacyTo) {
+        return res.json({
+          isSuccess: false,
+          error: "Please send all the required data with the request"
+        })
+      } else {
+        if (!Object.values(userPrivacy).includes(switchedUserPrivacyTo)) {
+          return res.json({
+            isSuccess: false,
+            error: "You are not allowed to set this privacy"
+          })
+        } else {
+          let user = await User.findById(req.user.id).select({ privacy: 1 })
+          user.privacy = switchedUserPrivacyTo
+          await user.save()
+          res.json({
+            isSuccess: true,
+            switchedTo: switchedUserPrivacyTo
+          })
+        }
+      }
     }
   } catch (err) {
-    console.log(errorLog("Error in switchUserPrivacy:"), mainErrorLog(err))
+    console.log(errorLog("Error in switchign User Privacy:"), mainErrorLog(err))
     res.json({
       isSuccess: false,
-      error: "Server Error In Switching Your Privacy,Please Try Again"
+      error: "Server error in switching your privacy,Please try again"
     })
   }
 }

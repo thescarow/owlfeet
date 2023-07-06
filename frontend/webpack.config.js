@@ -34,6 +34,16 @@ module.exports = {
       "./dev-javascripts/user-auth/resetPassword.dev.js"
     ),
 
+    emailLogin: path.resolve(
+      __dirname,
+      "./dev-javascripts/user-auth/emailLogin.dev.js"
+    ),
+
+    emailLoginStatus: path.resolve(
+      __dirname,
+      "./dev-javascripts/response-status/emailLoginStatus.dev.js"
+    ),
+
     profile: path.resolve(__dirname, "./dev-javascripts/user/profile.dev.js"),
 
     chat: path.resolve(__dirname, "./dev-javascripts/chat/chat.dev.js"),

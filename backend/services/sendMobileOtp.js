@@ -3,7 +3,9 @@ const dataLog = chalk.blue.bold
 const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
-require("dotenv").config()
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 const fetch = require("node-fetch")
 exports.sendMobileOtp = async (number, otp) => {
   try {

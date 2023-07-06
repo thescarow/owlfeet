@@ -18,6 +18,7 @@ exports.getLoginUserData = async (req, res) => {
       let loginUser = await User.findById(req.user.id)
         .select(selectLoginUserField)
         .lean()
+
       if (loginUser.hasOwnProperty("profile") && loginUser.profile !== "") {
         loginUser.profile = await signedUrlForGetAwsS3Object(loginUser.profile)
       }

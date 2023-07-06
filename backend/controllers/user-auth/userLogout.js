@@ -4,28 +4,40 @@ const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
 
-//@description     Logout user
-//@route           POST /user-auth/user-logout
-//@access          private // getLoginUser
 exports.userLogout = async (req, res) => {
   try {
-    if (req.user) {
-      res.clearCookie("user", {
-        httpOnly: true,
-        secure: true, //for https connection only
-        sameSite: "Lax",
-        signed: true
-        // domain: '' // default exclude all subdomain
-        // path: '/' // Path for the cookie
-      })
-      res.json({
-        isSuccess: true
+    if (!req.user) {
+      return res.json({
+        isSuccess: false,
+        error: "You are not logged in, First login then logout"
       })
     } else {
-      res.json({
-        isSuccess: false,
-        error: "You Are Not Logged in, First Login then Logout"
-      })
+      let { userId } = req.body
+      if (!userId) {
+        return res.json({
+          isSuccess: false,
+          error: "Please send all the required data with the request"
+        })
+      } else {
+        if (userId !== req.user.id) {
+          return res.json({
+            isSuccess: false,
+            error: "You are not authorized to logout this user"
+          })
+        } else {
+          res.clearCookie("user", {
+            httpOnly: true,
+            secure: true, //for https connection only
+            sameSite: "Lax",
+            signed: true
+            // domain: '' // default exclude all subdomain
+            // path: '/' // Path for the cookie
+          })
+          res.json({
+            isSuccess: true
+          })
+        }
+      }
     }
   } catch (err) {
     console.log(errorLog("Error in logoutUser:"), mainErrorLog(err))

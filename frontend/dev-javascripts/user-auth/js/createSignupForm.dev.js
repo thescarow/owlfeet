@@ -216,8 +216,8 @@ export function createSignupForm() {
                         class="required">*</span></label>
                 <ul class="input-field__desc-list">
                     <li>Choose unique username</li>
-                    <li>Use alphabate or .(dot) or _(underspace) </li>
-                    <li class="not-use">Don't use special character(!@#$%^&*;'...) or space</li>
+                    <li>Use small alphabet(a-z) or .(dot) or _(underscore)</li>
+                    <li class="not-use">Don't use special character(!@#$%^&*;'...) or space or capital letters(A-Z).</li>
                 </ul>
     
                 <div class="input-field__input-box input-field__input-box--username" id="signupUsernameBox">

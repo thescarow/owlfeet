@@ -6,94 +6,42 @@
 
 <div class="home-main-container" id="homeMainContainer">
   <div class="home-header" id="homeHeader">
-    <div class="home-header__main-menu-icon main-menu-icon" id="mainMenuIcon">
+    <div class="home-header__main-menu-icon main-menu-icon" id="mainMenuBtn">
       <%- include('../partials/icons/mainMenu.svg') -%>
     </div>
-    <div class="home-header__logo logo" id="mainLogo">Owl<span class="logo__tail">Feet</span>
+    <div class="main-logo main-logo--header" id="mainLogo">
+      <div class="main-logo__icon">
+        <%- include('../../public/assets/logo/mainOwlfeetLogoIcon.svg') _%>
+      </div>
+      <div class="main-logo__title">
+        <%- include('../../public/assets/logo/mainOwlfeetLogoTitle.svg') _%>
+      </div>
+
     </div>
-    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationIcon">
+    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationBtn">
       <%- include('../partials/icons/userNotification.svg') -%>
 
     </div>
-    <div class="user-notification-modal" id="userNotificationModal">
-
-      <div class="user-notification-content user-notification-modal__content">
-
-        <div class="user-notification-content__row ">
-          <div class="user-notification-content__title">Notification</div>
-          <span class="user-notification-modal__close-btn" id="userNotificationModalCloseBtn">close</span>
-        </div>
-
-        <div id="userNotificationContainer" class="user-notification-container">
-          <div class="user-notification user-notification-container__notification">
-            <a href="user-auth/login" class="user-notification__link">
-              <div class="user-notification__column">
-
-                <div class="user-notification__pic">
-                  <img
-                    src="https://learn.microsoft.com/en-us/answers/storage/attachments/209536-360-f-364211147-1qglvxv1tcq0ohz3fawufrtonzz8nq3e.jpg"
-                    alt="Rithik's profile">
-                </div>
-              </div>
-              <div class="user-notification__column user-notification__column--left-margin">
 
 
-                <div class="user-notification__content"> <span class="user-notification__username">User1</span> has sent
-                  you friend request.<span class="user-notification__time">2w</span>
-                </div>
-                <div class="user-notification__second-content">"hello how are you"</div>
-              </div>
-            </a>
-          </div>
+  </div>
+
+  <div class="user-notification-modal hide" id="userNotificationModal">
+    <span class="user-notification-modal__close-btn" id="userNotificationModalCloseBtn">X</span>
+
+    <div class="user-notification-modal-content user-notification-modal__content" id="userNotificationModalContent">
+
+      <div class="user-notification-content__title">Notification</div>
 
 
-        </div>
-        <a href="#" class="user-notification-content__see-all-notification">See all notification >></a>
+
+      <div id="userNotificationContainer" class="user-notification-container ">
       </div>
+
+      <a href="#" class="user-notification-content__see-all-notification">See all notification >></a>
+
     </div>
-
   </div>
-
-
-  <div class='link-preview'>
-    <a href="#" class="link-preview__link">
-
-
-      <h3 class='link-preview__title'>
-        Google's NEW AI 'PALM-2 Takes the Industry By STORM! (NOW RELEASED!)
-      </h3>
-      <div class='link-preview__site'>
-        <div class='link-preview__site-icon link-preview__site-icon--svg'>
-
-          <%- include('../partials/icons/messageLinkPreviewWebsiteIcon.svg') -%>
-        </div>
-        <div class='link-preview__site-name'>
-          YouTube
-        </div>
-
-      </div>
-      <div class='link-preview__pic link-preview__pic--img'>
-        <img src="https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png" alt="">
-        <%# include('../partials/icons/messageLinkPreviewWebsiteIcon.svg')-%>
-      </div>
-
-
-      <p class='link-preview__desc'>
-        Google's NEW AI 'PALM-2 Takes the Industry By STORM! (NOW
-        RELEASED!)https://blog.google/technology/ai/google-palm-2-ai-large-language-
-        Google's NEW AI 'PALM-2 Takes the Industry By STORM! (NOW
-        RELEASED!)https://blog.google/technology/ai/google-palm-2-ai-large-language-model/ https://www.you...
-      </p>
-
-
-
-    </a>
-
-
-
-
-  </div>
-
 </div>
 
 

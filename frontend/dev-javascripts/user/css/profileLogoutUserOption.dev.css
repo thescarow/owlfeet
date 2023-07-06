@@ -1,45 +1,89 @@
-#logoutUserBox {
+label {
+    cursor: pointer;
+
+}
+
+label::selection {
+    /* color: transparent; */
+    background-color: transparent;
+}
+
+.inner-modal-content--logout {
+    /*     height: 90%;
+    max-height: 321px; */
+}
+
+.logout-box {
     width: 100%;
+    height: 100%;
+    padding: 10px 10px 25px 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 12px;
+    animation: logoutBoxAnim 1s 1 cubic-bezier(0, 0.96, 0.67, 0.52) both;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
 
+.logout-box::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+@keyframes logoutBoxAnim {
+    0% {
+        transform: translate(0, -100%);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
 
 }
 
-#logoutUserBox span {
-
-        color: var(--light-color);
+.logout-box__title {
+    /*     width: 100%; */
     text-align: center;
-    font-size: 16px;
-    font-weight: 500;
-    border-bottom: 1px solid var(--light-color);
-    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(var(--rgba-light-color), 0.9);
+    border-bottom: 1px solid rgba(var(--rgba-light-color), 1);
 }
 
-
-
-div#logoutBtns {
-    margin-top: 20px;
+.logout-box__btn-container {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
+    margin: 40px 0 0 0;
 }
 
-div#logoutBtns button.btn {
-        background-color: var(--light-color);
-    padding: 5px 10px;
-    color: #413F42;
-    border: none;
-    outline: none;
-    font-size: 18px;
-    border-radius: 6px;
+.logout-box__btn {
+    background: rgba(var(--rgba-light-color), 0.9);
+    border: 1px solid rgba(var(--rgba-dark-color), 0.4);
+    color: rgba(var(--rgba-dark-color), 1);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-div#logoutBtns button#logoutUser {
-    background-color: var(--second-color);
+.logout-box__btn--logout {
+    background: rgba(var(--rgba-dark-color), 0.9);
+    border: 1px solid rgba(var(--rgba-light-color), 0.4);
+    color: rgba(var(--rgba-third-color), 1);
 
+}
+
+.logout-box__btn--logout:hover {
+    background: rgba(var(--rgba-third-color), 1);
+    border: 1px solid rgba(var(--rgba-light-color), 0.4);
+    color: rgba(var(--rgba-dark-color), 1);
 }

@@ -10,15 +10,15 @@ const listUserField = {
   gender: 1,
   isActive: 1
   // lastActive:1,
-  //   location: 1,
-  //   bio: 1,
-  //   birthday: 1,
-  //   followers: 1,
-  //   followings: 1
-  //   mobile: 1,
-  //   password: 1,
-  //   email: 1,
-  //   isEmailVerified: 1,
+  // location: 1,
+  // bio: 1,
+  // birthday: 1,
+  // followers: 1,
+  // followings: 1
+  // mobile: 1,
+  // password: 1,
+  // email: 1,
+  // isEmailVerified: 1,
 }
 
 const otherUserField = {
@@ -34,13 +34,13 @@ const otherUserField = {
   bio: 1,
   followers: 1,
   followings: 1
-  // isActive: 1,
+  // isActive: 1
   // lastActive:1,
-  //   birthday: 1,
-  //   mobile: 1,
-  //   password: 1,
-  //   email: 1,
-  //   isEmailVerified: 1,
+  // birthday: 1,
+  // mobile: 1,
+  // password: 1,
+  // email: 1,
+  // isEmailVerified: 1,
 }
 
 //////////////////////////////////////////////
@@ -59,11 +59,11 @@ exports.selectLoginUserField = {
   followers: 1,
   followings: 1,
   isActive: 1,
-  lastActive: 1
+  lastActive: 1,
+  email: 1,
+  isEmailVerified: 1
   //   mobile: 1,
   //   password: 1,
-  //   email: 1,
-  //   isEmailVerified: 1,
 }
 
 exports.selectListUserField = {
@@ -179,19 +179,19 @@ exports.selectUserFieldForCallRoom = {
 }
 
 exports.filterListUserField = user => {
-  const userDataFilterArray = Object.keys(listUserField)
+  const filteredKeyArray = Object.keys(listUserField)
 
   for (key in user) {
-    if (!userDataFilterArray.includes(key)) {
+    if (!filteredKeyArray.includes(key)) {
       delete user[key]
     }
   }
 }
 
 exports.filterOtherUserField = user => {
-  const userDataFilterArray = Object.keys(otherUserField)
+  const filteredKeyArray = Object.keys(otherUserField)
   for (key in user) {
-    if (!userDataFilterArray.includes(key)) {
+    if (!filteredKeyArray.includes(key)) {
       delete user[key]
     }
   }

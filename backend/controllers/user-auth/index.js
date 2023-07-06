@@ -1,5 +1,8 @@
 const { getAccountPage } = require("./getAccountPage")
+const { getResetPasswordPage } = require("./getResetPasswordPage")
+const { getEmailLoginPage } = require("./getEmailLoginPage")
 const { sendMobileOtp } = require("./sendMobileOtp")
+const { sendEmailVerification } = require("./sendEmailVerification")
 const { checkMobileOtp } = require("./checkMobileOtp")
 const { checkUsername } = require("./checkUsername")
 const { generateUsername } = require("./generateUsername")
@@ -7,15 +10,22 @@ const { generateCities } = require("./generateCities")
 const { userSignup } = require("./userSignup")
 const { userLogin } = require("./userLogin")
 const { userLogout } = require("./userLogout")
-const { getResetPasswordPage } = require("./getResetPasswordPage")
 const { resetPassword } = require("./resetPassword")
 const { editUserProfile } = require("./editUserProfile")
 const { changeUserPassword } = require("./changeUserPassword")
 const { userFeedbackReport } = require("./userFeedbackReport")
 const { switchUserPrivacy } = require("./switchUserPrivacy")
+const { removeUserEmail } = require("./removeUserEmail")
+const { verifyUserEmail } = require("./verifyUserEmail")
+const { verifyEmailLogin } = require("./verifyEmailLogin")
+const { sendEmailLogin } = require("./sendEmailLogin")
+const { userEmailLogin } = require("./userEmailLogin")
+const { emailLoginOnRequestedWindow } = require("./emailLoginOnRequestedWindow")
 
 module.exports = {
   getAccountPage,
+  getEmailLoginPage,
+  getResetPasswordPage,
   sendMobileOtp,
   checkMobileOtp,
   checkUsername,
@@ -24,10 +34,16 @@ module.exports = {
   userSignup,
   userLogin,
   userLogout,
-  getResetPasswordPage,
   resetPassword,
   editUserProfile,
   changeUserPassword,
   userFeedbackReport,
-  switchUserPrivacy
+  switchUserPrivacy,
+  sendEmailVerification,
+  removeUserEmail,
+  verifyUserEmail,
+  verifyEmailLogin,
+  sendEmailLogin,
+  userEmailLogin,
+  emailLoginOnRequestedWindow
 }

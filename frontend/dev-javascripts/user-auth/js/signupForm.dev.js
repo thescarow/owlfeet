@@ -350,10 +350,16 @@ signupConfirmPassword.addEventListener("keyup", e => {
 let specialRegex = new RegExp(`[^A-Za-z.0-9_\\s]`, "g") //special character, space is also excluded from special character
 let spaceRegex = new RegExp("\\s", "g") //space character
 
-let alphaRegex = new RegExp("[a-zA-Z]", "g") // alphabate character
+let capitalRegex = new RegExp("[A-Z]", "g") // capital letters (A-Z)
+
+let smallRegex = new RegExp("[a-z]", "g") // small letters (a-z)
 signupUsername.addEventListener("keyup", e => {
   signupUsername.value = signupUsername.value.replace(specialRegex, "")
   signupUsername.value = signupUsername.value.replace(spaceRegex, "")
+
+  signupUsername.value = signupUsername.value.replace(capitalRegex, match =>
+    match.toLowerCase()
+  )
 })
 
 signupUsername.addEventListener("change", e => {
@@ -375,13 +381,18 @@ signupUsername.addEventListener("input", () => {
       "Spaces are not allowed in username ,Please remove space from your username",
       "error"
     )
+  } else if (username.search(capitalRegex) !== -1) {
+    createMainNotification(
+      "Capital letters(A-Z) are not allowed in username, Please use small letters(a-z) for your username",
+      "error"
+    )
   } else {
     if (username !== "") {
       clearTimeout(usernameTimeout)
       usernameTimeout = setTimeout(() => {
-        if (username.search(alphaRegex) === -1) {
+        if (username.search(smallRegex) === -1) {
           createMainNotification(
-            "Please use atleast one alphabet (a-z or A-Z) in your username",
+            "Please use atleast one small alphabet(a-z) in your username",
             "error"
           )
         } else {

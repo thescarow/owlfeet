@@ -1,109 +1,140 @@
 import { createMainNotification } from "../../common/mainNotification.dev.js"
 import "../css/profileChangePasswordOption.dev.css"
-export function setOwnerSettingContent(modalBox, modalContentBox) {
-  modalContentBox.innerHTML = `
-  <div id="changePasswordBox">
-      <span>Change your Password</span>
-      <input type="password" id='currentPassword' class="password" placeholder="Current Password">
-      <input type="password" id='newPassword' class="password"  placeholder="New Password">
-      <input type="password" id='confirmPassword' class="password" placeholder="Confirm Password">
-      <label id="showPasswordContainer">
-      <input type="checkbox" id='showPassword'> 
-      <span id="showPasswordText"> Show Password </span>
+export function setChangePasswordContent(modalBox, modalContentBox) {
+  modalContentBox.innerHTML = ""
+  let changePasswordBox = document.createElement("div")
+  changePasswordBox.classList.add("change-password-box")
+  changePasswordBox.setAttribute("id", "changePasswordBox")
+
+  changePasswordBox.innerHTML = `
+      <div class="change-password__title">Change your Password</div>
+
+      <input class="change-password__input" type="password" id='changeCurrentPassword' placeholder="Current Password">
+
+      <input class="change-password__input" type="password" id='changeNewPassword' placeholder="New Password">
+
+      <input class="change-password__input" type="password" id='changeConfirmPassword' placeholder="Confirm Password">
+
+      <label class="change-password-checkbox">
+
+      <input class="change-password-checkbox__input" type="checkbox" id='showChangePasswordBtn'> 
+      <div class="change-password-checkbox__label"> Show Password </div>
+
       </label>
-      <div class="change-password-btns">
-          <button id="canclePassword" class="btn">Cancle</button>
-          <button id="changePassword" class="btn">Submit</button>
+
+      <div class="change-password__btn-container">
+          <button id="cancelChangePasswordBtn" class="change-password__btn">Cancle</button>
+          <button id="changePasswordBtn" class="change-password__btn change-password__btn--change-password">Submit</button>
       </div>
-  <a href="/user-auth/reset-password" id="profileResetPassword">Forgot password </a>
-  </div>
+
+  <a class="change-password__forgot-password" href="/user-auth/reset-password">Forgot password </a>
   `
 
-  const changePassword = document.getElementById("changePassword")
-  const canclePassword = document.getElementById("canclePassword")
-  canclePassword.addEventListener("click", () => {
-    modalBox.style.display = "none"
+  modalContentBox.insertAdjacentElement("beforeend", changePasswordBox)
+  attachScript(modalBox)
+}
+
+function attachScript(modalBox) {
+  const changePasswordBtn = document.getElementById("changePasswordBtn")
+  const cancelChangePasswordBtn = document.getElementById(
+    "cancelChangePasswordBtn"
+  )
+  cancelChangePasswordBtn.addEventListener("click", () => {
+    if (!modalBox.classList.contains("hide")) modalBox.classList.add("hide")
   })
 
-  const currentPassword = document.getElementById("currentPassword")
-  const newPassword = document.getElementById("newPassword")
-  const confirmPassword = document.getElementById("confirmPassword")
+  const changeCurrentPassword = document.getElementById("changeCurrentPassword")
+  const changeNewPassword = document.getElementById("changeNewPassword")
+  const changeConfirmPassword = document.getElementById("changeConfirmPassword")
 
-  currentPassword.addEventListener("keyup", e => {
-    currentPassword.value = currentPassword.value.replace(/\s/g, "")
+  changeCurrentPassword.addEventListener("keyup", e => {
+    changeCurrentPassword.value = changeCurrentPassword.value.replace(/\s/g, "")
   })
-  newPassword.addEventListener("keyup", e => {
-    newPassword.value = newPassword.value.replace(/\s/g, "")
+  changeNewPassword.addEventListener("keyup", e => {
+    changeNewPassword.value = changeNewPassword.value.replace(/\s/g, "")
   })
-  confirmPassword.addEventListener("keyup", e => {
-    confirmPassword.value = confirmPassword.value.replace(/\s/g, "")
+  changeConfirmPassword.addEventListener("keyup", e => {
+    changeConfirmPassword.value = changeConfirmPassword.value.replace(/\s/g, "")
   })
 
-  const passwords = [...document.getElementsByClassName("password")]
-  const showPassword = document.getElementById("showPassword")
-  showPassword.addEventListener("change", () => {
-    if (showPassword.checked) {
-      passwords.forEach(password => {
+  const passwordInputs = [
+    ...document.getElementsByClassName("change-password__input")
+  ]
+  const showChangePasswordBtn = document.getElementById("showChangePasswordBtn")
+  showChangePasswordBtn.addEventListener("change", () => {
+    if (showChangePasswordBtn.checked) {
+      passwordInputs.forEach(password => {
         password.type = "text"
       })
     } else {
-      passwords.forEach(password => {
+      passwordInputs.forEach(password => {
         password.type = "password"
       })
     }
   })
 
-  changePassword.addEventListener("click", () => {
-    if (currentPassword.value != "") {
-      if (confirmPassword.value == newPassword.value) {
-        let changePasswordData = {
-          currentPassword: currentPassword.value,
-          newPassword: newPassword.value
-        }
+  changePasswordBtn.addEventListener("click", () => {
+    if (changeCurrentPassword.value !== "") {
+      if (changeNewPassword.value !== "") {
+        if (changeConfirmPassword.value === changeNewPassword.value) {
+          let changePasswordData = {
+            currentPassword: changeCurrentPassword.value,
+            newPassword: changeNewPassword.value
+          }
 
-        fetch("/user-auth/change-user-password", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(changePasswordData)
-        })
-          .then(res => {
-            if (res.ok) return res.json()
-            throw new Error("Error in Changing Password")
+          fetch("/user-auth/change-user-password", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(changePasswordData)
           })
-          .then(data => {
-            if (data.isSuccess) {
+            .then(res => {
+              if (res.ok) return res.json()
+              throw new Error("Error in Changing Password")
+            })
+            .then(data => {
+              if (data.isSuccess) {
+                createMainNotification(
+                  "Your Password Is Changed SuccessFully",
+                  "success"
+                )
+                changeCurrentPassword.value = ""
+                changeNewPassword.value = ""
+                changeConfirmPassword.value = ""
+
+                setTimeout(() => {
+                  if (!modalBox.classList.contains("hide"))
+                    modalBox.classList.add("hide")
+                }, 2000)
+              } else {
+                createMainNotification(data.error, "error")
+              }
+            })
+            .catch(err => {
               createMainNotification(
-                "Your Password Is Changed SuccessFully",
-                "success"
+                "Server error in changing Password,Please try again",
+                "error"
               )
-              currentPassword.value = ""
-              newPassword.value = ""
-              confirmPassword.value = ""
-              modalBox.style.display = "none"
-            } else {
-              createMainNotification(data.error, "error")
-            }
-          })
-          .catch(err => {
-            createMainNotification(
-              "Server Error In Changing Password,Please Try Again",
-              "error"
-            )
-          })
+            })
+        } else {
+          createMainNotification(
+            "Password and Confirm Password are not same, Please check them carefully",
+            "error"
+          )
+        }
       } else {
         createMainNotification(
-          "Password And Confirm Password Are Not Same, Please Check Them Carefully",
+          "Please enter new password, It should not be empty",
           "error"
         )
       }
     } else {
       createMainNotification(
-        "Please Enter Current Password, It Should Not Be Empty",
+        "Please enter current password, It should not be empty",
         "error"
       )
-      currentPassword.focus()
+      changeCurrentPassword.focus()
     }
   })
 }

@@ -10,8 +10,8 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 const {
   selectSafeUserField,
   filterOtherUserField,
-  filterUserFollowListToLength
-} = require("../../common/userData")
+  filterUserFollowFieldToLength
+} = require("../../common/filter-field/filterUserField")
 const { userFollowStatus } = require("../../common/userFollowStatus")
 const {
   checkInSentFollowRequest,
@@ -25,8 +25,9 @@ const {
 //@access          Accessing login User
 exports.getProfilePageByUsername = async (req, res) => {
   try {
-    let isOwner = false,
-      isLogin = false
+    let isLogin = false
+    let isOwnerProfile = false
+
     let user = await User.findOne({ username: req.params.username })
       .select(selectSafeUserField)
       .lean()
@@ -35,7 +36,7 @@ exports.getProfilePageByUsername = async (req, res) => {
       if (req.user) {
         isLogin = true
         if (req.user.username.toString() === user.username.toString()) {
-          isOwner = true
+          isOwnerProfile = true
           user.receivedFollowRequestTotalCount =
             await getReceivedFollowRequestTotalCount(user._id)
         } else {
@@ -60,14 +61,14 @@ exports.getProfilePageByUsername = async (req, res) => {
         filterOtherUserField(user)
       }
       if (user.hasOwnProperty("profile") && user.profile !== "") {
-        user.profileUrl = await signedUrlForGetAwsS3Object(user.profile)
+        user.profile = await signedUrlForGetAwsS3Object(user.profile)
       }
-      filterUserFollowListToLength(user)
+      filterUserFollowFieldToLength(user)
 
       res.render("./user/profile.ejs", {
         profileUser: user,
         profileUsername: user.username,
-        isOwner: isOwner,
+        isOwnerProfile: isOwnerProfile,
         isLogin: isLogin,
         pageName: "profile"
       })
