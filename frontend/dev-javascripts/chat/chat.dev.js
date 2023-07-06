@@ -264,6 +264,7 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     //   )
     // })
     uppy.on("upload-success", (file, response) => {
+      console.log("uppy file:", file)
       let userMessage = {}
       userMessage.chat = activeChatSection.dataset.chatId
       userMessage.hasMediaContent = true

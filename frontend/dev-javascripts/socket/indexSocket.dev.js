@@ -40,6 +40,13 @@
     let { createUserSocket } = await import("./event-handler/user-socket")
     createUserSocket(socket)
 
+    if (isLogin === false) {
+      let { createUserAuthSocket } = await import(
+        "./event-handler/user-auth-socket"
+      )
+      createUserAuthSocket(socket)
+    }
+
     if (pageName && pageName === "call") {
       let { createCallSocket } = await import("./event-handler/call-socket")
       createCallSocket(socket)

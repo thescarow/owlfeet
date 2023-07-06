@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+
+
+    <link rel="stylesheet" href="/stylesheets/response-status/emailLoginStatus.css" />
+
+    <script src="/javascripts/emailLoginStatus.bundle.js" defer></script>
+
+</head>
+
+<body>
+
+    <div class="main-status-container" id='mainStatusContainer'>
+
+        <div class='status-box <%= (locals.isSuccess=== true )? "status-box--success": "status-box--failed" _%>'
+            data-token="<%= locals.token _%>" id="statusBox">
+            <div class="status__icon">
+                <% if(locals.isSuccess===true ){ %>
+                    <%- include('../partials/icons/response-status/emailLoginSuccessIcon.svg') _%>
+                        <% } else if(locals.isSuccess===false ){ %>
+                            <%- include('../partials/icons/response-status/failedIcon.svg') _%>
+                                <% } _%>
+            </div>
+            <div class="status__title" id="statusTitle">
+                <% if(locals.isSuccess===true ){ %>
+                    Login Successfully
+                    <% } else if(locals.isSuccess===false ){ %>
+                        <%= locals.errorTitle _%>
+                            <% } _%>
+            </div>
+            <div class="status__desc" id="statusDesc">
+                <% if(locals.isSuccess===true ){ %>
+                    Choose where you want to login ?
+                    <% } else if(locals.isSuccess===false ){ %>
+                        <%= locals.errorDesc _%>
+                            <% } _%>
+            </div>
+
+            <div class="status__btn-field" id="statusBtnField">
+                <% if(locals.isSuccess===true ){ %>
+                    <div class="status__btn status__btn--login-on-requested-window" id="loginOnRequestedWindowBtn">
+                        Login On Requested Window
+                    </div>
+                    <div class="status__btn status__btn--login-here" id="loginHereBtn">
+                        Login Here
+                    </div>
+                    <% } else if(locals.isSuccess===false ){ %>
+                        <div class="status__btn status__btn--go-back" id="goBackToLoginPageBtn">
+                            Go Back To Login Page
+                        </div>
+                        <% } _%>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

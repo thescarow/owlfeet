@@ -17,17 +17,19 @@ const {
   generateCities,
   userSignup,
   userLogin,
+  userEmailLogin,
   userLogout,
   resetPassword,
   editUserProfile,
   changeUserPassword,
   userFeedbackReport,
   switchUserPrivacy,
-  sendEmailVerification,
   removeUserEmail,
+  sendEmailVerification,
   verifyUserEmail,
-  sendEmailLogin,
-  verifyEmailLogin
+  // sendEmailLogin,
+  verifyEmailLogin,
+  emailLoginOnRequestedWindow
 } = require("../controllers/user-auth")
 
 router.get("/login", getLoginUser, getAccountPage)
@@ -35,17 +37,20 @@ router.get("/signin", getLoginUser, getAccountPage)
 router.get("/signup", getLoginUser, getAccountPage)
 router.get("/register", getLoginUser, getAccountPage)
 ///////////////////////////////////////////////////////
-router.post("/send-email-login", sendEmailLogin)
+router.get("/email-login", getLoginUser, getEmailLoginPage)
+// router.post("/send-email-login", sendEmailLogin)
+// we have used socket for it
 router.get("/verify-email-login", verifyEmailLogin)
-
+router.get("/email-login-on-requested-window", emailLoginOnRequestedWindow)
+router.get("/user-email-login", userEmailLogin)
+/////////////
 router.get("/reset-password", getLoginUser, getResetPasswordPage)
 router.post("/reset-password", resetPassword)
-router.get("/email-login", getLoginUser, getEmailLoginPage)
-
+///////////////
 router.post("/send-email-verification", getLoginUser, sendEmailVerification)
-router.patch("/remove-user-email", getLoginUser, removeUserEmail)
 router.get("/verify-user-email", verifyUserEmail)
-
+router.patch("/remove-user-email", getLoginUser, removeUserEmail)
+/////
 router.post("/send-signup-mobile-otp", checkNewMobile, sendMobileOtp)
 router.post("/send-reset-password-otp", checkRegisterMobile, sendMobileOtp)
 router.post("/check-mobile-otp", checkMobileOtp)
@@ -55,11 +60,11 @@ router.get("/generate-cities", generateCities)
 router.post("/user-signup", userSignup)
 router.post("/user-login", userLogin)
 router.post("/user-logout", getLoginUser, userLogout)
+
 //////////////////////////////////////////////////
 router.patch("/edit-user-profile", getLoginUser, editUserProfile)
 router.patch("/change-user-password", getLoginUser, changeUserPassword)
 router.patch("/switch-user-privacy", getLoginUser, switchUserPrivacy)
-router.post("/send-email-verification", getLoginUser, sendEmailVerification)
 router.post("/user-feedback-report", getLoginUser, userFeedbackReport)
 
 module.exports = router

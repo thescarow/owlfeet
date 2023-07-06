@@ -1,5 +1,16 @@
 export async function createOwnerUserProfileSocket(socket) {
   console.log("insideOwnerUserProfileSocket")
+  //send-follow-request
+  socket.on("user-auth:verified-user-email", async data => {
+    if (loginUser._id.toString() === data.userId.toString()) {
+      loginUser.isEmailVerified = true
+      loginUser.email = data.email
+    }
+    if (profileUser._id.toString() === data.userId.toString()) {
+      profileUser.isEmailVerified = true
+      profileUser.email = data.email
+    }
+  })
 
   const profileUserReceivedFollowRequestCount = document.getElementById(
     "profileUserReceivedFollowRequestCount"

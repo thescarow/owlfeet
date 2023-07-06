@@ -63,6 +63,7 @@ exports.verifyUserEmail = async (req, res) => {
               user.email = data.email
               user.isEmailVerified = true
               await user.save()
+              // we have already checked email is unique or not in sending email verification
 
               emailVerificationToken.isUsedOnce = true
               await emailVerificationToken.save()

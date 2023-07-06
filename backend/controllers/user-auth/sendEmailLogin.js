@@ -23,6 +23,7 @@ exports.sendEmailLogin = async (req, res) => {
       })
     } else {
       email = email.trim()
+      email = email.toString()
 
       if (!emailValidator.validate(email)) {
         return res.json({
@@ -51,10 +52,10 @@ exports.sendEmailLogin = async (req, res) => {
           ) {
             return res.json({
               isSuccess: false,
-              error: `Secure Login Link already sent to your email box,Please wait for ${
+              error: `Please wait for ${
                 2 * 60 -
                 Math.floor((Date.now() - oldToken.createdAt.getTime()) / 1000)
-              } seconds after that resend it again`
+              } seconds to send Secure Login Link again`
             })
           } else {
             await EmailLoginToken.deleteMany({ email: email })
@@ -78,8 +79,8 @@ exports.sendEmailLogin = async (req, res) => {
             let verificationUrl = `http://localhost:5000/user-auth/verify-email-login/?token=${token}`
 
             let userFullName = user.firstName + " " + user.lastName
-            // console.log("email login link:", verificationUrl)
 
+            // console.log("email login link:", verificationUrl)
             sendEmailLink(email, "email-login", verificationUrl, userFullName)
 
             res.json({ isSuccess: true })

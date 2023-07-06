@@ -20,13 +20,13 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./dev-javascripts/user-auth/emailLogin.dev.js":
-/*!*****************************************************!*\
-  !*** ./dev-javascripts/user-auth/emailLogin.dev.js ***!
-  \*****************************************************/
+/***/ "./dev-javascripts/response-status/emailLoginStatus.dev.js":
+/*!*****************************************************************!*\
+  !*** ./dev-javascripts/response-status/emailLoginStatus.dev.js ***!
+  \*****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var email_validator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! email-validator */ \"./node_modules/email-validator/index.js\");\n/* harmony import */ var _common_mainNotification_dev_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common/mainNotification.dev.js */ \"./dev-javascripts/common/mainNotification.dev.js\");\n\n\nconst emailLoginInput = document.getElementById(\"emailLoginInput\");\nconst emailLoginPostNote = document.getElementById(\"emailLoginPostNote\");\nconst emailLoginActionBtn = document.getElementById(\"emailLoginActionBtn\");\nemailLoginInput.addEventListener(\"input\", () => {\n  if (!emailLoginPostNote.classList.contains(\"email-login__note--hide\")) emailLoginPostNote.classList.add(\"email-login__note--hide\");\n});\nemailLoginActionBtn.addEventListener(\"click\", async () => {\n  let email = emailLoginInput.value.trim();\n\n  if (email !== \"\") {\n    if (email_validator__WEBPACK_IMPORTED_MODULE_0__.validate(email)) {\n      let {\n        sendEmailLoginSocket\n      } = await __webpack_require__.e(/*! import() */ \"dev-javascripts_socket_event-emitter_user-auth-socket_index_js\").then(__webpack_require__.bind(__webpack_require__, /*! ../socket/event-emitter/user-auth-socket */ \"./dev-javascripts/socket/event-emitter/user-auth-socket/index.js\"));\n      sendEmailLoginSocket(email);\n    } else {\n      (0,_common_mainNotification_dev_js__WEBPACK_IMPORTED_MODULE_1__.createMainNotification)(\"This Email Address is not valid, Please check it and try again\", \"error\");\n    }\n  } else {\n    (0,_common_mainNotification_dev_js__WEBPACK_IMPORTED_MODULE_1__.createMainNotification)(\"Email should not be empty\", \"error\");\n  }\n}); // fetch(\"/user-auth/send-email-login\", {\n//   method: \"POST\",\n//   headers: {\n//     \"Content-Type\": \"application/json\"\n//   },\n//   body: JSON.stringify({ email: email })\n// })\n//   .then(res => {\n//     if (res.ok) return res.json()\n//     throw new Error(\"Server error in sending secure login link.\")\n//   })\n// .then(data => {\n//   if (data.isSuccess) {\n//     createMainNotification(\n//       \"Secure link is sent to your Email Box.\",\n//       \"success\"\n//     )\n//     if (\n//       emailLoginPostNote.classList.contains(\"email-login__note--hide\")\n//     )\n//       emailLoginPostNote.classList.remove(\"email-login__note--hide\")\n//   } else {\n//     createMainNotification(data.error, \"error\")\n//   }\n// })\n// .catch(err => {\n//   createMainNotification(\n//     \"Server error in sending secure login link,Please try again\",\n//     \"error\"\n//   )\n// })//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9kZXYtamF2YXNjcmlwdHMvdXNlci1hdXRoL2VtYWlsTG9naW4uZGV2LmpzLmpzIiwibWFwcGluZ3MiOiI7OztBQUFBO0FBQ0E7QUFDQSxNQUFNRSxlQUFlLEdBQUdDLFFBQVEsQ0FBQ0MsY0FBVCxDQUF3QixpQkFBeEIsQ0FBeEI7QUFDQSxNQUFNQyxrQkFBa0IsR0FBR0YsUUFBUSxDQUFDQyxjQUFULENBQXdCLG9CQUF4QixDQUEzQjtBQUNBLE1BQU1FLG1CQUFtQixHQUFHSCxRQUFRLENBQUNDLGNBQVQsQ0FBd0IscUJBQXhCLENBQTVCO0FBRUFGLGVBQWUsQ0FBQ0ssZ0JBQWhCLENBQWlDLE9BQWpDLEVBQTBDLE1BQU07RUFDOUMsSUFBSSxDQUFDRixrQkFBa0IsQ0FBQ0csU0FBbkIsQ0FBNkJDLFFBQTdCLENBQXNDLHlCQUF0QyxDQUFMLEVBQ0VKLGtCQUFrQixDQUFDRyxTQUFuQixDQUE2QkUsR0FBN0IsQ0FBaUMseUJBQWpDO0FBQ0gsQ0FIRDtBQUlBSixtQkFBbUIsQ0FBQ0MsZ0JBQXBCLENBQXFDLE9BQXJDLEVBQThDLFlBQVk7RUFDeEQsSUFBSUksS0FBSyxHQUFHVCxlQUFlLENBQUNVLEtBQWhCLENBQXNCQyxJQUF0QixFQUFaOztFQUNBLElBQUlGLEtBQUssS0FBSyxFQUFkLEVBQWtCO0lBQ2hCLElBQUlYLHFEQUFBLENBQXdCVyxLQUF4QixDQUFKLEVBQW9DO01BQ2xDLElBQUk7UUFBRUk7TUFBRixJQUEyQixNQUFNLCtRQUFyQztNQUdBQSxvQkFBb0IsQ0FBQ0osS0FBRCxDQUFwQjtJQUNELENBTEQsTUFLTztNQUNMVix1RkFBc0IsQ0FDcEIsZ0VBRG9CLEVBRXBCLE9BRm9CLENBQXRCO0lBSUQ7RUFDRixDQVpELE1BWU87SUFDTEEsdUZBQXNCLENBQUMsMkJBQUQsRUFBOEIsT0FBOUIsQ0FBdEI7RUFDRDtBQUNGLENBakJELEdBbUJBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vZnJvbnRlbmQvLi9kZXYtamF2YXNjcmlwdHMvdXNlci1hdXRoL2VtYWlsTG9naW4uZGV2LmpzPzZlM2MiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGVtYWlsVmFsaWRhdG9yIGZyb20gXCJlbWFpbC12YWxpZGF0b3JcIlxyXG5pbXBvcnQgeyBjcmVhdGVNYWluTm90aWZpY2F0aW9uIH0gZnJvbSBcIi4uL2NvbW1vbi9tYWluTm90aWZpY2F0aW9uLmRldi5qc1wiXHJcbmNvbnN0IGVtYWlsTG9naW5JbnB1dCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZW1haWxMb2dpbklucHV0XCIpXHJcbmNvbnN0IGVtYWlsTG9naW5Qb3N0Tm90ZSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZW1haWxMb2dpblBvc3ROb3RlXCIpXHJcbmNvbnN0IGVtYWlsTG9naW5BY3Rpb25CdG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImVtYWlsTG9naW5BY3Rpb25CdG5cIilcclxuXHJcbmVtYWlsTG9naW5JbnB1dC5hZGRFdmVudExpc3RlbmVyKFwiaW5wdXRcIiwgKCkgPT4ge1xyXG4gIGlmICghZW1haWxMb2dpblBvc3ROb3RlLmNsYXNzTGlzdC5jb250YWlucyhcImVtYWlsLWxvZ2luX19ub3RlLS1oaWRlXCIpKVxyXG4gICAgZW1haWxMb2dpblBvc3ROb3RlLmNsYXNzTGlzdC5hZGQoXCJlbWFpbC1sb2dpbl9fbm90ZS0taGlkZVwiKVxyXG59KVxyXG5lbWFpbExvZ2luQWN0aW9uQnRuLmFkZEV2ZW50TGlzdGVuZXIoXCJjbGlja1wiLCBhc3luYyAoKSA9PiB7XHJcbiAgbGV0IGVtYWlsID0gZW1haWxMb2dpbklucHV0LnZhbHVlLnRyaW0oKVxyXG4gIGlmIChlbWFpbCAhPT0gXCJcIikge1xyXG4gICAgaWYgKGVtYWlsVmFsaWRhdG9yLnZhbGlkYXRlKGVtYWlsKSkge1xyXG4gICAgICBsZXQgeyBzZW5kRW1haWxMb2dpblNvY2tldCB9ID0gYXdhaXQgaW1wb3J0KFxyXG4gICAgICAgIFwiLi4vc29ja2V0L2V2ZW50LWVtaXR0ZXIvdXNlci1hdXRoLXNvY2tldFwiXHJcbiAgICAgIClcclxuICAgICAgc2VuZEVtYWlsTG9naW5Tb2NrZXQoZW1haWwpXHJcbiAgICB9IGVsc2Uge1xyXG4gICAgICBjcmVhdGVNYWluTm90aWZpY2F0aW9uKFxyXG4gICAgICAgIFwiVGhpcyBFbWFpbCBBZGRyZXNzIGlzIG5vdCB2YWxpZCwgUGxlYXNlIGNoZWNrIGl0IGFuZCB0cnkgYWdhaW5cIixcclxuICAgICAgICBcImVycm9yXCJcclxuICAgICAgKVxyXG4gICAgfVxyXG4gIH0gZWxzZSB7XHJcbiAgICBjcmVhdGVNYWluTm90aWZpY2F0aW9uKFwiRW1haWwgc2hvdWxkIG5vdCBiZSBlbXB0eVwiLCBcImVycm9yXCIpXHJcbiAgfVxyXG59KVxyXG5cclxuLy8gZmV0Y2goXCIvdXNlci1hdXRoL3NlbmQtZW1haWwtbG9naW5cIiwge1xyXG4vLyAgIG1ldGhvZDogXCJQT1NUXCIsXHJcbi8vICAgaGVhZGVyczoge1xyXG4vLyAgICAgXCJDb250ZW50LVR5cGVcIjogXCJhcHBsaWNhdGlvbi9qc29uXCJcclxuLy8gICB9LFxyXG4vLyAgIGJvZHk6IEpTT04uc3RyaW5naWZ5KHsgZW1haWw6IGVtYWlsIH0pXHJcbi8vIH0pXHJcbi8vICAgLnRoZW4ocmVzID0+IHtcclxuLy8gICAgIGlmIChyZXMub2spIHJldHVybiByZXMuanNvbigpXHJcbi8vICAgICB0aHJvdyBuZXcgRXJyb3IoXCJTZXJ2ZXIgZXJyb3IgaW4gc2VuZGluZyBzZWN1cmUgbG9naW4gbGluay5cIilcclxuLy8gICB9KVxyXG4vLyAudGhlbihkYXRhID0+IHtcclxuLy8gICBpZiAoZGF0YS5pc1N1Y2Nlc3MpIHtcclxuLy8gICAgIGNyZWF0ZU1haW5Ob3RpZmljYXRpb24oXHJcbi8vICAgICAgIFwiU2VjdXJlIGxpbmsgaXMgc2VudCB0byB5b3VyIEVtYWlsIEJveC5cIixcclxuLy8gICAgICAgXCJzdWNjZXNzXCJcclxuLy8gICAgIClcclxuLy8gICAgIGlmIChcclxuLy8gICAgICAgZW1haWxMb2dpblBvc3ROb3RlLmNsYXNzTGlzdC5jb250YWlucyhcImVtYWlsLWxvZ2luX19ub3RlLS1oaWRlXCIpXHJcbi8vICAgICApXHJcbi8vICAgICAgIGVtYWlsTG9naW5Qb3N0Tm90ZS5jbGFzc0xpc3QucmVtb3ZlKFwiZW1haWwtbG9naW5fX25vdGUtLWhpZGVcIilcclxuLy8gICB9IGVsc2Uge1xyXG4vLyAgICAgY3JlYXRlTWFpbk5vdGlmaWNhdGlvbihkYXRhLmVycm9yLCBcImVycm9yXCIpXHJcbi8vICAgfVxyXG4vLyB9KVxyXG4vLyAuY2F0Y2goZXJyID0+IHtcclxuLy8gICBjcmVhdGVNYWluTm90aWZpY2F0aW9uKFxyXG4vLyAgICAgXCJTZXJ2ZXIgZXJyb3IgaW4gc2VuZGluZyBzZWN1cmUgbG9naW4gbGluayxQbGVhc2UgdHJ5IGFnYWluXCIsXHJcbi8vICAgICBcImVycm9yXCJcclxuLy8gICApXHJcbi8vIH0pXHJcbiJdLCJuYW1lcyI6WyJlbWFpbFZhbGlkYXRvciIsImNyZWF0ZU1haW5Ob3RpZmljYXRpb24iLCJlbWFpbExvZ2luSW5wdXQiLCJkb2N1bWVudCIsImdldEVsZW1lbnRCeUlkIiwiZW1haWxMb2dpblBvc3ROb3RlIiwiZW1haWxMb2dpbkFjdGlvbkJ0biIsImFkZEV2ZW50TGlzdGVuZXIiLCJjbGFzc0xpc3QiLCJjb250YWlucyIsImFkZCIsImVtYWlsIiwidmFsdWUiLCJ0cmltIiwidmFsaWRhdGUiLCJzZW5kRW1haWxMb2dpblNvY2tldCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./dev-javascripts/user-auth/emailLogin.dev.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../common/mainNotification.dev */ \"./dev-javascripts/common/mainNotification.dev.js\");\n\nlet statusBox = document.getElementById(\"statusBox\");\nlet statusTitle = document.getElementById(\"statusTitle\");\nlet statusDesc = document.getElementById(\"statusDesc\");\nlet statusBtnField = document.getElementById(\"statusBtnField\");\nlet loginOnRequestedWindowBtn = document.getElementById(\"loginOnRequestedWindowBtn\");\n\nif (loginOnRequestedWindowBtn) {\n  loginOnRequestedWindowBtn.addEventListener(\"click\", async () => {\n    let token = statusBox.dataset.token;\n    if (token && token.trim() !== \"\") fetch(`/user-auth/email-login-on-requested-window/?token=${token}`).then(response => {\n      if (response.ok) {\n        return response.json();\n      }\n\n      return Promise.reject(response);\n    }).then(async data => {\n      if (data.isSuccess) {\n        statusTitle.textContent = \"Go and checkout your requested window.\";\n        statusDesc.textContent = \"\";\n        statusBtnField.innerHTML = \"\";\n      } else {\n        (0,_common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__.createMainNotification)(data.error, \"error\");\n      }\n    }).catch(async err => {\n      (0,_common_mainNotification_dev__WEBPACK_IMPORTED_MODULE_0__.createMainNotification)(\"Server Error, Please Try Again\", \"error\");\n    });\n  });\n}\n\nlet loginHereBtn = document.getElementById(\"loginHereBtn\");\n\nif (loginHereBtn) {\n  loginHereBtn.addEventListener(\"click\", () => {\n    let token = statusBox.dataset.token;\n    if (token && token.trim() !== \"\") location.assign(`/user-auth/user-email-login/?token=${token}`);\n  });\n}\n\nlet goBackToLoginPageBtn = document.getElementById(\"goBackToLoginPageBtn\");\n\nif (goBackToLoginPageBtn) {\n  goBackToLoginPageBtn.addEventListener(\"click\", () => {\n    location.assign(`/user-auth/email-login`);\n  });\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9kZXYtamF2YXNjcmlwdHMvcmVzcG9uc2Utc3RhdHVzL2VtYWlsTG9naW5TdGF0dXMuZGV2LmpzLmpzIiwibWFwcGluZ3MiOiI7O0FBQUE7QUFFQSxJQUFJQyxTQUFTLEdBQUdDLFFBQVEsQ0FBQ0MsY0FBVCxDQUF3QixXQUF4QixDQUFoQjtBQUNBLElBQUlDLFdBQVcsR0FBR0YsUUFBUSxDQUFDQyxjQUFULENBQXdCLGFBQXhCLENBQWxCO0FBQ0EsSUFBSUUsVUFBVSxHQUFHSCxRQUFRLENBQUNDLGNBQVQsQ0FBd0IsWUFBeEIsQ0FBakI7QUFDQSxJQUFJRyxjQUFjLEdBQUdKLFFBQVEsQ0FBQ0MsY0FBVCxDQUF3QixnQkFBeEIsQ0FBckI7QUFFQSxJQUFJSSx5QkFBeUIsR0FBR0wsUUFBUSxDQUFDQyxjQUFULENBQzlCLDJCQUQ4QixDQUFoQzs7QUFHQSxJQUFJSSx5QkFBSixFQUErQjtFQUM3QkEseUJBQXlCLENBQUNDLGdCQUExQixDQUEyQyxPQUEzQyxFQUFvRCxZQUFZO0lBQzlELElBQUlDLEtBQUssR0FBR1IsU0FBUyxDQUFDUyxPQUFWLENBQWtCRCxLQUE5QjtJQUNBLElBQUlBLEtBQUssSUFBSUEsS0FBSyxDQUFDRSxJQUFOLE9BQWlCLEVBQTlCLEVBQ0VDLEtBQUssQ0FBRSxxREFBb0RILEtBQU0sRUFBNUQsQ0FBTCxDQUNHSSxJQURILENBQ1FDLFFBQVEsSUFBSTtNQUNoQixJQUFJQSxRQUFRLENBQUNDLEVBQWIsRUFBaUI7UUFDZixPQUFPRCxRQUFRLENBQUNFLElBQVQsRUFBUDtNQUNEOztNQUNELE9BQU9DLE9BQU8sQ0FBQ0MsTUFBUixDQUFlSixRQUFmLENBQVA7SUFDRCxDQU5ILEVBT0dELElBUEgsQ0FPUSxNQUFNTSxJQUFOLElBQWM7TUFDbEIsSUFBSUEsSUFBSSxDQUFDQyxTQUFULEVBQW9CO1FBQ2xCaEIsV0FBVyxDQUFDaUIsV0FBWixHQUEwQix3Q0FBMUI7UUFDQWhCLFVBQVUsQ0FBQ2dCLFdBQVgsR0FBeUIsRUFBekI7UUFDQWYsY0FBYyxDQUFDZ0IsU0FBZixHQUEyQixFQUEzQjtNQUNELENBSkQsTUFJTztRQUNMdEIsb0ZBQXNCLENBQUNtQixJQUFJLENBQUNJLEtBQU4sRUFBYSxPQUFiLENBQXRCO01BQ0Q7SUFDRixDQWZILEVBZ0JHQyxLQWhCSCxDQWdCUyxNQUFNQyxHQUFOLElBQWE7TUFDbEJ6QixvRkFBc0IsQ0FBQyxnQ0FBRCxFQUFtQyxPQUFuQyxDQUF0QjtJQUNELENBbEJIO0VBbUJILENBdEJEO0FBdUJEOztBQUNELElBQUkwQixZQUFZLEdBQUd4QixRQUFRLENBQUNDLGNBQVQsQ0FBd0IsY0FBeEIsQ0FBbkI7O0FBQ0EsSUFBSXVCLFlBQUosRUFBa0I7RUFDaEJBLFlBQVksQ0FBQ2xCLGdCQUFiLENBQThCLE9BQTlCLEVBQXVDLE1BQU07SUFDM0MsSUFBSUMsS0FBSyxHQUFHUixTQUFTLENBQUNTLE9BQVYsQ0FBa0JELEtBQTlCO0lBQ0EsSUFBSUEsS0FBSyxJQUFJQSxLQUFLLENBQUNFLElBQU4sT0FBaUIsRUFBOUIsRUFDRWdCLFFBQVEsQ0FBQ0MsTUFBVCxDQUFpQixzQ0FBcUNuQixLQUFNLEVBQTVEO0VBQ0gsQ0FKRDtBQUtEOztBQUNELElBQUlvQixvQkFBb0IsR0FBRzNCLFFBQVEsQ0FBQ0MsY0FBVCxDQUF3QixzQkFBeEIsQ0FBM0I7O0FBQ0EsSUFBSTBCLG9CQUFKLEVBQTBCO0VBQ3hCQSxvQkFBb0IsQ0FBQ3JCLGdCQUFyQixDQUFzQyxPQUF0QyxFQUErQyxNQUFNO0lBQ25EbUIsUUFBUSxDQUFDQyxNQUFULENBQWlCLHdCQUFqQjtFQUNELENBRkQ7QUFHRCIsInNvdXJjZXMiOlsid2VicGFjazovL2Zyb250ZW5kLy4vZGV2LWphdmFzY3JpcHRzL3Jlc3BvbnNlLXN0YXR1cy9lbWFpbExvZ2luU3RhdHVzLmRldi5qcz9jOWJjIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGNyZWF0ZU1haW5Ob3RpZmljYXRpb24gfSBmcm9tIFwiLi4vY29tbW9uL21haW5Ob3RpZmljYXRpb24uZGV2XCJcclxuXHJcbmxldCBzdGF0dXNCb3ggPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcInN0YXR1c0JveFwiKVxyXG5sZXQgc3RhdHVzVGl0bGUgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcInN0YXR1c1RpdGxlXCIpXHJcbmxldCBzdGF0dXNEZXNjID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJzdGF0dXNEZXNjXCIpXHJcbmxldCBzdGF0dXNCdG5GaWVsZCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwic3RhdHVzQnRuRmllbGRcIilcclxuXHJcbmxldCBsb2dpbk9uUmVxdWVzdGVkV2luZG93QnRuID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXHJcbiAgXCJsb2dpbk9uUmVxdWVzdGVkV2luZG93QnRuXCJcclxuKVxyXG5pZiAobG9naW5PblJlcXVlc3RlZFdpbmRvd0J0bikge1xyXG4gIGxvZ2luT25SZXF1ZXN0ZWRXaW5kb3dCdG4uYWRkRXZlbnRMaXN0ZW5lcihcImNsaWNrXCIsIGFzeW5jICgpID0+IHtcclxuICAgIGxldCB0b2tlbiA9IHN0YXR1c0JveC5kYXRhc2V0LnRva2VuXHJcbiAgICBpZiAodG9rZW4gJiYgdG9rZW4udHJpbSgpICE9PSBcIlwiKVxyXG4gICAgICBmZXRjaChgL3VzZXItYXV0aC9lbWFpbC1sb2dpbi1vbi1yZXF1ZXN0ZWQtd2luZG93Lz90b2tlbj0ke3Rva2VufWApXHJcbiAgICAgICAgLnRoZW4ocmVzcG9uc2UgPT4ge1xyXG4gICAgICAgICAgaWYgKHJlc3BvbnNlLm9rKSB7XHJcbiAgICAgICAgICAgIHJldHVybiByZXNwb25zZS5qc29uKClcclxuICAgICAgICAgIH1cclxuICAgICAgICAgIHJldHVybiBQcm9taXNlLnJlamVjdChyZXNwb25zZSlcclxuICAgICAgICB9KVxyXG4gICAgICAgIC50aGVuKGFzeW5jIGRhdGEgPT4ge1xyXG4gICAgICAgICAgaWYgKGRhdGEuaXNTdWNjZXNzKSB7XHJcbiAgICAgICAgICAgIHN0YXR1c1RpdGxlLnRleHRDb250ZW50ID0gXCJHbyBhbmQgY2hlY2tvdXQgeW91ciByZXF1ZXN0ZWQgd2luZG93LlwiXHJcbiAgICAgICAgICAgIHN0YXR1c0Rlc2MudGV4dENvbnRlbnQgPSBcIlwiXHJcbiAgICAgICAgICAgIHN0YXR1c0J0bkZpZWxkLmlubmVySFRNTCA9IFwiXCJcclxuICAgICAgICAgIH0gZWxzZSB7XHJcbiAgICAgICAgICAgIGNyZWF0ZU1haW5Ob3RpZmljYXRpb24oZGF0YS5lcnJvciwgXCJlcnJvclwiKVxyXG4gICAgICAgICAgfVxyXG4gICAgICAgIH0pXHJcbiAgICAgICAgLmNhdGNoKGFzeW5jIGVyciA9PiB7XHJcbiAgICAgICAgICBjcmVhdGVNYWluTm90aWZpY2F0aW9uKFwiU2VydmVyIEVycm9yLCBQbGVhc2UgVHJ5IEFnYWluXCIsIFwiZXJyb3JcIilcclxuICAgICAgICB9KVxyXG4gIH0pXHJcbn1cclxubGV0IGxvZ2luSGVyZUJ0biA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwibG9naW5IZXJlQnRuXCIpXHJcbmlmIChsb2dpbkhlcmVCdG4pIHtcclxuICBsb2dpbkhlcmVCdG4uYWRkRXZlbnRMaXN0ZW5lcihcImNsaWNrXCIsICgpID0+IHtcclxuICAgIGxldCB0b2tlbiA9IHN0YXR1c0JveC5kYXRhc2V0LnRva2VuXHJcbiAgICBpZiAodG9rZW4gJiYgdG9rZW4udHJpbSgpICE9PSBcIlwiKVxyXG4gICAgICBsb2NhdGlvbi5hc3NpZ24oYC91c2VyLWF1dGgvdXNlci1lbWFpbC1sb2dpbi8/dG9rZW49JHt0b2tlbn1gKVxyXG4gIH0pXHJcbn1cclxubGV0IGdvQmFja1RvTG9naW5QYWdlQnRuID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJnb0JhY2tUb0xvZ2luUGFnZUJ0blwiKVxyXG5pZiAoZ29CYWNrVG9Mb2dpblBhZ2VCdG4pIHtcclxuICBnb0JhY2tUb0xvZ2luUGFnZUJ0bi5hZGRFdmVudExpc3RlbmVyKFwiY2xpY2tcIiwgKCkgPT4ge1xyXG4gICAgbG9jYXRpb24uYXNzaWduKGAvdXNlci1hdXRoL2VtYWlsLWxvZ2luYClcclxuICB9KVxyXG59XHJcbiJdLCJuYW1lcyI6WyJjcmVhdGVNYWluTm90aWZpY2F0aW9uIiwic3RhdHVzQm94IiwiZG9jdW1lbnQiLCJnZXRFbGVtZW50QnlJZCIsInN0YXR1c1RpdGxlIiwic3RhdHVzRGVzYyIsInN0YXR1c0J0bkZpZWxkIiwibG9naW5PblJlcXVlc3RlZFdpbmRvd0J0biIsImFkZEV2ZW50TGlzdGVuZXIiLCJ0b2tlbiIsImRhdGFzZXQiLCJ0cmltIiwiZmV0Y2giLCJ0aGVuIiwicmVzcG9uc2UiLCJvayIsImpzb24iLCJQcm9taXNlIiwicmVqZWN0IiwiZGF0YSIsImlzU3VjY2VzcyIsInRleHRDb250ZW50IiwiaW5uZXJIVE1MIiwiZXJyb3IiLCJjYXRjaCIsImVyciIsImxvZ2luSGVyZUJ0biIsImxvY2F0aW9uIiwiYXNzaWduIiwiZ29CYWNrVG9Mb2dpblBhZ2VCdG4iXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./dev-javascripts/response-status/emailLoginStatus.dev.js\n");
 
 /***/ }),
 
@@ -57,16 +57,6 @@ eval("\n\n/*\n  MIT License http://www.opensource.org/licenses/mit-license.php\n
 /***/ ((module) => {
 
 eval("\n\nmodule.exports = function (item) {\n  var content = item[1];\n  var cssMapping = item[3];\n\n  if (!cssMapping) {\n    return content;\n  }\n\n  if (typeof btoa === \"function\") {\n    var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));\n    var data = \"sourceMappingURL=data:application/json;charset=utf-8;base64,\".concat(base64);\n    var sourceMapping = \"/*# \".concat(data, \" */\");\n    var sourceURLs = cssMapping.sources.map(function (source) {\n      return \"/*# sourceURL=\".concat(cssMapping.sourceRoot || \"\").concat(source, \" */\");\n    });\n    return [content].concat(sourceURLs).concat([sourceMapping]).join(\"\\n\");\n  }\n\n  return [content].join(\"\\n\");\n};//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9ub2RlX21vZHVsZXMvY3NzLWxvYWRlci9kaXN0L3J1bnRpbWUvc291cmNlTWFwcy5qcy5qcyIsIm1hcHBpbmdzIjoiQUFBYTs7QUFFYjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSx1REFBdUQsY0FBYztBQUNyRTtBQUNBO0FBQ0E7QUFDQSxLQUFLO0FBQ0w7QUFDQTs7QUFFQTtBQUNBIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vZnJvbnRlbmQvLi9ub2RlX21vZHVsZXMvY3NzLWxvYWRlci9kaXN0L3J1bnRpbWUvc291cmNlTWFwcy5qcz9hZjEyIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHN0cmljdFwiO1xuXG5tb2R1bGUuZXhwb3J0cyA9IGZ1bmN0aW9uIChpdGVtKSB7XG4gIHZhciBjb250ZW50ID0gaXRlbVsxXTtcbiAgdmFyIGNzc01hcHBpbmcgPSBpdGVtWzNdO1xuXG4gIGlmICghY3NzTWFwcGluZykge1xuICAgIHJldHVybiBjb250ZW50O1xuICB9XG5cbiAgaWYgKHR5cGVvZiBidG9hID09PSBcImZ1bmN0aW9uXCIpIHtcbiAgICB2YXIgYmFzZTY0ID0gYnRvYSh1bmVzY2FwZShlbmNvZGVVUklDb21wb25lbnQoSlNPTi5zdHJpbmdpZnkoY3NzTWFwcGluZykpKSk7XG4gICAgdmFyIGRhdGEgPSBcInNvdXJjZU1hcHBpbmdVUkw9ZGF0YTphcHBsaWNhdGlvbi9qc29uO2NoYXJzZXQ9dXRmLTg7YmFzZTY0LFwiLmNvbmNhdChiYXNlNjQpO1xuICAgIHZhciBzb3VyY2VNYXBwaW5nID0gXCIvKiMgXCIuY29uY2F0KGRhdGEsIFwiICovXCIpO1xuICAgIHZhciBzb3VyY2VVUkxzID0gY3NzTWFwcGluZy5zb3VyY2VzLm1hcChmdW5jdGlvbiAoc291cmNlKSB7XG4gICAgICByZXR1cm4gXCIvKiMgc291cmNlVVJMPVwiLmNvbmNhdChjc3NNYXBwaW5nLnNvdXJjZVJvb3QgfHwgXCJcIikuY29uY2F0KHNvdXJjZSwgXCIgKi9cIik7XG4gICAgfSk7XG4gICAgcmV0dXJuIFtjb250ZW50XS5jb25jYXQoc291cmNlVVJMcykuY29uY2F0KFtzb3VyY2VNYXBwaW5nXSkuam9pbihcIlxcblwiKTtcbiAgfVxuXG4gIHJldHVybiBbY29udGVudF0uam9pbihcIlxcblwiKTtcbn07Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./node_modules/css-loader/dist/runtime/sourceMaps.js\n");
-
-/***/ }),
-
-/***/ "./node_modules/email-validator/index.js":
-/*!***********************************************!*\
-  !*** ./node_modules/email-validator/index.js ***!
-  \***********************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-eval("\r\n\r\nvar tester = /^[-!#$%&'*+\\/0-9=?A-Z^_a-z{|}~](\\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\\.?[a-zA-Z0-9])*\\.[a-zA-Z](-?[a-zA-Z0-9])+$/;\r\n// Thanks to:\r\n// http://fightingforalostcause.net/misc/2006/compare-email-regex.php\r\n// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx\r\n// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378\r\nexports.validate = function(email)\r\n{\r\n\tif (!email)\r\n\t\treturn false;\r\n\t\t\r\n\tif(email.length>254)\r\n\t\treturn false;\r\n\r\n\tvar valid = tester.test(email);\r\n\tif(!valid)\r\n\t\treturn false;\r\n\r\n\t// Further checking of some things regex can't handle\r\n\tvar parts = email.split(\"@\");\r\n\tif(parts[0].length>64)\r\n\t\treturn false;\r\n\r\n\tvar domainParts = parts[1].split(\".\");\r\n\tif(domainParts.some(function(part) { return part.length>63; }))\r\n\t\treturn false;\r\n\r\n\treturn true;\r\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9ub2RlX21vZHVsZXMvZW1haWwtdmFsaWRhdG9yL2luZGV4LmpzLmpzIiwibWFwcGluZ3MiOiJBQUFhO0FBQ2I7QUFDQSx5Q0FBeUMsRUFBRSxpQ0FBaUMsRUFBRTtBQUM5RTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGdCQUFnQjtBQUNoQjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0Esc0NBQXNDLHdCQUF3QjtBQUM5RDtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL2Zyb250ZW5kLy4vbm9kZV9tb2R1bGVzL2VtYWlsLXZhbGlkYXRvci9pbmRleC5qcz8xZmZhIl0sInNvdXJjZXNDb250ZW50IjpbIlwidXNlIHN0cmljdFwiO1xyXG5cclxudmFyIHRlc3RlciA9IC9eWy0hIyQlJicqK1xcLzAtOT0/QS1aXl9hLXp7fH1+XShcXC4/Wy0hIyQlJicqK1xcLzAtOT0/QS1aXl9hLXpge3x9fl0pKkBbYS16QS1aMC05XSgtKlxcLj9bYS16QS1aMC05XSkqXFwuW2EtekEtWl0oLT9bYS16QS1aMC05XSkrJC87XHJcbi8vIFRoYW5rcyB0bzpcclxuLy8gaHR0cDovL2ZpZ2h0aW5nZm9yYWxvc3RjYXVzZS5uZXQvbWlzYy8yMDA2L2NvbXBhcmUtZW1haWwtcmVnZXgucGhwXHJcbi8vIGh0dHA6Ly90aGVkYWlseXd0Zi5jb20vQXJ0aWNsZXMvVmFsaWRhdGluZ19FbWFpbF9BZGRyZXNzZXMuYXNweFxyXG4vLyBodHRwOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzIwMTMyMy93aGF0LWlzLXRoZS1iZXN0LXJlZ3VsYXItZXhwcmVzc2lvbi1mb3ItdmFsaWRhdGluZy1lbWFpbC1hZGRyZXNzZXMvMjAxMzc4IzIwMTM3OFxyXG5leHBvcnRzLnZhbGlkYXRlID0gZnVuY3Rpb24oZW1haWwpXHJcbntcclxuXHRpZiAoIWVtYWlsKVxyXG5cdFx0cmV0dXJuIGZhbHNlO1xyXG5cdFx0XHJcblx0aWYoZW1haWwubGVuZ3RoPjI1NClcclxuXHRcdHJldHVybiBmYWxzZTtcclxuXHJcblx0dmFyIHZhbGlkID0gdGVzdGVyLnRlc3QoZW1haWwpO1xyXG5cdGlmKCF2YWxpZClcclxuXHRcdHJldHVybiBmYWxzZTtcclxuXHJcblx0Ly8gRnVydGhlciBjaGVja2luZyBvZiBzb21lIHRoaW5ncyByZWdleCBjYW4ndCBoYW5kbGVcclxuXHR2YXIgcGFydHMgPSBlbWFpbC5zcGxpdChcIkBcIik7XHJcblx0aWYocGFydHNbMF0ubGVuZ3RoPjY0KVxyXG5cdFx0cmV0dXJuIGZhbHNlO1xyXG5cclxuXHR2YXIgZG9tYWluUGFydHMgPSBwYXJ0c1sxXS5zcGxpdChcIi5cIik7XHJcblx0aWYoZG9tYWluUGFydHMuc29tZShmdW5jdGlvbihwYXJ0KSB7IHJldHVybiBwYXJ0Lmxlbmd0aD42MzsgfSkpXHJcblx0XHRyZXR1cm4gZmFsc2U7XHJcblxyXG5cdHJldHVybiB0cnVlO1xyXG59Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./node_modules/email-validator/index.js\n");
 
 /***/ }),
 
@@ -166,9 +156,6 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
@@ -194,89 +181,9 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/ensure chunk */
-/******/ 	(() => {
-/******/ 		__webpack_require__.f = {};
-/******/ 		// This file contains only the entry chunk.
-/******/ 		// The chunk loading function for additional chunks
-/******/ 		__webpack_require__.e = (chunkId) => {
-/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
-/******/ 				__webpack_require__.f[key](chunkId, promises);
-/******/ 				return promises;
-/******/ 			}, []));
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/get javascript chunk filename */
-/******/ 	(() => {
-/******/ 		// This function allow to reference async chunks
-/******/ 		__webpack_require__.u = (chunkId) => {
-/******/ 			// return url for filenames based on template
-/******/ 			return "non-initial-chunk/" + chunkId + ".js";
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/load script */
-/******/ 	(() => {
-/******/ 		var inProgress = {};
-/******/ 		var dataWebpackPrefix = "frontend:";
-/******/ 		// loadScript function to load a script via script tag
-/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
-/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
-/******/ 			var script, needAttach;
-/******/ 			if(key !== undefined) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				for(var i = 0; i < scripts.length; i++) {
-/******/ 					var s = scripts[i];
-/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
-/******/ 				}
-/******/ 			}
-/******/ 			if(!script) {
-/******/ 				needAttach = true;
-/******/ 				script = document.createElement('script');
-/******/ 		
-/******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
-/******/ 				script.src = url;
-/******/ 			}
-/******/ 			inProgress[url] = [done];
-/******/ 			var onScriptComplete = (prev, event) => {
-/******/ 				// avoid mem leaks in IE.
-/******/ 				script.onerror = script.onload = null;
-/******/ 				clearTimeout(timeout);
-/******/ 				var doneFns = inProgress[url];
-/******/ 				delete inProgress[url];
-/******/ 				script.parentNode && script.parentNode.removeChild(script);
-/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
-/******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			;
-/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
-/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
-/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
-/******/ 			needAttach && document.head.appendChild(script);
-/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -290,116 +197,6 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"emailLogin": 0
-/******/ 		};
-/******/ 		
-/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
-/******/ 				// JSONP chunk loading for javascript
-/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
-/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
-/******/ 		
-/******/ 					// a Promise means "currently loading".
-/******/ 					if(installedChunkData) {
-/******/ 						promises.push(installedChunkData[2]);
-/******/ 					} else {
-/******/ 						if(true) { // all chunks have JS
-/******/ 							// setup Promise in chunk cache
-/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
-/******/ 							promises.push(installedChunkData[2] = promise);
-/******/ 		
-/******/ 							// start chunk loading
-/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-/******/ 							// create error before stack unwound to get useful stacktrace later
-/******/ 							var error = new Error();
-/******/ 							var loadingEnded = (event) => {
-/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
-/******/ 									installedChunkData = installedChunks[chunkId];
-/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
-/******/ 									if(installedChunkData) {
-/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 										var realSrc = event && event.target && event.target.src;
-/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 										error.name = 'ChunkLoadError';
-/******/ 										error.type = errorType;
-/******/ 										error.request = realSrc;
-/******/ 										installedChunkData[1](error);
-/******/ 									}
-/******/ 								}
-/******/ 							};
-/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						} else installedChunks[chunkId] = 0;
-/******/ 					}
-/******/ 				}
-/******/ 		};
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no on chunks loaded
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 		
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkfrontend"] = self["webpackChunkfrontend"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/nonce */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nc = undefined;
@@ -410,7 +207,7 @@ eval("\n\n/* istanbul ignore next  */\nfunction styleTagTransform(css, styleElem
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval-source-map devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./dev-javascripts/user-auth/emailLogin.dev.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./dev-javascripts/response-status/emailLoginStatus.dev.js");
 /******/ 	
 /******/ })()
 ;

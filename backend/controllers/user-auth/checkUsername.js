@@ -22,7 +22,7 @@ exports.checkUsername = async (req, res) => {
     } else {
       let result = await checkValidUsername(username)
       if (!result.isValid) {
-        res.json({
+        return res.json({
           isSuccess: false,
           error: result.error
         })

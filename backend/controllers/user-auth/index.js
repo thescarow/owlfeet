@@ -19,6 +19,8 @@ const { removeUserEmail } = require("./removeUserEmail")
 const { verifyUserEmail } = require("./verifyUserEmail")
 const { verifyEmailLogin } = require("./verifyEmailLogin")
 const { sendEmailLogin } = require("./sendEmailLogin")
+const { userEmailLogin } = require("./userEmailLogin")
+const { emailLoginOnRequestedWindow } = require("./emailLoginOnRequestedWindow")
 
 module.exports = {
   getAccountPage,
@@ -41,5 +43,7 @@ module.exports = {
   removeUserEmail,
   verifyUserEmail,
   verifyEmailLogin,
-  sendEmailLogin
+  sendEmailLogin,
+  userEmailLogin,
+  emailLoginOnRequestedWindow
 }

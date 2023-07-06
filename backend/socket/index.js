@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 const { chatHandler } = require("./chat/chatHandler.socket")
 const { userHandler } = require("./user/userHandler.socket")
 const { callHandler } = require("./call/callHandler.socket")
+const { userAuthHandler } = require("./user-auth/userAuth.socket")
 exports.createSocketIOInstance = httpServer => {
   const io = new Server(httpServer, {
     serveClient: false
@@ -44,6 +45,7 @@ exports.createSocketIOInstance = httpServer => {
     userHandler(io, socket)
     chatHandler(io, socket)
     callHandler(io, socket)
+    userAuthHandler(io, socket)
     if (socket.handshake.query.socketType === "call") {
     }
     /////////////////////////////////

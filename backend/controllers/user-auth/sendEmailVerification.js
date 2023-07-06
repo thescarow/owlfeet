@@ -11,6 +11,7 @@ const EmailVerificationToken = require("../../models/emailVerificationToken")
 const jwt = require("jsonwebtoken")
 const emailValidator = require("email-validator")
 const { sendEmailLink } = require("../../services/sendEmailLink")
+const { checkValidEmail } = require("./common/checkValidEmail")
 
 exports.sendEmailVerification = async (req, res) => {
   try {
@@ -29,6 +30,7 @@ exports.sendEmailVerification = async (req, res) => {
       } else {
         userId = userId.trim()
         email = email.trim()
+        email = email.toString()
 
         if (req.user.id.toString() !== userId.toString()) {
           return res.json({
@@ -36,11 +38,11 @@ exports.sendEmailVerification = async (req, res) => {
             error: "You are not authorized to verify this user's email address"
           })
         } else {
-          if (!emailValidator.validate(email)) {
+          let result = await checkValidEmail(email)
+          if (!result.isValid) {
             return res.json({
               isSuccess: false,
-              error:
-                "This email address is not valid, Please enter a valid email address"
+              error: result.error
             })
           } else {
             let oldToken = await EmailVerificationToken.findOne({
@@ -48,16 +50,17 @@ exports.sendEmailVerification = async (req, res) => {
             })
               .sort({ createdAt: -1 })
               .lean()
+            // 2 * 60 * 1000
             if (
               oldToken &&
               Date.now() - oldToken.createdAt.getTime() < 2 * 60 * 1000
             ) {
               return res.json({
                 isSuccess: false,
-                error: `Email Verification Link already sent to your email box,Please wait for ${
+                error: `Please wait for ${
                   2 * 60 -
                   Math.floor((Date.now() - oldToken.createdAt.getTime()) / 1000)
-                } seconds after that resend it again`
+                } seconds to send Email Verification Link again`
               })
             } else {
               await EmailVerificationToken.deleteMany({ userId: req.user.id })
@@ -80,6 +83,7 @@ exports.sendEmailVerification = async (req, res) => {
 
               let verificationUrl = `http://localhost:5000/user-auth/verify-user-email/?token=${token}`
 
+              // console.log("email verification link:", verificationUrl)
               sendEmailLink(
                 email,
                 "email-verification",

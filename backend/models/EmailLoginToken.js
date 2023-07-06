@@ -14,6 +14,14 @@ const EmailLoginTokenSchema = new mongoose.Schema(
     isUsedOnce: {
       type: Boolean,
       default: false
+    },
+    isReadyToLogin: {
+      type: Boolean,
+      default: false
+    },
+    isUsedForLogin: {
+      type: Boolean,
+      default: false
     }
   },
   { timestamps: true }
