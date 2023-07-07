@@ -295,7 +295,7 @@ function attachScript(profileUser) {
           dropPasteImportFiles: "Upload here or Drop file here 👇"
         }
       },
-      note: "Upload your profile file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
+      note: "Upload your profile, file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
     })
     .use(Webcam, {
       target: Dashboard,

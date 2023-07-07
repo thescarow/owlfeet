@@ -159,6 +159,12 @@ function initialiseEventForActiveChatInfo(activeChatInfoModal) {
     if (chatInfoBtn && chatInfoBtnContainer.contains(chatInfoBtn)) {
       let chatId = activeChatInfoModal.dataset.chatId
 
+      if (chatInfoBtn.dataset.chatInfoBtn === "change-chat-appearance") {
+        let { createChangeChatAppearanceModal } = await import(
+          "./createChangeChatAppearanceModal.dev"
+        )
+        createChangeChatAppearanceModal(activeChatData)
+      }
       if (chatInfoBtn.dataset.chatInfoBtn === "edit-group-chat") {
         let { createGroupChatFormModal, updateGroupChatFormModalData } =
           await import("./createGroupChatFormModal.dev")

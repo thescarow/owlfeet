@@ -149,10 +149,7 @@ exports.getChatPageWithAllChat = async (req, res) => {
         allChat: allChat
       })
     } else {
-      res.render("./chat/chat.ejs", {
-        pageName: "chat",
-        isLogin: false
-      })
+      res.redirect("/user-auth/login?next=/chat")
     }
   } catch (err) {
     console.log(

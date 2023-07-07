@@ -313,7 +313,7 @@ loginSubmitBtn.addEventListener("click", () => {
           const urlParams = new URLSearchParams(window.location.search)
           const nextUrl = urlParams.get("next")
           if (nextUrl !== null && nextUrl.trim() !== "") {
-            location.replace(`/${nextUrl}`)
+            location.replace(`${nextUrl}`)
           } else {
             location.replace(`/user/${data.username}`)
           }

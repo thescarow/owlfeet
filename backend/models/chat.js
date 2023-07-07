@@ -14,6 +14,13 @@ const chatSchema = new mongoose.Schema(
       default: ""
     },
 
+    chatCustomBackground: {
+      hasBackgroundColor: { type: Boolean, default: false },
+      hasBackgroundImage: { type: Boolean, default: false },
+      backgroundColor: { type: String, default: "#fff" },
+      backgroundImage: { type: String, default: "" }
+    },
+
     chatName: { type: String, default: "", trim: true },
 
     chatDescription: {
