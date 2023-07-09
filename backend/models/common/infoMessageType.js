@@ -5,5 +5,7 @@ exports.infoMessageType = {
   START_CALL: "start-call",
   END_CALL: "end-call",
   NEW_GROUP: "new-group",
-  LEAVE_GROUP: "leave-group"
+  LEAVE_GROUP: "leave-group",
+  CHANGE_BACKGROUND: "change-background",
+  REMOVE_BACKGROUND: "remove-background"
 }

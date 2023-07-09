@@ -556,6 +556,15 @@ export function adjustMessageContainerBottomPadding() {
 function initialiseEventForChatModule() {
   // initialize event to active chat
 
+  let activeChatInnerModal = document.getElementById("activeChatInnerModal")
+  let activeChatInnerModalCloseBtn = document.getElementById(
+    "activeChatInnerModalCloseBtn"
+  )
+  activeChatInnerModalCloseBtn.addEventListener("click", () => {
+    if (!activeChatInnerModal.classList.contains("hide"))
+      activeChatInnerModal.classList.add("hide")
+  })
+
   // active chat to all chat btn
   const ActiveChatToAllChatBtn = document.getElementById(
     "ActiveChatToAllChatBtn"
@@ -748,6 +757,12 @@ function initialiseEventForChatModule() {
       openReplyMessageBox(messageId)
     } else {
       return
+    }
+  })
+  window.addEventListener("click", e => {
+    if (e.target === activeChatInnerModal) {
+      if (!activeChatInnerModal.classList.contains("hide"))
+        activeChatInnerModal.classList.add("hide")
     }
   })
 }

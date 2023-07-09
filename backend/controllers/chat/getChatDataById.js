@@ -52,6 +52,19 @@ exports.getChatDataById = async (req, res) => {
         .lean()
 
       if (chat) {
+        if (
+          chat.hasOwnProperty("chatCustomBackground") &&
+          chat.chatCustomBackground.hasBackgroundImage
+        ) {
+          chat.chatCustomBackground.backgroundImagekey =
+            chat.chatCustomBackground.backgroundImage
+
+          chat.chatCustomBackground.backgroundImage =
+            await signedUrlForGetAwsS3Object(
+              chat.chatCustomBackground.backgroundImage
+            )
+        }
+
         let unseenMessagesCount = await Message.countDocuments({
           chat: chat._id,
           "seenStatus.seenBy": { $ne: req.user.id }

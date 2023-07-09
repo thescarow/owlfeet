@@ -14,9 +14,13 @@ const {
   timeDifferenceFromNow
 } = require("../../common/calculateTimeDifference")
 
-const { selectLoginUserForClientField } = require("../../common/userData")
+const {
+  selectLoginUserForClientField
+} = require("../../common/filter-field/filterUserField")
 //////////////////
-const { filterChatFieldForNonMember } = require("./common/filterChatField")
+const {
+  filterChatFieldForNonMember
+} = require("../../common/filter-field/filterChatField")
 const {
   selectLatestMessageField,
   filterMessageFieldForDeletedForAll
@@ -48,6 +52,19 @@ exports.getChatPageWithAllChat = async (req, res) => {
 
       await Promise.all(
         allChat.map(async chat => {
+          // if (
+          //   chat.hasOwnProperty("chatCustomBackground") &&
+          //   chat.chatCustomBackground.hasBackgroundImage
+          // ) {
+          //   chat.chatCustomBackground.backgroundImagekey =
+          //     chat.chatCustomBackground.backgroundImage
+
+          //   chat.chatCustomBackground.backgroundImage =
+          //     await signedUrlForGetAwsS3Object(
+          //       chat.chatCustomBackground.backgroundImage
+          //     )
+          // }
+
           let unseenMessagesCount = await Message.countDocuments({
             chat: chat._id,
             "seenStatus.seenBy": { $ne: req.user.id }

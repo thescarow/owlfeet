@@ -5,6 +5,7 @@ let chatFieldForNonMember = {
   chatName: 1,
   chatDescription: 1,
   createdAt: 1
+  // chatCustomBackground: 1
   //   groupChatAdmin: 1,
   //   currentChatMembers: 1,
   //   allChatMembers:1
@@ -35,7 +36,8 @@ exports.selectSafeChatField = {
   createdAt: 1,
   isDeleted: 1,
   isOnCall: 1,
-  callRoomId: 1
+  callRoomId: 1,
+  chatCustomBackground: 1
   //   allChatMembers: 1,
 }
 exports.selectChatFieldForChatBox = {
@@ -48,6 +50,8 @@ exports.selectChatFieldForChatBox = {
   currentChatMembers: 1,
   isOnCall: 1,
   callRoomId: 1
+  // chatCustomBackground: 1
+
   // groupChatAdmin: 1,
   // isDeleted: 1
   // allChatMembers: 1,
@@ -62,6 +66,7 @@ exports.selectChatFieldForCreatingCallRoom = {
   isOnCall: 1,
   callRoomId: 1,
   currentChatMembers: 1
+  // chatCustomBackground: 1
   // createdAt: 1,
   // groupChatAdmin: 1
   // isDeleted: 1
@@ -73,6 +78,7 @@ exports.selectChatFieldForCallRoom = {
   currentChatMembers: 1,
   isOnCall: 1,
   callRoomId: 1
+  // chatCustomBackground: 1
   // chatPic: 1,
   // chatName: 1,
   // chatDescription: 1,

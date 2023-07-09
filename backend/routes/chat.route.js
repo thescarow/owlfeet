@@ -11,9 +11,14 @@ const {
   leaveGroupChat,
   getChatDataById,
   getChatBoxDataById,
-  getAllChatData
+  getAllChatData,
+  removeChatBackground,
+  changeChatBackground
 } = require("../controllers/chat")
 
+router.post("/remove-background", getLoginUser, removeChatBackground)
+router.patch("/change-background/:chatId", getLoginUser, changeChatBackground)
+/////////////
 router.get("/", getLoginUser, getChatPageWithAllChat)
 
 router.post("/get-user-chat-id", getLoginUser, getUserChatId)
