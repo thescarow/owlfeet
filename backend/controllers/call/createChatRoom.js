@@ -31,6 +31,7 @@ const {
   selectUserFieldForCallRoom
 } = require("../../common/filter-field/filterUserField")
 const { createCallRoomMember } = require("./common/createCallRoomMember")
+const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 // router.post("/create-chat-room", getLoginUser, createChatRoom)
 exports.createChatRoom = async (req, res) => {
@@ -89,6 +90,13 @@ exports.createChatRoom = async (req, res) => {
               let chatOtherMember = chat.currentChatMembers.find(
                 user => user._id.toString() !== req.user.id.toString()
               )
+              if (!(await checkInFollowing(req.user.id, chatOtherMember._id))) {
+                return res.json({
+                  isSuccess: false,
+                  error:
+                    "You are not allowed to call in this chat, first follow him/her then make a call"
+                })
+              }
 
               newCallRoomData.roomPic =
                 chatOtherMember.hasOwnProperty("profile") &&
