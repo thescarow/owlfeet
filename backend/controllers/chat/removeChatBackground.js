@@ -49,9 +49,9 @@ exports.removeChatBackground = async (req, res) => {
         } else {
           if (
             chat.isGroupChat &&
-            chat.groupChatAdmin.findIndex(userId => {
-              userId.toString() === req.user.id.toString()
-            }) !== -1
+            chat.groupChatAdmin.some(userId => {
+              return userId.toString() === req.user.id.toString()
+            })
           ) {
             return res.json({
               isSuccess: false,
