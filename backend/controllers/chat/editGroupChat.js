@@ -4,11 +4,12 @@ const errorLog = chalk.red.bgWhite.bold
 const mainErrorLog = chalk.white.bgYellow.bold
 ////////////////////////////////////////////////////
 const Chat = require("../../models/chat")
-const Message = require("../../models/message")
+// const Message = require("../../models/message")
 ///////
 const {
   timeDifferenceFromNow
 } = require("../../common/calculateTimeDifference")
+
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 ////////
 const {
@@ -17,9 +18,10 @@ const {
 } = require("../../services/awsS3")
 
 ///////////////
-const { selectChatField } = require("./common/filterChatField")
-const { filterChatFieldForNonMember } = require("./common/filterChatField")
-// router.post("/edit-group-chat", getLoginUser, editGroupChat)
+const {
+  selectSafeChatField,
+  filterChatFieldForNonMember
+} = require("../../common/filter-field/filterChatField")
 
 exports.editGroupChat = async (req, res) => {
   try {
@@ -94,7 +96,7 @@ exports.editGroupChat = async (req, res) => {
 
               await chat.save()
               let savedChat = await Chat.findById(chat._id)
-                .select(selectChatField)
+                .select(selectSafeChatField)
                 .populate({
                   path: "currentChatMembers",
                   select: {

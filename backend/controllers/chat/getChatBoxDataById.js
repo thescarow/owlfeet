@@ -45,6 +45,19 @@ exports.getChatBoxDataById = async (req, res) => {
         .lean()
 
       if (chat) {
+        // if (
+        //   chat.hasOwnProperty("chatCustomBackground") &&
+        //   chat.chatCustomBackground.hasBackgroundImage
+        // ) {
+        //   chat.chatCustomBackground.backgroundImagekey =
+        //     chat.chatCustomBackground.backgroundImage
+
+        //   chat.chatCustomBackground.backgroundImage =
+        //     await signedUrlForGetAwsS3Object(
+        //       chat.chatCustomBackground.backgroundImage
+        //     )
+        // }
+
         chat.chatCreatedTime = timeDifferenceFromNow(chat.createdAt)
 
         if (chat.isGroupChat) {

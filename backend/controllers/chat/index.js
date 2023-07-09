@@ -8,6 +8,8 @@ const { deleteChat } = require("./deleteChat")
 const { leaveGroupChat } = require("./leaveGroupChat")
 const { getAllChatData } = require("./getAllChatData")
 const { getChatBoxDataById } = require("./getChatBoxDataById")
+const { removeChatBackground } = require("./removeChatBackground")
+const { changeChatBackground } = require("./changeChatBackground")
 
 module.exports = {
   getChatPageWithAllChat,
@@ -19,5 +21,7 @@ module.exports = {
   deleteChat,
   leaveGroupChat,
   getAllChatData,
-  getChatBoxDataById
+  getChatBoxDataById,
+  removeChatBackground,
+  changeChatBackground
 }

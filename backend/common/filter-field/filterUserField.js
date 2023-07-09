@@ -177,7 +177,17 @@ exports.selectUserFieldForCallRoom = {
   // createdAt:1,
   // updatedAt:1
 }
-
+exports.selectLoginUserForClientField = {
+  _id: 1,
+  role: 1,
+  privacy: 1,
+  firstName: 1,
+  lastName: 1,
+  username: 1,
+  gender: 1,
+  profile: 1,
+  bio: 1
+}
 exports.filterListUserField = user => {
   const filteredKeyArray = Object.keys(listUserField)
 

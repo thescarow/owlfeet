@@ -27,21 +27,20 @@ const mongoose = require("mongoose")
 const router = express.Router()
 const { getLoginUser } = require("../middleware/auth.middleware")
 
-// router.get("/", getLoginUser, async (req, res) => {
-//   res.render("./test/test", {
-//     pageName: "profile",
-//     accountType: "register"
-//   })
-// })
 router.get("/", getLoginUser, async (req, res) => {
-  // toEmail, emailType, emailLink, emailUser
-  sendEmailLink(
-    "rithikpathak123@gmail.com",
-    "email-login",
-    "http://localhost:5000/user/lala"
-  )
-  res.send("sent")
+  res.render("./test/test", {
+    pageName: "profile"
+  })
 })
+// router.get("/", getLoginUser, async (req, res) => {
+//   // toEmail, emailType, emailLink, emailUser
+//   sendEmailLink(
+//     "rithikpathak123@gmail.com",
+//     "email-login",
+//     "http://localhost:5000/user/lala"
+//   )
+//   res.send("sent")
+// })
 router.get("/2/:username", getLoginUser, async (req, res) => {
   try {
     let isLogin = false

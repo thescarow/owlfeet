@@ -33,7 +33,6 @@ export async function showActiveChatSection(chat) {
   )
   let unseenMessagesCountData = await unseenMessagesCountResponse.json()
   totalUnseenMessagesCount = unseenMessagesCountData.unseenMessagesCount
-  console.log("totalUnseenMessagesCount: " + totalUnseenMessagesCount)
   let { openActiveChatInputBox } = await import("../chat.dev.js")
   openActiveChatInputBox()
 
@@ -307,9 +306,29 @@ export async function updateActiveChatSection(chat) {
 
   activeChatHeader.dataset.chatId = chat._id
 
+  //chat backgound
+  if (chat.hasOwnProperty("chatCustomBackground")) {
+    if (chat.chatCustomBackground.hasBackgroundColor) {
+      changeActiveChatBackground(
+        "color",
+        chat.chatCustomBackground.backgroundColor
+      )
+    } else if (chat.chatCustomBackground.hasBackgroundImage) {
+      changeActiveChatBackground(
+        "image",
+        chat.chatCustomBackground.backgroundImage
+      )
+    } else {
+      removeActiveChatBackground()
+    }
+  } else {
+    removeActiveChatBackground()
+  }
+
+  ///////
+
   if (chat.hasOwnProperty("chatPic") && chat.chatPic !== "") {
     activeChatImg.src = chat.chatPic
-
     activeChatHeaderPic.classList.add("active-chat-header__pic--hide-svg")
     activeChatHeaderPic.classList.remove("active-chat-header__pic--hide-img")
   } else {
@@ -405,6 +424,23 @@ export function closeActiveChatCallRoomBox() {
   activeChatCallRoomBox.classList.add("chat-call-room-box--hide")
 
   activeChatCallRoomBox.dataset.callRoomId = ""
+}
+
+export function changeActiveChatBackground(backgroundType, backgroundValue) {
+  if (backgroundType === "color") {
+    activeChatSection.style.backgroundColor = backgroundValue
+    activeChatSection.style.backgroundImage = "none"
+  } else if (backgroundType === "image") {
+    activeChatSection.style.backgroundColor = "#eee"
+    activeChatSection.style.backgroundImage = `url(${backgroundValue})`
+  } else {
+    activeChatSection.style.backgroundColor = "#eee"
+    activeChatSection.style.backgroundImage = `url('../../assets/images/activeChatBackground.jpg')`
+  }
+}
+export function removeActiveChatBackground() {
+  activeChatSection.style.backgroundColor = "#eee"
+  activeChatSection.style.backgroundImage = `url('../../assets/images/activeChatBackground.jpg')`
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

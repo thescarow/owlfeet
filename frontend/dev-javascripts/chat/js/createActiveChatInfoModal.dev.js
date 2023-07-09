@@ -138,7 +138,8 @@ export async function createActiveChatInfoModal(chatId) {
       updateActiveChatInfoModal()
       initialiseEventForActiveChatInfo(activeChatInfoModal)
     } else {
-      activeChatInfoModal.classList.remove("chat-modal--hide")
+      if (activeChatInfoModal.classList.contains("hide"))
+        activeChatInfoModal.classList.remove("hide")
     }
 
     ///update activeChatInfoModal
@@ -159,6 +160,15 @@ function initialiseEventForActiveChatInfo(activeChatInfoModal) {
     if (chatInfoBtn && chatInfoBtnContainer.contains(chatInfoBtn)) {
       let chatId = activeChatInfoModal.dataset.chatId
 
+      if (chatInfoBtn.dataset.chatInfoBtn === "change-chat-appearance") {
+        console.log("change-chat-appearance")
+        let { setChatAppearanceContent } = await import(
+          "./createChangeChatAppearanceModal.dev"
+        )
+        if (!activeChatInfoModal.classList.contains("hide"))
+          activeChatInfoModal.classList.add("hide")
+        setChatAppearanceContent(activeChatData)
+      }
       if (chatInfoBtn.dataset.chatInfoBtn === "edit-group-chat") {
         let { createGroupChatFormModal, updateGroupChatFormModalData } =
           await import("./createGroupChatFormModal.dev")
@@ -226,11 +236,13 @@ function initialiseEventForActiveChatInfo(activeChatInfoModal) {
   document
     .getElementById("closeActiveChatInfoModal")
     .addEventListener("click", () => {
-      activeChatInfoModal.classList.add("chat-modal--hide")
+      if (!activeChatInfoModal.classList.contains("hide"))
+        activeChatInfoModal.classList.add("hide")
     })
   window.addEventListener("click", event => {
     if (event.target === activeChatInfoModal) {
-      activeChatInfoModal.classList.add("chat-modal--hide")
+      if (!activeChatInfoModal.classList.contains("hide"))
+        activeChatInfoModal.classList.add("hide")
     }
   })
 }

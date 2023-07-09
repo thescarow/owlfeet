@@ -12,6 +12,28 @@ export async function createChatSocket(socket) {
       "activeChatHeaderStatus"
     )
 
+    socket.on("chat:changed-active-chat-background", async data => {
+      if (
+        activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+      ) {
+        let { changeActiveChatBackground } = await import(
+          "../../../chat/js/showActiveChatSection.dev.js"
+        )
+        changeActiveChatBackground(data.backgroundType, data.backgroundValue)
+      }
+    })
+
+    socket.on("chat:removed-active-chat-background", async data => {
+      if (
+        activeChatSection.dataset.chatId.toString() === data.chatId.toString()
+      ) {
+        let { removeActiveChatBackground } = await import(
+          "../../../chat/js/showActiveChatSection.dev.js"
+        )
+        removeActiveChatBackground()
+      }
+    })
+
     socket.on("chat:message-start-typing", async data => {
       if (
         activeChatSection.dataset.chatId.toString() === data.chatId.toString()
