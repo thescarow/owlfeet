@@ -63,11 +63,13 @@ let userMessageOtherUserOptions = `<div class="inner-modal-option" data-user-mes
 <div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
 <div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
 
-let userMessageDeletedMessageOptions = `<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
+let userMessageDeletedMessageOptions = `
+<div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
 
 <div class="inner-modal-option" data-user-message-option-btn="delete" data-enable-for-all="false">${svg_messageDeleteIconBlank}Delete</div>
 <div class="inner-modal-option" data-user-message-option-btn="info">${svg_messageInfoIconBlank}Info</div>
-<div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>`
+<div class="inner-modal-option" data-user-message-option-btn="closeModal">Close</div>
+`
 import { getTimeStringFromDate } from "../../common/getTimeStringFromDate.dev"
 import "../css/userMessageOptionModal.dev.css"
 import { unSelectUserMessage } from "./message.dev"

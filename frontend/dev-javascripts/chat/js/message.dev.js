@@ -86,6 +86,7 @@ import { increaseTotalReceivedMessagesCount } from "./showActiveChatSection.dev"
 let activeChatMessageContainer = document.getElementById(
   "activeChatMessageContainer"
 )
+
 function createPlyr(element, type) {
   let player = new Plyr(element, {
     controls: [

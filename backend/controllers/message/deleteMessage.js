@@ -16,6 +16,9 @@ const {
   filterMessageFieldForDeletedForAll,
   selectLatestMessageField
 } = require("../../common/filter-field/filterMessageField")
+const {
+  selectChatFieldForChatBox
+} = require("../../common/filter-field/filterChatField")
 // const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 // router.post("/delete-user-message", getLoginUser, deleteUserMessage)
@@ -115,6 +118,13 @@ exports.deleteMessage = async (req, res) => {
             .populate({
               path: "sender",
               select: { firstName: 1, lastName: 1, username: 1 },
+              options: {
+                lean: true
+              }
+            })
+            .populate({
+              path: "chat",
+              select: selectChatFieldForChatBox,
               options: {
                 lean: true
               }

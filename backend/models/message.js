@@ -19,7 +19,7 @@ const messageSchema = new mongoose.Schema(
       deliveredTime: { type: Date }
     },
 
-    deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+    deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
     isDeletedForAll: { type: Boolean, default: false },
     ////
