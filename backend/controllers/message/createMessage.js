@@ -51,7 +51,7 @@ exports.createMessage = async (req, res) => {
               return res.json({
                 isSuccess: false,
                 error:
-                  '"You Are Not Allowed To Send Message To This Chat, First Follow Him/Her'
+                  "You Are Not Allowed To Send Message To This Chat, First Follow Him/Her"
               })
             }
           }
@@ -279,7 +279,7 @@ exports.createMessage = async (req, res) => {
           res.json({
             isSuccess: false,
             error:
-              "You Are Not Allowed To Send Message To This Chat, First Ask Chat Admins To Add You In The Chat Group"
+              "You Are Not Allowed To Send Message To This Chat, First Ask Chat Admin To Add You In The Chat Group"
           })
         }
       } else {

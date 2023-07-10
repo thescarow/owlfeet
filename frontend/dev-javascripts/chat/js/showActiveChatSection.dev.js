@@ -7,10 +7,19 @@ const activeChatMessageContainer = document.getElementById(
 const activeChatMessageLoadingBox = document.getElementById(
   "activeChatMessageLoadingBox"
 )
+const activeChatInnerModal = document.getElementById("activeChatInnerModal")
 
 let totalReceivedMessagesCount
 let totalUnseenMessagesCount
 export async function showActiveChatSection(chat) {
+  if (!activeChatInnerModal.classList.contains("hide"))
+    activeChatInnerModal.classList.add("hide")
+
+  const activeChatInfoModal = document.getElementById("activeChatInfoModal")
+  if (activeChatInfoModal)
+    if (!activeChatInfoModal.classList.contains("hide"))
+      activeChatInfoModal.classList.add("hide")
+
   if (
     activeChatMessageLoadingBox.classList.contains(
       "active-chat-message-loading-box--hide"

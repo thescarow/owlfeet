@@ -416,7 +416,7 @@ export function createUserMessage(
            </div>
        </div>
        <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
-</div>
+       </div>
         `
     messageBox.insertAdjacentHTML("beforeend", messageBoxInnerHtml)
 
@@ -763,6 +763,7 @@ function insertLinksToString(str) {
 
   return container.innerHTML
 }
+
 function insertLinksToTextContent(textContentContainer, textContent, allLinks) {
   let nodes = []
   let textLastPos = 0

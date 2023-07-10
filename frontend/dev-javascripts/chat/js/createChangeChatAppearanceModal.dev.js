@@ -156,7 +156,7 @@ export async function setChatAppearanceContent(chat) {
         <div class="chat-style-background-color__btn" style="background-color: #D9F8C4;"></div>
         <div class="chat-style-background-color__btn" style="background-color: #D7D1C9;"></div>
         <div class="chat-style-background-color__custom-btn">
-            <input type="color" id="backgroundCustomColorBtn" value="#ffffff" />
+            <input type="color" id="backgroundCustomColorBtn" value="#aaaaaa" />
             <label for="backgroundCustomColorBtn" id="backgroundCustomColorLabel">Custom</label>
         </div>
 

@@ -2461,7 +2461,7 @@ em-emoji-picker {
 .active-chat-inner-modal-content {
     position: relative;
     width: 98%;
-    max-width: 483px;
+    max-width: 450px;
     height: auto;
     max-height: 90%;
     display: flex;
