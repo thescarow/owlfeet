@@ -72,7 +72,6 @@
   --rgba-dark-color: 20, 22, 21;
   --rgba-danger-color: 204, 59, 33;
   --rgba-success-color: 167, 249, 167;
-
 }
 
 svg {
@@ -109,7 +108,7 @@ body {
     width: calc(100% - var(--main-nav-width));
     height: 100%;
     /* align-self: flex-end; */
-    background: rgba(var(--rgba-light-color), 1);
+    background: rgba(var(--rgba-dark-color), 1);
   }
 }
 
@@ -122,6 +121,6 @@ body {
     width: 100%;
     height: calc(100% - var(--main-nav-height));
     /* align-self: flex-end; */
-    background: rgba(var(--rgba-light-color), 1);
+    background: rgba(var(--rgba-dark-color), 1);
   }
 }

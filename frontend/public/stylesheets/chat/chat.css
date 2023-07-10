@@ -2040,8 +2040,8 @@ em-emoji-picker {
     width: 100%;
     /* max-width: var(--main-container-max-width); */
     height: calc(100% - var(--main-nav-height));
-    background-color:
-        rgba(var(--rgba-fourth-color), 0.8);
+    /* background-color:
+        rgba(var(--rgba-fourth-color), 0.8); */
     display: flex;
     justify-content: center;
     align-items: center;

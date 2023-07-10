@@ -3,22 +3,22 @@
 </title>
 <link rel="stylesheet" href="/stylesheets/error/notFound.css">
 
+<div class="main-error-container">
+    <div class="error-box">
+        <div class="error-box__tag">Oops!</div>
+        <div class="error-box__main-illus">
+            <%- include('../partials/illustrations/notFound.svg') _%>
+        </div>
 
-
-<div id="mainNotFoundErrorContainer">
-
-
-
-    <div id="oops">Oops! </div>
-    <div id="errorSvg">
-        <%- include('../partials/illustrations/notFound.svg') -%>
+        <div class="error-box__title">
+            <%= locals.errorTitle _%>
+        </div>
+        <div class="error-box__message">
+            <%= locals.errorMessage _%>
+        </div>
+        <button class="error-box__btn">
+            <a href="/">Back to Home</a>
+        </button>
     </div>
 
-    <div id="errorTitle">
-        <%= locals.errorTitle -%>
-    </div>
-    <div id="errorMessage">
-        <%= locals.errorMessage -%>
-    </div>
-    <a href="/"><button id="backToHome">Back to Home</button></a>
 </div>

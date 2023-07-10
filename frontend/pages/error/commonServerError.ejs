@@ -3,17 +3,23 @@
 </title>
 <link rel="stylesheet" href="/stylesheets/error/commonServerError.css">
 
-<div id="mainErrorContainer">
-    <div id="errorSvg">
-        <%- include('../partials/illustrations/serverError.svg') -%>
+
+<div class="main-error-container">
+    <div class="error-box">
+
+        <div class="error-box__main-illus">
+            <%- include('../partials/illustrations/serverError.svg') -%>
+        </div>
+
+        <div class="error-box__title">
+            <%= locals.errorTitle _%>
+        </div>
+        <div class="error-box__message">
+            <%= locals.errorMessage _%>
+        </div>
+        <button class="error-box__btn">
+            <a href="/">Back to Home</a>
+        </button>
     </div>
-    <div id="errorTitle">
-        <%= locals.errorTitle -%>
-    </div>
-    <div id="errorMessage">
-        <%= locals.errorMessage -%>
-    </div>
-    <a href="/">
-        <button id="backToHome">Back to Home</button>
-    </a>
+
 </div>
