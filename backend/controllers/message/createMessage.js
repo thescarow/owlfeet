@@ -90,7 +90,10 @@ exports.createMessage = async (req, res) => {
             }
           }
 
-          if (userMessage.repliedTo !== "") {
+          if (
+            userMessage.isRepliedMessage &&
+            userMessage.hasOwnProperty("repliedTo")
+          ) {
             let userRepliedMessage = await Message.findById(
               userMessage.repliedTo
             )
@@ -105,7 +108,7 @@ exports.createMessage = async (req, res) => {
             } else {
               return res.json({
                 isSuccess: false,
-                error: "You Can Not Replied To This Message"
+                error: "You are not allowed to reply to this message"
               })
             }
           } else {
@@ -312,13 +315,13 @@ async function attachSocketForCreatingNewMessage(
   let eventData = { message: createdNewMessage }
   messageChat.currentChatMembers.forEach(userId => {
     if (req.user.id.toString() !== userId.toString()) {
-      req.io.to(userId.toString()).emit("chat:new-message", eventData)
+      req.io.to(userId.toString()).emit("message:new-message", eventData)
     }
   })
   newMessageDocument.deliveryStatus.isDelivered = true
   newMessageDocument.deliveryStatus.deliveredTime = Date.now()
   await newMessageDocument.save()
-  req.io.to(req.user.id.toString()).emit("chat:message-delivered", {
+  req.io.to(req.user.id.toString()).emit("message:message-delivered", {
     messageId: newMessageDocument._id,
     chatId: newMessageDocument.chat,
     deliveredTime: Date.now()

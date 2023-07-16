@@ -9,8 +9,17 @@ let activeChatInputTextContent = document.getElementById(
 )
 
 let allChatChatBoxContainer = document.getElementById("allChatChatBoxContainer")
+
+const activeChatInputContainer = document.getElementById(
+  "activeChatInputContainer"
+)
+const activeChatInputAttachmentBox = document.getElementById(
+  "activeChatInputAttachmentBox"
+)
 let isUserTyping = false
 let lastActiveChatId = activeChatSection.dataset.chatId.toString()
+
+import { v4 as uuidv4 } from "uuid"
 ;(async function () {
   if (!IS_INIT_CHAT_MODULE) {
     async function checkChatState() {
@@ -40,15 +49,6 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // active chat input container
-    const activeChatInputContainer = document.getElementById(
-      "activeChatInputContainer"
-    )
-    const activeChatInputTextContent = document.getElementById(
-      "activeChatInputTextContent"
-    )
-    const activeChatInputAttachmentBox = document.getElementById(
-      "activeChatInputAttachmentBox"
-    )
 
     activeChatInputTextContent.addEventListener(
       "input",
@@ -136,13 +136,11 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // input message creation
-    let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev.js")
     // ///////////////////////////////////////////////////////////// /////////////////////////////////////////////////////
-    const { checkTimeAndCreateNewMessage } = await import("./js/message.dev")
-    const { updateAllChatSection } = await import(
-      "./js/updateAllChatSection.dev"
-    )
+    // const { checkTimeAndCreateNewMessage } = await import("./js/message.dev")
+    // const { updateAllChatSection } = await import(
+    //   "./js/updateAllChatSection.dev"
+    // )
     const { default: Uppy } = await import("@uppy/core")
     const { default: Dashboard } = await import("@uppy/dashboard")
     const { default: Webcam } = await import("@uppy/webcam")
@@ -271,42 +269,53 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
       userMessage.mediaContentType = file.type.split("/")[0]
       userMessage.mediaContentMimeType = file.type
       userMessage.mediaContentPath = file.s3Multipart.key
-      userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
-      fetch("/message", {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userMessage)
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json()
-          }
-          return Promise.reject(response)
-        })
-        .then(async data => {
-          if (data.isSuccess) {
-            checkTimeAndCreateNewMessage(data.message, true)
-            closeReplyMessageBox()
-            updateAllChatSection(data.message)
-          } else {
-            let { createMainNotification } = await import(
-              "../common/mainNotification.dev"
-            )
-            createMainNotification(data.error, "error")
-          }
-        })
-        .catch(async err => {
-          console.log(err)
-          let { createMainNotification } = await import(
-            "../common/mainNotification.dev"
-          )
-          createMainNotification(
-            "Server Error In Sending Message, Please Try Again",
-            "error"
-          )
-        })
+      if (activeChatInputContainer.dataset.repliedTo !== "") {
+        userMessage.isRepliedMessage = true
+        userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+      } else {
+        userMessage.isRepliedMessage = false
+      }
+
+      if (userMessage.mediaContentType === "image") {
+        userMessage.mediaContentImagePreview = file.preview
+      }
+
+      sendAndCreateClientUserMessage(userMessage, "media-content")
+      // fetch("/message", {
+      //   method: "POST", // or 'PUT'
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify(userMessage)
+      // })
+      //   .then(response => {
+      //     if (response.ok) {
+      //       return response.json()
+      //     }
+      //     return Promise.reject(response)
+      //   })
+      //   .then(async data => {
+      //     if (data.isSuccess) {
+      //       checkTimeAndCreateNewMessage(data.message, true)
+      //       closeReplyMessageBox()
+      //       updateAllChatSection(data.message)
+      //     } else {
+      //       let { createMainNotification } = await import(
+      //         "../common/mainNotification.dev"
+      //       )
+      //       createMainNotification(data.error, "error")
+      //     }
+      //   })
+      //   .catch(async err => {
+      //     console.log(err)
+      //     let { createMainNotification } = await import(
+      //       "../common/mainNotification.dev"
+      //     )
+      //     createMainNotification(
+      //       "Server Error In Sending Message, Please Try Again",
+      //       "error"
+      //     )
+      //   })
     })
 
     // active chat input youtube send btn
@@ -328,50 +337,56 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
           userMessage.mediaContentMimeType = "video/mp4"
           userMessage.mediaContentPath =
             activeChatInputAttachmentYoutubeContent.value
-          userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+          if (activeChatInputContainer.dataset.repliedTo !== "") {
+            userMessage.isRepliedMessage = true
+            userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+          } else {
+            userMessage.isRepliedMessage = false
+          }
 
           activeChatInputAttachmentYoutubeContent.value = ""
-          fetch("/message", {
-            method: "POST", // or 'PUT'
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userMessage)
-          })
-            .then(response => {
-              if (response.ok) {
-                return response.json()
-              }
-              return Promise.reject(response)
-            })
-            .then(async data => {
-              if (data.isSuccess) {
-                checkTimeAndCreateNewMessage(data.message, true)
-                closeReplyMessageBox()
-                document
-                  .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
-                  .classList.add("input-attachment-btn-box__input-box--hide")
-                updateAllChatSection(data.message)
-                activeChatInputAttachmentYoutubeBtnInputBox.classList.add(
-                  "attachment-btn-box__input-box--hide"
-                )
-              } else {
-                let { createMainNotification } = await import(
-                  "../common/mainNotification.dev"
-                )
-                createMainNotification(data.error, "error")
-              }
-            })
-            .catch(async err => {
-              console.log(err)
-              let { createMainNotification } = await import(
-                "../common/mainNotification.dev"
-              )
-              createMainNotification(
-                "Server Error In Sending Message, Please Try Again",
-                "error"
-              )
-            })
+          // createUserMessageSocket(userMessage)
+          sendAndCreateClientUserMessage(userMessage, "youtube")
+
+          // fetch("/message", {
+          //   method: "POST", // or 'PUT'
+          //   headers: {
+          //     "Content-Type": "application/json"
+          //   },
+          //   body: JSON.stringify(userMessage)
+          // })
+          //   .then(response => {
+          //     if (response.ok) {
+          //       return response.json()
+          //     }
+          //     return Promise.reject(response)
+          //   })
+          //   .then(async data => {
+          //     if (data.isSuccess) {
+          //       checkTimeAndCreateNewMessage(data.message, true)
+          //       closeReplyMessageBox()
+          //       document
+          //         .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
+          //         .classList.add("input-attachment-btn-box__input-box--hide")
+          //       updateAllChatSection(data.message)
+
+          //     } else {
+          //       let { createMainNotification } = await import(
+          //         "../common/mainNotification.dev"
+          //       )
+          //       createMainNotification(data.error, "error")
+          //     }
+          //   })
+          //   .catch(async err => {
+          //     console.log(err)
+          //     let { createMainNotification } = await import(
+          //       "../common/mainNotification.dev"
+          //     )
+          //     createMainNotification(
+          //       "Server Error In Sending Message, Please Try Again",
+          //       "error"
+          //     )
+          //   })
         }
       }
     )
@@ -382,7 +397,46 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     const activeChatInputSendBtn = document.getElementById(
       "activeChatInputSendBtn"
     )
-    activeChatInputSendBtn.addEventListener("click", async () => {
+    if (activeChatInputSendBtn)
+      activeChatInputSendBtn.addEventListener("click", async () => {
+        sendTextMessage()
+      })
+
+    activeChatInputTextContent.addEventListener("keydown", async event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        // Prevent the default behavior of the Enter key
+        event.preventDefault()
+        sendTextMessage()
+      } else if (event.key === "Enter" && event.shiftKey) {
+        // Simulate the press of the enter key
+        var enterKeyEvent = new KeyboardEvent("keydown", {
+          key: "Enter",
+          keyCode: 13,
+          code: "Enter",
+          which: 13,
+          keyCodeVal: 13,
+          bubbles: true
+        })
+
+        this.dispatchEvent(enterKeyEvent)
+        // // Insert a new line in the input field
+        // const inputText = activeChatInputTextContent.value
+        // const selectionStart = activeChatInputTextContent.selectionStart
+        // const selectionEnd = activeChatInputTextContent.selectionEnd
+
+        // // Insert a new line at the current cursor position
+        // const newText =
+        //   inputText.substring(0, selectionStart) +
+        //   "\n" +
+        //   inputText.substring(selectionEnd)
+
+        // // Update the input field value and cursor position
+        // activeChatInputTextContent.value = newText
+        // activeChatInputTextContent.selectionStart = selectionStart + 1
+        // activeChatInputTextContent.selectionEnd = selectionStart + 1
+      }
+    })
+    async function sendTextMessage() {
       let userMessage = {}
       if (
         activeChatInputTextContent.value.trim() !== "" &&
@@ -391,7 +445,12 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
         userMessage.chat = activeChatSection.dataset.chatId
         userMessage.hasMediaContent = false
         userMessage.textContent = activeChatInputTextContent.value.trim()
-        userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+        if (activeChatInputContainer.dataset.repliedTo !== "") {
+          userMessage.isRepliedMessage = true
+          userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+        } else {
+          userMessage.isRepliedMessage = false
+        }
         activeChatInputTextContent.value = ""
         if (activeChatSection.dataset.chatId !== "") {
           let { sendChatMessageStopTypingSocket } = await import(
@@ -400,64 +459,9 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
           sendChatMessageStopTypingSocket(activeChatSection.dataset.chatId)
           isUserTyping = false
         }
-
-        fetch("/message", {
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(userMessage)
-        })
-          .then(response => {
-            if (response.ok) {
-              return response.json()
-            }
-            return Promise.reject(response)
-          })
-          .then(async data => {
-            if (data.isSuccess) {
-              console.log("created message:", data.message)
-              activeChatInputAttachmentBox.classList.remove(
-                "active-chat-input-attachment-box--hide"
-              )
-              activeChatInputTextContent.style.height = "auto"
-              activeChatInputTextContent.style.height =
-                activeChatInputTextContent.scrollHeight + "px"
-              if (
-                parseInt(
-                  activeChatInputTextContent.style.height.slice(0, -2)
-                ) <= 40
-              ) {
-                activeChatMessageContainer.style.paddingBottom = "60px"
-              } else {
-                activeChatMessageContainer.style.paddingBottom =
-                  activeChatInputTextContent.style.height
-              }
-              checkTimeAndCreateNewMessage(data.message, true)
-              closeReplyMessageBox()
-              updateAllChatSection(data.message)
-              activeChatMessageContainer.scrollTop =
-                activeChatMessageContainer.scrollHeight
-            } else {
-              let { createMainNotification } = await import(
-                "../common/mainNotification.dev"
-              )
-              createMainNotification(data.error, "error")
-            }
-          })
-          .catch(async err => {
-            console.log(err)
-            let { createMainNotification } = await import(
-              "../common/mainNotification.dev"
-            )
-            createMainNotification(
-              "Server Error In Sending Message, Please Try Again",
-              "error"
-            )
-          })
+        sendAndCreateClientUserMessage(userMessage, "text")
       }
-    })
-
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // active-chat-input-attachment-box
@@ -495,6 +499,44 @@ let lastActiveChatId = activeChatSection.dataset.chatId.toString()
     IS_INIT_CHAT_MODULE = true
   }
 })()
+
+async function sendAndCreateClientUserMessage(userMessage, type) {
+  let { sendCreateUserMessageSocket } = await import(
+    "../socket/event-emitter/message-socket"
+  )
+
+  userMessage.clientMessageId = uuidv4()
+  let { checkTimeAndCreateNewClientUserMessage } = await import(
+    "./js/message.dev"
+  )
+
+  checkTimeAndCreateNewClientUserMessage(userMessage, true)
+
+  let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
+  closeReplyMessageBox()
+  if (type === "media-content") {
+  } else if (type === "youtube") {
+    document
+      .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
+      .classList.add("input-attachment-btn-box__input-box--hide")
+  } else if (type === "text") {
+    activeChatInputAttachmentBox.classList.remove(
+      "active-chat-input-attachment-box--hide"
+    )
+    activeChatInputTextContent.style.height = "auto"
+    activeChatInputTextContent.style.height =
+      activeChatInputTextContent.scrollHeight + "px"
+    if (parseInt(activeChatInputTextContent.style.height.slice(0, -2)) <= 40) {
+      activeChatMessageContainer.style.paddingBottom = "60px"
+    } else {
+      activeChatMessageContainer.style.paddingBottom =
+        activeChatInputTextContent.style.height
+    }
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight
+  }
+  sendCreateUserMessageSocket(userMessage)
+}
 
 export function openActivechatInputAttachmentBox() {
   document

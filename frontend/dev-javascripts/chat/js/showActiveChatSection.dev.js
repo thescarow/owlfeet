@@ -161,7 +161,7 @@ function initializeUserMessageBoxObserver() {
       entries.forEach(entry => {
         if (entry.isIntersecting === true) {
           let messageId = entry.target.dataset.messageId
-          socket.emit("chat:update-message-seen-status", {
+          socket.emit("message:update-message-seen-status", {
             messageId: messageId
           })
           observer.unobserve(entry.target)
@@ -202,7 +202,7 @@ function initializeBottomMessageBoxObserver() {
         if (entry.isIntersecting === true) {
           observer.unobserve(entry.target)
           let chatId = activeChatSection.dataset.chatId
-          socket.emit("chat:update-chat-unseen-messages", {
+          socket.emit("message:update-chat-unseen-messages", {
             chatId: chatId
           })
         }

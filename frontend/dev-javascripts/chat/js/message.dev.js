@@ -3,7 +3,7 @@ let svg_infoBlankBtn = `
 <path d="M38.6887 2C45.68 2 49.1756 6.56 49.1756 11.785C49.1756 18.31 43.1026 24.345 35.1983 24.345C28.5774 24.345 24.7165 20.595 24.8991 14.395C24.8991 9.18 29.4957 2 38.6887 2ZM17.1774 102C11.6574 102 7.61391 98.74 11.4748 84.38L17.8087 58.92C18.9096 54.85 19.0922 53.215 17.8087 53.215C16.1548 53.215 8.99652 56.025 4.75478 58.8L2 54.4C15.4191 43.47 30.8574 37.065 37.4835 37.065C42.9983 37.065 43.9165 43.43 41.1617 53.215L33.9043 79.975C32.6209 84.7 33.1687 86.33 34.4574 86.33C36.1113 86.33 41.5374 84.37 46.8696 80.295L50 84.365C36.9461 97.1 22.687 102 17.1774 102Z"/>
 </svg>
 `
-let svg_messageTick = `
+let svg_messageTickIcon = `
 <svg width="100" height="100" viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg">
 <path d="M35.5523 72.8954C34.3946 74.0434 32.7545 75 31.3073 75C29.8601 75 28.22 73.9955 27.014 72.8476L0 46.0619L8.58659 37.5478L31.3555 60.1244L91.5581 0L100 8.65752L35.5523 72.8954V72.8954Z" />
 </svg>
@@ -79,6 +79,31 @@ let svg_messageLinkPreviewApplicationIcon = `
 </svg>
 
 `
+let svg_messageAudioClientIcon = `
+<svg width="318" height="80" viewBox="0 0 318 80" xmlns="http://www.w3.org/2000/svg">
+<path d="M112.846 54.5455C111.826 54.5455 110.848 54.1623 110.127 53.4804C109.405 52.7984 109 51.8735 109 50.9091V29.0909C109 28.1265 109.405 27.2016 110.127 26.5196C110.848 25.8377 111.826 25.4545 112.846 25.4545C113.866 25.4545 114.845 25.8377 115.566 26.5196C116.287 27.2016 116.692 28.1265 116.692 29.0909V50.9091C116.692 51.8735 116.287 52.7984 115.566 53.4804C114.845 54.1623 113.866 54.5455 112.846 54.5455ZM128.231 65.4545C127.211 65.4545 126.232 65.0714 125.511 64.3895C124.79 63.7075 124.385 62.7826 124.385 61.8182V18.1818C124.385 17.2174 124.79 16.2925 125.511 15.6105C126.232 14.9286 127.211 14.5455 128.231 14.5455C129.251 14.5455 130.229 14.9286 130.95 15.6105C131.672 16.2925 132.077 17.2174 132.077 18.1818V61.8182C132.077 62.7826 131.672 63.7075 130.95 64.3895C130.229 65.0714 129.251 65.4545 128.231 65.4545ZM143.615 54.5455C142.595 54.5455 141.617 54.1623 140.896 53.4804C140.174 52.7984 139.769 51.8735 139.769 50.9091V29.0909C139.769 28.1265 140.174 27.2016 140.896 26.5196C141.617 25.8377 142.595 25.4545 143.615 25.4545C144.635 25.4545 145.614 25.8377 146.335 26.5196C147.056 27.2016 147.462 28.1265 147.462 29.0909V50.9091C147.462 51.8735 147.056 52.7984 146.335 53.4804C145.614 54.1623 144.635 54.5455 143.615 54.5455ZM159 69.0909C157.98 69.0909 157.002 68.7078 156.28 68.0258C155.559 67.3439 155.154 66.419 155.154 65.4545V14.5455C155.154 13.581 155.559 12.6561 156.28 11.9742C157.002 11.2922 157.98 10.9091 159 10.9091C160.02 10.9091 160.998 11.2922 161.72 11.9742C162.441 12.6561 162.846 13.581 162.846 14.5455V65.4545C162.846 66.419 162.441 67.3439 161.72 68.0258C160.998 68.7078 160.02 69.0909 159 69.0909ZM174.385 80C173.365 80 172.386 79.6169 171.665 78.9349C170.944 78.253 170.538 77.3281 170.538 76.3636V3.63636C170.538 2.67194 170.944 1.74702 171.665 1.06507C172.386 0.383117 173.365 0 174.385 0C175.405 0 176.383 0.383117 177.104 1.06507C177.826 1.74702 178.231 2.67194 178.231 3.63636V76.3636C178.231 77.3281 177.826 78.253 177.104 78.9349C176.383 79.6169 175.405 80 174.385 80ZM189.769 65.4545C188.749 65.4545 187.771 65.0714 187.05 64.3895C186.328 63.7075 185.923 62.7826 185.923 61.8182V18.1818C185.923 17.2174 186.328 16.2925 187.05 15.6105C187.771 14.9286 188.749 14.5455 189.769 14.5455C190.789 14.5455 191.768 14.9286 192.489 15.6105C193.21 16.2925 193.615 17.2174 193.615 18.1818V61.8182C193.615 62.7826 193.21 63.7075 192.489 64.3895C191.768 65.0714 190.789 65.4545 189.769 65.4545ZM205.154 50.9091C204.134 50.9091 203.155 50.526 202.434 49.844C201.713 49.1621 201.308 48.2372 201.308 47.2727V32.7273C201.308 31.7629 201.713 30.8379 202.434 30.156C203.155 29.474 204.134 29.0909 205.154 29.0909C206.174 29.0909 207.152 29.474 207.873 30.156C208.595 30.8379 209 31.7629 209 32.7273V47.2727C209 48.2372 208.595 49.1621 207.873 49.844C207.152 50.526 206.174 50.9091 205.154 50.9091Z" />
+<path d="M221.846 54.5455C220.826 54.5455 219.848 54.1623 219.127 53.4804C218.405 52.7984 218 51.8735 218 50.9091V29.0909C218 28.1265 218.405 27.2016 219.127 26.5196C219.848 25.8377 220.826 25.4545 221.846 25.4545C222.866 25.4545 223.845 25.8377 224.566 26.5196C225.287 27.2016 225.692 28.1265 225.692 29.0909V50.9091C225.692 51.8735 225.287 52.7984 224.566 53.4804C223.845 54.1623 222.866 54.5455 221.846 54.5455ZM237.231 65.4545C236.211 65.4545 235.232 65.0714 234.511 64.3895C233.79 63.7075 233.385 62.7826 233.385 61.8182V18.1818C233.385 17.2174 233.79 16.2925 234.511 15.6105C235.232 14.9286 236.211 14.5455 237.231 14.5455C238.251 14.5455 239.229 14.9286 239.95 15.6105C240.672 16.2925 241.077 17.2174 241.077 18.1818V61.8182C241.077 62.7826 240.672 63.7075 239.95 64.3895C239.229 65.0714 238.251 65.4545 237.231 65.4545ZM252.615 54.5455C251.595 54.5455 250.617 54.1623 249.896 53.4804C249.174 52.7984 248.769 51.8735 248.769 50.9091V29.0909C248.769 28.1265 249.174 27.2016 249.896 26.5196C250.617 25.8377 251.595 25.4545 252.615 25.4545C253.635 25.4545 254.614 25.8377 255.335 26.5196C256.056 27.2016 256.462 28.1265 256.462 29.0909V50.9091C256.462 51.8735 256.056 52.7984 255.335 53.4804C254.614 54.1623 253.635 54.5455 252.615 54.5455ZM268 69.0909C266.98 69.0909 266.002 68.7078 265.28 68.0258C264.559 67.3439 264.154 66.419 264.154 65.4545V14.5455C264.154 13.581 264.559 12.6561 265.28 11.9742C266.002 11.2922 266.98 10.9091 268 10.9091C269.02 10.9091 269.998 11.2922 270.72 11.9742C271.441 12.6561 271.846 13.581 271.846 14.5455V65.4545C271.846 66.419 271.441 67.3439 270.72 68.0258C269.998 68.7078 269.02 69.0909 268 69.0909ZM283.385 80C282.365 80 281.386 79.6169 280.665 78.9349C279.944 78.253 279.538 77.3281 279.538 76.3636V3.63636C279.538 2.67194 279.944 1.74702 280.665 1.06507C281.386 0.383117 282.365 0 283.385 0C284.405 0 285.383 0.383117 286.104 1.06507C286.826 1.74702 287.231 2.67194 287.231 3.63636V76.3636C287.231 77.3281 286.826 78.253 286.104 78.9349C285.383 79.6169 284.405 80 283.385 80ZM298.769 65.4545C297.749 65.4545 296.771 65.0714 296.05 64.3895C295.328 63.7075 294.923 62.7826 294.923 61.8182V18.1818C294.923 17.2174 295.328 16.2925 296.05 15.6105C296.771 14.9286 297.749 14.5455 298.769 14.5455C299.789 14.5455 300.768 14.9286 301.489 15.6105C302.21 16.2925 302.615 17.2174 302.615 18.1818V61.8182C302.615 62.7826 302.21 63.7075 301.489 64.3895C300.768 65.0714 299.789 65.4545 298.769 65.4545ZM314.154 50.9091C313.134 50.9091 312.155 50.526 311.434 49.844C310.713 49.1621 310.308 48.2372 310.308 47.2727V32.7273C310.308 31.7629 310.713 30.8379 311.434 30.156C312.155 29.474 313.134 29.0909 314.154 29.0909C315.174 29.0909 316.152 29.474 316.873 30.156C317.595 30.8379 318 31.7629 318 32.7273V47.2727C318 48.2372 317.595 49.1621 316.873 49.844C316.152 50.526 315.174 50.9091 314.154 50.9091Z" />
+<path d="M3.84615 54.5455C2.82609 54.5455 1.84781 54.1623 1.12651 53.4804C0.405218 52.7984 0 51.8735 0 50.9091V29.0909C0 28.1265 0.405218 27.2016 1.12651 26.5196C1.84781 25.8377 2.82609 25.4545 3.84615 25.4545C4.86622 25.4545 5.8445 25.8377 6.56579 26.5196C7.28709 27.2016 7.69231 28.1265 7.69231 29.0909V50.9091C7.69231 51.8735 7.28709 52.7984 6.56579 53.4804C5.8445 54.1623 4.86622 54.5455 3.84615 54.5455ZM19.2308 65.4545C18.2107 65.4545 17.2324 65.0714 16.5111 64.3895C15.7898 63.7075 15.3846 62.7826 15.3846 61.8182V18.1818C15.3846 17.2174 15.7898 16.2925 16.5111 15.6105C17.2324 14.9286 18.2107 14.5455 19.2308 14.5455C20.2508 14.5455 21.2291 14.9286 21.9504 15.6105C22.6717 16.2925 23.0769 17.2174 23.0769 18.1818V61.8182C23.0769 62.7826 22.6717 63.7075 21.9504 64.3895C21.2291 65.0714 20.2508 65.4545 19.2308 65.4545ZM34.6154 54.5455C33.5953 54.5455 32.617 54.1623 31.8957 53.4804C31.1744 52.7984 30.7692 51.8735 30.7692 50.9091V29.0909C30.7692 28.1265 31.1744 27.2016 31.8957 26.5196C32.617 25.8377 33.5953 25.4545 34.6154 25.4545C35.6354 25.4545 36.6137 25.8377 37.335 26.5196C38.0563 27.2016 38.4615 28.1265 38.4615 29.0909V50.9091C38.4615 51.8735 38.0563 52.7984 37.335 53.4804C36.6137 54.1623 35.6354 54.5455 34.6154 54.5455ZM50 69.0909C48.9799 69.0909 48.0017 68.7078 47.2804 68.0258C46.5591 67.3439 46.1538 66.419 46.1538 65.4545V14.5455C46.1538 13.581 46.5591 12.6561 47.2804 11.9742C48.0017 11.2922 48.9799 10.9091 50 10.9091C51.0201 10.9091 51.9983 11.2922 52.7196 11.9742C53.4409 12.6561 53.8462 13.581 53.8462 14.5455V65.4545C53.8462 66.419 53.4409 67.3439 52.7196 68.0258C51.9983 68.7078 51.0201 69.0909 50 69.0909ZM65.3846 80C64.3646 80 63.3863 79.6169 62.665 78.9349C61.9437 78.253 61.5385 77.3281 61.5385 76.3636V3.63636C61.5385 2.67194 61.9437 1.74702 62.665 1.06507C63.3863 0.383117 64.3646 0 65.3846 0C66.4047 0 67.383 0.383117 68.1043 1.06507C68.8256 1.74702 69.2308 2.67194 69.2308 3.63636V76.3636C69.2308 77.3281 68.8256 78.253 68.1043 78.9349C67.383 79.6169 66.4047 80 65.3846 80ZM80.7692 65.4545C79.7492 65.4545 78.7709 65.0714 78.0496 64.3895C77.3283 63.7075 76.9231 62.7826 76.9231 61.8182V18.1818C76.9231 17.2174 77.3283 16.2925 78.0496 15.6105C78.7709 14.9286 79.7492 14.5455 80.7692 14.5455C81.7893 14.5455 82.7676 14.9286 83.4889 15.6105C84.2102 16.2925 84.6154 17.2174 84.6154 18.1818V61.8182C84.6154 62.7826 84.2102 63.7075 83.4889 64.3895C82.7676 65.0714 81.7893 65.4545 80.7692 65.4545ZM96.1538 50.9091C95.1338 50.9091 94.1555 50.526 93.4342 49.844C92.7129 49.1621 92.3077 48.2372 92.3077 47.2727V32.7273C92.3077 31.7629 92.7129 30.8379 93.4342 30.156C94.1555 29.474 95.1338 29.0909 96.1538 29.0909C97.1739 29.0909 98.1522 29.474 98.8735 30.156C99.5948 30.8379 100 31.7629 100 32.7273V47.2727C100 48.2372 99.5948 49.1621 98.8735 49.844C98.1522 50.526 97.1739 50.9091 96.1538 50.9091Z" />
+</svg>
+`
+let svg_messageVideoClientIcon = `
+<svg width="75" height="100" viewBox="0 0 75 100" xmlns="http://www.w3.org/2000/svg">
+<path d="M71.4592 42.9499L13.1974 1.53339C10.6223 -0.267334 7.32296 -0.512887 4.50644 0.960429C1.68991 2.43374 0 5.38038 0 8.57256V91.4057C0 94.5978 1.77039 97.5445 4.50644 99.0178C5.71352 99.6726 7.08154 100 8.3691 100C10.059 100 11.7489 99.5089 13.1974 98.4448L71.3788 57.0283C73.632 55.3913 75 52.772 75 49.9891C75 47.2062 73.7124 44.587 71.4592 42.9499ZM12.2318 83.8754V16.1028L59.8712 49.9891L12.2318 83.8754Z" />
+</svg>
+`
+let svg_messagePendingIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M50 0C40.111 0 30.444 2.93245 22.2215 8.42652C13.999 13.9206 7.59043 21.7295 3.80605 30.8658C0.0216642 40.0021 -0.968502 50.0555 0.960758 59.7545C2.89002 69.4535 7.65206 78.3627 14.6447 85.3553C21.6373 92.3479 30.5465 97.11 40.2455 99.0392C49.9445 100.969 59.9979 99.9783 69.1342 96.194C78.2705 92.4096 86.0794 86.0009 91.5735 77.7785C97.0675 69.556 100 59.889 100 50C100 43.4339 98.7067 36.9321 96.194 30.8658C93.6812 24.7995 89.9983 19.2876 85.3553 14.6447C80.7124 10.0017 75.2005 6.31876 69.1342 3.80602C63.0679 1.29329 56.5661 0 50 0ZM50 90C42.0888 90 34.3552 87.654 27.7772 83.2588C21.1992 78.8635 16.0723 72.6164 13.0448 65.3073C10.0173 57.9983 9.2252 49.9556 10.7686 42.1964C12.312 34.4371 16.1216 27.3098 21.7157 21.7157C27.3098 16.1216 34.4372 12.312 42.1964 10.7686C49.9556 9.22518 57.9983 10.0173 65.3073 13.0448C72.6164 16.0723 78.8635 21.1992 83.2588 27.7772C87.654 34.3551 90 42.0887 90 50C90 60.6086 85.7857 70.7828 78.2843 78.2843C70.7828 85.7857 60.6087 90 50 90Z" />
+<path d="M50 20C48.6739 20 47.4022 20.5268 46.4645 21.4645C45.5268 22.4021 45 23.6739 45 25V47.95L31.45 61.45C30.9266 61.8982 30.5015 62.4498 30.2014 63.0701C29.9013 63.6905 29.7326 64.3661 29.706 65.0547C29.6794 65.7433 29.7955 66.43 30.0468 67.0716C30.2982 67.7132 30.6795 68.296 31.1668 68.7832C31.654 69.2705 32.2368 69.6518 32.8784 69.9032C33.52 70.1545 34.2067 70.2706 34.8953 70.244C35.5839 70.2174 36.2595 70.0487 36.8799 69.7486C37.5002 69.4485 38.0518 69.0234 38.5 68.5L53.5 53.5C54.4421 52.5768 54.9812 51.3188 55 50V25C55 23.6739 54.4732 22.4021 53.5355 21.4645C52.5979 20.5268 51.3261 20 50 20Z" />
+</svg>
+
+`
+let svg_messageErrorIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M50 0C22.3875 0 0 22.3875 0 50C0 77.6125 22.3875 100 50 100C77.6125 100 100 77.6125 100 50C100 22.3875 77.6125 0 50 0ZM50 93.75C25.875 93.75 6.25 74.125 6.25 50C6.25 25.875 25.875 6.25 50 6.25C74.125 6.25 93.75 25.875 93.75 50C93.75 74.125 74.125 93.75 50 93.75ZM50 18.75C48.3424 18.75 46.7527 19.4085 45.5806 20.5806C44.4085 21.7527 43.75 23.3424 43.75 25V56.25C43.75 57.9076 44.4085 59.4973 45.5806 60.6694C46.7527 61.8415 48.3424 62.5 50 62.5C51.6576 62.5 53.2473 61.8415 54.4194 60.6694C55.5915 59.4973 56.25 57.9076 56.25 56.25V25C56.25 23.3424 55.5915 21.7527 54.4194 20.5806C53.2473 19.4085 51.6576 18.75 50 18.75ZM43.75 74.9C43.75 76.5576 44.4085 78.1473 45.5806 79.3194C46.7527 80.4915 48.3424 81.15 50 81.15C51.6576 81.15 53.2473 80.4915 54.4194 79.3194C55.5915 78.1473 56.25 76.5576 56.25 74.9C56.25 74.0792 56.0883 73.2665 55.7742 72.5082C55.4602 71.7499 54.9998 71.061 54.4194 70.4806C53.8391 69.9002 53.1501 69.4398 52.3918 69.1258C51.6335 68.8117 50.8208 68.65 50 68.65C49.1792 68.65 48.3665 68.8117 47.6082 69.1258C46.8499 69.4398 46.1609 69.9002 45.5806 70.4806C45.0002 71.061 44.5398 71.7499 44.2258 72.5082C43.9117 73.2665 43.75 74.0792 43.75 74.9Z" />
+</svg>
+
+`
 
 import Plyr from "plyr"
 import { increaseTotalReceivedMessagesCount } from "./showActiveChatSection.dev"
@@ -115,8 +140,11 @@ function createPlyr(element, type) {
 const weekDaysArray = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"]
 
 function getTimeString(date) {
-  let dateObj = typeof date === "string" ? new Date(date) : date
-
+  let dateObj
+  if (date) dateObj = typeof date === "string" ? new Date(date) : date
+  else {
+    dateObj = new Date()
+  }
   let dateHour = dateObj.getHours()
   let dateMin = dateObj.getMinutes()
   let dateStr1 = dateHour < 10 ? "0" + dateHour : dateHour
@@ -580,7 +608,7 @@ export function createUserMessage(
           ? "You"
           : message.repliedTo.sender.firstName +
             " " +
-            message.repliedTo.sender.firstName
+            message.repliedTo.sender.lastName
 
       messageContentBox.getElementsByClassName(
         "active-chat-user-message-reply-box__user"
@@ -654,9 +682,9 @@ export function createUserMessage(
     messageContentInfo.insertAdjacentHTML(
       "beforeend",
       `<div class="active-chat-user-message-box__content-status-container">
-               <div class="active-chat-user-message-box__content-status">${svg_messageTick}
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
                 </div>
-               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--second ">${svg_messageTick}
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick ">${svg_messageTickIcon}
                </div>
       </div>`
     )
@@ -678,7 +706,7 @@ export function createUserMessage(
     ) {
       let svgs = [
         ...messageBox.querySelectorAll(
-          ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status svg"
+          ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
         )
       ]
       let color = generateColorForUserMessageStatus(
@@ -724,6 +752,694 @@ export function createUserMessage(
     USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
   }
   return messageBox
+}
+
+export function checkTimeAndCreateNewClientUserMessage(
+  message,
+  isScrolledToBottom = false
+) {
+  let isUserChanged
+  let currentTimeObj = new Date()
+  if (activeChatMessageContainer.children.length === 0) {
+    BOTTOM_MESSAGE_TIME_POINTER = currentTimeObj
+    TOP_MESSAGE_TIME_POINTER = currentTimeObj
+  }
+
+  if (isMessageDateChanged(currentTimeObj, BOTTOM_MESSAGE_TIME_POINTER)) {
+    let dateMessageBox = createDateMessage(currentTimeObj)
+    activeChatMessageContainer.insertAdjacentElement(
+      "beforeend",
+      dateMessageBox
+    )
+    BOTTOM_MESSAGE_TIME_POINTER = currentTimeObj
+  }
+
+  isUserChanged = false
+  if (
+    !activeChatMessageContainer.getElementsByClassName(
+      "active-chat-user-message-box"
+    )[0]
+  ) {
+    isUserChanged = true
+  } else {
+    if (
+      BOTTOM_MESSAGE_USER_POINTER._id.toString() !== loginUser._id.toString()
+    ) {
+      isUserChanged = true
+    }
+  }
+  let userMessageBox = createClientUserMessage(message, isScrolledToBottom)
+  activeChatMessageContainer.insertAdjacentElement("beforeend", userMessageBox)
+  if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = loginUser
+  if (isScrolledToBottom) {
+    activeChatMessageContainer.scrollTop =
+      activeChatMessageContainer.scrollHeight + 1000
+  }
+}
+export function createClientUserMessage(message, isScrolledToBottom = false) {
+  let currentTimeObj = new Date()
+  const messageBox = document.createElement("div")
+  messageBox.classList.add("active-chat-user-message-box")
+  messageBox.setAttribute("data-client-message-id", message.clientMessageId)
+
+  if (
+    !message.hasOwnProperty("isDeletedForAll") ||
+    (message.hasOwnProperty("isDeletedForAll") &&
+      message.isDeletedForAll === false)
+  ) {
+    let messageBoxInnerHtml = `
+        
+        <div class="active-chat-user-message-box__content-box">
+      
+           <div class="active-chat-user-message-box__content-info">
+               <div class="active-chat-user-message-box__content-time">${getTimeString(
+                 currentTimeObj
+               )}
+               </div>
+           </div>
+       </div>
+      
+        `
+    messageBox.insertAdjacentHTML("beforeend", messageBoxInnerHtml)
+
+    let messageContentBox = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-box"
+    )[0]
+    let messageContentInfo = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-info"
+    )[0]
+
+    if (
+      message.hasOwnProperty("hasMediaContent") &&
+      message.hasMediaContent === true
+    ) {
+      if (message.mediaContentType === "video") {
+        messageBox.classList.add("active-chat-user-message-box--video-client")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--video-client"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--video-client"
+        )
+        let videoClient = document.createElement("div")
+        videoClient.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--video-client"
+        )
+        videoClient.insertAdjacentHTML("beforeend", svg_messageVideoClientIcon)
+        messageContentBox.insertAdjacentElement("afterbegin", videoClient)
+      }
+      if (message.mediaContentType === "audio") {
+        messageBox.classList.add("active-chat-user-message-box--audio-client")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--audio-client"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--audio-client"
+        )
+        let audioClient = document.createElement("div")
+        audioClient.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--audio-client"
+        )
+
+        audioClient.insertAdjacentHTML("beforeend", svg_messageAudioClientIcon)
+
+        messageContentBox.insertAdjacentElement("afterbegin", audioClient)
+      }
+      if (message.mediaContentType === "youtube") {
+        messageBox.classList.add("active-chat-user-message-box--youtube")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--youtube"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--youtube"
+        )
+        let youtube = document.createElement("div")
+        youtube.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--youtube"
+        )
+
+        youtube.setAttribute("data-plyr-provider", "youtube")
+        youtube.setAttribute("data-plyr-embed-id", message.mediaContentPath)
+
+        messageContentBox.insertAdjacentElement("afterbegin", youtube)
+        createPlyr(youtube, "youtube")
+      }
+      if (message.mediaContentType === "image") {
+        messageBox.classList.add("active-chat-user-message-box--image")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--image"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--image"
+        )
+
+        let image = document.createElement("img")
+        image.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--image"
+        )
+        image.onload = () => {
+          if (isScrolledToBottom) {
+            activeChatMessageContainer.scrollTop =
+              activeChatMessageContainer.scrollHeight
+          }
+        }
+        image.setAttribute("src", message.mediaContentImagePreview)
+        image.setAttribute("alt", "Image")
+
+        messageContentBox.insertAdjacentElement("afterbegin", image)
+      }
+    } else {
+      messageBox.classList.add("active-chat-user-message-box--text")
+      messageContentBox.classList.add(
+        "active-chat-user-message-box__content-box--text"
+      )
+      messageContentInfo.classList.add(
+        "active-chat-user-message-box__content-info--text"
+      )
+
+      let textMessage = document.createElement("div")
+      textMessage.classList.add(
+        "active-chat-user-message-box__content",
+        "active-chat-user-message-box__content--text"
+      )
+      textMessage.textContent = message.textContent
+      messageContentBox.insertAdjacentElement("afterbegin", textMessage)
+    }
+    ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
+    if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
+      let userMessageBox = document.querySelector(
+        `.active-chat-user-message-box[data-message-id="${message.repliedTo}"]`
+      )
+      if (userMessageBox) {
+        let repliedMessageContent, repliedMessageUser
+
+        messageContentBox.insertAdjacentHTML(
+          "afterbegin",
+          `<div class='active-chat-user-message-reply-box ${
+            userMessageBox.dataset.senderId.toString() ===
+            loginUser._id.toString()
+              ? "active-chat-user-message-reply-box--self-replied"
+              : ""
+          }'>
+              <div class="active-chat-user-message-reply-box__user">
+              </div>
+             <div class="active-chat-user-message-reply-box__user-message">
+            </div>
+          </div>`
+        )
+
+        //reply message user
+        repliedMessageUser =
+          userMessageBox.dataset.senderId.toString() ===
+          loginUser._id.toString()
+            ? "You"
+            : userMessageBox.dataset.senderName
+
+        messageContentBox.getElementsByClassName(
+          "active-chat-user-message-reply-box__user"
+        )[0].textContent = repliedMessageUser
+
+        if (
+          userMessageBox.classList.contains(
+            "active-chat-user-message-box--deleted-message"
+          )
+        ) {
+          repliedMessageContent = `${svg_deletedMessageBlankIcon} <span>This Message has been deleted.</span>`
+
+          messageContentBox.getElementsByClassName(
+            "active-chat-user-message-reply-box__user-message"
+          )[0].innerHTML = repliedMessageContent
+
+          messageContentBox
+            .getElementsByClassName("active-chat-user-message-reply-box")[0]
+            .classList.add(
+              "active-chat-user-message-reply-box--deleted-message"
+            )
+        } else {
+          if (
+            userMessageBox.classList.contains(
+              "active-chat-user-message-box--text"
+            )
+          ) {
+            let userMessageTextContent = userMessageBox.getElementsByClassName(
+              "active-chat-user-message-box__content--text"
+            )[0]
+            if (userMessageTextContent)
+              repliedMessageContent = userMessageTextContent.textContent
+            messageContentBox.getElementsByClassName(
+              "active-chat-user-message-reply-box__user-message"
+            )[0].textContent = repliedMessageContent
+          } else {
+            repliedMessageContent = ""
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--video"
+              )
+            ) {
+              repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+            }
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--audio"
+              )
+            ) {
+              repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
+            }
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--image"
+              )
+            ) {
+              repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
+            }
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--youtube"
+              )
+            ) {
+              repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
+            }
+
+            messageContentBox.getElementsByClassName(
+              "active-chat-user-message-reply-box__user-message"
+            )[0].innerHTML = repliedMessageContent
+          }
+        }
+
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--replied-message"
+        )
+        messageBox.classList.add(
+          "active-chat-user-message-box--replied-message"
+        )
+        messageBox.dataset.repliedMessageId = message.repliedTo
+      }
+    }
+  }
+
+  let messageContentInfo = messageBox.getElementsByClassName(
+    "active-chat-user-message-box__content-info"
+  )[0]
+
+  messageContentInfo.insertAdjacentHTML(
+    "beforeend",
+    `<div class="active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--pending">
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--pending">${svg_messagePendingIcon}
+                </div>
+      </div>`
+  )
+
+  messageBox.classList.add("active-chat-user-message-box--right")
+  return messageBox
+}
+
+export function replaceClientUserMessage(
+  clientMessageId,
+  message,
+  isUserChanged = true,
+  isScrolledToBottom = false
+) {
+  increaseTotalReceivedMessagesCount()
+
+  let messageBox = activeChatMessageContainer.querySelector(
+    `.active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
+  )
+
+  console.log("messageBox message:", message)
+  console.log("messageBox:", messageBox)
+  if (messageBox) {
+    messageBox.setAttribute("data-message-id", message._id)
+    if (message.hasOwnProperty("sender")) {
+      messageBox.setAttribute("data-sender-id", message.sender._id)
+      messageBox.setAttribute(
+        "data-sender-name",
+        message.sender.firstName + " " + message.sender.lastName
+      )
+    }
+    if (
+      !message.hasOwnProperty("isDeletedForAll") ||
+      (message.hasOwnProperty("isDeletedForAll") &&
+        message.isDeletedForAll === false)
+    ) {
+      let messageBoxInnerHtml = `
+        
+        <div class="active-chat-user-message-box__content-box">
+      
+           <div class="active-chat-user-message-box__content-info">
+               <div class="active-chat-user-message-box__content-time">${getTimeString(
+                 message.createdAt
+               )}
+               </div>
+           </div>
+       </div>
+       <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+       </div>
+        `
+      messageBox.innerHTML = messageBoxInnerHtml
+
+      let messageContentBox = messageBox.getElementsByClassName(
+        "active-chat-user-message-box__content-box"
+      )[0]
+      let messageContentInfo = messageBox.getElementsByClassName(
+        "active-chat-user-message-box__content-info"
+      )[0]
+
+      if (message.hasMediaContent) {
+        if (message.mediaContentType === "video") {
+          messageBox.classList.add("active-chat-user-message-box--video")
+          messageContentBox.classList.add(
+            "active-chat-user-message-box__content-box--video"
+          )
+          messageContentInfo.classList.add(
+            "active-chat-user-message-box__content-info--video"
+          )
+          let video = document.createElement("video")
+          video.classList.add(
+            "active-chat-user-message-box__content",
+            "active-chat-user-message-box__content--video"
+          )
+          let videoSource = document.createElement("source")
+          videoSource.src = message.mediaContentPath
+          //   videoSource.type = message.mediaContentMimeType.split(";")[0]
+          video.insertAdjacentElement("beforeend", videoSource)
+
+          messageContentBox.insertAdjacentElement("afterbegin", video)
+          createPlyr(video, "video")
+        }
+        if (message.mediaContentType === "audio") {
+          messageBox.classList.add("active-chat-user-message-box--audio")
+          messageContentBox.classList.add(
+            "active-chat-user-message-box__content-box--audio"
+          )
+          messageContentInfo.classList.add(
+            "active-chat-user-message-box__content-info--audio"
+          )
+          let audio = document.createElement("audio")
+          audio.classList.add(
+            "active-chat-user-message-box__content",
+            "active-chat-user-message-box__content--audio"
+          )
+
+          let audioSource = document.createElement("source")
+          audioSource.src = message.mediaContentPath
+          audioSource.type = message.mediaContentMimeType
+          audio.insertAdjacentElement("beforeend", audioSource)
+
+          messageContentBox.insertAdjacentElement("afterbegin", audio)
+          createPlyr(audio, "audio")
+        }
+        if (message.mediaContentType === "youtube") {
+          messageBox.classList.add("active-chat-user-message-box--youtube")
+          messageContentBox.classList.add(
+            "active-chat-user-message-box__content-box--youtube"
+          )
+          messageContentInfo.classList.add(
+            "active-chat-user-message-box__content-info--youtube"
+          )
+          let youtube = document.createElement("div")
+          youtube.classList.add(
+            "active-chat-user-message-box__content",
+            "active-chat-user-message-box__content--youtube"
+          )
+
+          youtube.setAttribute("data-plyr-provider", "youtube")
+          youtube.setAttribute("data-plyr-embed-id", message.mediaContentPath)
+
+          messageContentBox.insertAdjacentElement("afterbegin", youtube)
+          createPlyr(youtube, "youtube")
+        }
+        if (message.mediaContentType === "image") {
+          messageBox.classList.add("active-chat-user-message-box--image")
+          messageContentBox.classList.add(
+            "active-chat-user-message-box__content-box--image"
+          )
+          messageContentInfo.classList.add(
+            "active-chat-user-message-box__content-info--image"
+          )
+
+          let image = document.createElement("img")
+          image.classList.add(
+            "active-chat-user-message-box__content",
+            "active-chat-user-message-box__content--image"
+          )
+          image.onload = () => {
+            if (isScrolledToBottom) {
+              activeChatMessageContainer.scrollTop =
+                activeChatMessageContainer.scrollHeight
+            }
+          }
+          image.setAttribute("src", message.mediaContentPath)
+          image.setAttribute("alt", "Image")
+
+          messageContentBox.insertAdjacentElement("afterbegin", image)
+        }
+      } else {
+        messageBox.classList.add("active-chat-user-message-box--text")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--text"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--text"
+        )
+
+        let textMessage = document.createElement("div")
+        textMessage.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--text"
+        )
+
+        if (message.hasOwnProperty("hasLinks") && message.hasLinks === true) {
+          insertLinksToTextContent(
+            textMessage,
+            message.textContent,
+            message.linksData
+          )
+          if (
+            message.hasOwnProperty("hasLinkPreview") &&
+            message.hasOwnProperty("linkPreviewData") &&
+            message.hasLinkPreview === true
+          ) {
+            let linkPreview = createLinkPreview(
+              message.linkPreviewData,
+              isScrolledToBottom
+            )
+            linkPreview.classList.add("link-preview--message")
+
+            messageContentBox.insertAdjacentElement("beforeend", linkPreview)
+          }
+        } else {
+          textMessage.textContent = message.textContent
+        }
+
+        ////////////////////////////////////////////////////////////////////
+        messageContentBox.insertAdjacentElement("afterbegin", textMessage)
+      }
+      if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
+        let repliedMessageContent, repliedMessageUser
+
+        messageContentBox.insertAdjacentHTML(
+          "afterbegin",
+          `<div class='active-chat-user-message-reply-box ${
+            message.sender._id.toString() ===
+            message.repliedTo.sender._id.toString()
+              ? "active-chat-user-message-reply-box--self-replied"
+              : ""
+          }'>
+            <div class="active-chat-user-message-reply-box__user">
+            </div>
+           <div class="active-chat-user-message-reply-box__user-message">
+          </div>
+        </div>`
+        )
+
+        repliedMessageUser =
+          message.repliedTo.sender._id.toString() === loginUser._id.toString()
+            ? "You"
+            : message.repliedTo.sender.firstName +
+              " " +
+              message.repliedTo.sender.lastName
+
+        messageContentBox.getElementsByClassName(
+          "active-chat-user-message-reply-box__user"
+        )[0].textContent = repliedMessageUser
+
+        if (
+          message.repliedTo.hasOwnProperty("isDeletedForAll") &&
+          message.repliedTo.isDeletedForAll === true
+        ) {
+          repliedMessageContent = `${svg_deletedMessageBlankIcon} <span>This Message has been deleted.</span>`
+          messageContentBox.getElementsByClassName(
+            "active-chat-user-message-reply-box__user-message"
+          )[0].innerHTML = repliedMessageContent
+          messageContentBox
+            .getElementsByClassName("active-chat-user-message-reply-box")[0]
+            .classList.add(
+              "active-chat-user-message-reply-box--deleted-message"
+            )
+        } else {
+          if (message.repliedTo.hasMediaContent) {
+            if (message.repliedTo.mediaContentType === "video") {
+              repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+            }
+            if (message.repliedTo.mediaContentType === "audio") {
+              repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
+            }
+            if (message.repliedTo.mediaContentType === "image") {
+              repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
+            }
+            if (message.repliedTo.mediaContentType === "youtube") {
+              repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
+            }
+            messageContentBox.getElementsByClassName(
+              "active-chat-user-message-reply-box__user-message"
+            )[0].innerHTML = repliedMessageContent
+          } else {
+            repliedMessageContent = message.repliedTo.textContent
+            messageContentBox.getElementsByClassName(
+              "active-chat-user-message-reply-box__user-message"
+            )[0].textContent = repliedMessageContent
+          }
+        }
+
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--replied-message"
+        )
+        messageBox.classList.add(
+          "active-chat-user-message-box--replied-message"
+        )
+        messageBox.dataset.repliedMessageId = message.repliedTo._id
+      }
+    } else {
+      messageBox.classList.add("active-chat-user-message-box--deleted-message")
+
+      messageBox.innerHTML = `<div class="active-chat-user-message-box__content-box active-chat-user-message-box__content-box--deleted-message">
+    <div class="active-chat-user-message-box__content active-chat-user-message-box__content--deleted-message">
+   ${svg_deletedMessageBlankIcon}<span>This Message has been deleted.</span>
+    </div>
+    <div class="active-chat-user-message-box__content-info active-chat-user-message-box__content-info--deleted-message">
+        <div class="active-chat-user-message-box__content-time active-chat-user-message-box__content-time--deleted-message">${getTimeString(
+          message.createdAt
+        )}
+        </div>
+    </div>
+     </div>
+     <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+     </div>`
+    }
+
+    let messageContentInfo = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-info"
+    )[0]
+    if (message.sender._id.toString() === loginUser._id.toString()) {
+      messageBox.classList.add("active-chat-user-message-box--right")
+      messageContentInfo.insertAdjacentHTML(
+        "beforeend",
+        `<div class="active-chat-user-message-box__content-status-container">
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
+                </div>
+               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick ">${svg_messageTickIcon}
+               </div>
+      </div>`
+      )
+      let contentStatusContainer = messageContentInfo.getElementsByClassName(
+        "active-chat-user-message-box__content-status-container"
+      )[0]
+      if (
+        message.hasOwnProperty("deliveryStatus") &&
+        message.deliveryStatus.isDelivered === true
+      ) {
+        contentStatusContainer.classList.add(
+          "active-chat-user-message-box__content-status-container--delivered"
+        )
+      }
+
+      if (
+        message.hasOwnProperty("seenStatus") &&
+        message.hasOwnProperty("reader")
+      ) {
+        let svgs = [
+          ...messageBox.querySelectorAll(
+            ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+          )
+        ]
+        let color = generateColorForUserMessageStatus(
+          message.seenStatus.length - 1,
+          message.reader.length - 1
+        )
+        svgs.forEach(svg => {
+          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+          svg.style.strokeWidth = `1px`
+          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        })
+        messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+      }
+    }
+
+    if (
+      isUserChanged === true &&
+      message.sender._id.toString() !== loginUser._id.toString()
+    ) {
+      let messageContentBox = messageBox.getElementsByClassName(
+        "active-chat-user-message-box__content-box"
+      )[0]
+      messageContentBox.insertAdjacentHTML(
+        "afterbegin",
+        `<div class="active-chat-user-message-box__user-box">
+      </div>`
+      )
+      messageContentBox.getElementsByClassName(
+        "active-chat-user-message-box__user-box"
+      )[0].textContent =
+        message.sender.firstName + " " + message.sender.lastName
+      messageContentBox.classList.add(
+        "active-chat-user-message-box__content-box--has-user-box"
+      )
+      messageBox.classList.add("active-chat-user-message-box--has-user-box")
+    }
+
+    if (
+      message.hasOwnProperty("seenStatus") &&
+      message.hasOwnProperty("reader") &&
+      message.seenStatus.length !== message.reader.length &&
+      message.sender._id.toString() !== loginUser._id.toString()
+    ) {
+      USER_MESSAGE_BOX_OBSERVER.observe(messageBox)
+    }
+  }
+}
+
+export function updateClientUserMessageStatus(clientMessageId, status) {
+  let messageBox = activeChatMessageContainer.querySelector(
+    `.active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
+  )
+
+  if (messageBox) {
+    let contentStatusContainer = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-status-container"
+    )[0]
+    if (status === "error") {
+      contentStatusContainer.className =
+        "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--error"
+
+      contentStatusContainer.innerHTML = `<div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--error">${svg_messageErrorIcon}
+      </div>
+      `
+    } else if (status === "sent") {
+      contentStatusContainer.className =
+        "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
+
+      contentStatusContainer.innerHTML = `<div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
+        </div>
+       <div class="active-chat-user-message-box__content-status
+       active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick">${svg_messageTickIcon}
+       </div>`
+    }
+  }
 }
 
 function insertLinksToString(str) {

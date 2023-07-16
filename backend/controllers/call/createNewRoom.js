@@ -32,16 +32,16 @@ exports.createNewRoom = async (req, res) => {
         userData.hasOwnProperty("isCameraOn") &&
         userData.hasOwnProperty("isScreenShareOn")
       ) {
-        if (userData.isCameraOn === "string")
+        if (typeof userData.isCameraOn === "string")
           userData.isCameraOn = userData.isCameraOn === "true" ? true : false
-        if (userData.isScreenShareOn === "string")
+        if (typeof userData.isScreenShareOn === "string")
           userData.isScreenShareOn =
             userData.isScreenShareOn === "true" ? true : false
-        if (userData.isAudioOn === "string")
+        if (typeof userData.isAudioOn === "string")
           userData.isAudioOn = userData.isAudioOn === "true" ? true : false
 
         if (userData.roomName.trim() === "") {
-          return response.json({
+          return res.json({
             isSuccess: false,
             error: "Please give a name to call room"
           })
@@ -90,10 +90,10 @@ exports.createNewRoom = async (req, res) => {
           })
         }
 
-        createdChatRoom.ownMemberUserId = req.user.id
+        createdNewRoom.ownMemberUserId = req.user.id
 
         let callRoomMembers = await CallRoomMember.find({
-          callRoom: createdChatRoom._id
+          callRoom: createdNewRoom._id
         })
           .populate({
             path: "user",
@@ -114,7 +114,7 @@ exports.createNewRoom = async (req, res) => {
             }
           })
         )
-        createdChatRoom.members = callRoomMembers
+        createdNewRoom.members = callRoomMembers
 
         res.json({ isSuccess: true, callRoom: createdNewRoom })
       } else {
@@ -131,7 +131,7 @@ exports.createNewRoom = async (req, res) => {
     }
   } catch (err) {
     console.log(
-      errorLog("Server Error In Creating Chat Room:"),
+      errorLog("Server Error In Creating New Room:"),
       mainErrorLog(err)
     )
     res.status(500).json({

@@ -200,7 +200,6 @@ export async function createChatBox(chat) {
 }
 
 export async function updateChatBoxLatestMessage(message = null) {
-  console.log("updateChatBoxLatestMessage:", message)
   let chatBox = allChatChatBoxContainer.querySelector(
     `.chat-box[data-chat-id = "${message.chat._id.toString()}"]`
   )

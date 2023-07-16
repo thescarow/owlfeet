@@ -81,7 +81,7 @@ exports.createAndSendInfoMessage = async (
       message: createdInfoMessage
     }
     createdInfoMessage.reader.forEach(userId => {
-      io.to(userId.toString()).emit("chat:new-info-message", eventData)
+      io.to(userId.toString()).emit("message:new-info-message", eventData)
     })
   } catch (e) {
     console.log(

@@ -207,7 +207,7 @@ async function attachSocketForDeleteMessage(
       if (userId.toString() !== req.user.id.toString()) {
         req.io
           .to(userId.toString())
-          .emit("chat:delete-message-for-all", eventData)
+          .emit("message:delete-message-for-all", eventData)
       }
     })
   }

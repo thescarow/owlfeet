@@ -67,6 +67,11 @@
     if (pageName && pageName === "chat") {
       let { createChatSocket } = await import("./event-handler/chat-socket")
       createChatSocket(socket)
+
+      let { createMessageSocket } = await import(
+        "./event-handler/message-socket"
+      )
+      createMessageSocket(socket)
     }
     IS_INIT_SOCKET_MODULE = true
   }

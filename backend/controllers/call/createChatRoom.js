@@ -44,12 +44,12 @@ exports.createChatRoom = async (req, res) => {
         userData.hasOwnProperty("isCameraOn") &&
         userData.hasOwnProperty("isScreenShareOn")
       ) {
-        if (userData.isCameraOn === "string")
+        if (typeof userData.isCameraOn === "string")
           userData.isCameraOn = userData.isCameraOn === "true" ? true : false
-        if (userData.isScreenShareOn === "string")
+        if (typeof userData.isScreenShareOn === "string")
           userData.isScreenShareOn =
             userData.isScreenShareOn === "true" ? true : false
-        if (userData.isAudioOn === "string")
+        if (typeof userData.isAudioOn === "string")
           userData.isAudioOn = userData.isAudioOn === "true" ? true : false
 
         let chat = await Chat.findOne({
@@ -194,7 +194,7 @@ exports.createChatRoom = async (req, res) => {
           return res.json({
             isSuccess: false,
             error:
-              "You are not authorized to call in this chat or chat is not exists for you."
+              "You are not allowed to call in this chat or chat is not exists for you."
           })
         }
       } else {
@@ -206,7 +206,7 @@ exports.createChatRoom = async (req, res) => {
     } else {
       return res.json({
         isSuccess: false,
-        error: "You Are Not Logged In, Please Log In First"
+        error: "You are not logged in, Please log in first"
       })
     }
   } catch (err) {

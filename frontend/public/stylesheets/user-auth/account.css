@@ -516,7 +516,7 @@ label::selection {
 }
 
 .main-text-link--have-account {
-	color: rgba(var(--rgba-second-color), 1);
+	color: rgba(var(--rgba-third-color), 1);
 	margin: 25px 0 260px 0;
 }
 

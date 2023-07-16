@@ -325,6 +325,7 @@ svg {
     font-size: 15px;
     font-weight: 800;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .creating-new-room__btn--select-calltype {
