@@ -7,16 +7,18 @@
   const userNotificationContainer = document.getElementById(
     "userNotificationContainer"
   )
-  const userNotificationBtn = document.getElementById("userNotificationBtn")
+  const userNotificationOpenBtn = document.getElementById(
+    "userNotificationOpenBtn"
+  )
   const userNotificationModal = document.getElementById("userNotificationModal")
   const userNotificationModalCloseBtn = document.getElementById(
     "userNotificationModalCloseBtn"
   )
-  userNotificationBtn.addEventListener("click", async () => {
+  userNotificationOpenBtn.addEventListener("click", async () => {
     if (userNotificationModal.classList.contains("hide"))
       userNotificationModal.classList.remove("hide")
 
-    fetch("/user-notification")
+    fetch("/user-notification/data?totalReceivedNotificationCount=0")
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -25,12 +27,23 @@
       })
       .then(async data => {
         if (data.isSuccess) {
-          let { createUserNotification } = await import(
-            "./js/createUserNotification.dev.js"
-          )
-          data.userNotification.forEach(userNotification => {
-            createUserNotification(userNotificationContainer, userNotification)
-          })
+          if (data.userNotifications.length > 0) {
+            let { createUserNotification } = await import(
+              "./js/createUserNotification.dev.js"
+            )
+            data.userNotifications.forEach(userNotification => {
+              createUserNotification(
+                userNotificationContainer,
+                userNotification
+              )
+            })
+          } else {
+            let userNotificationStatus = document.getElementById(
+              "userNotificationStatus"
+            )
+            if (userNotificationStatus.classList.contains("hide"))
+              userNotificationStatus.classList.remove("hide")
+          }
         } else {
           createMainNotification(data.error, "error")
         }

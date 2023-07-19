@@ -11,7 +11,7 @@ const DATA_DIR = path.join(__dirname, "companion-tmp-file")
 const options = {
   s3: {
     getKey: (req, filename, metadata) => {
-      console.log(req, "-----", filename, "-------", metadata)
+      // console.log(req, "-----", filename, "-------", metadata)
       if (filename !== "") {
         return filename
       } else {

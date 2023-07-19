@@ -11,14 +11,15 @@
     </div>
     <div class="main-logo main-logo--header" id="mainLogo">
       <div class="main-logo__icon">
-        <%- include('../../public/assets/logo/mainOwlfeetLogoIcon.svg') _%>
+        <%- include('../partials/icons/main-logo/mainOwlfeetLogoIconLightColor.svg') _%>
       </div>
       <div class="main-logo__title">
-        <%- include('../../public/assets/logo/mainOwlfeetLogoTitle.svg') _%>
+        <%# include('../partials/icons/main-logo/mainOwlfeetLogoTitle.svg') _%>
+          owlfeet
       </div>
 
     </div>
-    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationBtn">
+    <div class="home-header__user-notification-icon user-notification-icon" id="userNotificationOpenBtn">
       <%- include('../partials/icons/userNotification.svg') -%>
 
     </div>
@@ -33,159 +34,14 @@
 
       <div class="user-notification-content__title">Notification</div>
 
-
-
-      <div id="userNotificationContainer" class="user-notification-container ">
+      <div class="user-notification-container" id="userNotificationContainer">
       </div>
 
-      <a href="#" class="user-notification-content__see-all-notification">See all notification >></a>
+      <div class="user-notification-status hide" id="userNotificationStatus">
+        There is no notification.
+      </div>
+      <a href="/user-notification" class="user-notification-content__see-all-notification">See all notification >></a>
 
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="home-top-bar-container">
-    <a id="logo" href="/">
-      OwlFeet
-      <span id="logo-last">
-
-      </span>
-    </a> -->
-
-
-
-<!-- <div class="home-toggle-container" onclick="toggleContainer(this)">
-      <div class="toggle-bar1"></div>
-      <div class="toggle-bar2"></div>
-      <div class="toggle-bar3"></div>
-    </div>
-
-    <div class="news-categories-holder">
-      <ul class="news-categories">
-        <li class="news-category">general</li>
-        <li class="news-category">politics</li>
-        <li class="news-category">sports</li>
-        <li class="news-category">business</li>
-        <li class="news-category">health</li>
-        <li class="news-category">tech</li>
-        <li class="news-category">gadgets</li>
-        <li class="news-category">astronomy</li>
-        <li class="news-category">entertainment</li>
-        <li class="news-category">jobs</li>
-        <li class="news-category">localImportant</li>
-      </ul>
-    </div>
-    <div class="sort-by-holder">
-
-      <select id="sort-by" class="sort-by">
-        <option value="most recent">Most recent</option>
-        <option value="most viewed">Most viewed</option>
-      </select>
-
-    </div>
-
-  </div> -->
-<!-- #### ending of home top bar -->
-
-
-<!-- <div class="home-side-container">
-
-    <div class="home-side-content">
-
-
-
-      <div class="home-contacts">
-        <input type="checkbox" href="#" class="home-contacts-open" name="home-contacts-open" id="home-contacts-open" />
-        <label class="home-contacts-open-button" for="home-contacts-open">
-          <span class="hamburger-text">Contact Us</span>
-          <span class="hamburger hamburger-1"></span>
-          <span class="hamburger hamburger-2"></span>
-          <span class="hamburger hamburger-3"></span>
-        </label>
-
-        <a href="#" class="home-contacts-item">
-          <ion-icon name="logo-whatsapp"></ion-icon>
-        </a>
-        <a href="#" class="home-contacts-item">
-          <ion-icon name="logo-facebook"></ion-icon>
-        </a>
-        <a href="#" class="home-contacts-item">
-          <ion-icon name="logo-instagram"></ion-icon>
-        </a>
-        <a href="#" class="home-contacts-item">
-          <ion-icon name="logo-twitter"></ion-icon>
-        </a>
-        <a href="#" class="home-contacts-item">
-          <ion-icon name="mail"></ion-icon>
-          </ion-icon>
-        </a> -->
-
-<!-- </div> -->
-<!-- ###### end home contacts  -->
-
-<!-- </div> -->
-<!-- ##### end of  home side content  -->
-<!-- </div> -->
-<!-- ##### end of home side container  -->
-
-
-
-<%# include('../news/_newsModel') %>
-
-
-
-
-
-
-  <!-- </div> -->
-  <!-- ending of home news container  -->
-
-  <!-- </div> -->
-  <!-- #### home main conatiner end  -->
-
-
-
-
-
-
-
-  <!-- for purifing the comment  -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.6/purify.min.js" integrity="sha512-DJjvM/U3zCRpzrYboJgg23iLHapWcS2rlo7Ni18Cdv+FMs6b3gUF7hQihztj4uVkHHfUwk7dha97jVzRqUJ7hg==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script> -->

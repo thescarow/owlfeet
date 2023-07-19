@@ -8,15 +8,13 @@ const {
   selectListUserField
 } = require("../../common/filter-field/filterUserField")
 const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
+const {
+  timeDifferenceFromNow
+} = require("../../common/calculateTimeDifference")
 
-exports.fetchUserNotification = async (req, res) => {
+exports.getUserNotificationPage = async (req, res) => {
   try {
     if (req.user) {
-      let { totalReceivedNotificationCount } = req.query
-      console.log(
-        "totalReceivedNotificationCount",
-        totalReceivedNotificationCount
-      )
       let userNotifications = await UserNotification.find({
         toUser: req.user.id
       })
@@ -27,8 +25,7 @@ exports.fetchUserNotification = async (req, res) => {
             lean: true
           }
         })
-        .limit(10)
-        .skip(totalReceivedNotificationCount)
+        .limit(15)
         .sort({ createdAt: -1 })
         .lean()
 
@@ -41,9 +38,15 @@ exports.fetchUserNotification = async (req, res) => {
             await signedUrlForGetAwsS3Object(
               userNotifications[i].fromUser.profile
             )
+        userNotifications[i].timeDiff = timeDifferenceFromNow(
+          userNotifications[i].createdAt
+        )
       }
 
-      res.json({ isSuccess: true, userNotifications: userNotifications })
+      res.render("user-notification/userNotification.ejs", {
+        isSuccess: true,
+        userNotifications: userNotifications
+      })
     } else {
       res.json({
         isSuccess: false,

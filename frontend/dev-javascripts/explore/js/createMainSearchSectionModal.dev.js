@@ -46,8 +46,9 @@ export function createMainSearchSectionModal() {
                     </div>
                 </div>
                 <div class="searched-user-box">
-             
+          
                 </div>
+                <div class="search-status hide">User not found</div> 
            </div>
        
       </div>`
@@ -87,19 +88,18 @@ function initialiseEventForMainSearchSectionModal() {
     let searchBoxInput =
       mainSearchSectionModal.getElementsByClassName("search-box__input")[0]
 
+    fetchSearchedUserAndAddThem("", 5)
+    let searchedInputDelay
     searchBoxInput.addEventListener("input", function () {
-      clearTimeout(this.delay)
-      this.delay = setTimeout(
-        function () {
-          let userInput = searchBoxInput.value.trim()
-          if (userInput !== "") {
-            fetchSearchedUserAndAddThem(userInput, 8)
-          } else {
-            fetchSearchedUserAndAddThem("", 5)
-          }
-        }.bind(this),
-        1000
-      )
+      clearTimeout(searchedInputDelay)
+      searchedInputDelay = setTimeout(() => {
+        let userInput = searchBoxInput.value.trim()
+        if (userInput !== "") {
+          fetchSearchedUserAndAddThem(userInput, 8)
+        } else {
+          fetchSearchedUserAndAddThem("", 5)
+        }
+      }, 500)
     })
 
     mainSearchSectionModal
@@ -148,14 +148,21 @@ async function fetchSearchedUserAndAddThem(userInput, userCount) {
 function updateSearchedUserBox(users) {
   let mainSearchSectionModal = document.getElementById("mainSearchSectionModal")
   if (mainSearchSectionModal) {
+    let searchStatus = document.getElementsByClassName("search-status")[0]
     let searchedUserBox =
       mainSearchSectionModal.getElementsByClassName("searched-user-box")[0]
     if (searchedUserBox) {
       searchedUserBox.innerHTML = ""
-
-      users.forEach(user => {
-        createSearchedUser(user)
-      })
+      if (users.length > 0) {
+        if (!searchStatus.classList.contains("hide"))
+          searchStatus.classList.add("hide")
+        users.forEach(user => {
+          createSearchedUser(user)
+        })
+      } else {
+        if (searchStatus.classList.contains("hide"))
+          searchStatus.classList.remove("hide")
+      }
     }
   }
 }

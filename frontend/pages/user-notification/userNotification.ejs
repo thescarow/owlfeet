@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="/stylesheets/user-notification/userNotification.css" />
+
+<script defer src="/javascripts/userNotification.bundle.js"></script>
+
+<div class="user-notification-main-container" id='userNotificationMainContainer'>
+
+
+
+
+    <div class="user-notification-box">
+        <div class="user-notification__title">Notification</div>
+
+        <div class="user-notification-container" id="userNotificationContainer">
+
+            <% if(locals.userNotifications.length>0){ %>
+
+
+                <% locals.userNotifications.forEach(notification=> { %>
+
+                    <div class="user-notification">
+                        <a href="/user/<%= 
+                            notification.fromUser.username
+                           _%>" class="user-notification__link">
+                            <div class="user-notification__column">
+                                <div class='user-notification__pic <%=
+          (notification.fromUser.hasOwnProperty("profile") &&
+          notification.fromUser.profile !== "")
+              ? "user-notification__pic--img"
+              : "user-notification__pic--svg"
+          %>'>
+
+                                    <img src='<%= notification.fromUser.profile _%>' alt="">
+                                    <%- include('../partials/icons/profile/defaultUserImageIcon.svg') -%>
+
+                                </div>
+                            </div>
+                            <div class="user-notification__column user-notification__column--left-margin">
+
+                                <div class="user-notification__content">
+                                    <span class="user-notification__username">
+                                        <%= notification.fromUser.username _%>
+                                    </span>
+
+                                    <%= notification.content _%>
+
+                                        <span class="user-notification__passed-time">
+                                            <%= notification.timeDiff _%>
+                                        </span>
+                                </div>
+
+                                <div class="user-notification__second-content">
+                                    <%= notification.secondContent_%>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <% })%>
+
+                        <div class="user-notification-loading" id="userNotificationLoading">
+                            <div class="lds-roller">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <% } %>
+        </div>
+
+        <% if(locals.userNotifications.length===0){ %>
+            <div class="user-notification-status">
+                There is no notification.
+            </div>
+            <% } %>
+    </div>
+
+</div>

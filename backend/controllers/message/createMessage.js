@@ -236,20 +236,20 @@ exports.createMessage = async (req, res) => {
               let allLinks = linkify.find(createdNewMessage.textContent)
 
               if (allLinks.length > 0) {
-                console.log("allLinks:", allLinks)
+                // console.log("allLinks:", allLinks)
                 try {
                   let data = await getLinkPreview(
                     allLinks[0].href,
                     linkPreviewOptions
                   )
                   if (data) {
-                    console.log("linkPreviewData:", data)
+                    // console.log("linkPreviewData:", data)
                     createdNewMessage.hasLinkPreview = true
                     createdNewMessage.linkPreviewData = data
                   }
                 } catch (err) {
                   createdNewMessage.hasLinkPreview = false
-                  console.log("linkPreviewError:", err)
+                  // console.log("linkPreviewError:", err)
                 }
 
                 createdNewMessage.hasLinks = true

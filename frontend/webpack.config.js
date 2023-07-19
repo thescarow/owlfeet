@@ -19,6 +19,11 @@ module.exports = {
 
     home: path.resolve(__dirname, "./dev-javascripts/index/home.dev.js"),
 
+    userNotification: path.resolve(
+      __dirname,
+      "./dev-javascripts/user-notification/userNotification.dev.js"
+    ),
+
     explore: path.resolve(
       __dirname,
       "./dev-javascripts/explore/explore.dev.js"

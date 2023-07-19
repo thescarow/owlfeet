@@ -24,152 +24,149 @@
 
             <% locals.allChat.forEach(chat=>{ -%>
 
-                <% console.log("chat:",chat)_%>
-                    <div class='chat-box <%=(chat.isGroupChat===false && chat.isUserActive===true) ? "chat-box--active-user"
+
+                <div class='chat-box <%=(chat.isGroupChat===false && chat.isUserActive===true) ? "chat-box--active-user"
                     : "" _%>' data-chat-id='<%=chat._id-%>'>
 
-                        <div class="chat-box__column chat-box__column--img">
-                            <div
-                                class='chat-box__pic <%=(chat.chatPic && chat.chatPic !=="")?"chat-box__pic--hide-svg":"chat-box__pic--hide-img" %> '>
-                                <img src="<%=chat.chatPic -%>" alt="chat img">
-                                <%- include('../partials/icons/chatPic.svg')-%>
-                                    <div class="chat-box__active-user-status">
+                    <div class="chat-box__column chat-box__column--img">
+                        <div
+                            class='chat-box__pic <%=(chat.chatPic && chat.chatPic !=="")?"chat-box__pic--hide-svg":"chat-box__pic--hide-img" %> '>
+                            <img src="<%=chat.chatPic -%>" alt="chat img">
+                            <%- include('../partials/icons/chatPic.svg')-%>
+                                <div class="chat-box__active-user-status">
 
-                                    </div>
-                            </div>
-
+                                </div>
                         </div>
-                        <div class="chat-box__column chat-box__column--data">
-                            <div class="chat-box__row">
-                                <% if(chat.isGroupChat){ -%>
-                                    <div class="chat-box__icon">
-                                        <%- include('../partials/icons/group.svg')-%>
+
+                    </div>
+                    <div class="chat-box__column chat-box__column--data">
+                        <div class="chat-box__row">
+                            <% if(chat.isGroupChat){ -%>
+                                <div class="chat-box__icon">
+                                    <%- include('../partials/icons/group.svg')-%>
+                                </div>
+
+                                <% } %>
+                                    <div class="chat-box__name"><%=chat.chatName-%>
                                     </div>
+                        </div>
 
-                                    <% } %>
-                                        <div class="chat-box__name"><%=chat.chatName-%>
+
+                        <div class="chat-box__latest-message-box">
+                            <% if(chat.hasOwnProperty("latestMessage") && chat.latestMessage !=='' ){ %>
+
+                                <% if(chat.latestMessage.hasOwnProperty("isInfoMessage") &&
+                                    chat.latestMessage.isInfoMessage===true){ %>
+                                    <div class="chat-box__sender"></div>
+
+                                    <div class="chat-box__latest-message">
+                                        <% if(chat.latestMessage.infoMessageType==='video-call' ){ %>
+                                            <%- include("../partials/icons/videoCallBlankIcon.svg") -%>
+                                                <% } %>
+                                                    <% if(chat.latestMessage.infoMessageType==='new-group' ){ %>
+                                                        <%- include("../partials/icons/newGroupBlankIcon.svg") -%>
+                                                            <% } %>
+
+                                                                <%= chat.latestMessage.infoMessageContent %>
+
+                                    </div>
+                                    <% } else { %>
+                                        <div class="chat-box__sender">
+
+                                            <% if
+                                                (chat.latestMessage.sender._id.toString()===locals.loginUser._id.toString())
+                                                { -%>
+                                                You:
+                                                <% } else { %>
+                                                    <%= chat.latestMessage.sender.firstName + ":" -%>
+                                                        <% } -%>
+
                                         </div>
-                            </div>
-
-
-                            <div class="chat-box__latest-message-box">
-                                <% if(chat.hasOwnProperty("latestMessage") && chat.latestMessage !=='' ){ %>
-
-                                    <% if(chat.latestMessage.hasOwnProperty("isInfoMessage") &&
-                                        chat.latestMessage.isInfoMessage===true){ %>
-                                        <div class="chat-box__sender"></div>
 
                                         <div class="chat-box__latest-message">
-                                            <% if(chat.latestMessage.infoMessageType==='video-call' ){ %>
-                                                <%- include("../partials/icons/videoCallBlankIcon.svg") -%>
-                                                    <% } %>
-                                                        <% if(chat.latestMessage.infoMessageType==='new-group' ){ %>
-                                                            <%- include("../partials/icons/newGroupBlankIcon.svg") -%>
-                                                                <% } %>
+                                            <% if(chat.latestMessage.hasOwnProperty("isDeletedForAll") &&
+                                                chat.latestMessage.isDeletedForAll===true){ -%>
+                                                <%- include("../partials/icons/deletedMessageBlankIcon.svg") _%>This
+                                                    Message
+                                                    Has Been Deleted. <% }else { _%>
+                                                        <% if( chat.latestMessage.hasOwnProperty("hasMediaContent") &&
+                                                            chat.latestMessage.hasMediaContent===true) { -%>
 
-                                                                    <%= chat.latestMessage.infoMessageContent %>
+                                                            <% if(chat.latestMessage.mediaContentType==="video" ){-%>
+                                                                <%- include("../partials/icons/videoIcon.svg")-%>
+                                                                    Video
+                                                                    <% } -%>
 
-                                        </div>
-                                        <% } else { %>
-                                            <div class="chat-box__sender">
+                                                                        <% if(chat.latestMessage.mediaContentType==="image"
+                                                                            ){-%>
+                                                                            <%-
+                                                                                include("../partials/icons/imageIcon.svg")-%>
+                                                                                Image
+                                                                                <% } -%>
 
-                                                <% if
-                                                    (chat.latestMessage.sender._id.toString()===locals.loginUser._id.toString())
-                                                    { -%>
-                                                    You:
-                                                    <% } else { %>
-                                                        <%= chat.latestMessage.sender.firstName + ":" -%>
-                                                            <% } -%>
+                                                                                    <% if(chat.latestMessage.mediaContentType==="audio"
+                                                                                        ){-%>
+                                                                                        <%-
+                                                                                            include("../partials/icons/audioIcon.svg")-%>
+                                                                                            Audio
+                                                                                            <% } -%>
 
-                                            </div>
-
-                                            <div class="chat-box__latest-message">
-                                                <% if(chat.latestMessage.hasOwnProperty("isDeletedForAll") &&
-                                                    chat.latestMessage.isDeletedForAll===true){ -%>
-                                                    <%- include("../partials/icons/deletedMessageBlankIcon.svg") _%>This
-                                                        Message
-                                                        Has Been Deleted. <% }else { _%>
-                                                            <% if( chat.latestMessage.hasOwnProperty("hasMediaContent")
-                                                                && chat.latestMessage.hasMediaContent===true) { -%>
-
-                                                                <% if(chat.latestMessage.mediaContentType==="video"
-                                                                    ){-%>
-                                                                    <%- include("../partials/icons/videoIcon.svg")-%>
-                                                                        Video
-                                                                        <% } -%>
-
-                                                                            <% if(chat.latestMessage.mediaContentType==="image"
-                                                                                ){-%>
-                                                                                <%-
-                                                                                    include("../partials/icons/imageIcon.svg")-%>
-                                                                                    Image
-                                                                                    <% } -%>
-
-                                                                                        <% if(chat.latestMessage.mediaContentType==="audio"
-                                                                                            ){-%>
-                                                                                            <%-
-                                                                                                include("../partials/icons/audioIcon.svg")-%>
-                                                                                                Audio
-                                                                                                <% } -%>
-
-                                                                                                    <% if(chat.latestMessage.mediaContentType==="youtube"
-                                                                                                        ){-%>
-                                                                                                        <%-
-                                                                                                            include("../partials/icons/youtubeIcon.svg")-%>
-                                                                                                            Youtube
-                                                                                                            <% } -%>
+                                                                                                <% if(chat.latestMessage.mediaContentType==="youtube"
+                                                                                                    ){-%>
+                                                                                                    <%-
+                                                                                                        include("../partials/icons/youtubeIcon.svg")-%>
+                                                                                                        Youtube
+                                                                                                        <% } -%>
 
 
 
 
 
-                                                                                                                <% }else
-                                                                                                                    {
-                                                                                                                    _%>
-                                                                                                                    <% if(chat.latestMessage.hasOwnProperty("textContent"))
-                                                                                                                        {-%>
-                                                                                                                        <%= chat.latestMessage.textContent
+                                                                                                            <% }else {
+                                                                                                                _%>
+                                                                                                                <% if(chat.latestMessage.hasOwnProperty("textContent"))
+                                                                                                                    {-%>
+                                                                                                                    <%= chat.latestMessage.textContent
+                                                                                                                        _%>
+                                                                                                                        <% }
                                                                                                                             _%>
-                                                                                                                            <% }
+
+                                                                                                                            <%}
                                                                                                                                 _%>
 
-                                                                                                                                <%}
+                                                                                                                                <% }
                                                                                                                                     _%>
-
-                                                                                                                                    <% }
-                                                                                                                                        _%>
-                                            </div>
-                                            <% } %>
-                                                <% } else { _%>
-                                                    <div class="chat-box__sender">
-                                                    </div>
-                                                    <div class="chat-box__latest-message">
-                                                    </div>
-                                                    <% } _%>
-                            </div>
-
-                            <div class='chat-call-room-box chat-call-room-box--chat-box  <%=(chat.hasOwnProperty("isOnCall") && chat.isOnCall === false)?"chat-call-room-box--hide":"" %>'
-                                data-call-room-id='<%=(chat.hasOwnProperty("callRoomId")&& chat.callRoomId !== undefined)? chat.callRoomId:"" %>'>
-                                <div class="chat-call-room-icon chat-call-room-icon--chat-box">
-                                    <%- include('../partials/icons/callAcceptCallIcon.svg')-%>
-                                </div>
-                                <div class="chat-call-room-title chat-call-room-title--chat-box">Join</div>
-                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% } else { _%>
+                                                <div class="chat-box__sender">
+                                                </div>
+                                                <div class="chat-box__latest-message">
+                                                </div>
+                                                <% } _%>
                         </div>
 
-                        <div
-                            class='chat-box__unseen-messages-count <%= (chat.unseenMessagesCount > 0) ? "chat-box__unseen-messages-count--have":"" _%>'>
-                            <%= (chat.unseenMessagesCount===0) ?"":chat.unseenMessagesCount _%>
-                        </div>
-
-                        <div class="chat-box__latest-message-time">
-                            <%= chat.hasOwnProperty("latestMessageTime") ? chat.latestMessageTime: chat.chatCreatedTime
-                                -%>
+                        <div class='chat-call-room-box chat-call-room-box--chat-box  <%=(chat.hasOwnProperty("isOnCall") && chat.isOnCall === false)?"chat-call-room-box--hide":"" %>'
+                            data-call-room-id='<%=(chat.hasOwnProperty("callRoomId")&& chat.callRoomId !== undefined)? chat.callRoomId:"" %>'>
+                            <div class="chat-call-room-icon chat-call-room-icon--chat-box">
+                                <%- include('../partials/icons/callAcceptCallIcon.svg')-%>
+                            </div>
+                            <div class="chat-call-room-title chat-call-room-title--chat-box">Join</div>
                         </div>
                     </div>
 
+                    <div
+                        class='chat-box__unseen-messages-count <%= (chat.unseenMessagesCount > 0) ? "chat-box__unseen-messages-count--have":"" _%>'>
+                        <%= (chat.unseenMessagesCount===0) ?"":chat.unseenMessagesCount _%>
+                    </div>
 
-                    <% }) -%>
+                    <div class="chat-box__latest-message-time">
+                        <%= chat.hasOwnProperty("latestMessageTime") ? chat.latestMessageTime: chat.chatCreatedTime -%>
+                    </div>
+                </div>
+
+
+                <% }) -%>
 
         </div>
 

@@ -14,6 +14,7 @@
     }
     IS_INIT_MAIN_LAYOUT_MODULE = true
   }
+  console.log("main layout:", location)
 })()
 
 export async function updateGlobalLoginUserData() {
