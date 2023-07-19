@@ -1,6 +1,9 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
+const ORIGIN =
+  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
+console.log("ORIGIN:", ORIGIN)
 // imports dependencies
 const { createServer } = require("http")
 const express = require("express")

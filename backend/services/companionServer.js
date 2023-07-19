@@ -5,7 +5,12 @@ const companion = require("@uppy/companion")
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-
+const PROTOCOL = process.env.PROTOCOL
+const HOST = process.env.HOSTNAME + ":" + process.env.PORT
+const PORT = process.env.PORT
+const ORIGIN =
+  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
+//////////////////////////////
 const DATA_DIR = path.join(__dirname, "companion-tmp-file")
 
 const options = {
@@ -27,15 +32,18 @@ const options = {
     region: process.env.AWS_BUCKET_REGION
   },
   server: {
-    host: "localhost:5000",
-    protocol: "http",
+    // host: "localhost:5000",
+    host: HOST,
+    // protocol: "http",
+    protocol: PROTOCOL,
     // This MUST match the path you specify in `app.use()` below:
     path: "/companion"
   },
   filePath: DATA_DIR,
   secret: "this-is-secret-change-it-later",
   debug: false,
-  uploadUrls: ["http:localhost:5000/"],
+  // uploadUrls: ["http:localhost:5000/"],
+  uploadUrls: [ORIGIN],
   streamingUpload: true
 }
 try {

@@ -6,6 +6,8 @@ const mainErrorLog = chalk.white.bgYellow.bold
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
+const ORIGIN =
+  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
 
 const EmailVerificationToken = require("../../models/emailVerificationToken")
 const jwt = require("jsonwebtoken")
@@ -81,7 +83,7 @@ exports.sendEmailVerification = async (req, res) => {
               })
               await emailVerificationToken.save()
 
-              let verificationUrl = `http://localhost:5000/user-auth/verify-user-email/?token=${token}`
+              let verificationUrl = `${ORIGIN}/user-auth/verify-user-email/?token=${token}`
 
               // console.log("email verification link:", verificationUrl)
               sendEmailLink(

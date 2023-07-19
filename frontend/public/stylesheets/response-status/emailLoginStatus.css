@@ -156,6 +156,7 @@ svg {
 
 .status__btn-field {
     width: 100%;
+    max-width: 500px;
     display: flex;
     justify-content: space-around;
     align-items: center;
