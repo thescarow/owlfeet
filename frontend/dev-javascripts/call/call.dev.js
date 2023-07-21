@@ -24,32 +24,66 @@ let myStreamTypeData = {
       )
       createCalltypeInfoContainer(myMediaStream, myStreamTypeData)
 
-      let roomInfoContainer = document.getElementById("roomInfoContainer")
+      // let roomInfoContainer = document.getElementById("roomInfoContainer")
 
-      if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
-        let { joinCallRoom } = await import("./js/joinCallRoom.dev")
-        joinCallRoom(myMediaStream, myStreamTypeData)
-      }
-      if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
-        let creatingRoomInfo = document.getElementById("creatingRoomInfo")
-        if (creatingRoomInfo) {
-          if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
-            let { createChatRoom } = await import("./js/createChatRoom.dev")
-            createChatRoom(myMediaStream, myStreamTypeData)
-          }
-          if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
-            let { createNewRoom } = await import("./js/createNewRoom.dev")
-            createNewRoom(myMediaStream, myStreamTypeData)
-          }
-        }
-      }
+      // if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
+      //   let { joinCallRoom } = await import("./js/joinCallRoom.dev")
+      //   joinCallRoom(myMediaStream, myStreamTypeData)
+      // }
+      // if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
+      //   let creatingRoomInfo = document.getElementById("creatingRoomInfo")
+      //   if (creatingRoomInfo) {
+      //     if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
+      //       let { createChatRoom } = await import("./js/createChatRoom.dev")
+      //       createChatRoom(myMediaStream, myStreamTypeData)
+      //     }
+      //     if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
+      //       let { createNewRoom } = await import("./js/createNewRoom.dev")
+      //       createNewRoom(myMediaStream, myStreamTypeData)
+      //     }
+      //   }
+      // }
     } else {
       console.log("error message: ", data.error)
       let { showCalltypeMessage } = await import(
         "./js/calltypeInfoContainer.dev"
       )
       showCalltypeMessage(data.problem, data.solution)
+      let emptyMediaStream = null
+      const MediaStream = window.MediaStream || window.webkitMediaStream
+      // Check if the MediaStream constructor is available in the current environment
+      if (MediaStream) emptyMediaStream = new MediaStream()
+      // Create an empty MediaStream
+      myMediaStream = emptyMediaStream
+      myStreamTypeData.isScreenShareOn = false
+      myStreamTypeData.isCameraOn = false
+      myStreamTypeData.isAudioOn = false
     }
+
+    /////////////////////////////////////////////////////
+    // delete this all , when does not want to create call when media is not supported
+    /////////////////////////////////////////////////////
+
+    let roomInfoContainer = document.getElementById("roomInfoContainer")
+    if (roomInfoContainer.dataset.callRoomType.trim() === "join") {
+      let { joinCallRoom } = await import("./js/joinCallRoom.dev")
+      joinCallRoom(myMediaStream, myStreamTypeData)
+    }
+    if (roomInfoContainer.dataset.callRoomType.trim() === "create") {
+      let creatingRoomInfo = document.getElementById("creatingRoomInfo")
+      if (creatingRoomInfo) {
+        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "chat") {
+          let { createChatRoom } = await import("./js/createChatRoom.dev")
+          createChatRoom(myMediaStream, myStreamTypeData)
+        }
+        if (creatingRoomInfo.dataset.creatingCallRoom.trim() === "new") {
+          let { createNewRoom } = await import("./js/createNewRoom.dev")
+          createNewRoom(myMediaStream, myStreamTypeData)
+        }
+      }
+    }
+    // delete till here
+    ///////////////////////////////////////////////////////////
 
     IS_INIT_CALL_MODULE = true
   }
@@ -60,7 +94,6 @@ function initialiseEventForCallModule() {}
 async function createMediaStream() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     console.log("Camera and microphone access is supported")
-
     try {
       let stream = await navigator.mediaDevices.getUserMedia({
         video: { aspectRatio: 4 / 3 },
@@ -122,8 +155,9 @@ async function createMediaStream() {
     return {
       isSuccess: false,
       error: "Camera and microphone access is not supported",
-      problem: "Your browser does not support microphone and camera access",
-      solution: `please upgrade your browser version or switch to <span>Chrome</span> latest version`
+      problem:
+        "Your browser does not support microphone and camera access Or you are on unsecure protocol (http:).",
+      solution: `Please upgrade your browser version or switch to <span>Chrome</span> latest version or if you are on <span>unsecure network (http:)</span>, please switch to <span>secure network (https:)</span>.`
     }
   }
 }

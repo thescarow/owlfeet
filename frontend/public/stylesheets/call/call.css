@@ -857,7 +857,7 @@ svg {
 
 .on-call-user-box__pic svg {
     display: none;
-    fill: rgba(var(--rgba-fourth-color), 1);
+    fill: rgba(var(--rgba-fourth-color), 0.1);
     padding: 5px;
 }
 
@@ -911,7 +911,7 @@ svg {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 5px 8px;
+    padding: 8px 10px;
     color: rgba(var(--rgba-fourth-color), 0.8);
     background: rgba(var(--rgba-fourth-color), 0.1);
     font-size: 15px;
@@ -936,7 +936,7 @@ svg {
 }
 
 .on-call-user-box__btn-icon svg {
-    fill: rgba(var(--rgba-fourth-color), 0.9);
+    fill: rgba(var(--rgba-light-color), 0.9);
 }
 
 
