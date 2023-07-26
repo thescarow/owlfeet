@@ -12,7 +12,7 @@ const userFeedbackRouter = require("./userFeedback.route")
 // const trendRouter = require("./trend.route")
 // const addRouter = require("./add.route")
 const userNotificationRouter = require("./userNotification.route")
-const testRouter = require("./test.route")
+// const testRouter = require("./test.route")
 /////////////////////////////////////////////////////
 
 exports.registerRoutes = app => {
@@ -30,5 +30,5 @@ exports.registerRoutes = app => {
   // app.use("/trends", trendRouter);
   // app.use("/add", addRouter);
   app.use("/user-notification", userNotificationRouter)
-  app.use("/test", testRouter)
+  // app.use("/test", testRouter)
 }
