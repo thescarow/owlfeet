@@ -6,10 +6,9 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
 const PROTOCOL = process.env.PROTOCOL
-const HOST = process.env.HOSTNAME + ":" + process.env.PORT
+const HOSTNAME = process.env.HOSTNAME
 const PORT = process.env.PORT
-const ORIGIN =
-  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
+const ORIGIN = process.env.PROTOCOL + "://" + process.env.HOSTNAME
 //////////////////////////////
 const DATA_DIR = path.join(__dirname, "companion-tmp-file")
 
@@ -33,7 +32,7 @@ const options = {
   },
   server: {
     // host: "localhost:5000",
-    host: HOST,
+    host: HOSTNAME,
     // protocol: "http",
     protocol: PROTOCOL,
     // This MUST match the path you specify in `app.use()` below:

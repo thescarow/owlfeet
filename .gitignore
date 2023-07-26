@@ -1,1 +1,5 @@
+.env
+envSample.js
+node_modules
+test.route.js
 z-notes

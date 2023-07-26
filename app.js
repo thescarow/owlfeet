@@ -1,8 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-const ORIGIN =
-  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
+const PORT = process.env.PORT || 5000
+const ORIGIN = process.env.PROTOCOL + "://" + process.env.HOSTNAME
 console.log("ORIGIN:", ORIGIN)
 // imports dependencies
 const { createServer } = require("http")
@@ -33,7 +33,7 @@ connectDB() // connecting to database
 // console.log("all environments variable:", process.env)
 //setting express app settings
 app.set("view engine", "ejs")
-app.set("views", "../frontend/pages")
+app.set("views", "./frontend/pages")
 app.set("layout", "layout/mainLayout")
 app.set("layout extractScripts", true)
 app.set("layout extractStyles", true)
@@ -42,7 +42,7 @@ app.set("query parser", "simple") // Only parse query parameters into strings an
 // define middleware here
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET))
 app.use(expressLayouts)
-app.use(express.static("../frontend/public"))
+app.use(express.static("./frontend/public"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(
@@ -74,6 +74,10 @@ registerRoutes(app) // register routes
 app.use(notFound)
 app.use(errorHandler)
 
-httpServer.listen(process.env.PORT || 5000)
-// const mainServer = app.listen(process.env.MAIN_SERVER_PORT || 5000)
+httpServer.listen(PORT, () => {
+  console.log("App listening on port:", PORT)
+})
+// const mainServer = app.listen(PORT, () => {
+// console.log("App listening on port:", PORT)
+// })
 // companion.socket(httpServer)

@@ -6,8 +6,7 @@ const mainErrorLog = chalk.white.bgYellow.bold
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config()
 }
-const ORIGIN =
-  process.env.PROTOCOL + "://" + process.env.HOSTNAME + ":" + process.env.PORT
+const ORIGIN = process.env.PROTOCOL + "://" + process.env.HOSTNAME
 
 const User = require("../../models/user")
 const EmailLoginToken = require("../../models/EmailLoginToken")
