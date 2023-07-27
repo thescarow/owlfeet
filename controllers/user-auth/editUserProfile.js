@@ -44,7 +44,6 @@ exports.editUserProfile = async (req, res) => {
           editData.editBirthday
         )
       ) {
-        console.log("editData:", editData)
         return res.json({
           isSuccess: false,
           error: "Please send all the required data with the request"

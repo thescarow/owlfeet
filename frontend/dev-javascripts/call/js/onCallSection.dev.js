@@ -112,7 +112,7 @@ export async function createOnCallSection(
   isCameraOn = streamTypeData.isCameraOn
   isAudioOn = streamTypeData.isAudioOn
 
-  console.log("oginal callRoomData:", callRoom)
+  // console.log("oginal callRoomData:", callRoom)
   waitingSection.classList.remove("waiting-section--hide")
 
   let onCallUserBoxSliderHtml = `
@@ -152,7 +152,7 @@ export async function createOnCallSection(
   }
 
   if (callRoom.hasOwnProperty("members")) {
-    console.log("Members count:", callRoom.members.length)
+    // console.log("Members count:", callRoom.members.length)
     ownCallRoomMemberData = callRoom.members.find(member => {
       return member.user._id.toString() === callRoom.ownMemberUserId.toString()
     })

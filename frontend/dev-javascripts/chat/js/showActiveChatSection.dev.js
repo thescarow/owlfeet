@@ -80,7 +80,6 @@ export async function showActiveChatSection(chat) {
           )
 
         activeChatMessageContainer.innerHTML = ""
-        console.log(data)
 
         if (data.allMessages.length > 0) {
           totalReceivedMessagesCount += data.allMessages.length
@@ -226,8 +225,6 @@ async function fetchMessageAndCreateUserMessageBox(chatId) {
     })
     .then(async data => {
       if (data.isSuccess) {
-        console.log(data)
-
         if (data.allMessages.length > 0) {
           totalReceivedMessagesCount += data.allMessages.length
           if (

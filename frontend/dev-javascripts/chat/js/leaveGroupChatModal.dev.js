@@ -70,7 +70,7 @@ async function initialiseEventForLeaveGroupChatModal(leaveGroupChatModal) {
         })
         .then(async data => {
           if (data.isSuccess) {
-            console.log(data.chat)
+            // console.log(data.chat)
             leaveGroupChatModal.classList.add("inner-modal--hide")
             if (activeChatData._id.toString() === data.chat._id.toString()) {
               let { onOffActiveChatInputContainer } = await import(

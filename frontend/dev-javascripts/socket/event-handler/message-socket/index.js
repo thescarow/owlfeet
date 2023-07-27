@@ -1,6 +1,6 @@
 export async function createMessageSocket(socket) {
   try {
-    console.log("insideMessageSocket")
+    // console.log("insideMessageSocket")
     let { createMainNotification } = await import(
       "../../../common/mainNotification.dev.js"
     )
@@ -27,7 +27,6 @@ export async function createMessageSocket(socket) {
       }
     })
     socket.on("message:create-user-message-res", async data => {
-      console.log("create-message data:", data)
       if (data.isSuccess) {
         let message = data.message
         let chatId = activeChatSection.dataset.chatId
@@ -58,7 +57,6 @@ export async function createMessageSocket(socket) {
     })
 
     socket.on("message:new-message", async data => {
-      console.log("new-message data:", data)
       let message = data.message
       let chatId = activeChatSection.dataset.chatId
       let { updateAllChatSection } = await import(

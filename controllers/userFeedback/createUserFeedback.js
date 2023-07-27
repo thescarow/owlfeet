@@ -18,9 +18,9 @@ exports.createUserFeedback = async (req, res) => {
   try {
     if (req.user) {
       let { id, feedbackType, message, email, url } = req.body
-      console.log(
-        `New ${feedbackType} feedback for form ${id} from user ${email} on page ${url}: ${message}`
-      )
+      // console.log(
+      //   `New ${feedbackType} feedback for form ${id} from user ${email} on page ${url}: ${message}`
+      // )
       // do something with feedback
       message = DOMPurify.sanitize(message).trim()
       if (message.trim() !== "") {

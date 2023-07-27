@@ -1,5 +1,5 @@
 export async function createHomeSocket(socket) {
-  console.log("insideHomeSocket")
+  // console.log("insideHomeSocket")
 
   const userNotificationContainer = document.getElementById(
     "userNotificationContainer"

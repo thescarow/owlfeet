@@ -16,7 +16,7 @@ export function joinCallRoom(mediaStream, streamTypeData) {
 function initialiseEventForJoinCallRoom() {
   if (joiningCallRoom) {
     joiningCallRoom.addEventListener("click", async e => {
-      console.log("clickedd")
+      // console.log("clickedd")
       let callRoomBtn = e.target.closest(`.call-room__btn `)
       if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
         if (callRoomBtn.dataset.btn === "join-call-room") {
@@ -52,7 +52,7 @@ function initialiseEventForJoinCallRoom() {
               })
               .then(async data => {
                 if (data.isSuccess) {
-                  console.log(data.callRoom)
+                  // console.log(data.callRoom)
                   let { createOnCallSection } = await import(
                     "./onCallSection.dev"
                   )

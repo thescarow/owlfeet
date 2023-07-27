@@ -15,25 +15,25 @@
     }
     socket = io(clientSocketOptions) // socket is define in mainLayout File
     socket.on("connect", () => {
-      console.log("client connected")
+      console.log("socket connected")
     })
     socket.on("connect_error", err => {
-      console.log("client connection error:", err)
+      console.log("socket connection error:", err)
     })
     socket.on("disconnect", reason => {
-      console.log("client disconnect:", reason)
+      console.log("socket disconnect:", reason)
     })
 
-    socket.prependAny((eventName, ...args) => {
-      console.log(
-        "eventName:",
-        eventName,
-        "args:",
-        args,
-        "socketId:",
-        socket.id
-      )
-    })
+    // socket.prependAny((eventName, ...args) => {
+    //   console.log(
+    //     "eventName:",
+    //     eventName,
+    //     "args:",
+    //     args,
+    //     "socketId:",
+    //     socket.id
+    //   )
+    // })
 
     //////////////////////////////////////////////////
     //  define socket handler here

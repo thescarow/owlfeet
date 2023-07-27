@@ -184,7 +184,7 @@ export async function createGroupChatFormModal(modalType = "new") {
                 })
                 .then(async data => {
                   if (data.isSuccess) {
-                    console.log(data)
+                    // console.log(data)
                     activeChatData = { ...data.chat }
                     let { updateActiveChatInfoModal } = await import(
                       "./createActiveChatInfoModal.dev"

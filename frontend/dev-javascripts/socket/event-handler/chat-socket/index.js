@@ -1,6 +1,6 @@
 export async function createChatSocket(socket) {
   try {
-    console.log("insideChatSocket")
+    // console.log("insideChatSocket")
 
     let activeChatSection = document.getElementById("activeChatSection")
 
@@ -63,14 +63,12 @@ export async function createChatSocket(socket) {
     })
 
     socket.on("chat:create-new-group-chat", async chat => {
-      console.log("created-new-group-chat")
       let { createChatBox } = await import(
         "../../../chat/js/updateAllChatSection.dev"
       )
       createChatBox(chat)
     })
     socket.on("chat:edit-group-chat", async chat => {
-      console.log("edit-group-chat")
       activeChatData = { ...chat }
       let { updateActiveChatInfoModal } = await import(
         "../../../chat/js/createActiveChatInfoModal.dev"

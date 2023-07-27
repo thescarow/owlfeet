@@ -166,7 +166,7 @@ profileBtns.forEach(btn => {
             return Promise.reject(response)
           })
           .then(data => {
-            console.log(data)
+            // console.log(data)
             if (data.isSuccess) {
               btn.setAttribute("data-user-follow-status", data.userFollowStatus)
               if (data.userFollowStatus === "send-follow-request") {

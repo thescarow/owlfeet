@@ -13,10 +13,10 @@ exports.fetchUserNotification = async (req, res) => {
   try {
     if (req.user) {
       let { totalReceivedNotificationCount } = req.query
-      console.log(
-        "totalReceivedNotificationCount",
-        totalReceivedNotificationCount
-      )
+      // console.log(
+      //   "totalReceivedNotificationCount",
+      //   totalReceivedNotificationCount
+      // )
       let userNotifications = await UserNotification.find({
         toUser: req.user.id
       })

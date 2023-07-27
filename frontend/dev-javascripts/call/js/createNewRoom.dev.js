@@ -130,7 +130,7 @@ function initialiseEventForCreatingNewRoom() {
 
     creatingNewRoom.addEventListener("click", async e => {
       let callRoomBtn = e.target.closest(`.creating-new-room__btn `)
-      console.log(callRoomBtn)
+      // console.log(callRoomBtn)
 
       if (callRoomBtn && roomInfoContainer.contains(callRoomBtn)) {
         if (callRoomBtn.dataset.btn === "create-new-room") {
@@ -175,7 +175,7 @@ function initialiseEventForCreatingNewRoom() {
               })
               .then(async data => {
                 if (data.isSuccess) {
-                  console.log(data.callRoom)
+                  // console.log(data.callRoom)
 
                   callMainContainer.dataset.callRoomId =
                     data.callRoom._id.toString()

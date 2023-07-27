@@ -1070,8 +1070,6 @@ export function replaceClientUserMessage(
     `.active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
   )
 
-  console.log("messageBox message:", message)
-  console.log("messageBox:", messageBox)
   if (messageBox) {
     messageBox.setAttribute("data-message-id", message._id)
     if (message.hasOwnProperty("sender")) {

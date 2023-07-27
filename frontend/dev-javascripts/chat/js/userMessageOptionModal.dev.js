@@ -305,7 +305,7 @@ async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
       deleteMessageModal.classList.add("inner-modal--hide")
 
       let messageId = deleteMessageModal.dataset.messageId
-      console.log("messageId:", messageId)
+
       let deleteMessageData = {}
 
       deleteMessageData.id = messageId
@@ -336,8 +336,6 @@ async function initialiseEventForDeleteMessageModal(deleteMessageModal) {
         })
         .then(async data => {
           if (data.isSuccess) {
-            console.log("deletedMessgeData:", data)
-
             if (data.isDeletedForAll) {
               unSelectUserMessage(messageId)
 
@@ -583,7 +581,6 @@ export async function addUserToMessageInfoSeenStatus(
   user,
   userTime
 ) {
-  console.log("userTime: ", userTime)
   if (user._id.toString() !== loginUser._id.toString()) {
     let messageInfoModal = document.getElementById("messageInfoModal")
     if (messageInfoModal && messageInfoModal.dataset.messageId === messageId) {
@@ -660,7 +657,7 @@ export async function addUserToMessageInfoSeenStatus(
             let pointWidth = getComputedStyle(
               messageInfoSeenStatusIndicatorPoint
             ).width
-            console.log(pointWidth)
+
             messageInfoSeenStatusIndicatorPoint.style.left =
               "calc(" +
               userPercent * 100 +
@@ -686,7 +683,7 @@ export async function addUserToMessageInfoSeenStatus(
             seenUserCount,
             totalUserCount
           )
-          console.log("color", color)
+          // console.log("color", color)
           messageInfoSeenStatusBoxIcon.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
           messageInfoSeenStatusBoxIcon.style.strokeWidth = `1px`
           messageInfoSeenStatusBoxIcon.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`

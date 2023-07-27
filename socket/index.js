@@ -52,9 +52,9 @@ exports.createSocketIOInstance = httpServer => {
     }
     /////////////////////////////////
     console.log("All Rooms:", socket.rooms)
-    socket.prependAny((eventName, ...args) => {
-      console.log("@eventName:", eventName, "@args:", args)
-    })
+    // socket.prependAny((eventName, ...args) => {
+    //   console.log("@eventName:", eventName, "@args:", args)
+    // })
   })
 
   return io

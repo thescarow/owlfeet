@@ -161,7 +161,7 @@ import { v4 as uuidv4 } from "uuid"
       allowMultipleUploadBatches: true,
       debug: false,
       onBeforeFileAdded: (currentFile, files) => {
-        console.log(currentFile)
+        // console.log(currentFile)
         if (!currentFile.type) {
           uppy.log(`Skipping file because it has no type`)
           uppy.info(`Skipping file because it has no type`, "error", 500)
@@ -262,7 +262,7 @@ import { v4 as uuidv4 } from "uuid"
     //   )
     // })
     uppy.on("upload-success", (file, response) => {
-      console.log("uppy file:", file)
+      // console.log("uppy file:", file)
       let userMessage = {}
       userMessage.chat = activeChatSection.dataset.chatId
       userMessage.hasMediaContent = true
@@ -737,7 +737,6 @@ function initialiseEventForChatModule() {
     "activeChatMessageContainer"
   )
   activeChatMessageContainer.addEventListener("click", async e => {
-    console.log("activeChatMessageContainer click")
     let userMessageBox = e.target.closest(`.active-chat-user-message-box`)
     let userMessageBoxBtn = e.target.closest(
       `.active-chat-user-message-box__btn[data-message-box-btn ="user"]`

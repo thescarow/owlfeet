@@ -29,7 +29,7 @@ function attachEventListenerToUserBoxBtn(userBox, btnType, userBoxUserId) {
       return Promise.reject(response)
     })
     .then(data => {
-      console.log(data)
+      // console.log(data)
       if (data.isSuccess === true) {
         if (data.userFollowStatus) {
           if (data.userFollowStatus === "send-follow-request") {
@@ -281,7 +281,7 @@ export function fetchUserAndCreateUserBox(userBoxContainer, userBoxType) {
       return Promise.reject(response)
     })
     .then(data => {
-      console.log(data) //delete this
+      // console.log(data) //delete this
       if (data.isSuccess === true) {
         data.user.forEach(user => {
           createUserBox(userBoxContainer, userBoxType, user)

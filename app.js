@@ -59,6 +59,24 @@ app.use(
     credentials: true
   })
 )
+
+// // Middleware to redirect HTTP to HTTPS
+
+// app.use((req, res, next) => {
+//   console.log(
+//     "req.headers['x-forwarded-proto']:",
+//     req.headers["x-forwarded-proto"],
+//     "req.headers.host:",
+//     req.headers.host,
+//     "req.url",
+//     req.url
+//   )
+//   // if (req.headers["x-forwarded-proto"] !== "https") {
+//   //   return res.redirect("https://" + req.headers.host + req.url)
+//   // }
+//   next()
+// })
+
 // Enable gzip compression for all responses
 app.use(compression({ level: 6 }))
 app.use((req, res, next) => {
