@@ -12,9 +12,14 @@
     if (pageName === "chat") {
       updateGlobalAllChatData()
     }
+
+    // handle keyboard for main navigation
+    const { checkKeyboard } = await import("../common/keyboardDetector.dev")
+
+    checkKeyboard(onKeyboard, offKeyboard)
+
     IS_INIT_MAIN_LAYOUT_MODULE = true
   }
-  console.log("main layout:", location)
 })()
 
 export async function updateGlobalLoginUserData() {
@@ -123,5 +128,18 @@ export async function updateGlobalIsLogin() {
     }
   } catch (e) {
     console.error(e)
+  }
+}
+
+function onKeyboard(height) {
+  const mainNavContainer = document.getElementById("mainNavContainer")
+  if (!mainNavContainer.classList.contains("hide")) {
+    mainNavContainer.classList.add("hide")
+  }
+}
+function offKeyboard() {
+  const mainNavContainer = document.getElementById("mainNavContainer")
+  if (mainNavContainer.classList.contains("hide")) {
+    mainNavContainer.classList.remove("hide")
   }
 }
