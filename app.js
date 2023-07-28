@@ -20,6 +20,7 @@ const {
   notFound,
   errorHandler
 } = require("./middleware/errorHandler.middleware")
+const { redirectToHttps } = require("./middleware/redirectToHttps.middleware")
 ////////////////////////////////////////////////
 
 const app = express()
@@ -61,21 +62,7 @@ app.use(
 )
 
 // // Middleware to redirect HTTP to HTTPS
-
-// app.use((req, res, next) => {
-//   console.log(
-//     "req.headers['x-forwarded-proto']:",
-//     req.headers["x-forwarded-proto"],
-//     "req.headers.host:",
-//     req.headers.host,
-//     "req.url",
-//     req.url
-//   )
-//   // if (req.headers["x-forwarded-proto"] !== "https") {
-//   //   return res.redirect("https://" + req.headers.host + req.url)
-//   // }
-//   next()
-// })
+app.use(redirectToHttps)
 
 // Enable gzip compression for all responses
 app.use(compression({ level: 6 }))
