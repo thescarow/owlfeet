@@ -199,7 +199,7 @@ async function attachSocketForDeleteMessage(
   if (isDeletedForAll) {
     let eventData = {
       deletedForAllMessage: deletedForAllMessage,
-      isLatestMessageChanged: true,
+      isLatestMessageChanged: isLatestMessageChanged,
       latestMessage: isLatestMessageChanged ? latestMessage : {}
     }
 

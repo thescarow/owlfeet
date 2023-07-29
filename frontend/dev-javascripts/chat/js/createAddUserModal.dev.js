@@ -5,7 +5,9 @@ let svg_searchBtn = `<svg width="102" height="102" viewBox="0 0 102 102" xmlns="
 <path d="M48.9056 89.3888C75.3631 89.3888 96.8111 69.6023 96.8111 45.1944C96.8111 20.7865 75.3631 1 48.9056 1C22.4481 1 1 20.7865 1 45.1944C1 69.6023 22.4481 89.3888 48.9056 89.3888Z"  stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M82.2194 83.7185L101 101"   stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`
-
+let svg_defaultUserImageIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="Layer 2"><circle cx="16" cy="6.96" r="6"/><path d="M30.86,26.84a15.07,15.07,0,0,0-4.11-7.47A12.47,12.47,0,0,0,25.13,18,15,15,0,0,0,16,15,15.24,15.24,0,0,0,5.24,19.37a15.07,15.07,0,0,0-4.11,7.47,3.42,3.42,0,0,0,.69,2.88A3.52,3.52,0,0,0,4.58,31H27.42a3.52,3.52,0,0,0,2.75-1.32A3.42,3.42,0,0,0,30.86,26.84Z"/></g></svg>
+`
 import "../css/addUserModal.dev.css"
 let allAddedUser = []
 // we store value of alreadyAddedUser array to allAddedUser array so that we can not destroy the alreadyAddedUser array refrence so when we click cancel it will not change anything
@@ -168,10 +170,14 @@ function createSearchedUser(searchedUserContainer, addedUserContainer, user) {
     addUserSearchedUser.dataset.userId = user._id
     let addUserSearchedUserHtml = `
      
-                  <div class="add-user-searched-user__pic">
+                  <div class='add-user-searched-user__pic  ${
+                    user.hasOwnProperty("profile") && user.profile !== ""
+                      ? "add-user-searched-user__pic--img"
+                      : "add-user-searched-user__pic--svg"
+                  }'>
                       <img src="${user.profile}"
                           alt="">
-      
+                          ${svg_defaultUserImageIcon}
                   </div>
                   <div class="chat-modal-content--column chat-modal-content-column--user-data">
                       <div class="add-user-searched-user__fullname"></div>
@@ -225,9 +231,14 @@ function createAddedUser(addedUserContainer, searchedUserContainer, user) {
   let addedUser = document.createElement("div")
   addedUser.classList.add("added-user")
   addedUser.dataset.userId = user._id
-  let addedUserHtml = `<div class="added-user__pic">
+  let addedUserHtml = `<div class='added-user__pic ${
+    user.hasOwnProperty("profile") && user.profile !== ""
+      ? "added-user__pic--img"
+      : "added-user__pic--svg"
+  }'>
   <img src="${user.profile}"
-      alt="user image">
+      alt="user image"> 
+      ${svg_defaultUserImageIcon}
 </div>
 <div class="added-user__username"></div>
 <span class="added-user__remove">X</span>`

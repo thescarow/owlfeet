@@ -5,8 +5,8 @@
 }
 
 .inner-modal-content--message-info {
-    /* background: rgba(var(--rgba-first-color), 1); */
-    /* color: rgba(var(--rgba-fourth-color), 1); */
+    background: rgba(var(--rgba-dark-color), 1);
+    color: rgba(var(--rgba-light-color), 0.8);
     padding: 0px 5px 10px 5px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -28,14 +28,14 @@
 
 .inner-modal-header__title--message-info {
     text-align: center;
-    /* color: rgba(var(--rgba-fourth-color), 1); */
+    color: rgba(var(--rgba-light-color), 0.8);
 }
 
 .message-info-delivery-status-box {
     padding: 14px 0;
     margin: 5px 0 0 0;
-    border-bottom: 1px solid rgba(var(--rgba-first-color), 0.1);
-    border-top: 1px solid rgba(var(--rgba-first-color), 0.1);
+    border-bottom: 1px solid rgba(var(--rgba-light-color), 0.1);
+    border-top: 1px solid rgba(var(--rgba-light-color), 0.1);
 }
 
 .message-info-delivery-status-box--delivered {}
@@ -57,13 +57,13 @@
 .message-info-delivery-status-box__icon svg {
     width: 100%;
     height: 100%;
-    fill: rgba(var(--rgba-first-color), 0.4);
+    fill: rgba(var(--rgba-light-color), 0.8);
 }
 
 .message-info-delivery-status-box__title {
     font-size: 17px;
     font-weight: 800;
-    /* color: rgba(var(--rgba-fourth-color), 1); */
+    color: rgba(var(--rgba-light-color), 0.8);
 }
 
 
@@ -75,7 +75,7 @@
 }
 
 .message-info-delivery-status-box__time {
-    color: rgba(var(--rgba-first-color), 0.3);
+    color: rgba(var(--rgba-light-color), 0.3);
     font-size: 15px;
     font-weight: 800;
     margin: 0 5px 0 0;
@@ -96,7 +96,7 @@
 .message-info-seen-status-box__title {
     font-size: 17px;
     font-weight: 800;
-    color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-light-color), 0.8);
 }
 
 .message-info-seen-status-box__icon {
@@ -128,14 +128,15 @@
 .message-info-seen-status-indicator__user-count {
     font-size: 20px;
     font-weight: 800;
-    color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-light-color), 0.3);
     margin-right: 2px;
 }
 
 .message-info-seen-status-indicator__bar {
     width: 100%;
     height: 15px;
-    background-image: linear-gradient(90deg, rgba(var(--rgba-fourth-color), 1), rgba(var(--rgba-second-color), 1), rgba(var(--rgba-third-color), 1));
+    /* background-image: linear-gradient(90deg, rgba(var(--rgba-fourth-color), 1), rgba(var(--rgba-second-color), 1), rgba(var(--rgba-third-color), 1)); */
+    background-image: linear-gradient(90deg, rgba(var(--rgba-fourth-color), 1), rgba(var(--rgba-third-color), 1));
     border-radius: 12px;
     position: relative;
     /* border: 1px solid rgba(var(--rgba-first-color), 0.2); */
@@ -156,7 +157,7 @@
 .message-info-seen-status-indicator__total-count {
     font-size: 20px;
     font-weight: 800;
-    color: rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-light-color), 0.3);
     margin-left: 2px;
 }
 
@@ -181,10 +182,10 @@
     align-items: center;
     margin: 5px 0 0 0;
     width: 100%;
-    color: rgba(var(--rgba-first-color), 1);
-    border: 1px solid rgba(var(--rgba-first-color), 1);
+    color: rgba(var(--rgba-light-color), 0.6);
+    border: 1px solid rgba(var(--rgba-light-color), 0.1);
     border-radius: 15px;
-    padding: 3px 8px;
+    padding: 5px 5px;
     /* background: rgba(var(--rgba-first-color), 1); */
 }
 
@@ -198,14 +199,36 @@
 .message-info-seen-status-user__pic {
     width: 40px;
     height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(var(--rgba-light-color), 0.1);
     border-radius: 50%;
-    overflow: hidden;
-    border: 1px solid rgba(var(--rgba-first-color), 0.2);
 }
 
 .message-info-seen-status-user__pic img {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+    display: none;
+}
+
+.message-info-seen-status-user__pic svg {
+    fill: rgba(var(--rgba-light-color), 0.2);
+    stroke: rgba(var(--rgba-first-color), 1);
+    stroke-width: 1;
+    display: none;
+}
+
+
+.message-info-seen-status-user__pic--img img {
+    display: inline-block;
+}
+
+.message-info-seen-status-user__pic--svg svg {
+    display: inline-block;
+    padding: 6px;
 }
 
 .message-info-seen-status-user__name {
@@ -217,7 +240,7 @@
 .message-info-seen-status-user__time {
     font-size: 15px;
     font-weight: 800;
-    color: rgba(var(--rgba-first-color), 0.4);
+    color: rgba(var(--rgba-light-color), 0.3);
     text-align: right;
     /* width: 100%; */
 }
