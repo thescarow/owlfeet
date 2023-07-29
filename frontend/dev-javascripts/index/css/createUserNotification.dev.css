@@ -51,7 +51,7 @@
 }
 
 .user-notification__pic svg {
-    fill: rgba(var(--rgba-fourth-color), 0.2);
+    fill: rgba(var(--rgba-light-color), 0.2);
     stroke: rgba(var(--rgba-first-color), 1);
     stroke-width: 1;
     display: none;

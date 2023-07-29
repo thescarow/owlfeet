@@ -714,9 +714,9 @@ export function createUserMessage(
         message.reader.length - 1
       )
       svgs.forEach(svg => {
-        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
         svg.style.strokeWidth = `1px`
-        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
       })
       messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
     }
@@ -1370,9 +1370,9 @@ export function replaceClientUserMessage(
           message.reader.length - 1
         )
         svgs.forEach(svg => {
-          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
           svg.style.strokeWidth = `1px`
-          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},0.7)`
+          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
         })
         messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
       }
@@ -1704,19 +1704,26 @@ export function generateColorForUserMessageStatus(
 ) {
   let percent = seenStatusCountExceptMe / readerCountExceptMe
   let firstColor = { r: 255, g: 255, b: 255 }
-  let secondColor = { r: 8, g: 175, b: 124 }
-  let thirdColor = { r: 236, g: 179, b: 101 }
+  let secondColor = { r: 236, g: 179, b: 101 }
 
   let resultColor
+  resultColor = getColorWithPercentage(firstColor, secondColor, percent)
 
-  if (percent < 0.5) {
-    let subPercent = percent / 0.5
-    resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
-  } else {
-    var subPercent = (percent - 0.5) / 0.5
-    resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
-  }
   return resultColor
+  // let firstColor = { r: 255, g: 255, b: 255 }
+  // let secondColor = { r: 8, g: 175, b: 124 }
+  // let thirdColor = { r: 236, g: 179, b: 101 }
+
+  // let resultColor
+
+  // if (percent < 0.5) {
+  //   let subPercent = percent / 0.5
+  //   resultColor = getColorWithPercentage(firstColor, secondColor, subPercent)
+  // } else {
+  //   var subPercent = (percent - 0.5) / 0.5
+  //   resultColor = getColorWithPercentage(secondColor, thirdColor, subPercent)
+  // }
+  // return resultColor
 }
 export function getColorWithPercentage(color1, color2, percent) {
   let r = Math.round(color1.r + (color2.r - color1.r) * percent)

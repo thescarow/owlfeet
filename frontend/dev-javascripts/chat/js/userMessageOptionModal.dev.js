@@ -45,6 +45,9 @@ const svg_messageDownloadIconBlank = `<svg width="100" height="100" viewBox="0 0
 <path d="M95 60C93.6739 60 92.4021 60.5268 91.4645 61.4645C90.5268 62.4021 90 63.6739 90 65V85C90 86.3261 89.4732 87.5979 88.5355 88.5355C87.5979 89.4732 86.3261 90 85 90H15C13.6739 90 12.4021 89.4732 11.4645 88.5355C10.5268 87.5979 10 86.3261 10 85V65C10 63.6739 9.47322 62.4021 8.53553 61.4645C7.59785 60.5268 6.32608 60 5 60C3.67392 60 2.40215 60.5268 1.46447 61.4645C0.526784 62.4021 0 63.6739 0 65V85C0 88.9782 1.58035 92.7936 4.3934 95.6066C7.20644 98.4196 11.0218 100 15 100H85C88.9782 100 92.7936 98.4196 95.6066 95.6066C98.4196 92.7936 100 88.9782 100 85V65C100 63.6739 99.4732 62.4021 98.5355 61.4645C97.5979 60.5268 96.3261 60 95 60ZM46.45 68.55C46.9255 69.0052 47.4862 69.362 48.1 69.6C48.6985 69.8645 49.3456 70.0012 50 70.0012C50.6544 70.0012 51.3015 69.8645 51.9 69.6C52.5138 69.362 53.0745 69.0052 53.55 68.55L73.55 48.55C74.4915 47.6085 75.0205 46.3315 75.0205 45C75.0205 43.6685 74.4915 42.3915 73.55 41.45C72.6085 40.5085 71.3315 39.9795 70 39.9795C68.6685 39.9795 67.3915 40.5085 66.45 41.45L55 52.95V5C55 3.67392 54.4732 2.40215 53.5355 1.46447C52.5979 0.526784 51.3261 0 50 0C48.6739 0 47.4021 0.526784 46.4645 1.46447C45.5268 2.40215 45 3.67392 45 5V52.95L33.55 41.45C33.0838 40.9838 32.5304 40.614 31.9212 40.3617C31.3121 40.1094 30.6593 39.9795 30 39.9795C29.3407 39.9795 28.6879 40.1094 28.0788 40.3617C27.4696 40.614 26.9162 40.9838 26.45 41.45C25.9838 41.9162 25.614 42.4696 25.3617 43.0788C25.1094 43.6879 24.9795 44.3407 24.9795 45C24.9795 45.6593 25.1094 46.3121 25.3617 46.9212C25.614 47.5304 25.9838 48.0838 26.45 48.55L46.45 68.55Z" />
 </svg>
 `
+let svg_defaultUserImageIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g data-name="Layer 2"><circle cx="16" cy="6.96" r="6"/><path d="M30.86,26.84a15.07,15.07,0,0,0-4.11-7.47A12.47,12.47,0,0,0,25.13,18,15,15,0,0,0,16,15,15.24,15.24,0,0,0,5.24,19.37a15.07,15.07,0,0,0-4.11,7.47,3.42,3.42,0,0,0,.69,2.88A3.52,3.52,0,0,0,4.58,31H27.42a3.52,3.52,0,0,0,2.75-1.32A3.42,3.42,0,0,0,30.86,26.84Z"/></g></svg>
+`
 
 let userMessageSenderOptions = ` <div class="inner-modal-option" data-user-message-option-btn="reply" >${svg_messageReplyIconBlank}Reply</div>
 <div class="inner-modal-option"  data-user-message-option-btn="copy">${svg_messageCopyIconBlank}Copy</div>
@@ -600,8 +603,13 @@ export async function addUserToMessageInfoSeenStatus(
           messageInfoSeenStatusUser.dataset.userId = user._id.toString()
           messageInfoSeenStatusUser.innerHTML = `
       <div class="message-info-seen-status-user__left-box">
-           <div class="message-info-seen-status-user__pic">
-                <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="">
+           <div class='message-info-seen-status-user__pic ${
+             user.hasOwnProperty("profile") && user.profile !== ""
+               ? "message-info-seen-status-user__pic--img"
+               : "message-info-seen-status-user__pic--svg"
+           }'>
+                <img src='${user.profile}' alt="">
+                ${svg_defaultUserImageIcon}
            </div>
           <div class="message-info-seen-status-user__name">
           
@@ -611,11 +619,6 @@ export async function addUserToMessageInfoSeenStatus(
       01/01/1975 00:00
      </div>`
 
-          if (user.hasOwnProperty("profile") && user.profile !== "") {
-            messageInfoSeenStatusUser.querySelector(
-              ".message-info-seen-status-user__pic img"
-            ).src = user.profile
-          }
           messageInfoSeenStatusUser.getElementsByClassName(
             "message-info-seen-status-user__name"
           )[0].textContent = user.firstName + " " + user.lastName
