@@ -290,7 +290,12 @@ function attachScript(profileUser) {
       allowedFileTypes: [".jpg", ".jpeg", ".png", ".gif", ".svg"]
     },
 
-    infoTimeout: 5000
+    infoTimeout: 5000,
+    locale: {
+      strings: {
+        companionError: "first connect to provider"
+      }
+    }
   })
     .use(Dashboard, {
       trigger: "#editProfile",

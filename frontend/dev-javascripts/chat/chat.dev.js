@@ -218,7 +218,12 @@ import { v4 as uuidv4 } from "uuid"
         ]
       },
 
-      infoTimeout: 5000
+      infoTimeout: 5000,
+      locale: {
+        strings: {
+          companionError: "first connect to provider"
+        }
+      }
     })
       .use(Dashboard, {
         trigger: "#activeChatInputAttachmentFileBtn",
