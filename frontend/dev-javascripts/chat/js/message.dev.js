@@ -455,7 +455,10 @@ export function createUserMessage(
       "active-chat-user-message-box__content-info"
     )[0]
 
-    if (message.hasMediaContent) {
+    if (
+      message.hasOwnProperty("hasMediaContent") &&
+      message.hasMediaContent === true
+    ) {
       if (message.mediaContentType === "video") {
         messageBox.classList.add("active-chat-user-message-box--video")
         messageContentBox.classList.add(
@@ -582,17 +585,21 @@ export function createUserMessage(
         textMessage.textContent = message.textContent
       }
 
-      ////////////////////////////////////////////////////////////////////
       messageContentBox.insertAdjacentElement("afterbegin", textMessage)
     }
-    if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
+    ////////////////////////////////////////////////////////////////////
+    if (
+      message.hasOwnProperty("isRepliedMessage") &&
+      message.isRepliedMessage &&
+      message.hasOwnProperty("repliedTo")
+    ) {
       let repliedMessageContent, repliedMessageUser
 
       messageContentBox.insertAdjacentHTML(
         "afterbegin",
         `<div class='active-chat-user-message-reply-box ${
-          message.sender._id.toString() ===
-          message.repliedTo.sender._id.toString()
+          message.repliedTo.sender._id.toString() ===
+          message.sender._id.toString()
             ? "active-chat-user-message-reply-box--self-replied"
             : ""
         }'>
@@ -695,30 +702,31 @@ export function createUserMessage(
       message.hasOwnProperty("deliveryStatus") &&
       message.deliveryStatus.isDelivered === true
     ) {
-      contentStatusContainer.classList.add(
-        "active-chat-user-message-box__content-status-container--delivered"
-      )
-    }
-
-    if (
-      message.hasOwnProperty("seenStatus") &&
-      message.hasOwnProperty("reader")
-    ) {
-      let svgs = [
-        ...messageBox.querySelectorAll(
-          ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+      contentStatusContainer.className =
+        "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
+      if (
+        message.hasOwnProperty("seenStatus") &&
+        message.hasOwnProperty("reader")
+      ) {
+        let svgs = [
+          ...messageBox.querySelectorAll(
+            ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+          )
+        ]
+        let color = generateColorForUserMessageStatus(
+          message.seenStatus.length - 1,
+          message.reader.length - 1
         )
-      ]
-      let color = generateColorForUserMessageStatus(
-        message.seenStatus.length - 1,
-        message.reader.length - 1
-      )
-      svgs.forEach(svg => {
-        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
-        svg.style.strokeWidth = `1px`
-        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
-      })
-      messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+        svgs.forEach(svg => {
+          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
+          svg.style.strokeWidth = `1px`
+          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
+        })
+        messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+      }
+    } else {
+      contentStatusContainer.className =
+        "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
     }
   }
 
@@ -834,38 +842,47 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
       message.hasMediaContent === true
     ) {
       if (message.mediaContentType === "video") {
-        messageBox.classList.add("active-chat-user-message-box--video-client")
+        messageBox.classList.add("active-chat-user-message-box--video")
         messageContentBox.classList.add(
-          "active-chat-user-message-box__content-box--video-client"
+          "active-chat-user-message-box__content-box--video"
         )
         messageContentInfo.classList.add(
-          "active-chat-user-message-box__content-info--video-client"
+          "active-chat-user-message-box__content-info--video"
         )
-        let videoClient = document.createElement("div")
-        videoClient.classList.add(
+        let video = document.createElement("video")
+        video.classList.add(
           "active-chat-user-message-box__content",
-          "active-chat-user-message-box__content--video-client"
+          "active-chat-user-message-box__content--video"
         )
-        videoClient.insertAdjacentHTML("beforeend", svg_messageVideoClientIcon)
-        messageContentBox.insertAdjacentElement("afterbegin", videoClient)
+        let videoSource = document.createElement("source")
+        videoSource.src = message.clientMediaContentPath
+        //   videoSource.type = message.mediaContentMimeType.split(";")[0]
+        video.insertAdjacentElement("beforeend", videoSource)
+
+        messageContentBox.insertAdjacentElement("afterbegin", video)
+        createPlyr(video, "video")
       }
       if (message.mediaContentType === "audio") {
-        messageBox.classList.add("active-chat-user-message-box--audio-client")
+        messageBox.classList.add("active-chat-user-message-box--audio")
         messageContentBox.classList.add(
-          "active-chat-user-message-box__content-box--audio-client"
+          "active-chat-user-message-box__content-box--audio"
         )
         messageContentInfo.classList.add(
-          "active-chat-user-message-box__content-info--audio-client"
+          "active-chat-user-message-box__content-info--audio"
         )
-        let audioClient = document.createElement("div")
-        audioClient.classList.add(
+        let audio = document.createElement("audio")
+        audio.classList.add(
           "active-chat-user-message-box__content",
-          "active-chat-user-message-box__content--audio-client"
+          "active-chat-user-message-box__content--audio"
         )
 
-        audioClient.insertAdjacentHTML("beforeend", svg_messageAudioClientIcon)
+        let audioSource = document.createElement("source")
+        audioSource.src = message.clientMediaContentPath
+        audioSource.type = message.mediaContentMimeType
+        audio.insertAdjacentElement("beforeend", audioSource)
 
-        messageContentBox.insertAdjacentElement("afterbegin", audioClient)
+        messageContentBox.insertAdjacentElement("afterbegin", audio)
+        createPlyr(audio, "audio")
       }
       if (message.mediaContentType === "youtube") {
         messageBox.classList.add("active-chat-user-message-box--youtube")
@@ -882,7 +899,10 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
         )
 
         youtube.setAttribute("data-plyr-provider", "youtube")
-        youtube.setAttribute("data-plyr-embed-id", message.mediaContentPath)
+        youtube.setAttribute(
+          "data-plyr-embed-id",
+          message.clientMediaContentPath
+        )
 
         messageContentBox.insertAdjacentElement("afterbegin", youtube)
         createPlyr(youtube, "youtube")
@@ -907,7 +927,7 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
               activeChatMessageContainer.scrollHeight
           }
         }
-        image.setAttribute("src", message.mediaContentImagePreview)
+        image.setAttribute("src", message.clientMediaContentPath)
         image.setAttribute("alt", "Image")
 
         messageContentBox.insertAdjacentElement("afterbegin", image)
@@ -931,7 +951,11 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
     }
     ////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////
-    if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
+    if (
+      message.hasOwnProperty("isRepliedMessage") &&
+      message.isRepliedMessage &&
+      message.hasOwnProperty("repliedTo")
+    ) {
       let userMessageBox = document.querySelector(
         `.active-chat-user-message-box[data-message-id="${message.repliedTo}"]`
       )
@@ -1058,10 +1082,9 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
   return messageBox
 }
 
-export function replaceClientUserMessage(
+export function replaceClientUserMessageToServerMessage(
   clientMessageId,
   message,
-  isUserChanged = true,
   isScrolledToBottom = false
 ) {
   increaseTotalReceivedMessagesCount()
@@ -1084,257 +1107,60 @@ export function replaceClientUserMessage(
       (message.hasOwnProperty("isDeletedForAll") &&
         message.isDeletedForAll === false)
     ) {
-      let messageBoxInnerHtml = `
-        
-        <div class="active-chat-user-message-box__content-box">
-      
-           <div class="active-chat-user-message-box__content-info">
-               <div class="active-chat-user-message-box__content-time">${getTimeString(
-                 message.createdAt
-               )}
-               </div>
-           </div>
-       </div>
-       <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
-       </div>
-        `
-      messageBox.innerHTML = messageBoxInnerHtml
+      messageBox.insertAdjacentHTML(
+        "beforeend",
+        `<div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+      </div>`
+      )
 
       let messageContentBox = messageBox.getElementsByClassName(
         "active-chat-user-message-box__content-box"
       )[0]
-      let messageContentInfo = messageBox.getElementsByClassName(
-        "active-chat-user-message-box__content-info"
-      )[0]
 
-      if (message.hasMediaContent) {
-        if (message.mediaContentType === "video") {
-          messageBox.classList.add("active-chat-user-message-box--video")
-          messageContentBox.classList.add(
-            "active-chat-user-message-box__content-box--video"
-          )
-          messageContentInfo.classList.add(
-            "active-chat-user-message-box__content-info--video"
-          )
-          let video = document.createElement("video")
-          video.classList.add(
-            "active-chat-user-message-box__content",
-            "active-chat-user-message-box__content--video"
-          )
-          let videoSource = document.createElement("source")
-          videoSource.src = message.mediaContentPath
-          //   videoSource.type = message.mediaContentMimeType.split(";")[0]
-          video.insertAdjacentElement("beforeend", videoSource)
-
-          messageContentBox.insertAdjacentElement("afterbegin", video)
-          createPlyr(video, "video")
-        }
-        if (message.mediaContentType === "audio") {
-          messageBox.classList.add("active-chat-user-message-box--audio")
-          messageContentBox.classList.add(
-            "active-chat-user-message-box__content-box--audio"
-          )
-          messageContentInfo.classList.add(
-            "active-chat-user-message-box__content-info--audio"
-          )
-          let audio = document.createElement("audio")
-          audio.classList.add(
-            "active-chat-user-message-box__content",
-            "active-chat-user-message-box__content--audio"
-          )
-
-          let audioSource = document.createElement("source")
-          audioSource.src = message.mediaContentPath
-          audioSource.type = message.mediaContentMimeType
-          audio.insertAdjacentElement("beforeend", audioSource)
-
-          messageContentBox.insertAdjacentElement("afterbegin", audio)
-          createPlyr(audio, "audio")
-        }
-        if (message.mediaContentType === "youtube") {
-          messageBox.classList.add("active-chat-user-message-box--youtube")
-          messageContentBox.classList.add(
-            "active-chat-user-message-box__content-box--youtube"
-          )
-          messageContentInfo.classList.add(
-            "active-chat-user-message-box__content-info--youtube"
-          )
-          let youtube = document.createElement("div")
-          youtube.classList.add(
-            "active-chat-user-message-box__content",
-            "active-chat-user-message-box__content--youtube"
-          )
-
-          youtube.setAttribute("data-plyr-provider", "youtube")
-          youtube.setAttribute("data-plyr-embed-id", message.mediaContentPath)
-
-          messageContentBox.insertAdjacentElement("afterbegin", youtube)
-          createPlyr(youtube, "youtube")
-        }
-        if (message.mediaContentType === "image") {
-          messageBox.classList.add("active-chat-user-message-box--image")
-          messageContentBox.classList.add(
-            "active-chat-user-message-box__content-box--image"
-          )
-          messageContentInfo.classList.add(
-            "active-chat-user-message-box__content-info--image"
-          )
-
-          let image = document.createElement("img")
-          image.classList.add(
-            "active-chat-user-message-box__content",
-            "active-chat-user-message-box__content--image"
-          )
-          image.onload = () => {
-            if (isScrolledToBottom) {
-              activeChatMessageContainer.scrollTop =
-                activeChatMessageContainer.scrollHeight
-            }
-          }
-          image.setAttribute("src", message.mediaContentPath)
-          image.setAttribute("alt", "Image")
-
-          messageContentBox.insertAdjacentElement("afterbegin", image)
-        }
-      } else {
-        messageBox.classList.add("active-chat-user-message-box--text")
-        messageContentBox.classList.add(
-          "active-chat-user-message-box__content-box--text"
-        )
-        messageContentInfo.classList.add(
-          "active-chat-user-message-box__content-info--text"
-        )
-
-        let textMessage = document.createElement("div")
-        textMessage.classList.add(
-          "active-chat-user-message-box__content",
-          "active-chat-user-message-box__content--text"
-        )
-
-        if (message.hasOwnProperty("hasLinks") && message.hasLinks === true) {
-          insertLinksToTextContent(
-            textMessage,
-            message.textContent,
-            message.linksData
-          )
-          if (
-            message.hasOwnProperty("hasLinkPreview") &&
-            message.hasOwnProperty("linkPreviewData") &&
-            message.hasLinkPreview === true
-          ) {
-            let linkPreview = createLinkPreview(
-              message.linkPreviewData,
-              isScrolledToBottom
-            )
-            linkPreview.classList.add("link-preview--message")
-
-            messageContentBox.insertAdjacentElement("beforeend", linkPreview)
-          }
-        } else {
-          textMessage.textContent = message.textContent
-        }
-
-        ////////////////////////////////////////////////////////////////////
-        messageContentBox.insertAdjacentElement("afterbegin", textMessage)
-      }
-      if (message.isRepliedMessage && message.hasOwnProperty("repliedTo")) {
-        let repliedMessageContent, repliedMessageUser
-
-        messageContentBox.insertAdjacentHTML(
-          "afterbegin",
-          `<div class='active-chat-user-message-reply-box ${
-            message.sender._id.toString() ===
-            message.repliedTo.sender._id.toString()
-              ? "active-chat-user-message-reply-box--self-replied"
-              : ""
-          }'>
-            <div class="active-chat-user-message-reply-box__user">
-            </div>
-           <div class="active-chat-user-message-reply-box__user-message">
-          </div>
-        </div>`
-        )
-
-        repliedMessageUser =
-          message.repliedTo.sender._id.toString() === loginUser._id.toString()
-            ? "You"
-            : message.repliedTo.sender.firstName +
-              " " +
-              message.repliedTo.sender.lastName
-
-        messageContentBox.getElementsByClassName(
-          "active-chat-user-message-reply-box__user"
-        )[0].textContent = repliedMessageUser
-
+      if (
+        message.hasOwnProperty("hasMediaContent") &&
+        message.hasMediaContent === false
+      ) {
         if (
-          message.repliedTo.hasOwnProperty("isDeletedForAll") &&
-          message.repliedTo.isDeletedForAll === true
+          message.hasOwnProperty("textContent") &&
+          message.textContent !== ""
         ) {
-          repliedMessageContent = `${svg_deletedMessageBlankIcon} <span>This Message has been deleted.</span>`
-          messageContentBox.getElementsByClassName(
-            "active-chat-user-message-reply-box__user-message"
-          )[0].innerHTML = repliedMessageContent
-          messageContentBox
-            .getElementsByClassName("active-chat-user-message-reply-box")[0]
-            .classList.add(
-              "active-chat-user-message-reply-box--deleted-message"
+          let textMessageContent = messageContentBox.getElementsByClassName(
+            "active-chat-user-message-box__content--text"
+          )[0]
+
+          if (message.hasOwnProperty("hasLinks") && message.hasLinks === true) {
+            textMessageContent.textContent = ""
+            insertLinksToTextContent(
+              textMessageContent,
+              message.textContent,
+              message.linksData
             )
-        } else {
-          if (message.repliedTo.hasMediaContent) {
-            if (message.repliedTo.mediaContentType === "video") {
-              repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+            if (
+              message.hasOwnProperty("hasLinkPreview") &&
+              message.hasOwnProperty("linkPreviewData") &&
+              message.hasLinkPreview === true
+            ) {
+              let linkPreview = createLinkPreview(
+                message.linkPreviewData,
+                isScrolledToBottom
+              )
+              linkPreview.classList.add("link-preview--message")
+
+              messageContentBox.insertAdjacentElement("beforeend", linkPreview)
             }
-            if (message.repliedTo.mediaContentType === "audio") {
-              repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
-            }
-            if (message.repliedTo.mediaContentType === "image") {
-              repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
-            }
-            if (message.repliedTo.mediaContentType === "youtube") {
-              repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
-            }
-            messageContentBox.getElementsByClassName(
-              "active-chat-user-message-reply-box__user-message"
-            )[0].innerHTML = repliedMessageContent
-          } else {
-            repliedMessageContent = message.repliedTo.textContent
-            messageContentBox.getElementsByClassName(
-              "active-chat-user-message-reply-box__user-message"
-            )[0].textContent = repliedMessageContent
           }
         }
-
-        messageContentBox.classList.add(
-          "active-chat-user-message-box__content-box--replied-message"
-        )
-        messageBox.classList.add(
-          "active-chat-user-message-box--replied-message"
-        )
-        messageBox.dataset.repliedMessageId = message.repliedTo._id
       }
-    } else {
-      messageBox.classList.add("active-chat-user-message-box--deleted-message")
-
-      messageBox.innerHTML = `<div class="active-chat-user-message-box__content-box active-chat-user-message-box__content-box--deleted-message">
-    <div class="active-chat-user-message-box__content active-chat-user-message-box__content--deleted-message">
-   ${svg_deletedMessageBlankIcon}<span>This Message has been deleted.</span>
-    </div>
-    <div class="active-chat-user-message-box__content-info active-chat-user-message-box__content-info--deleted-message">
-        <div class="active-chat-user-message-box__content-time active-chat-user-message-box__content-time--deleted-message">${getTimeString(
-          message.createdAt
-        )}
-        </div>
-    </div>
-     </div>
-     <div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
-     </div>`
     }
 
     let messageContentInfo = messageBox.getElementsByClassName(
       "active-chat-user-message-box__content-info"
     )[0]
+    messageContentInfo.innerHTML = ""
     if (message.sender._id.toString() === loginUser._id.toString()) {
-      messageBox.classList.add("active-chat-user-message-box--right")
+      if (!messageBox.classList.contains("active-chat-user-message-box--right"))
+        messageBox.classList.add("active-chat-user-message-box--right")
       messageContentInfo.insertAdjacentHTML(
         "beforeend",
         `<div class="active-chat-user-message-box__content-status-container">
@@ -1351,55 +1177,34 @@ export function replaceClientUserMessage(
         message.hasOwnProperty("deliveryStatus") &&
         message.deliveryStatus.isDelivered === true
       ) {
-        contentStatusContainer.classList.add(
-          "active-chat-user-message-box__content-status-container--delivered"
-        )
-      }
+        contentStatusContainer.className =
+          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
 
-      if (
-        message.hasOwnProperty("seenStatus") &&
-        message.hasOwnProperty("reader")
-      ) {
-        let svgs = [
-          ...messageBox.querySelectorAll(
-            ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+        if (
+          message.hasOwnProperty("seenStatus") &&
+          message.hasOwnProperty("reader")
+        ) {
+          let svgs = [
+            ...messageBox.querySelectorAll(
+              ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+            )
+          ]
+          let color = generateColorForUserMessageStatus(
+            message.seenStatus.length - 1,
+            message.reader.length - 1
           )
-        ]
-        let color = generateColorForUserMessageStatus(
-          message.seenStatus.length - 1,
-          message.reader.length - 1
-        )
-        svgs.forEach(svg => {
-          svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
-          svg.style.strokeWidth = `1px`
-          svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
-        })
-        messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+          svgs.forEach(svg => {
+            svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
+            svg.style.strokeWidth = `1px`
+            svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
+          })
+          messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+        }
+      } else {
+        contentStatusContainer.className =
+          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
       }
     }
-
-    if (
-      isUserChanged === true &&
-      message.sender._id.toString() !== loginUser._id.toString()
-    ) {
-      let messageContentBox = messageBox.getElementsByClassName(
-        "active-chat-user-message-box__content-box"
-      )[0]
-      messageContentBox.insertAdjacentHTML(
-        "afterbegin",
-        `<div class="active-chat-user-message-box__user-box">
-      </div>`
-      )
-      messageContentBox.getElementsByClassName(
-        "active-chat-user-message-box__user-box"
-      )[0].textContent =
-        message.sender.firstName + " " + message.sender.lastName
-      messageContentBox.classList.add(
-        "active-chat-user-message-box__content-box--has-user-box"
-      )
-      messageBox.classList.add("active-chat-user-message-box--has-user-box")
-    }
-
     if (
       message.hasOwnProperty("seenStatus") &&
       message.hasOwnProperty("reader") &&
@@ -1438,44 +1243,6 @@ export function updateClientUserMessageStatus(clientMessageId, status) {
        </div>`
     }
   }
-}
-
-function insertLinksToString(str) {
-  const regexForUrl =
-    /(?:https?:\/\/)(?:www\.)?[^\s]+|(?:\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/g
-
-  const allUrls = str.match(regexForUrl)
-  if (allUrls === null) {
-    return str
-  }
-  allUrls.forEach(url => {
-    url.startsWith("http") ? url : `http://${url}`
-  })
-
-  // console.log("allUrls:", allUrls)
-  let textNodes = []
-  let i = 0
-  let arr = str.split(regexForUrl)
-
-  arr.forEach(text => {
-    textNodes.push(document.createTextNode(text))
-    if (i < allUrls.length) {
-      const link = document.createElement("a")
-      link.href = allUrls[i]
-      link.target = "_blank"
-      link.setAttribute("rel", "noopener noreferrer")
-      link.textContent = allUrls[i]
-      textNodes.push(link)
-      i++
-    }
-  })
-
-  const container = document.createElement("div")
-  textNodes.forEach(node => {
-    container.appendChild(node)
-  })
-
-  return container.innerHTML
 }
 
 function insertLinksToTextContent(textContentContainer, textContent, allLinks) {

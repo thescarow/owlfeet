@@ -300,12 +300,12 @@ import { v4 as uuidv4 } from "uuid"
               key: "6811ee5b698f4aa0b05a0a65755841c0"
             },
             template_id: "0bedb1fefa9b4a8ba36f61fc541b618d"
+            // notify_url: `${location.origin}/transloadit/notify/user-media-message`
           },
           fields: {
             mediaFolder: "chat-media"
           }
           // signature: "generated-signature"
-          // notify_url: "https://example.com/transloadit_pingback"
         }
       })
     uppy.on("transloadit:complete", assembly => {
@@ -318,6 +318,7 @@ import { v4 as uuidv4 } from "uuid"
       let userMessage = {}
       userMessage.chat = activeChatSection.dataset.chatId
       userMessage.hasMediaContent = true
+      userMessage.hasDirectMediaContentPath = false
       userMessage.mediaContentType = file.type
       userMessage.mediaContentMimeType = file.mime
       userMessage.mediaContentPath = fileKey
@@ -328,46 +329,8 @@ import { v4 as uuidv4 } from "uuid"
         userMessage.isRepliedMessage = false
       }
 
-      if (userMessage.mediaContentType === "image") {
-        userMessage.mediaContentImagePreview = fileTempUrl
-      }
-
+      userMessage.clientMediaContentPath = fileTempUrl
       sendAndCreateClientUserMessage(userMessage, "media-content")
-      // fetch("/message", {
-      //   method: "POST", // or 'PUT'
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify(userMessage)
-      // })
-      //   .then(response => {
-      //     if (response.ok) {
-      //       return response.json()
-      //     }
-      //     return Promise.reject(response)
-      //   })
-      //   .then(async data => {
-      //     if (data.isSuccess) {
-      //       checkTimeAndCreateNewMessage(data.message, true)
-      //       closeReplyMessageBox()
-      //       updateAllChatSection(data.message)
-      //     } else {
-      //       let { createMainNotification } = await import(
-      //         "../common/mainNotification.dev"
-      //       )
-      //       createMainNotification(data.error, "error")
-      //     }
-      //   })
-      //   .catch(async err => {
-      //     console.log(err)
-      //     let { createMainNotification } = await import(
-      //       "../common/mainNotification.dev"
-      //     )
-      //     createMainNotification(
-      //       "Server Error In Sending Message, Please Try Again",
-      //       "error"
-      //     )
-      //   })
     })
 
     // active chat input youtube send btn
@@ -385,6 +348,7 @@ import { v4 as uuidv4 } from "uuid"
         if (activeChatInputAttachmentYoutubeContent.value !== "") {
           userMessage.chat = activeChatSection.dataset.chatId
           userMessage.hasMediaContent = true
+          userMessage.hasDirectMediaContentPath = true
           userMessage.mediaContentType = "youtube"
           userMessage.mediaContentMimeType = "video/mp4"
           userMessage.mediaContentPath =
@@ -396,6 +360,8 @@ import { v4 as uuidv4 } from "uuid"
             userMessage.isRepliedMessage = false
           }
 
+          userMessage.clientMediaContentPath =
+            activeChatInputAttachmentYoutubeContent.value
           activeChatInputAttachmentYoutubeContent.value = ""
           // createUserMessageSocket(userMessage)
           sendAndCreateClientUserMessage(userMessage, "youtube")
@@ -556,11 +522,11 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
   let { sendCreateUserMessageSocket } = await import(
     "../socket/event-emitter/message-socket"
   )
-
-  userMessage.clientMessageId = uuidv4()
   let { checkTimeAndCreateNewClientUserMessage } = await import(
     "./js/message.dev"
   )
+
+  userMessage.clientMessageId = uuidv4()
 
   checkTimeAndCreateNewClientUserMessage(userMessage, true)
 

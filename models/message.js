@@ -3,9 +3,17 @@ const { mediaContentType } = require("./common/mediaContentType")
 const { infoMessageType } = require("./common/infoMessageType")
 const messageSchema = new mongoose.Schema(
   {
-    chat: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
+    chat: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chat"
+    },
 
-    reader: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+    reader: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }
+    ],
 
     seenStatus: [
       {
@@ -32,17 +40,41 @@ const messageSchema = new mongoose.Schema(
 
     mediaContentType: {
       type: String,
-      default: mediaContentType.DEFAULT
+      default: ""
     },
     mediaContentMimeType: {
-      type: String
+      type: String,
+      default: ""
     },
+
+    hasDirectMediaContentPath: {
+      type: Boolean,
+      default: false
+    },
+
     mediaContentPath: {
       type: String,
       default: ""
     },
 
-    textContent: { type: String, trim: true, default: "" },
+    mediaImageSpecs: {
+      width: { type: String, default: "" },
+      height: { type: String, default: "" },
+      aspectRatio: { type: String, default: "1.5" },
+      averageColor: { type: String, default: "#888" }
+    },
+
+    mediaVideoSpecs: {
+      width: { type: String, default: "" },
+      height: { type: String, default: "" },
+      aspectRatio: { type: String, default: "1.7" }
+    },
+
+    textContent: {
+      type: String,
+      trim: true,
+      default: ""
+    },
 
     isRepliedMessage: {
       type: Boolean,
@@ -54,11 +86,20 @@ const messageSchema = new mongoose.Schema(
       ref: "Message"
     },
     //// info message
-    isInfoMessage: { type: Boolean, default: false },
+    isInfoMessage: {
+      type: Boolean,
+      default: false
+    },
 
-    infoMessageType: { type: String, default: infoMessageType.INFO },
+    infoMessageType: {
+      type: String,
+      default: infoMessageType.INFO
+    },
 
-    infoMessageContent: { type: String, trim: true }
+    infoMessageContent: {
+      type: String,
+      trim: true
+    }
   },
   { timestamps: true }
 )

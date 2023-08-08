@@ -8,6 +8,7 @@ const messageRouter = require("./message.route")
 const callRouter = require("./call.route")
 const callRoomMemberRouter = require("./callRoomMember.route")
 const userFeedbackRouter = require("./userFeedback.route")
+const transloaditRouter = require("./transloadit.route")
 // const newsRouter = require("./news.route")
 // const trendRouter = require("./trend.route")
 // const addRouter = require("./add.route")
@@ -26,6 +27,7 @@ exports.registerRoutes = app => {
   app.use("/call", callRouter)
   app.use("/call-room-member", callRoomMemberRouter)
   app.use("/user-feedback", userFeedbackRouter)
+  app.use("/transloadit", transloaditRouter)
   // app.use("/news", newsRouter);
   // app.use("/trends", trendRouter);
   // app.use("/add", addRouter);

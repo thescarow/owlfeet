@@ -14,7 +14,7 @@ export async function createMessageSocket(socket) {
       "activeChatHeaderStatus"
     )
 
-    socket.on("message:client-message-sent", async data => {
+    socket.on("message:client-user-message-sent", async data => {
       let chatId = activeChatSection.dataset.chatId
       if (
         chatId.toString() !== "" &&
@@ -26,10 +26,14 @@ export async function createMessageSocket(socket) {
         updateClientUserMessageStatus(data.clientMessageId, "sent")
       }
     })
-    socket.on("message:create-user-message-res", async data => {
-      if (data.isSuccess) {
+
+    socket.on(
+      "message:replace-client-user-message-to-server-user-message",
+      async data => {
+        let clientMessageId = data.clientMessageId
         let message = data.message
         let chatId = activeChatSection.dataset.chatId
+
         let { updateAllChatSection } = await import(
           "../../../chat/js/updateAllChatSection.dev"
         )
@@ -42,11 +46,20 @@ export async function createMessageSocket(socket) {
           chatId.toString() !== "" &&
           chatId.toString() === message.chat._id.toString()
         ) {
-          let { replaceClientUserMessage } = await import(
+          let { replaceClientUserMessageToServerMessage } = await import(
             "../../../chat/js/message.dev"
           )
-          replaceClientUserMessage(data.clientMessageId, message, true, false)
+          replaceClientUserMessageToServerMessage(
+            clientMessageId,
+            message,
+            false
+          )
         }
+      }
+    )
+    socket.on("message:create-user-message-res", async data => {
+      if (data.isSuccess) {
+        // updateClientUserMessageStatus(data.clientMessageId, "sent")
       } else {
         let { updateClientUserMessageStatus } = await import(
           "../../../chat/js/message.dev.js"
@@ -55,8 +68,42 @@ export async function createMessageSocket(socket) {
         createMainNotification(data.error, "error")
       }
     })
+    // socket.on("message:create-user-media-message-request-res", async data => {
+    //   if (data.isSuccess) {
+    //     let message = data.message
+    //     let chatId = activeChatSection.dataset.chatId
+    //     let { updateAllChatSection } = await import(
+    //       "../../../chat/js/updateAllChatSection.dev"
+    //     )
+    //     updateAllChatSection(message)
+    //     // let { increaseUnseenMessagesCountInChatBox } = await import(
+    //     //   "../../../chat/js/updateAllChatSection.dev"
+    //     // )
+    //     // increaseUnseenMessagesCountInChatBox(message.chat._id)
+    //     if (
+    //       chatId.toString() !== "" &&
+    //       chatId.toString() === message.chat._id.toString()
+    //     ) {
+    //       let { replaceClientUserMessageToServerMessage } = await import(
+    //         "../../../chat/js/message.dev"
+    //       )
+    //       replaceClientUserMessageToServerMessage(
+    //         data.clientMessageId,
+    //         message,
+    //         true,
+    //         false
+    //       )
+    //     }
+    //   } else {
+    //     let { updateClientUserMessageStatus } = await import(
+    //       "../../../chat/js/message.dev.js"
+    //     )
+    //     updateClientUserMessageStatus(data.clientMessageId, "error")
+    //     createMainNotification(data.error, "error")
+    //   }
+    // })
 
-    socket.on("message:new-message", async data => {
+    socket.on("message:new-user-message", async data => {
       let message = data.message
       let chatId = activeChatSection.dataset.chatId
       let { updateAllChatSection } = await import(
@@ -114,7 +161,7 @@ export async function createMessageSocket(socket) {
         updateChatBoxLatestMessage(data.latestMessage)
       }
     })
-    socket.on("message:message-delivered", async data => {
+    socket.on("message:user-message-delivered", async data => {
       if (
         data.chatId.toString() === activeChatSection.dataset.chatId.toString()
       ) {

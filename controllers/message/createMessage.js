@@ -17,7 +17,7 @@ const {
 ///////
 const {
   selectSafeMessageField,
-  selectRepliedToMessageField,
+  selectMessageFieldForRepliedMessage,
   filterMessageFieldForDeletedForAll
 } = require("../../common/filter-field/filterMessageField")
 
@@ -134,7 +134,7 @@ exports.createMessage = async (req, res) => {
             })
             .populate({
               path: "repliedTo",
-              select: selectRepliedToMessageField,
+              select: selectMessageFieldForRepliedMessage,
               populate: {
                 path: "sender",
                 select: { username: 1, firstName: 1, lastName: 1 }
@@ -315,13 +315,13 @@ async function attachSocketForCreatingNewMessage(
   let eventData = { message: createdNewMessage }
   messageChat.currentChatMembers.forEach(userId => {
     if (req.user.id.toString() !== userId.toString()) {
-      req.io.to(userId.toString()).emit("message:new-message", eventData)
+      req.io.to(userId.toString()).emit("message:new-user-message", eventData)
     }
   })
   newMessageDocument.deliveryStatus.isDelivered = true
   newMessageDocument.deliveryStatus.deliveredTime = Date.now()
   await newMessageDocument.save()
-  req.io.to(req.user.id.toString()).emit("message:message-delivered", {
+  req.io.to(req.user.id.toString()).emit("message:user-message-delivered", {
     messageId: newMessageDocument._id,
     chatId: newMessageDocument.chat,
     deliveredTime: Date.now()

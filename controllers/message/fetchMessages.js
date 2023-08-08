@@ -14,7 +14,7 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 const {
   selectSafeMessageField,
   filterMessageFieldForDeletedForAll,
-  selectRepliedToMessageField
+  selectMessageFieldForRepliedMessage
 } = require("../../common/filter-field/filterMessageField")
 
 // router.get("/fetch-message/:chatId", getLoginUser, fetchMessages)
@@ -51,7 +51,7 @@ exports.fetchMessages = async (req, res) => {
           })
           .populate({
             path: "repliedTo",
-            select: selectRepliedToMessageField,
+            select: selectMessageFieldForRepliedMessage,
             populate: {
               path: "sender",
               select: { username: 1, firstName: 1, lastName: 1 }
@@ -229,7 +229,7 @@ async function attachSocketForFetchingMessage(req, chat) {
           if (message.isInfoMessage === false) {
             req.io
               .to(message.sender.toString())
-              .emit("message:message-delivered", {
+              .emit("message:user-message-delivered", {
                 messageId: message._id,
                 chatId: chat._id,
                 deliveredTime: message.deliveryStatus.deliveredTime

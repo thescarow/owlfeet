@@ -18,7 +18,10 @@ let deletedForAllMessageField = {
   //   hasMediaContent: 1,
   //   mediaContentType: 1,
   //   mediaContentMimeType: 1,
+  //   hasDirectMediaContentPath:1
   //   mediaContentPath: 1,
+  //   mediaImageSpecs: 1,
+  //   mediaVideoSpecs: 1,
   //   textContent: 1,
   //   updatedAt: 1
 }
@@ -41,13 +44,16 @@ exports.selectSafeMessageField = {
   hasMediaContent: 1,
   mediaContentType: 1,
   mediaContentMimeType: 1,
+  hasDirectMediaContentPath: 1,
   mediaContentPath: 1,
+  mediaImageSpecs: 1,
+  mediaVideoSpecs: 1,
   textContent: 1,
   createdAt: 1
   // deletedFor: 1,
   //   updatedAt: 1
 }
-exports.selectRepliedToMessageField = {
+exports.selectMessageFieldForRepliedMessage = {
   _id: 1,
   chat: 1,
   sender: 1,
@@ -66,7 +72,10 @@ exports.selectRepliedToMessageField = {
   hasMediaContent: 1,
   mediaContentType: 1,
   // mediaContentMimeType: 1,
+  // hasDirectMediaContentPath: 1,
   // mediaContentPath: 1,
+  // mediaImageSpecs: 1,
+  // mediaVideoSpecs: 1,
   textContent: 1,
   createdAt: 1
   // deletedFor: 1,
@@ -93,7 +102,10 @@ exports.selectDeletedForAllMessageField = {
   //   hasMediaContent: 1,
   //   mediaContentType: 1,
   //   mediaContentMimeType: 1,
+  //   hasDirectMediaContentPath: 1,
   //   mediaContentPath: 1,
+  //   mediaImageSpecs: 1,
+  //   mediaVideoSpecs: 1,
   //   textContent: 1,
   //   updatedAt: 1
 }
@@ -118,7 +130,10 @@ exports.selectLatestMessageField = {
   //   repliedTo: 1,
   //   deletedFor: 1,
   //   mediaContentMimeType: 1,
+  //   hasDirectMediaContentPath: 1,
   //   mediaContentPath: 1,
+  //   mediaImageSpecs: 1,
+  //   mediaVideoSpecs: 1,
 }
 
 exports.filterMessageFieldForDeletedForAll = message => {
