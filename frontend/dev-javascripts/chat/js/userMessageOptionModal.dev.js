@@ -541,7 +541,7 @@ function updateMessageInfoStatus(messageInfoModal, messageId) {
           data.message.hasOwnProperty("deliveryStatus") &&
           data.message.deliveryStatus.isDelivered === true
         ) {
-          updateMessageInfoDeliveryStatus(
+          updateMessageInfoModalDeliveryStatus(
             data.message._id.toString(),
             data.message.deliveryStatus.deliveredTime
           )
@@ -554,7 +554,7 @@ function updateMessageInfoStatus(messageInfoModal, messageId) {
             data.message.readerCount - 1
 
           data.message.seenStatus.forEach(entry => {
-            addUserToMessageInfoSeenStatus(
+            addUserToMessageInfoModalSeenStatus(
               data.message._id.toString(),
               entry.seenBy,
               entry.seenTime
@@ -579,7 +579,7 @@ function updateMessageInfoStatus(messageInfoModal, messageId) {
     })
 }
 
-export async function addUserToMessageInfoSeenStatus(
+export async function addUserToMessageInfoModalSeenStatus(
   messageId,
   user,
   userTime
@@ -695,7 +695,7 @@ export async function addUserToMessageInfoSeenStatus(
     }
   }
 }
-export async function updateMessageInfoDeliveryStatus(
+export async function updateMessageInfoModalDeliveryStatus(
   messageId,
   deliveredTime
 ) {

@@ -13,9 +13,13 @@ const { signedUrlForGetAwsS3Object } = require("../../services/awsS3")
 ///////
 const {
   selectSafeMessageField,
-  filterMessageFieldForDeletedForAll,
-  selectMessageFieldForRepliedMessage
+  selectMessageFieldForRepliedMessage,
+  filterMessageFieldForDeletedForAll
 } = require("../../common/filter-field/filterMessageField")
+
+const {
+  selectChatFieldForMessage
+} = require("../../common/filter-field/filterChatField")
 
 // router.get("/fetch-message/:chatId", getLoginUser, fetchMessages)
 
@@ -26,7 +30,8 @@ exports.fetchMessages = async (req, res) => {
       const totalReceivedMessagesCount = req.query.totalReceivedMessagesCount
       const chat = await Chat.findOne({
         _id: chatId,
-        allChatMembers: { $elemMatch: { $eq: req.user.id } }
+        allChatMembers: { $elemMatch: { $eq: req.user.id } },
+        isDeleted: false
       })
         .select({ _id: 1 })
         .lean()
@@ -38,13 +43,14 @@ exports.fetchMessages = async (req, res) => {
         })
           .populate({
             path: "sender",
-            select: { username: 1, firstName: 1, lastName: 1, profile: 1 }
+            select: { username: 1, firstName: 1, lastName: 1, profile: 1 },
+            options: {
+              lean: true
+            }
           })
           .populate({
             path: "chat",
-            select: {
-              chatName: 1
-            },
+            select: selectChatFieldForMessage,
             options: {
               lean: true
             }
@@ -56,7 +62,6 @@ exports.fetchMessages = async (req, res) => {
               path: "sender",
               select: { username: 1, firstName: 1, lastName: 1 }
             },
-
             options: {
               lean: true
             }
@@ -146,10 +151,7 @@ exports.fetchMessages = async (req, res) => {
                 )
               }
               if (message.hasMediaContent === true) {
-                if (
-                  message.hasMediaContent &&
-                  message.mediaContentType !== "youtube"
-                ) {
+                if (message.hasDirectMediaContentPath === false) {
                   message.mediaContentPath = await signedUrlForGetAwsS3Object(
                     message.mediaContentPath
                   )

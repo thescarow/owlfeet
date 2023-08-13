@@ -24,16 +24,16 @@
       console.log("socket disconnect:", reason)
     })
 
-    // socket.prependAny((eventName, ...args) => {
-    //   console.log(
-    //     "eventName:",
-    //     eventName,
-    //     "args:",
-    //     args,
-    //     "socketId:",
-    //     socket.id
-    //   )
-    // })
+    socket.prependAny((eventName, ...args) => {
+      console.log(
+        "eventName:",
+        eventName,
+        "args:",
+        args,
+        "socketId:",
+        socket.id
+      )
+    })
 
     //////////////////////////////////////////////////
     //  define socket handler here

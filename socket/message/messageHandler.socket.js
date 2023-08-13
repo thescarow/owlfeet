@@ -21,16 +21,7 @@ const {
   deleteAwsS3Object,
   signedUrlForGetAwsS3Object
 } = require("../../services/awsS3")
-///////
-const {
-  selectSafeMessageField,
-  selectMessageFieldForRepliedMessage,
-  filterMessageFieldForDeletedForAll
-} = require("../../common/filter-field/filterMessageField")
 
-const {
-  selectChatFieldForChatBox
-} = require("../../common/filter-field/filterChatField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 exports.messageHandler = async (io, socket) => {
@@ -196,7 +187,6 @@ exports.messageHandler = async (io, socket) => {
       const { userMessage } = data
       let clientMessageId = ""
       let messageChatId = userMessage.chat
-
       if (
         userMessage.hasOwnProperty("clientMessageId") &&
         userMessage.clientMessageId !== ""
@@ -206,7 +196,9 @@ exports.messageHandler = async (io, socket) => {
         if (
           userMessage.hasOwnProperty("hasMediaContent") &&
           userMessage.hasMediaContent &&
-          userMessage.mediaContentType !== "youtube"
+          (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+            (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+              userMessage.hasDirectMediaContentPath === false))
         ) {
           await deleteAwsS3Object(userMessage.mediaContentPath)
         }
@@ -217,7 +209,13 @@ exports.messageHandler = async (io, socket) => {
           error: "Please send client message id."
         })
       }
-
+      // for testing
+      // return socket.emit("message:create-user-message-res", {
+      //   isSuccess: false,
+      //   clientMessageId: clientMessageId,
+      //   chatId: messageChatId,
+      //   error: "Please send client message id."
+      // })
       try {
         if (socket.loginUser) {
           const newMessageData = {}
@@ -243,7 +241,11 @@ exports.messageHandler = async (io, socket) => {
                   if (
                     userMessage.hasOwnProperty("hasMediaContent") &&
                     userMessage.hasMediaContent &&
-                    userMessage.mediaContentType !== "youtube"
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
                   ) {
                     await deleteAwsS3Object(userMessage.mediaContentPath)
                   }
@@ -284,7 +286,11 @@ exports.messageHandler = async (io, socket) => {
                   if (
                     userMessage.hasOwnProperty("hasMediaContent") &&
                     userMessage.hasMediaContent &&
-                    userMessage.mediaContentType !== "youtube"
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
                   ) {
                     await deleteAwsS3Object(userMessage.mediaContentPath)
                   }
@@ -332,7 +338,11 @@ exports.messageHandler = async (io, socket) => {
                   if (
                     userMessage.hasOwnProperty("hasMediaContent") &&
                     userMessage.hasMediaContent &&
-                    userMessage.mediaContentType !== "youtube"
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
                   ) {
                     await deleteAwsS3Object(userMessage.mediaContentPath)
                   }
@@ -352,7 +362,8 @@ exports.messageHandler = async (io, socket) => {
 
               // socket.emit("message:client-user-message-sent", {
               //   chatId: messageChat._id,
-              //   clientMessageId: clientMessageId
+              //   clientMessageId: clientMessageId,
+              //  messageId: newMessage._id,
               // })
 
               //here i send the event to client that has created the message only (not all devices where he/she log in with same account because not all devices created the client message so we can not update them if there is not any client message. once message is created on server end we will create the message for all)
@@ -378,7 +389,9 @@ exports.messageHandler = async (io, socket) => {
               if (
                 userMessage.hasOwnProperty("hasMediaContent") &&
                 userMessage.hasMediaContent &&
-                userMessage.mediaContentType !== "youtube"
+                (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                  (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                    userMessage.hasDirectMediaContentPath === false))
               ) {
                 await deleteAwsS3Object(userMessage.mediaContentPath)
               }
@@ -394,7 +407,9 @@ exports.messageHandler = async (io, socket) => {
             if (
               userMessage.hasOwnProperty("hasMediaContent") &&
               userMessage.hasMediaContent &&
-              userMessage.mediaContentType !== "youtube"
+              (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                  userMessage.hasDirectMediaContentPath === false))
             ) {
               await deleteAwsS3Object(userMessage.mediaContentPath)
             }
@@ -409,7 +424,9 @@ exports.messageHandler = async (io, socket) => {
           if (
             userMessage.hasOwnProperty("hasMediaContent") &&
             userMessage.hasMediaContent &&
-            userMessage.mediaContentType !== "youtube"
+            (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+              (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                userMessage.hasDirectMediaContentPath === false))
           ) {
             await deleteAwsS3Object(userMessage.mediaContentPath)
           }
@@ -424,7 +441,9 @@ exports.messageHandler = async (io, socket) => {
         if (
           userMessage.hasOwnProperty("hasMediaContent") &&
           userMessage.hasMediaContent &&
-          userMessage.mediaContentType !== "youtube"
+          (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+            (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+              userMessage.hasDirectMediaContentPath === false))
         ) {
           await deleteAwsS3Object(userMessage.mediaContentPath)
         }

@@ -80,7 +80,7 @@ exports.sendMessageToOtherMembersAndUpdateMessageStatusForSender = async (
 
   if (
     newMessage.hasMediaContent &&
-    newMessage.hasDirectMediaContentPath !== false
+    newMessage.hasDirectMediaContentPath === false
   ) {
     newMessage.mediaContentPath = await signedUrlForGetAwsS3Object(
       newMessage.mediaContentPath

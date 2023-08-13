@@ -809,6 +809,11 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
   messageBox.setAttribute("data-client-message-id", message.clientMessageId)
+  messageBox.setAttribute("data-sender-id", loginUser._id)
+  messageBox.setAttribute(
+    "data-sender-name",
+    loginUser.firstName + " " + loginUser.lastName
+  )
 
   if (
     !message.hasOwnProperty("isDeletedForAll") ||
@@ -1077,7 +1082,7 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
                 </div>
       </div>`
   )
-
+  messageBox.dataset.messageSeenStatusCount = "1"
   messageBox.classList.add("active-chat-user-message-box--right")
   return messageBox
 }
@@ -1088,7 +1093,6 @@ export function replaceClientUserMessageToServerMessage(
   isScrolledToBottom = false
 ) {
   increaseTotalReceivedMessagesCount()
-
   let messageBox = activeChatMessageContainer.querySelector(
     `.active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
   )
@@ -1107,11 +1111,15 @@ export function replaceClientUserMessageToServerMessage(
       (message.hasOwnProperty("isDeletedForAll") &&
         message.isDeletedForAll === false)
     ) {
-      messageBox.insertAdjacentHTML(
-        "beforeend",
-        `<div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+      let userMessageBoxBtn = messageBox.getElementsByClassName(
+        "active-chat-user-message-box__btn"
+      )[0]
+      if (!userMessageBoxBtn)
+        messageBox.insertAdjacentHTML(
+          "beforeend",
+          `<div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
       </div>`
-      )
+        )
 
       let messageContentBox = messageBox.getElementsByClassName(
         "active-chat-user-message-box__content-box"
@@ -1154,55 +1162,55 @@ export function replaceClientUserMessageToServerMessage(
       }
     }
 
-    let messageContentInfo = messageBox.getElementsByClassName(
-      "active-chat-user-message-box__content-info"
+    let messageContentStatusContainer = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-status-container"
     )[0]
-    messageContentInfo.innerHTML = ""
     if (message.sender._id.toString() === loginUser._id.toString()) {
       if (!messageBox.classList.contains("active-chat-user-message-box--right"))
         messageBox.classList.add("active-chat-user-message-box--right")
-      messageContentInfo.insertAdjacentHTML(
-        "beforeend",
-        `<div class="active-chat-user-message-box__content-status-container">
-               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
-                </div>
-               <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick ">${svg_messageTickIcon}
-               </div>
-      </div>`
-      )
-      let contentStatusContainer = messageContentInfo.getElementsByClassName(
-        "active-chat-user-message-box__content-status-container"
-      )[0]
+
       if (
-        message.hasOwnProperty("deliveryStatus") &&
-        message.deliveryStatus.isDelivered === true
+        messageContentStatusContainer.classList.contains(
+          "active-chat-user-message-box__content-status-container--pending"
+        )
       ) {
-        contentStatusContainer.className =
-          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
+        messageContentStatusContainer.innerHTML = `<div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
+         </div>
+         <div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick ">${svg_messageTickIcon}
+         </div>`
 
         if (
-          message.hasOwnProperty("seenStatus") &&
-          message.hasOwnProperty("reader")
+          message.hasOwnProperty("deliveryStatus") &&
+          message.deliveryStatus.isDelivered === true
         ) {
-          let svgs = [
-            ...messageBox.querySelectorAll(
-              ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+          messageContentStatusContainer.className =
+            "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
+
+          if (
+            message.hasOwnProperty("seenStatus") &&
+            message.hasOwnProperty("reader")
+          ) {
+            let svgs = [
+              ...messageBox.querySelectorAll(
+                ".active-chat-user-message-box__content-status-container--delivered .active-chat-user-message-box__content-status--tick svg"
+              )
+            ]
+            let color = generateColorForUserMessageStatus(
+              message.seenStatus.length - 1,
+              message.reader.length - 1
             )
-          ]
-          let color = generateColorForUserMessageStatus(
-            message.seenStatus.length - 1,
-            message.reader.length - 1
-          )
-          svgs.forEach(svg => {
-            svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
-            svg.style.strokeWidth = `1px`
-            svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
-          })
-          messageBox.dataset.messageSeenStatusCount = message.seenStatus.length
+            svgs.forEach(svg => {
+              svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
+              svg.style.strokeWidth = `1px`
+              svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
+            })
+            messageBox.dataset.messageSeenStatusCount =
+              message.seenStatus.length
+          }
+        } else {
+          messageContentStatusContainer.className =
+            "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
         }
-      } else {
-        contentStatusContainer.className =
-          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
       }
     }
     if (
@@ -1216,7 +1224,11 @@ export function replaceClientUserMessageToServerMessage(
   }
 }
 
-export function updateClientUserMessageStatus(clientMessageId, status) {
+export function updateClientUserMessageStatus(
+  clientMessageId,
+  status,
+  messageId = ""
+) {
   let messageBox = activeChatMessageContainer.querySelector(
     `.active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
   )
@@ -1233,6 +1245,19 @@ export function updateClientUserMessageStatus(clientMessageId, status) {
       </div>
       `
     } else if (status === "sent") {
+      if (messageId !== "")
+        messageBox.setAttribute("data-message-id", messageId)
+
+      let userMessageBoxBtn = messageBox.getElementsByClassName(
+        "active-chat-user-message-box__btn"
+      )[0]
+      if (!userMessageBoxBtn)
+        messageBox.insertAdjacentHTML(
+          "beforeend",
+          `<div class="active-chat-user-message-box__btn" data-message-box-btn="user">${svg_infoBlankBtn}
+        </div>`
+        )
+
       contentStatusContainer.className =
         "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--sent"
 
@@ -1241,6 +1266,76 @@ export function updateClientUserMessageStatus(clientMessageId, status) {
        <div class="active-chat-user-message-box__content-status
        active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick">${svg_messageTickIcon}
        </div>`
+    }
+  }
+}
+
+export function changeUserMessageStatusToDelivered(clientMessageId, messageId) {
+  let messageBox = activeChatMessageContainer.querySelector(
+    `.active-chat-user-message-box[data-message-id = "${messageId}"] , .active-chat-user-message-box[data-client-message-id = "${clientMessageId}"]`
+  )
+
+  if (messageBox) {
+    let contentStatusContainer = messageBox.getElementsByClassName(
+      "active-chat-user-message-box__content-status-container"
+    )[0]
+    if (
+      contentStatusContainer.classList.contains(
+        "active-chat-user-message-box__content-status-container--sent"
+      )
+    ) {
+      setInterval(() => {
+        contentStatusContainer.className =
+          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
+      }, 500)
+    } else if (
+      contentStatusContainer.classList.contains(
+        "active-chat-user-message-box__content-status-container--pending"
+      )
+    ) {
+      setInterval(() => {
+        contentStatusContainer.className =
+          "active-chat-user-message-box__content-status-container active-chat-user-message-box__content-status-container--delivered"
+
+        contentStatusContainer.innerHTML = `<div class="active-chat-user-message-box__content-status active-chat-user-message-box__content-status--tick">${svg_messageTickIcon}
+        </div>
+       <div class="active-chat-user-message-box__content-status
+       active-chat-user-message-box__content-status--tick active-chat-user-message-box__content-status--second-tick">${svg_messageTickIcon}
+       </div>`
+      }, 500)
+    }
+  }
+}
+
+export function changeUserMessageStatusWithMessageSeenStatusCount(
+  messageId,
+  messageSeenStatusCount,
+  messageReaderCount
+) {
+  let userMessageBox = document.querySelector(
+    `.active-chat-user-message-box[data-message-id="${messageId}"]`
+  )
+
+  if (userMessageBox) {
+    if (
+      messageSeenStatusCount > userMessageBox.dataset.messageSeenStatusCount
+    ) {
+      let svgs = [
+        ...userMessageBox.querySelectorAll(
+          ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
+        )
+      ]
+
+      let color = generateColorForUserMessageStatus(
+        messageSeenStatusCount - 1,
+        messageReaderCount - 1
+      )
+      svgs.forEach(svg => {
+        svg.style.fill = `rgba(${color.r}, ${color.g},${color.b},1)`
+        svg.style.strokeWidth = `1px`
+        svg.style.stroke = `rgba(${color.r}, ${color.g},${color.b},1)`
+      })
+      userMessageBox.dataset.messageSeenStatusCount = messageSeenStatusCount
     }
   }
 }
@@ -1415,62 +1510,12 @@ export function unSelectUserMessage(messageId) {
     userMessageBox.classList.remove("active-chat-user-message-box--selected")
 }
 
-export function changeUserMessageStatusToDelivered(messageId) {
-  setTimeout(() => {
-    let userMessageBox = document.querySelector(
-      `.active-chat-user-message-box[data-message-id="${messageId}"]`
-    )
-
-    if (userMessageBox) {
-      userMessageBox
-        .getElementsByClassName(
-          "active-chat-user-message-box__content-status-container"
-        )[0]
-        .classList.add(
-          "active-chat-user-message-box__content-status-container--delivered"
-        )
-    }
-  }, 500)
-}
-
-export function changeUserMessageStatusWithMessageSeenStatusCount(
-  messageId,
-  messageSeenStatusCount,
-  messageReaderCount
-) {
-  let userMessageBox = document.querySelector(
-    `.active-chat-user-message-box[data-message-id="${messageId}"]`
-  )
-
-  if (userMessageBox) {
-    if (
-      messageSeenStatusCount > userMessageBox.dataset.messageSeenStatusCount
-    ) {
-      let svgs = [
-        ...userMessageBox.querySelectorAll(
-          ".active-chat-user-message-box__content-status-container .active-chat-user-message-box__content-status svg"
-        )
-      ]
-
-      let color = generateColorForUserMessageStatus(
-        messageSeenStatusCount - 1,
-        messageReaderCount - 1
-      )
-      svgs.forEach(svg => {
-        svg.style.fill = `rgb(${color.r}, ${color.g},${color.b})`
-        svg.style.strokeWidth = `1px`
-        svg.style.stroke = `rgb(${color.r}, ${color.g},${color.b})`
-      })
-      userMessageBox.dataset.messageSeenStatusCount = messageSeenStatusCount
-    }
-  }
-}
 export function generateColorForUserMessageStatus(
   seenStatusCountExceptMe,
   readerCountExceptMe
 ) {
   let percent = seenStatusCountExceptMe / readerCountExceptMe
-  let firstColor = { r: 255, g: 255, b: 255 }
+  let firstColor = { r: 150, g: 150, b: 150 }
   let secondColor = { r: 236, g: 179, b: 101 }
 
   let resultColor
@@ -1503,7 +1548,7 @@ function createLinkPreview(linkPreviewData, isScrolledToBottom = false) {
   let linkPreview = document.createElement("div")
   linkPreview.classList.add("link-preview")
   linkPreview.innerHTML = ` 
-    <a href="#" class="link-preview__link">
+    <a href="#" class="link-preview__link" target="_blank" rel="noopener noreferrer">
         <h3 class='link-preview__title'>
         </h3>
       

@@ -534,9 +534,17 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
   closeReplyMessageBox()
   if (type === "media-content") {
   } else if (type === "youtube") {
-    document
-      .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
-      .classList.add("input-attachment-btn-box__input-box--hide")
+    let activeChatInputAttachmentYoutubeBtnInputBox = document.getElementById(
+      "activeChatInputAttachmentYoutubeBtnInputBox"
+    )
+    if (
+      !activeChatInputAttachmentYoutubeBtnInputBox.classList.contains(
+        "input-attachment-btn-box__input-box--hide"
+      )
+    )
+      activeChatInputAttachmentYoutubeBtnInputBox.classList.add(
+        "input-attachment-btn-box__input-box--hide"
+      )
   } else if (type === "text") {
     activeChatInputAttachmentBox.classList.remove(
       "active-chat-input-attachment-box--hide"
