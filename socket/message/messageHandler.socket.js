@@ -274,14 +274,132 @@ exports.messageHandler = async (io, socket) => {
                   newMessageData.hasMediaContent = true
                   newMessageData.mediaContentType = userMessage.mediaContentType
                   newMessageData.mediaContentMimeType =
-                    userMessage.mediaContentMimeType
+                    userMessage.mediaContentMimeType || ""
                   newMessageData.mediaContentPath = userMessage.mediaContentPath
 
                   if (
                     userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
                     userMessage.hasDirectMediaContentPath === true
-                  )
+                  ) {
                     newMessageData.hasDirectMediaContentPath = true
+                    if (userMessage.mediaContentType === "video-clip") {
+                      if (userMessage.hasOwnProperty("mediaVideoClipSpecs")) {
+                        newMessageData.mediaVideoClipSpecs = {
+                          width: userMessage.mediaVideoClipSpecs.width || "",
+                          height: userMessage.mediaVideoClipSpecs.height || "",
+                          mediaQuality: {
+                            hasLow:
+                              userMessage.mediaVideoClipSpecs.mediaQuality
+                                .hasLow || false,
+                            low: {
+                              width:
+                                userMessage.mediaVideoClipSpecs.mediaQuality.low
+                                  .width || "",
+                              height:
+                                userMessage.mediaVideoClipSpecs.mediaQuality.low
+                                  .height || "",
+                              url:
+                                userMessage.mediaVideoClipSpecs.mediaQuality.low
+                                  .url || ""
+                            },
+                            hasMedium:
+                              userMessage.mediaVideoClipSpecs.mediaQuality
+                                .hasMedium || false,
+                            medium: {
+                              width:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .medium.width || "",
+                              height:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .medium.height || "",
+                              url:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .medium.url || ""
+                            },
+                            hasHigh:
+                              userMessage.mediaVideoClipSpecs.mediaQuality
+                                .hasHigh || false,
+                            high: {
+                              width:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .high.width || "",
+                              height:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .high.height || "",
+                              url:
+                                userMessage.mediaVideoClipSpecs.mediaQuality
+                                  .high.url || ""
+                            }
+                          },
+
+                          hasPreview:
+                            userMessage.mediaVideoClipSpecs.hasPreview || false,
+                          preview: {
+                            width:
+                              userMessage.mediaVideoClipSpecs.preview.width ||
+                              "",
+                            height:
+                              userMessage.mediaVideoClipSpecs.preview.height ||
+                              "",
+                            hasMp4:
+                              userMessage.mediaVideoClipSpecs.preview.hasMp4 ||
+                              false,
+                            mp4:
+                              userMessage.mediaVideoClipSpecs.preview.mp4 || "",
+                            hasWebp:
+                              userMessage.mediaVideoClipSpecs.preview.hasWebp ||
+                              false,
+                            webp:
+                              userMessage.mediaVideoClipSpecs.preview.webp ||
+                              "",
+                            hasGif:
+                              userMessage.mediaVideoClipSpecs.preview.hasGif ||
+                              false,
+                            gif:
+                              userMessage.mediaVideoClipSpecs.preview.gif || ""
+                          }
+                        }
+                      }
+                    } else if (userMessage.mediaContentType === "sticker") {
+                      if (userMessage.hasOwnProperty("mediaStickerSpecs")) {
+                        newMessageData.mediaStickerSpecs = {
+                          width: userMessage.mediaStickerSpecs.width || "",
+                          height: userMessage.mediaStickerSpecs.height || "",
+                          hasMp4: userMessage.mediaStickerSpecs.hasMp4 || false,
+                          mp4: userMessage.mediaStickerSpecs.mp4 || "",
+                          hasWebp:
+                            userMessage.mediaStickerSpecs.hasWebp || false,
+                          webp: userMessage.mediaStickerSpecs.webp || "",
+                          hasGif: userMessage.mediaStickerSpecs.hasGif || false,
+                          gif: userMessage.mediaStickerSpecs.gif || "",
+
+                          hasPreview:
+                            userMessage.mediaStickerSpecs.hasPreview || false,
+                          preview: {
+                            width:
+                              userMessage.mediaStickerSpecs.preview.width || "",
+                            height:
+                              userMessage.mediaStickerSpecs.preview.height ||
+                              "",
+                            hasMp4:
+                              userMessage.mediaStickerSpecs.preview.hasMp4 ||
+                              false,
+                            mp4:
+                              userMessage.mediaStickerSpecs.preview.mp4 || "",
+                            hasWebp:
+                              userMessage.mediaStickerSpecs.preview.hasWebp ||
+                              false,
+                            webp:
+                              userMessage.mediaStickerSpecs.preview.webp || "",
+                            hasGif:
+                              userMessage.mediaStickerSpecs.preview.hasGif ||
+                              false,
+                            gif: userMessage.mediaStickerSpecs.preview.gif || ""
+                          }
+                        }
+                      }
+                    }
+                  }
                 } else {
                   if (
                     userMessage.hasOwnProperty("hasMediaContent") &&
@@ -460,6 +578,7 @@ exports.messageHandler = async (io, socket) => {
         })
       }
     })
+
     socket.on("message:create-user-text-message", async data => {
       const { userMessage } = data
       let clientMessageId = ""

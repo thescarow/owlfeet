@@ -149,7 +149,7 @@ export async function createMessageSocket(socket) {
         let { checkTimeAndCreateNewMessage } = await import(
           "../../../chat/js/message.dev"
         )
-        checkTimeAndCreateNewMessage(message, true)
+        checkTimeAndCreateNewMessage(message, true, true, false)
       }
     })
     ////////////////////////////////////////////

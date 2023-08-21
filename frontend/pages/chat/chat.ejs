@@ -93,49 +93,66 @@
                                                             chat.latestMessage.hasMediaContent===true) { -%>
 
                                                             <% if(chat.latestMessage.mediaContentType==="video" ){-%>
-                                                                <%- include("../partials/icons/videoIcon.svg")-%>
+                                                                <%-
+                                                                    include("../partials/icons/chat/mediaVideoIcon.svg")-%>
                                                                     Video
                                                                     <% } -%>
 
                                                                         <% if(chat.latestMessage.mediaContentType==="image"
                                                                             ){-%>
                                                                             <%-
-                                                                                include("../partials/icons/imageIcon.svg")-%>
+                                                                                include("../partials/icons/chat/mediaImageIcon.svg")-%>
                                                                                 Image
                                                                                 <% } -%>
 
                                                                                     <% if(chat.latestMessage.mediaContentType==="audio"
                                                                                         ){-%>
                                                                                         <%-
-                                                                                            include("../partials/icons/audioIcon.svg")-%>
+                                                                                            include("../partials/icons/chat/mediaAudioIcon.svg")-%>
                                                                                             Audio
                                                                                             <% } -%>
 
                                                                                                 <% if(chat.latestMessage.mediaContentType==="youtube"
                                                                                                     ){-%>
                                                                                                     <%-
-                                                                                                        include("../partials/icons/youtubeIcon.svg")-%>
+                                                                                                        include("../partials/icons/chat/mediaYoutubeIcon.svg")-%>
                                                                                                         Youtube
                                                                                                         <% } -%>
-
-
-
-
-
-                                                                                                            <% }else {
-                                                                                                                _%>
-                                                                                                                <% if(chat.latestMessage.hasOwnProperty("textContent"))
-                                                                                                                    {-%>
-                                                                                                                    <%= chat.latestMessage.textContent
-                                                                                                                        _%>
-                                                                                                                        <% }
-                                                                                                                            _%>
-
-                                                                                                                            <%}
-                                                                                                                                _%>
-
+                                                                                                            <% if(chat.latestMessage.mediaContentType==="video-clip"
+                                                                                                                ){-%>
+                                                                                                                <%-
+                                                                                                                    include("../partials/icons/chat/mediaVideoClipIcon.svg")-%>
+                                                                                                                    Video
+                                                                                                                    clip
+                                                                                                                    <% }
+                                                                                                                        -%>
+                                                                                                                        <% if(chat.latestMessage.mediaContentType==="sticker"
+                                                                                                                            ){-%>
+                                                                                                                            <%-
+                                                                                                                                include("../partials/icons/chat/mediaStickerIcon.svg")-%>
+                                                                                                                                Sticker
                                                                                                                                 <% }
-                                                                                                                                    _%>
+                                                                                                                                    -%>
+
+
+
+
+
+                                                                                                                                    <% }else
+                                                                                                                                        {
+                                                                                                                                        _%>
+                                                                                                                                        <% if(chat.latestMessage.hasOwnProperty("textContent"))
+                                                                                                                                            {-%>
+                                                                                                                                            <%= chat.latestMessage.textContent
+                                                                                                                                                _%>
+                                                                                                                                                <% }
+                                                                                                                                                    _%>
+
+                                                                                                                                                    <%}
+                                                                                                                                                        _%>
+
+                                                                                                                                                        <% }
+                                                                                                                                                            _%>
                                         </div>
                                         <% } %>
                                             <% } else { _%>
@@ -240,6 +257,9 @@
 
 
                 <div class="active-chat-input-main">
+                    <div class="active-chat-input-gif-btn" id="activeChatInputGifBtn">
+                        <%- include('../partials/icons/chat/gifInputIcon.svg') -%>
+                    </div>
                     <div class="active-chat-input-attachment-box-btn" id="activeChatInputAttachmentBoxBtn">
                         <%- include('../partials/icons/addAttachmentBlankIcon.svg') -%>
                     </div>
@@ -306,11 +326,14 @@
 
         </div>
 
-        <div class="active-chat-emoji-container  active-chat-emoji-container--hide"
+        <div class="active-chat-emoji-container hide"
             data-note="insert-it-above-input-textarea-as-a-sibling-so-that-it-will-move-with-text-box"
             id="activeChatEmojiContainer">
+            <div class="active-chat-emoji-box" id="activeChatEmojiBox">
+            </div>
         </div>
 
+        <div class="active-chat-gif-container hide" id="activeChatGifContainer"></div>
 
         <div class="active-chat-inner-modal hide" id="activeChatInnerModal">
             <div class="active-chat-inner-modal__close-btn" id="activeChatInnerModalCloseBtn">X</div>

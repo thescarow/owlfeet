@@ -57,7 +57,9 @@ import { v4 as uuidv4 } from "uuid"
           activeChatInputAttachmentBox.classList.remove(
             "active-chat-input-attachment-box--hide"
           )
+          showActiveChatMediaBtn()
         } else {
+          hideActiveChatMediaBtn()
           if (
             !activeChatInputAttachmentBox.classList.contains(
               "active-chat-input-attachment-box--hide"
@@ -93,9 +95,10 @@ import { v4 as uuidv4 } from "uuid"
     const activeChatEmojiContainer = document.getElementById(
       "activeChatEmojiContainer"
     )
+    const activeChatEmojiBox = document.getElementById("activeChatEmojiBox")
 
     let emojiPickerOptions = {
-      parent: activeChatEmojiContainer,
+      parent: activeChatEmojiBox,
       data: async () => {
         const data = await import("@emoji-mart/data")
         return data
@@ -128,12 +131,20 @@ import { v4 as uuidv4 } from "uuid"
 
     let emojiPicker = new Picker(emojiPickerOptions)
 
-    activeChatInputEmojiBtn.addEventListener("click", () => {
-      activeChatEmojiContainer.classList.toggle(
-        "active-chat-emoji-container--hide"
-      )
+    activeChatInputEmojiBtn.addEventListener("click", async () => {
+      if (activeChatEmojiContainer.classList.contains("hide")) {
+        activeChatEmojiContainer.classList.remove("hide")
+        //  emojiPicker = new Picker(emojiPickerOptions)
+      } else {
+        activeChatEmojiContainer.classList.add("hide")
+      }
     })
-
+    window.addEventListener("click", e => {
+      if (e.target === activeChatEmojiContainer) {
+        if (!activeChatEmojiContainer.classList.contains("hide"))
+          activeChatEmojiContainer.classList.add("hide")
+      }
+    })
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ///////////////////////////////////////////////////////////// /////////////////////////////////////////////////////
@@ -427,27 +438,24 @@ import { v4 as uuidv4 } from "uuid"
         sendTextMessage()
       } else if (event.key === "Enter" && event.shiftKey) {
         // Simulate the press of the enter key
-        var enterKeyEvent = new KeyboardEvent("keydown", {
-          key: "Enter",
-          keyCode: 13,
-          code: "Enter",
-          which: 13,
-          keyCodeVal: 13,
-          bubbles: true
-        })
-
-        this.dispatchEvent(enterKeyEvent)
+        // let enterKeyEvent = new KeyboardEvent("keydown", {
+        //   key: "Enter",
+        //   keyCode: 13,
+        //   code: "Enter",
+        //   which: 13,
+        //   keyCodeVal: 13,
+        //   bubbles: true
+        // })
+        // this.dispatchEvent(enterKeyEvent)
         // // Insert a new line in the input field
         // const inputText = activeChatInputTextContent.value
         // const selectionStart = activeChatInputTextContent.selectionStart
         // const selectionEnd = activeChatInputTextContent.selectionEnd
-
         // // Insert a new line at the current cursor position
         // const newText =
         //   inputText.substring(0, selectionStart) +
         //   "\n" +
         //   inputText.substring(selectionEnd)
-
         // // Update the input field value and cursor position
         // activeChatInputTextContent.value = newText
         // activeChatInputTextContent.selectionStart = selectionStart + 1
@@ -481,9 +489,32 @@ import { v4 as uuidv4 } from "uuid"
       }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // active-chat-input-gif-btn
+    const activeChatInputGifBtn = document.getElementById(
+      "activeChatInputGifBtn"
+    )
+    const activeChatGifContainer = document.getElementById(
+      "activeChatGifContainer"
+    )
+    activeChatInputGifBtn.addEventListener("click", async () => {
+      let { createActiveChatGifModal } = await import(
+        "./js/createActiveChatGifModal.dev"
+      )
+      if (activeChatGifContainer.classList.contains("hide")) {
+        activeChatGifContainer.classList.remove("hide")
+        createActiveChatGifModal()
+      } else {
+        activeChatGifContainer.classList.add("hide")
+      }
+    })
+    window.addEventListener("click", e => {
+      if (e.target === activeChatGifContainer) {
+        if (!activeChatGifContainer.classList.contains("hide"))
+          activeChatGifContainer.classList.add("hide")
+      }
+    })
 
     // active-chat-input-attachment-box
-
     const activeChatInputAttachmentBoxBtn = document.getElementById(
       "activeChatInputAttachmentBoxBtn"
     )
@@ -494,8 +525,12 @@ import { v4 as uuidv4 } from "uuid"
           "active-chat-input-attachment-box-btn--selected"
         )
       ) {
+        if (activeChatInputGifBtn.classList.contains("hide"))
+          activeChatInputGifBtn.classList.remove("hide")
         openActiveChatInputBox()
       } else {
+        if (!activeChatInputGifBtn.classList.contains("hide"))
+          activeChatInputGifBtn.classList.add("hide")
         openActivechatInputAttachmentBox()
       }
     })
@@ -517,6 +552,215 @@ import { v4 as uuidv4 } from "uuid"
     IS_INIT_CHAT_MODULE = true
   }
 })()
+export function sendGifMessage(gif) {
+  console.log("called gif function")
+  let userMessage = {}
+  if (activeChatInputContainer.dataset.repliedTo !== "") {
+    userMessage.isRepliedMessage = true
+    userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
+  } else {
+    userMessage.isRepliedMessage = false
+  }
+
+  userMessage.chat = activeChatSection.dataset.chatId
+  userMessage.hasMediaContent = true
+  userMessage.hasDirectMediaContentPath = true
+
+  if (gif.type === "video") {
+    userMessage.mediaContentType = "video-clip"
+    userMessage.mediaContentPath = ""
+    // userMessage.mediaContentMimeType = ""
+    userMessage.mediaVideoClipSpecs = {
+      width: "",
+      height: "",
+      mediaQuality: {
+        hasLow: false,
+        low: {
+          width: "",
+          height: "",
+          url: ""
+        },
+        hasMedium: false,
+        medium: {
+          width: "",
+          height: "",
+          url: ""
+        },
+        hasHigh: false,
+        high: {
+          width: "",
+          height: "",
+          url: ""
+        }
+      },
+      hasPreview: false,
+      preview: {
+        width: "",
+        height: "",
+        hasMp4: false,
+        mp4: "",
+        hasWebp: false,
+        webp: "",
+        hasGif: false,
+        gif: ""
+      }
+    }
+
+    if (gif.video.assets.hasOwnProperty("360p")) {
+      userMessage.mediaVideoClipSpecs.mediaQuality.hasLow = true
+      userMessage.mediaVideoClipSpecs.mediaQuality.low.width =
+        gif.video.assets["360p"].width
+      userMessage.mediaVideoClipSpecs.mediaQuality.low.height =
+        gif.video.assets["360p"].height
+      userMessage.mediaVideoClipSpecs.mediaQuality.low.url =
+        gif.video.assets["360p"].url
+      //
+      userMessage.mediaContentPath = gif.video.assets["360p"].url
+      userMessage.mediaVideoClipSpecs.width = gif.video.assets["360p"].width
+      userMessage.mediaVideoClipSpecs.height = gif.video.assets["360p"].height
+    }
+    if (gif.video.assets.hasOwnProperty("480p")) {
+      userMessage.mediaVideoClipSpecs.mediaQuality.hasMedium = true
+      userMessage.mediaVideoClipSpecs.mediaQuality.medium.width =
+        gif.video.assets["480p"].width
+      userMessage.mediaVideoClipSpecs.mediaQuality.medium.height =
+        gif.video.assets["480p"].height
+      userMessage.mediaVideoClipSpecs.mediaQuality.medium.url =
+        gif.video.assets["480p"].url
+      //
+      userMessage.mediaContentPath = gif.video.assets["480p"].url
+      userMessage.mediaVideoClipSpecs.width = gif.video.assets["480p"].width
+      userMessage.mediaVideoClipSpecs.height = gif.video.assets["480p"].height
+    }
+    if (gif.video.assets.hasOwnProperty("720p")) {
+      userMessage.mediaVideoClipSpecs.mediaQuality.hasHigh = true
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.width =
+        gif.video.assets["720p"].width
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.height =
+        gif.video.assets["720p"].height
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.url =
+        gif.video.assets["720p"].url
+      //
+      userMessage.mediaContentPath = gif.video.assets["720p"].url
+      userMessage.mediaVideoClipSpecs.width = gif.video.assets["720p"].width
+      userMessage.mediaVideoClipSpecs.height = gif.video.assets["720p"].height
+    } else if (gif.video.assets.hasOwnProperty("1080p")) {
+      userMessage.mediaVideoClipSpecs.mediaQuality.hasHigh = true
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.width =
+        gif.video.assets["1080p"].width
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.height =
+        gif.video.assets["1080p"].height
+      userMessage.mediaVideoClipSpecs.mediaQuality.high.url =
+        gif.video.assets["1080p"].url
+      //
+      userMessage.mediaContentPath = gif.video.assets["1080p"].url
+      userMessage.mediaVideoClipSpecs.width = gif.video.assets["1080p"].width
+      userMessage.mediaVideoClipSpecs.height = gif.video.assets["1080p"].height
+    }
+
+    if (
+      gif.video.hasOwnProperty("previews") &&
+      gif.video.previews.hasOwnProperty("fixed_height")
+    ) {
+      userMessage.mediaVideoClipSpecs.hasPreview = true
+
+      userMessage.mediaVideoClipSpecs.preview.width =
+        gif.video.previews["fixed_height"].width
+      userMessage.mediaVideoClipSpecs.preview.height =
+        gif.video.previews["fixed_height"].height
+      if (gif.video.previews["fixed_height"].hasOwnProperty("mp4")) {
+        userMessage.mediaVideoClipSpecs.preview.hasMp4 = true
+        userMessage.mediaVideoClipSpecs.preview.mp4 =
+          gif.video.previews["fixed_height"].mp4
+      }
+      if (gif.video.previews["fixed_height"].hasOwnProperty("webp")) {
+        userMessage.mediaVideoClipSpecs.preview.hasWebp = true
+        userMessage.mediaVideoClipSpecs.preview.webp =
+          gif.video.previews["fixed_height"].webp
+      }
+      if (gif.video.previews["fixed_height"].hasOwnProperty("url")) {
+        userMessage.mediaVideoClipSpecs.preview.hasGif = true
+        userMessage.mediaVideoClipSpecs.preview.gif =
+          gif.video.previews["fixed_height"].url
+      }
+    }
+  } else if (
+    gif.type === "sticker" ||
+    gif.type === "gif" ||
+    gif.type === "emoji" ||
+    gif.type === "text"
+  ) {
+    userMessage.mediaContentType = "sticker"
+    // userMessage.mediaContentMimeType = ""
+    userMessage.mediaContentPath = ""
+    userMessage.mediaStickerSpecs = {
+      width: "",
+      height: "",
+      hasMp4: false,
+      mp4: "",
+      hasWebp: false,
+      webp: "",
+      hasGif: false,
+      gif: "",
+
+      hasPreview: false,
+      preview: {
+        width: "",
+        height: "",
+        hasMp4: false,
+        mp4: "",
+        hasWebp: false,
+        webp: "",
+        hasGif: false,
+        gif: ""
+      }
+    }
+
+    userMessage.mediaStickerSpecs.width = gif.images.original.width
+    userMessage.mediaStickerSpecs.height = gif.images.original.height
+    if (gif.images.original.hasOwnProperty("mp4")) {
+      userMessage.mediaContentPath = gif.images.original.mp4
+      userMessage.mediaStickerSpecs.hasMp4 = true
+      userMessage.mediaStickerSpecs.mp4 = gif.images.original.mp4
+    }
+    if (gif.images.original.hasOwnProperty("url")) {
+      userMessage.mediaContentPath = gif.images.original.url
+      userMessage.mediaStickerSpecs.hasGif = true
+      userMessage.mediaStickerSpecs.gif = gif.images.original.url
+    }
+    if (gif.images.original.hasOwnProperty("webp")) {
+      userMessage.mediaContentPath = gif.images.original.webp
+      userMessage.mediaStickerSpecs.hasWebp = true
+      userMessage.mediaStickerSpecs.webp = gif.images.original.webp
+    }
+
+    if (gif.images.hasOwnProperty("fixed_height")) {
+      userMessage.mediaStickerSpecs.hasPreview = true
+      userMessage.mediaStickerSpecs.preview.width =
+        gif.images["fixed_height"].width
+      userMessage.mediaStickerSpecs.preview.height =
+        gif.images["fixed_height"].height
+
+      if (gif.images["fixed_height"].hasOwnProperty("mp4")) {
+        userMessage.mediaStickerSpecs.preview.hasMp4 = true
+        userMessage.mediaStickerSpecs.preview.mp4 =
+          gif.images["fixed_height"].mp4
+      }
+      if (gif.images["fixed_height"].hasOwnProperty("webp")) {
+        userMessage.mediaStickerSpecs.preview.hasWebp = true
+        userMessage.mediaStickerSpecs.preview.webp =
+          gif.images["fixed_height"].webp
+      }
+      if (gif.images["fixed_height"].hasOwnProperty("url")) {
+        userMessage.mediaStickerSpecs.preview.hasGif = true
+        userMessage.mediaStickerSpecs.preview.gif =
+          gif.images["fixed_height"].url
+      }
+    }
+  }
+
+  sendAndCreateClientUserMessage(userMessage, "gif")
+}
 
 async function sendAndCreateClientUserMessage(userMessage, type) {
   let { sendCreateUserMessageSocket } = await import(
@@ -528,7 +772,7 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
 
   userMessage.clientMessageId = uuidv4()
 
-  checkTimeAndCreateNewClientUserMessage(userMessage, true)
+  checkTimeAndCreateNewClientUserMessage(userMessage, false, true)
 
   let { closeReplyMessageBox } = await import("./js/replyMessageBox.dev")
   closeReplyMessageBox()
@@ -546,6 +790,7 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
         "input-attachment-btn-box__input-box--hide"
       )
   } else if (type === "text") {
+    showActiveChatMediaBtn()
     activeChatInputAttachmentBox.classList.remove(
       "active-chat-input-attachment-box--hide"
     )
@@ -560,6 +805,12 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
     }
     activeChatMessageContainer.scrollTop =
       activeChatMessageContainer.scrollHeight
+  } else if (type === "gif") {
+    let activeChatGifContainer = document.getElementById(
+      "activeChatGifContainer"
+    )
+    if (!activeChatGifContainer.classList.contains("hide"))
+      activeChatGifContainer.classList.add("hide")
   }
   sendCreateUserMessageSocket(userMessage)
 }
@@ -841,4 +1092,24 @@ function openNewTab(url) {
 
   // simulate a click on the link to open the new tab
   link.click()
+}
+function hideActiveChatMediaBtn() {
+  let activeChatInputGifBtn = document.getElementById("activeChatInputGifBtn")
+  let activeChatInputAttachmentBoxBtn = document.getElementById(
+    "activeChatInputAttachmentBoxBtn"
+  )
+  if (!activeChatInputGifBtn.classList.contains("hide"))
+    activeChatInputGifBtn.classList.add("hide")
+  if (!activeChatInputAttachmentBoxBtn.classList.contains("hide"))
+    activeChatInputAttachmentBoxBtn.classList.add("hide")
+}
+function showActiveChatMediaBtn() {
+  let activeChatInputGifBtn = document.getElementById("activeChatInputGifBtn")
+  let activeChatInputAttachmentBoxBtn = document.getElementById(
+    "activeChatInputAttachmentBoxBtn"
+  )
+  if (activeChatInputGifBtn.classList.contains("hide"))
+    activeChatInputGifBtn.classList.remove("hide")
+  if (activeChatInputAttachmentBoxBtn.classList.contains("hide"))
+    activeChatInputAttachmentBoxBtn.classList.remove("hide")
 }
