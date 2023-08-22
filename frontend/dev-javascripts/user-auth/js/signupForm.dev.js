@@ -9,69 +9,156 @@ import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
 import Webcam from "@uppy/webcam"
 import ImageEditor from "@uppy/image-editor"
-import AwsS3Multipart from "@uppy/aws-s3-multipart"
-import "@uppy/core/dist/style.css"
-import "@uppy/dashboard/dist/style.css"
-import "@uppy/webcam/dist/style.css"
-import "@uppy/image-editor/dist/style.css"
+import RemoteSources from "@uppy/remote-sources"
+import { COMPANION_URL, COMPANION_ALLOWED_HOSTS } from "@uppy/transloadit"
+import Transloadit from "@uppy/transloadit"
+
+import "@uppy/core/dist/style.min.css"
+import "@uppy/dashboard/dist/style.min.css"
+import "@uppy/webcam/dist/style.min.css"
+import "@uppy/image-editor/dist/style.min.css"
 
 ////////////////////////////////////////////////////////////////
-
 const uppy = new Uppy({
-  id: "signupProfile",
+  id: "SIGNUP_PROFILE",
   autoProceed: false,
   allowMultipleUploadBatches: false,
-  debug: false,
+
   onBeforeFileAdded: (currentFile, files) => {
-    currentFile.name = signupProfile.dataset.profileKey
-    return currentFile
+    if (!currentFile.type) {
+      uppy.log(`Skipping file because it has no type`)
+      uppy.info(`Skipping file because it has no type`, "error", 500)
+      return false
+    } else {
+      const modifiedFile = {
+        ...currentFile,
+        name: `${Date.now()}`
+      }
+      return modifiedFile
+    }
   },
+  // onBeforeUpload: files => {
+  //   // We’ll be careful to return a new object, not mutating the original `files`
+  //   const updatedFiles = {}
+  //   Object.keys(files).forEach(fileID => {
+  //     updatedFiles[fileID] = {
+  //       ...files[fileID],
+  //       name: `${myCustomPrefix}__${files[fileID].name}`
+  //     }
+  //   })
+  //   return updatedFiles
+  // },
   restrictions: {
-    maxFileSize: 1024 * 1024 * 10,
+    maxFileSize: 1024 * 1024 * 5 * 1,
+    minFileSize: null,
+    maxTotalFileSize: 1024 * 1024 * 5 * 1,
     maxNumberOfFiles: 1,
-    allowedFileTypes: ["image/jpg", "image/jpeg", "image/png", "image/gif"]
+    minNumberOfFiles: 1,
+    allowedFileTypes: [".jpg", ".jpeg", ".png", ".gif", ".svg"]
   },
-  meta: { mediaType: "user-profile-picture" },
-  infoTimeout: 5000
+
+  infoTimeout: 5000,
+  locale: {
+    strings: {
+      companionError: "first connect to provider"
+    }
+  }
 })
   .use(Dashboard, {
     trigger: "#signupProfile",
     target: "body",
     inline: false,
-    // plugins: ['Webcam'],
-    thumbnailWidth: 300,
-    proudlyDisplayPoweredByUppy: false,
+
+    waitForThumbnailsBeforeUpload: false,
+    showSelectedFiles: true,
+    showRemoveButtonAfterComplete: false,
+    singleFileFullScreen: true,
     closeModalOnClickOutside: true,
+    closeAfterFinish: false,
+    animateOpenClose: true,
+
+    autoOpenFileEditor: false,
+    disablePageScrollWhenModalOpen: true,
+    proudlyDisplayPoweredByUppy: false,
     theme: "dark",
     locale: {
       strings: {
-        dropPasteImportFiles: "Upload here or Drop file here 👇"
+        dropPasteImportFiles: ""
       }
-    },
-    note: "Upload your profile, file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
+    }
+    // note: "file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
   })
   .use(Webcam, {
     target: Dashboard,
-    mirror: true,
+    countdown: false,
     modes: ["picture"],
-    showRecordingLength: true
+    mirror: true,
+    videoConstraints: {},
+    showVideoSourceDropdown: false,
+    showRecordingLength: false,
+    preferredImageMimeType: "image/jpeg",
+    preferredVideoMimeType: null
   })
-  .use(ImageEditor, {
+  .use(ImageEditor, { target: Dashboard })
+  .use(RemoteSources, {
     target: Dashboard,
-    quality: 0.8
+    sources: [
+      "Unsplash",
+      "Instagram",
+      "Facebook",
+      "GoogleDrive",
+      "OneDrive",
+      "Dropbox",
+      "Box",
+      "Url",
+      "Zoom"
+    ],
+    companionUrl: COMPANION_URL,
+    companionAllowedHosts: COMPANION_ALLOWED_HOSTS
   })
-  .use(AwsS3Multipart, {
-    limit: 4,
-    companionUrl: `${location.origin}/companion`
+  // .use(Unsplash, {
+  //   target: Dashboard,
+  //   companionUrl: COMPANION_URL,
+  //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+  // })
+  // .use(Instagram, {
+  //   target: Dashboard,
+  //   companionUrl: COMPANION_URL,
+  //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+  // })
+  .use(Transloadit, {
+    waitForEncoding: true,
+    waitForMetadata: true,
+    // alwaysRunAssembly: false,
+    // limit: 20
+    assemblyOptions: {
+      params: {
+        auth: {
+          key: "6811ee5b698f4aa0b05a0a65755841c0"
+        },
+        template_id: "0bedb1fefa9b4a8ba36f61fc541b618d"
+      },
+      fields: {
+        mediaFolder: "user-profile-picture"
+      }
+      // signature: "generated-signature"
+      // notify_url: "https://example.com/transloadit_pingback"
+    }
   })
+uppy.on("transloadit:complete", assembly => {
+  let file = assembly.uploads[0]
+  let mediaFolder = assembly.fields.mediaFolder
+  let fileKey =
+    mediaFolder + "/" + file.type + "/" + file.id + "-" + file.basename
+  let fileTempUrl = file.tus_upload_url
 
-uppy.on("complete", result => {
   const image = document.createElement("img")
-  image.src = result.successful[0].preview
+  image.src = fileTempUrl
   signupProfile.innerHTML = ""
   signupProfile.appendChild(image)
-  signupProfile.dataset.profileKey = result.successful[0].s3Multipart.key
+  signupProfile.dataset.profileKey = fileKey
 })
+
 /////////////////////////////////////////////////////
 
 const signupFormPage1 = document.getElementById("signupFormPage1")

@@ -11,21 +11,17 @@ const dns = require("node:dns")
 const User = require("../../models/user")
 const Message = require("../../models/message")
 const Chat = require("../../models/chat")
+const TransloaditUserMediaMessageEntry = require("../../models/transloaditUserMediaMessageEntry")
 //////////////////////
+
+const {
+  sendMessageToOtherMembersAndUpdateMessageStatusForSender
+} = require("../../controllers/message/common/sendMessageAndUpdateMessageStatus")
 const {
   deleteAwsS3Object,
   signedUrlForGetAwsS3Object
 } = require("../../services/awsS3")
-///////
-const {
-  selectSafeMessageField,
-  selectRepliedToMessageField,
-  filterMessageFieldForDeletedForAll
-} = require("../../common/filter-field/filterMessageField")
 
-const {
-  selectChatFieldForChatBox
-} = require("../../common/filter-field/filterChatField")
 const { checkInFollowing } = require("../../common/checkUserFollowStatus")
 
 exports.messageHandler = async (io, socket) => {
@@ -190,27 +186,47 @@ exports.messageHandler = async (io, socket) => {
     socket.on("message:create-user-message", async data => {
       const { userMessage } = data
       let clientMessageId = ""
+      let messageChatId = userMessage.chat
       if (
         userMessage.hasOwnProperty("clientMessageId") &&
         userMessage.clientMessageId !== ""
       ) {
         clientMessageId = userMessage.clientMessageId
       } else {
+        if (
+          userMessage.hasOwnProperty("hasMediaContent") &&
+          userMessage.hasMediaContent &&
+          (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+            (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+              userMessage.hasDirectMediaContentPath === false))
+        ) {
+          await deleteAwsS3Object(userMessage.mediaContentPath)
+        }
         return socket.emit("message:create-user-message-res", {
           isSuccess: false,
-          error: "Please send client message id.",
-          clientMessageId: clientMessageId
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Please send client message id."
         })
       }
-
+      // for testing
+      // return socket.emit("message:create-user-message-res", {
+      //   isSuccess: false,
+      //   clientMessageId: clientMessageId,
+      //   chatId: messageChatId,
+      //   error: "Please send client message id."
+      // })
       try {
         if (socket.loginUser) {
           const newMessageData = {}
 
-          if (userMessage.chat) {
+          if (userMessage.hasOwnProperty("chat") && userMessage.chat !== "") {
             let messageChat = await Chat.findOne({
               _id: userMessage.chat,
-              currentChatMembers: { $elemMatch: { $eq: socket.loginUser.id } }
+              currentChatMembers: {
+                $elemMatch: { $eq: socket.loginUser.id }
+              },
+              isDeleted: false
             })
               .select({ isGroupChat: 1, currentChatMembers: 1 })
               .lean()
@@ -218,15 +234,27 @@ exports.messageHandler = async (io, socket) => {
             if (messageChat) {
               if (!messageChat.isGroupChat) {
                 let otherUserId = messageChat.currentChatMembers.find(
-                  userId => userId.toString() != socket.loginUser.id.toString()
+                  userId => userId.toString() !== socket.loginUser.id.toString()
                 )
 
                 if (!checkInFollowing(socket.loginUser.id, otherUserId)) {
+                  if (
+                    userMessage.hasOwnProperty("hasMediaContent") &&
+                    userMessage.hasMediaContent &&
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
+                  ) {
+                    await deleteAwsS3Object(userMessage.mediaContentPath)
+                  }
                   return socket.emit("message:create-user-message-res", {
                     isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
                     error:
-                      "You are not allowed to send message to this chat, First follow him/her",
-                    clientMessageId: clientMessageId
+                      "You are not allowed to send message to this chat, First follow him/her"
                   })
                 }
               }
@@ -248,23 +276,258 @@ exports.messageHandler = async (io, socket) => {
                   newMessageData.mediaContentMimeType =
                     userMessage.mediaContentMimeType
                   newMessageData.mediaContentPath = userMessage.mediaContentPath
+
+                  if (
+                    userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                    userMessage.hasDirectMediaContentPath === true
+                  )
+                    newMessageData.hasDirectMediaContentPath = true
                 } else {
+                  if (
+                    userMessage.hasOwnProperty("hasMediaContent") &&
+                    userMessage.hasMediaContent &&
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
+                  ) {
+                    await deleteAwsS3Object(userMessage.mediaContentPath)
+                  }
                   return socket.emit("message:create-user-message-res", {
                     isSuccess: false,
-                    error: "Send all the required fields with request",
-                    clientMessageId: clientMessageId
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "Send all the required fields with request."
                   })
                 }
               } else {
-                if (userMessage.hasOwnProperty("textContent")) {
+                if (
+                  userMessage.hasOwnProperty("textContent") &&
+                  userMessage.textContent !== ""
+                ) {
                   newMessageData.textContent = userMessage.textContent
                 } else {
                   return socket.emit("message:create-user-message-res", {
                     isSuccess: false,
-                    error: "Send all the required fields with request",
-                    clientMessageId: clientMessageId
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "You can not create an empty message."
                   })
                 }
+              }
+
+              if (
+                userMessage.hasOwnProperty("isRepliedMessage") &&
+                userMessage.isRepliedMessage &&
+                userMessage.hasOwnProperty("repliedTo")
+              ) {
+                let userRepliedMessage = await Message.findById(
+                  userMessage.repliedTo
+                )
+                  .select({ chat: 1 })
+                  .lean()
+                if (
+                  userRepliedMessage &&
+                  userRepliedMessage.chat.toString() ===
+                    messageChat._id.toString()
+                ) {
+                  newMessageData.isRepliedMessage = true
+                  newMessageData.repliedTo = userRepliedMessage._id
+                } else {
+                  if (
+                    userMessage.hasOwnProperty("hasMediaContent") &&
+                    userMessage.hasMediaContent &&
+                    (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                      (userMessage.hasOwnProperty(
+                        "hasDirectMediaContentPath"
+                      ) &&
+                        userMessage.hasDirectMediaContentPath === false))
+                  ) {
+                    await deleteAwsS3Object(userMessage.mediaContentPath)
+                  }
+                  return socket.emit("message:create-user-text-message-res", {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "You are not allowed to reply to this message."
+                  })
+                }
+              } else {
+                newMessageData.isRepliedMessage = false
+              }
+
+              let newMessage = new Message(newMessageData)
+              newMessage = await newMessage.save()
+
+              // socket.emit("message:client-user-message-sent", {
+              //   chatId: messageChat._id,
+              //   clientMessageId: clientMessageId,
+              //  messageId: newMessage._id,
+              // })
+
+              //here i send the event to client that has created the message only (not all devices where he/she log in with same account because not all devices created the client message so we can not update them if there is not any client message. once message is created on server end we will create the message for all)
+              socket.emit("message:create-user-message-res", {
+                isSuccess: true,
+                clientMessageId: clientMessageId,
+                messageId: newMessage._id,
+                chatId: messageChatId
+              })
+
+              await sendMessageToOtherMembersAndUpdateMessageStatusForSender(
+                io,
+                clientMessageId,
+                newMessage._id
+              )
+
+              // socket.emit("message:create-user-message-res", {
+              //   isSuccess: true,
+              //   message: createdNewMessage,
+              //   clientMessageId: clientMessageId
+              // })
+            } else {
+              if (
+                userMessage.hasOwnProperty("hasMediaContent") &&
+                userMessage.hasMediaContent &&
+                (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                  (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                    userMessage.hasDirectMediaContentPath === false))
+              ) {
+                await deleteAwsS3Object(userMessage.mediaContentPath)
+              }
+              return socket.emit("message:create-user-message-res", {
+                isSuccess: false,
+                clientMessageId: clientMessageId,
+                chatId: messageChatId,
+                error:
+                  "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group."
+              })
+            }
+          } else {
+            if (
+              userMessage.hasOwnProperty("hasMediaContent") &&
+              userMessage.hasMediaContent &&
+              (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+                (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                  userMessage.hasDirectMediaContentPath === false))
+            ) {
+              await deleteAwsS3Object(userMessage.mediaContentPath)
+            }
+            return socket.emit("message:create-user-message-res", {
+              isSuccess: false,
+              clientMessageId: clientMessageId,
+              chatId: messageChatId,
+              error: "Send all the required fields with request."
+            })
+          }
+        } else {
+          if (
+            userMessage.hasOwnProperty("hasMediaContent") &&
+            userMessage.hasMediaContent &&
+            (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+              (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+                userMessage.hasDirectMediaContentPath === false))
+          ) {
+            await deleteAwsS3Object(userMessage.mediaContentPath)
+          }
+          return socket.emit("message:create-user-message-res", {
+            isSuccess: false,
+            clientMessageId: clientMessageId,
+            chatId: messageChatId,
+            error: "You are not logged in, Please log in first"
+          })
+        }
+      } catch (err) {
+        if (
+          userMessage.hasOwnProperty("hasMediaContent") &&
+          userMessage.hasMediaContent &&
+          (!userMessage.hasOwnProperty("hasDirectMediaContentPath") ||
+            (userMessage.hasOwnProperty("hasDirectMediaContentPath") &&
+              userMessage.hasDirectMediaContentPath === false))
+        ) {
+          await deleteAwsS3Object(userMessage.mediaContentPath)
+        }
+
+        console.log(
+          errorLog("Server Error In Creating Message socket"),
+          mainErrorLog(err)
+        )
+        return socket.emit("message:create-user-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Server error in sending message, Please send it again"
+        })
+      }
+    })
+    socket.on("message:create-user-text-message", async data => {
+      const { userMessage } = data
+      let clientMessageId = ""
+      let messageChatId = userMessage.chat
+
+      if (
+        userMessage.hasOwnProperty("clientMessageId") &&
+        userMessage.clientMessageId !== ""
+      ) {
+        clientMessageId = userMessage.clientMessageId
+      } else {
+        return socket.emit("message:create-user-text-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Please send client message id."
+        })
+      }
+
+      try {
+        if (socket.loginUser) {
+          const newMessageData = {}
+
+          if (messageChatId) {
+            let messageChat = await Chat.findOne({
+              _id: messageChatId,
+              currentChatMembers: { $elemMatch: { $eq: socket.loginUser.id } },
+              isDeleted: false
+            })
+              .select({ isGroupChat: 1, currentChatMembers: 1 })
+              .lean()
+
+            if (messageChat) {
+              if (!messageChat.isGroupChat) {
+                let otherUserId = messageChat.currentChatMembers.find(
+                  userId => userId.toString() !== socket.loginUser.id.toString()
+                )
+
+                if (!checkInFollowing(socket.loginUser.id, otherUserId)) {
+                  return socket.emit("message:create-user-text-message-res", {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error:
+                      "You are not allowed to send message to this chat, First follow him/her"
+                  })
+                }
+              }
+
+              newMessageData.chat = messageChat._id
+              newMessageData.sender = socket.loginUser.id
+              newMessageData.reader = messageChat.currentChatMembers
+              newMessageData.seenStatus = [
+                { seenBy: socket.loginUser.id, seenTime: Date.now() }
+              ]
+
+              if (
+                userMessage.hasOwnProperty("textContent") &&
+                userMessage.textContent !== ""
+              ) {
+                newMessageData.textContent = userMessage.textContent
+              } else {
+                return socket.emit("message:create-user-text-message-res", {
+                  isSuccess: false,
+                  clientMessageId: clientMessageId,
+                  chatId: messageChatId,
+                  error: "You can not create an empty message."
+                })
               }
 
               if (
@@ -284,237 +547,628 @@ exports.messageHandler = async (io, socket) => {
                   newMessageData.isRepliedMessage = true
                   newMessageData.repliedTo = userRepliedMessage._id
                 } else {
-                  return socket.emit("message:create-user-message-res", {
+                  return socket.emit("message:create-user-text-message-res", {
                     isSuccess: false,
-                    error: "You are not allowed to reply to this message",
-                    clientMessageId: clientMessageId
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "You are not allowed to reply to this message."
                   })
                 }
               } else {
                 newMessageData.isRepliedMessage = false
               }
 
-              let newMessageDocument = new Message(newMessageData)
+              let newMessage = new Message(newMessageData)
+              newMessage = await newMessage.save()
 
-              newMessageDocument = await newMessageDocument.save()
-
-              socket.emit("message:client-message-sent", {
-                chatId: messageChat._id,
-                clientMessageId: clientMessageId
-              })
-
-              let createdNewMessage = await Message.findById(
-                newMessageDocument._id
-              )
-                .populate({
-                  path: "sender",
-                  select: {
-                    username: 1,
-                    firstName: 1,
-                    lastName: 1,
-                    profile: 1
-                  },
-                  options: {
-                    lean: true
-                  }
-                })
-                .populate({
-                  path: "chat",
-                  select: selectChatFieldForChatBox,
-                  options: {
-                    lean: true
-                  }
-                })
-                .populate({
-                  path: "repliedTo",
-                  select: selectRepliedToMessageField,
-                  populate: {
-                    path: "sender",
-                    select: { username: 1, firstName: 1, lastName: 1 }
-                  },
-
-                  options: {
-                    lean: true
-                  }
-                })
-                .select(selectSafeMessageField)
-                .lean()
-
-              if (
-                createdNewMessage.isRepliedMessage === true &&
-                createdNewMessage.repliedTo.isDeletedForAll === true
-              ) {
-                createdNewMessage.repliedTo =
-                  filterMessageFieldForDeletedForAll(
-                    createdNewMessage.repliedTo
-                  )
-              }
-
-              if (
-                createdNewMessage.sender.hasOwnProperty("profile") &&
-                createdNewMessage.sender.profile !== ""
-              ) {
-                createdNewMessage.sender.profile =
-                  await signedUrlForGetAwsS3Object(
-                    createdNewMessage.sender.profile
-                  )
-              }
-
-              if (
-                createdNewMessage.hasMediaContent &&
-                createdNewMessage.mediaContentType !== "youtube"
-              ) {
-                createdNewMessage.mediaContentPath =
-                  await signedUrlForGetAwsS3Object(
-                    createdNewMessage.mediaContentPath
-                  )
-              } else {
-                if (
-                  createdNewMessage.hasOwnProperty("textContent") &&
-                  createdNewMessage.textContent !== ""
-                ) {
-                  // const linkifyOptions = {
-                  //   attributes: null,
-                  //   className: "hello",
-                  //   defaultProtocol: "http",
-                  //   events: null,
-                  //   format: (value, type) => value,
-                  //   formatHref: (href, type) => href,
-                  //   ignoreTags: [],
-                  //   nl2br: false,
-                  //   rel: null,
-                  //   render: null,
-                  //   tagName: "a",
-                  //   target: null,
-                  //   truncate: Infinity,
-                  //   validate: true
-                  // }
-                  let linkPreviewOptions = {
-                    // resolveDNSHost: async url => {
-                    //   return new Promise((resolve, reject) => {
-                    //     const hostname = new URL(url).hostname
-                    //     dns.lookup(hostname, (err, address, family) => {
-                    //       if (err) {
-                    //         reject(err)
-                    //         return
-                    //       }
-
-                    //       resolve(address) // if address resolves to localhost or '127.0.0.1' library will throw an error
-                    //     })
-                    //   }).catch(e => {
-                    //     // will throw a detected redirection to localhost
-                    //   })
-                    // },
-                    // imagesPropertyType: "og", // fetches only open-graph images,
-
-                    headers: {
-                      "user-agent": "googlebot", // fetches with googlebot crawler user agent
-                      "Accept-Language": "en-US" // fetches site for French language
-                      // ...other optional HTTP request headers
-                    },
-                    // timeout: 1000,
-                    followRedirects: `manual`,
-                    handleRedirects: (baseURL, forwardedURL) => {
-                      const baseURLObj = new URL(baseURL)
-                      const forwardedURLObj = new URL(forwardedURL)
-                      if (
-                        forwardedURLObj.hostname === baseURLObj.hostname ||
-                        forwardedURLObj.hostname ===
-                          "www." + baseURLObj.hostname ||
-                        "www." + forwardedURLObj.hostname ===
-                          baseURLObj.hostname
-                      ) {
-                        return true
-                      } else {
-                        return false
-                      }
-                    }
-                  }
-                  let allLinks = linkify.find(createdNewMessage.textContent)
-
-                  if (allLinks.length > 0) {
-                    // console.log("allLinks:", allLinks)
-                    try {
-                      let data = await getLinkPreview(
-                        allLinks[0].href,
-                        linkPreviewOptions
-                      )
-                      if (data) {
-                        // console.log("linkPreviewData:", data)
-                        createdNewMessage.hasLinkPreview = true
-                        createdNewMessage.linkPreviewData = data
-                      }
-                    } catch (err) {
-                      createdNewMessage.hasLinkPreview = false
-                      console.log("linkPreviewError:", err)
-                    }
-
-                    createdNewMessage.hasLinks = true
-                    createdNewMessage.linksData = allLinks
-                  } else {
-                    createdNewMessage.hasLinks = false
-                    createdNewMessage.hasLinkPreview = false
-                  }
-                }
-              }
-
-              socket.emit("message:create-user-message-res", {
+              //here i send the event to client that has created the message only (not all devices where he/she log in with same account because not all devices created the client message so we can not update them if there is not any client message. once message is created on server end we will create the message for all)
+              socket.emit("message:create-user-text-message-res", {
                 isSuccess: true,
-                message: createdNewMessage,
-                clientMessageId: clientMessageId
+                clientMessageId: clientMessageId,
+                messageId: newMessage._id,
+                chatId: messageChatId
               })
 
-              sendMessageToOtherMembersAndUpdateStatus(
-                socket,
+              await sendMessageToOtherMembersAndUpdateMessageStatusForSender(
                 io,
-                messageChat,
-                newMessageDocument,
-                createdNewMessage,
-                clientMessageId
+                clientMessageId,
+                newMessage._id
               )
             } else {
-              if (
-                userMessage.hasMediaContent &&
-                userMessage.mediaContentType !== "youtube"
-              ) {
-                await deleteAwsS3Object(userMessage.mediaContentPath)
-              }
-              return socket.emit("message:create-user-message-res", {
+              return socket.emit("message:create-user-text-message-res", {
                 isSuccess: false,
+                clientMessageId: clientMessageId,
+                chatId: messageChatId,
                 error:
-                  "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group",
-                clientMessageId: clientMessageId
+                  "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group"
               })
             }
           } else {
-            return socket.emit("message:create-user-message-res", {
+            return socket.emit("message:create-user-text-message-res", {
               isSuccess: false,
-              error: "Send all the required fields with request",
-              clientMessageId: clientMessageId
+              clientMessageId: clientMessageId,
+              chatId: messageChatId,
+              error: "Send all the required fields with request."
             })
           }
         } else {
-          return socket.emit("message:create-user-message-res", {
+          return socket.emit("message:create-user-text-message-res", {
             isSuccess: false,
-            error: "You are not logged in, Please log in first",
-            clientMessageId: clientMessageId
+            clientMessageId: clientMessageId,
+            chatId: messageChatId,
+            error: "You are not logged in, Please log in first."
           })
         }
       } catch (err) {
         console.log(
-          errorLog("Server Error In Creating Message socket"),
+          errorLog("Server Error In Creating User Text Message socket"),
           mainErrorLog(err)
         )
-        return socket.emit("message:create-user-message-res", {
+        return socket.emit("message:create-user-text-message-res", {
           isSuccess: false,
-          error: "Server error in sending message, Please send it again",
-          clientMessageId: clientMessageId
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Server error in sending message, Please send it again"
         })
       }
     })
+    socket.on("message:create-user-media-url-message", async data => {
+      const { userMessage } = data
+      let clientMessageId = ""
+      let messageChatId = userMessage.chat
+
+      if (
+        userMessage.hasOwnProperty("clientMessageId") &&
+        userMessage.clientMessageId !== ""
+      ) {
+        clientMessageId = userMessage.clientMessageId
+      } else {
+        return socket.emit("message:create-user-media-url-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Please send client message id."
+        })
+      }
+
+      try {
+        if (socket.loginUser) {
+          const newMessageData = {}
+
+          if (messageChatId) {
+            let messageChat = await Chat.findOne({
+              _id: messageChatId,
+              currentChatMembers: { $elemMatch: { $eq: socket.loginUser.id } },
+              isDeleted: false
+            })
+              .select({ isGroupChat: 1, currentChatMembers: 1 })
+              .lean()
+
+            if (messageChat) {
+              if (!messageChat.isGroupChat) {
+                let otherUserId = messageChat.currentChatMembers.find(
+                  userId => userId.toString() !== socket.loginUser.id.toString()
+                )
+
+                if (!checkInFollowing(socket.loginUser.id, otherUserId)) {
+                  return socket.emit(
+                    "message:create-user-media-url-message-res",
+                    {
+                      isSuccess: false,
+                      clientMessageId: clientMessageId,
+                      chatId: messageChatId,
+                      error:
+                        "You are not allowed to send message to this chat, First follow him/her"
+                    }
+                  )
+                }
+              }
+
+              newMessageData.chat = messageChat._id
+              newMessageData.sender = socket.loginUser.id
+              newMessageData.reader = messageChat.currentChatMembers
+              newMessageData.seenStatus = [
+                { seenBy: socket.loginUser.id, seenTime: Date.now() }
+              ]
+              if (
+                userMessage.hasOwnProperty("hasMediaContent") &&
+                userMessage.hasMediaContent === true
+              ) {
+                if (
+                  userMessage.hasOwnProperty("mediaContentType") &&
+                  userMessage.hasOwnProperty("mediaContentPath")
+                ) {
+                  newMessageData.hasMediaContent = true
+                  newMessageData.hasDirectMediaContentPath = true
+                  newMessageData.mediaContentPath = userMessage.mediaContentPath
+                  newMessageData.mediaContentType = userMessage.mediaContentType
+                } else {
+                  return socket.emit(
+                    "message:create-user-media-url-message-res",
+                    {
+                      isSuccess: false,
+                      clientMessageId: clientMessageId,
+                      chatId: messageChatId,
+                      error: "Send all the required data with request"
+                    }
+                  )
+                }
+              } else {
+                return socket.emit(
+                  "message:create-user-media-url-message-res",
+                  {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "Please send media data with request"
+                  }
+                )
+              }
+
+              if (
+                userMessage.isRepliedMessage &&
+                userMessage.hasOwnProperty("repliedTo")
+              ) {
+                let userRepliedMessage = await Message.findById(
+                  userMessage.repliedTo
+                )
+                  .select({ chat: 1 })
+                  .lean()
+                if (
+                  userRepliedMessage &&
+                  userRepliedMessage.chat.toString() ===
+                    messageChat._id.toString()
+                ) {
+                  newMessageData.isRepliedMessage = true
+                  newMessageData.repliedTo = userRepliedMessage._id
+                } else {
+                  return socket.emit(
+                    "message:create-user-media-url-message-res",
+                    {
+                      isSuccess: false,
+                      clientMessageId: clientMessageId,
+                      chatId: messageChatId,
+                      error: "You are not allowed to reply to this message."
+                    }
+                  )
+                }
+              } else {
+                newMessageData.isRepliedMessage = false
+              }
+
+              let newMessage = new Message(newMessageData)
+              newMessage = await newMessage.save()
+
+              //here i send the event to client that has created the message only (not all devices where he/she log in with same account because not all devices created the client message so we can not update them if there is not any client message. once message is created on server end we will create the message for all)
+              socket.emit("message:create-user-media-url-message-res", {
+                isSuccess: true,
+                clientMessageId: clientMessageId,
+                messageId: newMessage._id,
+                chatId: messageChatId
+              })
+
+              await sendMessageToOtherMembersAndUpdateMessageStatusForSender(
+                io,
+                clientMessageId,
+                newMessage._id
+              )
+            } else {
+              return socket.emit("message:create-user-media-url-message-res", {
+                isSuccess: false,
+                clientMessageId: clientMessageId,
+                chatId: messageChatId,
+                error:
+                  "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group"
+              })
+            }
+          } else {
+            return socket.emit("message:create-user-media-url-message-res", {
+              isSuccess: false,
+              clientMessageId: clientMessageId,
+              chatId: messageChatId,
+              error: "Send all the required fields with request."
+            })
+          }
+        } else {
+          return socket.emit("message:create-user-media-url-message-res", {
+            isSuccess: false,
+            clientMessageId: clientMessageId,
+            chatId: messageChatId,
+            error: "You are not logged in, Please log in first."
+          })
+        }
+      } catch (err) {
+        console.log(
+          errorLog("Server Error In Creating User Text Message socket"),
+          mainErrorLog(err)
+        )
+        return socket.emit("message:create-user-media-url-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Server error in sending message, Please send it again"
+        })
+      }
+    })
+    socket.on("message:create-user-media-message", async data => {
+      const { userMessage } = data
+      let clientMessageId = ""
+      let messageChatId = userMessage.chat
+
+      if (
+        userMessage.hasOwnProperty("clientMessageId") &&
+        userMessage.clientMessageId !== ""
+      ) {
+        clientMessageId = userMessage.clientMessageId
+      } else {
+        return socket.emit("message:create-user-media-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Please send client message id."
+        })
+      }
+
+      try {
+        if (socket.loginUser) {
+          const newMessageData = {}
+
+          if (messageChatId) {
+            let messageChat = await Chat.findOne({
+              _id: messageChatId,
+              currentChatMembers: { $elemMatch: { $eq: socket.loginUser.id } },
+              isDeleted: false
+            })
+              .select({ isGroupChat: 1, currentChatMembers: 1 })
+              .lean()
+
+            if (messageChat) {
+              if (!messageChat.isGroupChat) {
+                let otherUserId = messageChat.currentChatMembers.find(
+                  userId => userId.toString() !== socket.loginUser.id.toString()
+                )
+
+                if (!checkInFollowing(socket.loginUser.id, otherUserId)) {
+                  return socket.emit("message:create-user-media-message-res", {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error:
+                      "You are not allowed to send message to this chat, First follow him/her"
+                  })
+                }
+              }
+
+              newMessageData.chat = messageChat._id
+              newMessageData.sender = socket.loginUser.id
+              newMessageData.reader = messageChat.currentChatMembers
+              newMessageData.seenStatus = [
+                { seenBy: socket.loginUser.id, seenTime: Date.now() }
+              ]
+              if (
+                userMessage.hasOwnProperty("hasMediaContent") &&
+                userMessage.hasMediaContent === true
+              ) {
+                if (
+                  userMessage.hasOwnProperty("mediaContentType") &&
+                  userMessage.hasOwnProperty("mediaContentPath")
+                ) {
+                  newMessageData.hasMediaContent = true
+                  newMessageData.hasDirectMediaContentPath = false
+                  newMessageData.mediaContentPath = userMessage.mediaContentPath
+                  newMessageData.mediaContentType = userMessage.mediaContentType
+                } else {
+                  return socket.emit("message:create-user-media-message-res", {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "Send all the required data with request"
+                  })
+                }
+              } else {
+                return socket.emit("message:create-user-media-message-res", {
+                  isSuccess: false,
+                  clientMessageId: clientMessageId,
+                  chatId: messageChatId,
+                  error: "Please send media data with request"
+                })
+              }
+
+              if (
+                userMessage.isRepliedMessage &&
+                userMessage.hasOwnProperty("repliedTo")
+              ) {
+                let userRepliedMessage = await Message.findById(
+                  userMessage.repliedTo
+                )
+                  .select({ chat: 1 })
+                  .lean()
+                if (
+                  userRepliedMessage &&
+                  userRepliedMessage.chat.toString() ===
+                    messageChat._id.toString()
+                ) {
+                  newMessageData.isRepliedMessage = true
+                  newMessageData.repliedTo = userRepliedMessage._id
+                } else {
+                  return socket.emit("message:create-user-media-message-res", {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error: "You are not allowed to reply to this message."
+                  })
+                }
+              } else {
+                newMessageData.isRepliedMessage = false
+              }
+
+              let newMessage = new Message(newMessageData)
+              newMessage = await newMessage.save()
+
+              //here i send the event to client that has created the message only (not all devices where he/she log in with same account because not all devices created the client message so we can not update them if there is not any client message. once message is created on server end we will create the message for all)
+              socket.emit("message:create-user-media-message-res", {
+                isSuccess: true,
+                clientMessageId: clientMessageId,
+                messageId: newMessage._id,
+                chatId: messageChatId
+              })
+
+              await sendMessageToOtherMembersAndUpdateMessageStatusForSender(
+                io,
+                clientMessageId,
+                newMessage._id
+              )
+            } else {
+              return socket.emit("message:create-user-media-message-res", {
+                isSuccess: false,
+                clientMessageId: clientMessageId,
+                chatId: messageChatId,
+                error:
+                  "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group"
+              })
+            }
+          } else {
+            return socket.emit("message:create-user-media-message-res", {
+              isSuccess: false,
+              clientMessageId: clientMessageId,
+              chatId: messageChatId,
+              error: "Send all the required fields with request."
+            })
+          }
+        } else {
+          return socket.emit("message:create-user-media-message-res", {
+            isSuccess: false,
+            clientMessageId: clientMessageId,
+            chatId: messageChatId,
+            error: "You are not logged in, Please log in first."
+          })
+        }
+      } catch (err) {
+        console.log(
+          errorLog("Server Error In Creating User Text Message socket"),
+          mainErrorLog(err)
+        )
+        return socket.emit("message:create-user-media-message-res", {
+          isSuccess: false,
+          clientMessageId: clientMessageId,
+          chatId: messageChatId,
+          error: "Server error in sending message, Please send it again"
+        })
+      }
+    })
+
+    socket.on(
+      "message:create-transloadit-user-media-message-entry",
+      async data => {
+        const { messageData } = data
+        let clientMessageId = ""
+        let assemblyId = messageData.assemblyId
+        let fileId = messageData.fileId
+        let messageChatId = messageData.chat
+
+        if (
+          messageData.hasOwnProperty("clientMessageId") &&
+          messageData.clientMessageId !== "" &&
+          messageData.hasOwnProperty("assemblyId") &&
+          messageData.assemblyId !== "" &&
+          messageData.hasOwnProperty("fileId") &&
+          messageData.fileId !== ""
+        ) {
+          clientMessageId = messageData.clientMessageId
+          assemblyId = messageData.assemblyId
+          fileId = messageData.fileId
+        } else {
+          createDeletedTransloaditUserMediaMessageEntry(assemblyId, fileId)
+          return socket.emit(
+            "message:create-transloadit-user-media-message-entry-res",
+            {
+              isSuccess: false,
+              error: "Error In Sending Media Data With Request.",
+              clientMessageId: clientMessageId,
+              chatId: messageChatId
+            }
+          )
+        }
+
+        try {
+          if (socket.loginUser) {
+            const userMediaMessageEntryData = {}
+
+            if (messageData.hasOwnProperty("chat") && messageData.chat !== "") {
+              let messageChat = await Chat.findOne({
+                _id: messageData.chat,
+                currentChatMembers: {
+                  $elemMatch: { $eq: socket.loginUser.id }
+                },
+                isDeleted: false
+              })
+                .select({ isGroupChat: 1, currentChatMembers: 1 })
+                .lean()
+
+              if (messageChat) {
+                if (!messageChat.isGroupChat) {
+                  let otherUserId = messageChat.currentChatMembers.find(
+                    userId =>
+                      userId.toString() !== socket.loginUser.id.toString()
+                  )
+
+                  if (!checkInFollowing(socket.loginUser.id, otherUserId)) {
+                    createDeletedTransloaditUserMediaMessageEntry(
+                      assemblyId,
+                      fileId
+                    )
+                    return socket.emit(
+                      "message:create-transloadit-user-media-message-entry-res",
+                      {
+                        isSuccess: false,
+                        clientMessageId: clientMessageId,
+                        chatId: messageChatId,
+                        error:
+                          "You are not allowed to send message to this chat, First follow him/her"
+                      }
+                    )
+                  }
+                }
+
+                if (
+                  messageData.isRepliedMessage &&
+                  messageData.hasOwnProperty("repliedTo")
+                ) {
+                  let userRepliedMessage = await Message.findById(
+                    messageData.repliedTo
+                  )
+                    .select({ chat: 1 })
+                    .lean()
+                  if (
+                    userRepliedMessage &&
+                    userRepliedMessage.chat.toString() ===
+                      messageChat._id.toString()
+                  ) {
+                    userMediaMessageEntryData.isRepliedMessage = true
+                    userMediaMessageEntryData.repliedTo = userRepliedMessage._id
+                  } else {
+                    createDeletedTransloaditUserMediaMessageEntry(
+                      assemblyId,
+                      fileId
+                    )
+                    return socket.emit(
+                      "message:create-transloadit-user-media-message-entry-res",
+                      {
+                        isSuccess: false,
+                        clientMessageId: clientMessageId,
+                        chatId: messageChatId,
+                        error: "You are not allowed to reply to this message"
+                      }
+                    )
+                  }
+                } else {
+                  userMediaMessageEntryData.isRepliedMessage = false
+                }
+                userMediaMessageEntryData.assemblyId = assemblyId
+                userMediaMessageEntryData.fileId = fileId
+                userMediaMessageEntryData.sender = socket.loginUser.id
+                userMediaMessageEntryData.chatId = messageData.chat
+                userMediaMessageEntryData.clientMessageId = clientMessageId
+
+                let userMediaMessageEntry =
+                  new TransloaditUserMediaMessageEntry(
+                    userMediaMessageEntryData
+                  )
+
+                userMediaMessageEntry = await userMediaMessageEntry.save()
+
+                socket.emit(
+                  "message:create-transloadit-user-media-message-entry-res",
+                  {
+                    isSuccess: true,
+                    clientMessageId: clientMessageId,
+                    chatId: messageData.chat
+                  }
+                )
+              } else {
+                createDeletedTransloaditUserMediaMessageEntry(
+                  assemblyId,
+                  fileId
+                )
+                return socket.emit(
+                  "message:create-transloadit-user-media-message-entry-res",
+                  {
+                    isSuccess: false,
+                    clientMessageId: clientMessageId,
+                    chatId: messageChatId,
+                    error:
+                      "You are not allowed to send message to this chat, First ask chat admin to add you in the chat group"
+                  }
+                )
+              }
+            } else {
+              createDeletedTransloaditUserMediaMessageEntry(assemblyId, fileId)
+              return socket.emit(
+                "message:create-transloadit-user-media-message-entry-res",
+                {
+                  isSuccess: false,
+                  clientMessageId: clientMessageId,
+                  chatId: messageChatId,
+                  error: "Send all the required fields with request"
+                }
+              )
+            }
+          } else {
+            createDeletedTransloaditUserMediaMessageEntry(assemblyId, fileId)
+            return socket.emit(
+              "message:create-transloadit-user-media-message-entry-res",
+              {
+                isSuccess: false,
+                clientMessageId: clientMessageId,
+                chatId: messageChatId,
+                error: "You are not logged in, Please log in first"
+              }
+            )
+          }
+        } catch (err) {
+          console.log(
+            errorLog(
+              "Server Error In Creating Transloadit User Media Message Entry socket"
+            ),
+            mainErrorLog(err)
+          )
+          createDeletedTransloaditUserMediaMessageEntry(assemblyId, fileId)
+          return socket.emit(
+            "message:create-transloadit-user-media-message-entry-res",
+            {
+              isSuccess: false,
+              clientMessageId: clientMessageId,
+              chatId: messageChatId,
+              error: "Server error in sending message, Please send it again"
+            }
+          )
+        }
+      }
+    )
   } catch (err) {
     console.log(
       errorLog("Server Error In Chat Handler Socket"),
+      mainErrorLog(err)
+    )
+  }
+}
+
+async function createDeletedTransloaditUserMediaMessageEntry(
+  assemblyId,
+  fileId
+) {
+  try {
+    if (assemblyId && fileId) {
+      let deletedUserMediaMessageEntry = new TransloaditUserMediaMessageEntry({
+        isMessageDeleted: true,
+        assemblyId: assemblyId,
+        fileId: fileId
+      })
+      await deletedUserMediaMessageEntry.save()
+    }
+  } catch (err) {
+    console.log(
+      errorLog("Server Error In Creating Deleted Media Message Request"),
       mainErrorLog(err)
     )
   }
@@ -531,13 +1185,13 @@ async function sendMessageToOtherMembersAndUpdateStatus(
   let eventData = { message: createdNewMessage }
   messageChat.currentChatMembers.forEach(userId => {
     if (socket.loginUser.id.toString() !== userId.toString()) {
-      io.to(userId.toString()).emit("message:new-message", eventData)
+      io.to(userId.toString()).emit("message:new-user-message", eventData)
     }
   })
   newMessageDocument.deliveryStatus.isDelivered = true
   newMessageDocument.deliveryStatus.deliveredTime = Date.now()
   await newMessageDocument.save()
-  io.to(socket.loginUser.id.toString()).emit("message:message-delivered", {
+  io.to(socket.loginUser.id.toString()).emit("message:user-message-delivered", {
     messageId: newMessageDocument._id,
     clientMessageId: clientMessageId,
     chatId: newMessageDocument.chat,

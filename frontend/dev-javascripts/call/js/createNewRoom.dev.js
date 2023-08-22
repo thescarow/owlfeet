@@ -10,13 +10,15 @@ import Uppy from "@uppy/core"
 import Dashboard from "@uppy/dashboard"
 import Webcam from "@uppy/webcam"
 import ImageEditor from "@uppy/image-editor"
+import RemoteSources from "@uppy/remote-sources"
+import { COMPANION_URL, COMPANION_ALLOWED_HOSTS } from "@uppy/transloadit"
+import Transloadit from "@uppy/transloadit"
 
-import "@uppy/core/dist/style.css"
-import "@uppy/dashboard/dist/style.css"
-import "@uppy/webcam/dist/style.css"
-import "@uppy/image-editor/dist/style.css"
+import "@uppy/core/dist/style.min.css"
+import "@uppy/dashboard/dist/style.min.css"
+import "@uppy/webcam/dist/style.min.css"
+import "@uppy/image-editor/dist/style.min.css"
 
-import AwsS3Multipart from "@uppy/aws-s3-multipart"
 let myMediaStream
 let myStreamTypeData
 export function createNewRoom(mediaStream, streamTypeData) {
@@ -28,103 +30,147 @@ export function createNewRoom(mediaStream, streamTypeData) {
 function initialiseEventForCreatingNewRoom() {
   if (creatingNewRoom) {
     const uppy = new Uppy({
-      id: "creatingNewRoomPic",
+      id: "CALL_ROOM_PIC",
       autoProceed: false,
       allowMultipleUploadBatches: false,
-      debug: false,
+
       onBeforeFileAdded: (currentFile, files) => {
         if (!currentFile.type) {
           uppy.log(`Skipping file because it has no type`)
           uppy.info(`Skipping file because it has no type`, "error", 500)
           return false
         } else {
-          let creatingNewRoomPicKey =
-            document.getElementById("creatingNewRoomPic").dataset.roomPic
-          currentFile.name = creatingNewRoomPicKey
-          return currentFile
+          const modifiedFile = {
+            ...currentFile,
+            name: `${Date.now()}`
+          }
+          return modifiedFile
         }
       },
-      onBeforeUpload: files => {
-        // const updatedFiles = {}
-        // Object.keys(files).forEach(fileID => {
-        //   updatedFiles[fileID] = {
-        //     ...files[fileID],
-        //     meta: {
-        //       ...files[fileID].meta,
-        //       fileType: files[fileID].type
-        //     }
-        //   }
-        // })
-        // console.log(updatedFiles)
-        // return updatedFiles
-      },
+      // onBeforeUpload: files => {
+      //   // We’ll be careful to return a new object, not mutating the original `files`
+      //   const updatedFiles = {}
+      //   Object.keys(files).forEach(fileID => {
+      //     updatedFiles[fileID] = {
+      //       ...files[fileID],
+      //       name: `${myCustomPrefix}__${files[fileID].name}`
+      //     }
+      //   })
+      //   return updatedFiles
+      // },
       restrictions: {
         maxFileSize: 1024 * 1024 * 5,
         minFileSize: null,
         maxTotalFileSize: 1024 * 1024 * 5 * 1,
         maxNumberOfFiles: 1,
         minNumberOfFiles: 1,
-        allowedFileTypes: [
-          "image/jpeg",
-          "image/png",
-          "image/gif",
-          "image/svg+xml",
-          "image/x-png"
-        ]
+        allowedFileTypes: [".jpg", ".jpeg", ".png", ".gif", ".svg"]
       },
-      meta: { mediaType: "new-call-room-pic" },
-      infoTimeout: 5000
+
+      infoTimeout: 5000,
+      locale: {
+        strings: {
+          companionError: "first connect to provider"
+        }
+      }
     })
       .use(Dashboard, {
         trigger: "#creatingNewRoomPic",
         target: "body",
         inline: false,
-        plugins: ["Webcam", "ImageEditor"],
-        thumbnailWidth: 300,
-        // closeAfterFinish: false,
-        showRemoveButtonAfterComplete: false,
-        disablePageScrollWhenModalOpen: true,
-        closeModalOnClickOutside: true,
 
+        waitForThumbnailsBeforeUpload: false,
+        showSelectedFiles: true,
+        showRemoveButtonAfterComplete: false,
+        singleFileFullScreen: true,
+        closeModalOnClickOutside: true,
+        closeAfterFinish: false,
+        animateOpenClose: true,
+
+        autoOpenFileEditor: false,
+        disablePageScrollWhenModalOpen: true,
+        proudlyDisplayPoweredByUppy: false,
         theme: "dark",
         locale: {
-          strings: {}
-        },
-        note: "File size up to 5 MB",
-        proudlyDisplayPoweredByUppy: false
+          strings: {
+            dropPasteImportFiles: ""
+          }
+        }
+        // note: "file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
       })
       .use(Webcam, {
         target: Dashboard,
-        title: "Camera",
+        countdown: false,
+        modes: ["picture"],
         mirror: true,
-        modes: ["picture"]
+        videoConstraints: {},
+        showVideoSourceDropdown: false,
+        showRecordingLength: false,
+        preferredImageMimeType: "image/jpeg",
+        preferredVideoMimeType: null
       })
-      .use(ImageEditor, {
+      .use(ImageEditor, { target: Dashboard })
+      .use(RemoteSources, {
         target: Dashboard,
-        quality: 0.8
+        sources: [
+          "Unsplash",
+          "Instagram",
+          "Facebook",
+          "GoogleDrive",
+          "OneDrive",
+          "Dropbox",
+          "Box",
+          "Url",
+          "Zoom"
+        ],
+        companionUrl: COMPANION_URL,
+        companionAllowedHosts: COMPANION_ALLOWED_HOSTS
       })
-
-      .use(AwsS3Multipart, {
-        limit: 4,
-        companionUrl: `${location.origin}/companion`
+      // .use(Unsplash, {
+      //   target: Dashboard,
+      //   companionUrl: COMPANION_URL,
+      //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+      // })
+      // .use(Instagram, {
+      //   target: Dashboard,
+      //   companionUrl: COMPANION_URL,
+      //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+      // })
+      .use(Transloadit, {
+        waitForEncoding: true,
+        waitForMetadata: true,
+        // alwaysRunAssembly: false,
+        // limit: 20
+        assemblyOptions: {
+          params: {
+            auth: {
+              key: "6811ee5b698f4aa0b05a0a65755841c0"
+            },
+            template_id: "0bedb1fefa9b4a8ba36f61fc541b618d"
+          },
+          fields: {
+            mediaFolder: "new-call-room-pic"
+          }
+          // signature: "generated-signature"
+          // notify_url: "https://example.com/transloadit_pingback"
+        }
       })
+    uppy.on("transloadit:complete", assembly => {
+      let file = assembly.uploads[0]
+      let mediaFolder = assembly.fields.mediaFolder
+      let fileKey =
+        mediaFolder + "/" + file.type + "/" + file.id + "-" + file.basename
+      let fileTempUrl = file.tus_upload_url
 
-    // uppy.on("complete", result => {
-    //   console.log(
-    //     "Upload complete! We’ve uploaded these files:",
-    //     result.successful
-    //   )
-    // })
-    uppy.on("upload-success", (file, response) => {
       let creatingNewRoomPic = document.getElementById("creatingNewRoomPic")
       creatingNewRoomPic.classList.add("creating-new-room__pic--img")
       creatingNewRoomPic.classList.remove("creating-new-room__pic--svg")
 
-      creatingNewRoomPic.dataset.roomPic = file.s3Multipart.key
+      creatingNewRoomPic.dataset.roomPic = fileKey
 
       let creatingNewRoomPicImg = creatingNewRoomPic.querySelector("img")
       if (creatingNewRoomPicImg) {
-        creatingNewRoomPicImg.src = file.preview
+        creatingNewRoomPicImg.src = fileTempUrl
       }
     })
 

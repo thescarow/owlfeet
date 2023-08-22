@@ -141,70 +141,75 @@ import { v4 as uuidv4 } from "uuid"
     // const { updateAllChatSection } = await import(
     //   "./js/updateAllChatSection.dev"
     // )
+
     const { default: Uppy } = await import("@uppy/core")
     const { default: Dashboard } = await import("@uppy/dashboard")
     const { default: Webcam } = await import("@uppy/webcam")
     const { default: ImageEditor } = await import("@uppy/image-editor")
+    const { default: ScreenCapture } = await import("@uppy/screen-capture")
     const { default: Audio } = await import("@uppy/audio")
+    const { default: RemoteSources } = await import("@uppy/remote-sources")
+    const {
+      default: Transloadit,
+      COMPANION_URL,
+      COMPANION_ALLOWED_HOSTS
+    } = await import("@uppy/transloadit")
 
-    await import("@uppy/core/dist/style.css")
-    await import("@uppy/dashboard/dist/style.css")
-    await import("@uppy/webcam/dist/style.css")
-    await import("@uppy/image-editor/dist/style.css")
-    await import("@uppy/audio/dist/style.css")
-
-    const { default: AwsS3Multipart } = await import("@uppy/aws-s3-multipart")
+    await import("@uppy/core/dist/style.min.css")
+    await import("@uppy/dashboard/dist/style.min.css")
+    await import("@uppy/webcam/dist/style.min.css")
+    await import("@uppy/image-editor/dist/style.min.css")
+    await import("@uppy/screen-capture/dist/style.min.css")
+    await import("@uppy/audio/dist/style.min.css")
 
     const uppy = new Uppy({
-      id: "chatMedia",
+      id: "CHAT_MEDIA",
       autoProceed: false,
-      allowMultipleUploadBatches: true,
-      debug: false,
+      allowMultipleUploadBatches: false,
+
       onBeforeFileAdded: (currentFile, files) => {
-        // console.log(currentFile)
         if (!currentFile.type) {
           uppy.log(`Skipping file because it has no type`)
           uppy.info(`Skipping file because it has no type`, "error", 500)
           return false
         } else {
-          currentFile.name = ""
-          return currentFile
+          const modifiedFile = {
+            ...currentFile,
+            name: `${Date.now()}`
+          }
+          return modifiedFile
         }
       },
-      onBeforeUpload: files => {
-        // const updatedFiles = {}
-        // Object.keys(files).forEach(fileID => {
-        //   updatedFiles[fileID] = {
-        //     ...files[fileID],
-        //     meta: {
-        //       ...files[fileID].meta,
-        //       fileType: files[fileID].type
-        //     }
-        //   }
-        // })
-        // console.log(updatedFiles)
-        // return updatedFiles
-      },
+      // onBeforeUpload: files => {
+      //   // We’ll be careful to return a new object, not mutating the original `files`
+      //   const updatedFiles = {}
+      //   Object.keys(files).forEach(fileID => {
+      //     updatedFiles[fileID] = {
+      //       ...files[fileID],
+      //       name: `${myCustomPrefix}__${files[fileID].name}`
+      //     }
+      //   })
+      //   return updatedFiles
+      // },
       restrictions: {
-        maxFileSize: 1024 * 1024 * 100,
+        maxFileSize: 1024 * 1024 * 200 * 1,
         minFileSize: null,
-        maxTotalFileSize: 1024 * 1024 * 100 * 10,
-        maxNumberOfFiles: 10,
+        maxTotalFileSize: 1024 * 1024 * 200 * 1,
+        maxNumberOfFiles: 1,
         minNumberOfFiles: 1,
         allowedFileTypes: [
-          "image/jpeg",
-          "image/png",
-          "image/gif",
-          "image/svg+xml",
-          "image/x-png",
-
+          ".jpg",
+          ".jpeg",
+          ".png",
+          ".gif",
+          ".svg",
+          // "audio/*",
           "audio/mpeg",
           "audio/wav",
           "audio/x-wav",
           "audio/ogg",
           "audio/webm",
-          // "audio/*",
-
+          // video
           "video/mp4",
           "video/webm",
           "video/ogg",
@@ -212,63 +217,111 @@ import { v4 as uuidv4 } from "uuid"
           "video/x-matroska"
         ]
       },
-      meta: { mediaType: "chat-media" },
-      infoTimeout: 5000
+
+      infoTimeout: 5000,
+      locale: {
+        strings: {
+          companionError: "first connect to provider"
+        }
+      }
     })
       .use(Dashboard, {
         trigger: "#activeChatInputAttachmentFileBtn",
         target: "body",
         inline: false,
-        plugins: ["Webcam", "ImageEditor", "Audio"],
-        thumbnailWidth: 300,
-        // closeAfterFinish: false,
-        showRemoveButtonAfterComplete: false,
-        disablePageScrollWhenModalOpen: true,
-        closeModalOnClickOutside: true,
 
-        theme: "light",
+        waitForThumbnailsBeforeUpload: false,
+        showSelectedFiles: true,
+        showRemoveButtonAfterComplete: false,
+        singleFileFullScreen: true,
+        closeModalOnClickOutside: true,
+        closeAfterFinish: false,
+        animateOpenClose: true,
+
+        autoOpenFileEditor: false,
+        disablePageScrollWhenModalOpen: true,
+        proudlyDisplayPoweredByUppy: false,
+        theme: "dark",
         locale: {
-          strings: {}
-        },
-        note: "Images, Audios and videos only, up to 10 files, 1 file up to 100 MB",
-        proudlyDisplayPoweredByUppy: false
+          strings: {
+            dropPasteImportFiles: ""
+          }
+        }
+        // note: "file-size: up to 10MB, file-type: [jpeg  jpg  gif  png]"
       })
       .use(Webcam, {
         target: Dashboard,
-        title: "Camera",
-        mirror: true,
+        countdown: false,
         modes: ["video-audio", "video-only", "picture"],
-        preferredVideoMimeType: "video/mp4",
-        showRecordingLength: true
+        mirror: true,
+        videoConstraints: {},
+        showVideoSourceDropdown: true,
+        showRecordingLength: false,
+        preferredImageMimeType: "image/jpeg",
+        preferredVideoMimeType: null
       })
-      .use(ImageEditor, {
+      .use(ImageEditor, { target: Dashboard })
+      .use(ScreenCapture, { target: Dashboard, preferredVideoMimeType: null })
+      .use(Audio, { target: Dashboard, showAudioSourceDropdown: true })
+      .use(RemoteSources, {
         target: Dashboard,
-        quality: 0.8
+        sources: [
+          "Unsplash",
+          "Instagram",
+          "Facebook",
+          "GoogleDrive",
+          "OneDrive",
+          "Dropbox",
+          "Box",
+          "Url",
+          "Zoom"
+        ],
+        companionUrl: COMPANION_URL,
+        companionAllowedHosts: COMPANION_ALLOWED_HOSTS
       })
-      .use(Audio, {
-        id: "Audio",
-        target: Dashboard,
-        showAudioSourceDropdown: false
+      // .use(Unsplash, {
+      //   target: Dashboard,
+      //   companionUrl: COMPANION_URL,
+      //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+      // })
+      // .use(Instagram, {
+      //   target: Dashboard,
+      //   companionUrl: COMPANION_URL,
+      //   companionAllowedHosts: COMPANION_ALLOWED_HOSTS
+      // })
+      .use(Transloadit, {
+        waitForEncoding: true,
+        waitForMetadata: true,
+        // alwaysRunAssembly: false,
+        // limit: 20
+        assemblyOptions: {
+          params: {
+            auth: {
+              key: "6811ee5b698f4aa0b05a0a65755841c0"
+            },
+            template_id: "0bedb1fefa9b4a8ba36f61fc541b618d"
+            // notify_url: `${location.origin}/transloadit/notify/user-media-message`
+          },
+          fields: {
+            mediaFolder: "chat-media"
+          }
+          // signature: "generated-signature"
+        }
       })
-      .use(AwsS3Multipart, {
-        limit: 4,
-        companionUrl: `${location.origin}/companion`
-      })
+    uppy.on("transloadit:complete", assembly => {
+      let file = assembly.uploads[0]
+      let mediaFolder = assembly.fields.mediaFolder
+      let fileKey =
+        mediaFolder + "/" + file.type + "/" + file.id + "-" + file.basename
+      let fileTempUrl = file.tus_upload_url
 
-    // uppy.on("complete", result => {
-    //   console.log(
-    //     "Upload complete! We’ve uploaded these files:",
-    //     result.successful
-    //   )
-    // })
-    uppy.on("upload-success", (file, response) => {
-      // console.log("uppy file:", file)
       let userMessage = {}
       userMessage.chat = activeChatSection.dataset.chatId
       userMessage.hasMediaContent = true
-      userMessage.mediaContentType = file.type.split("/")[0]
-      userMessage.mediaContentMimeType = file.type
-      userMessage.mediaContentPath = file.s3Multipart.key
+      userMessage.hasDirectMediaContentPath = false
+      userMessage.mediaContentType = file.type
+      userMessage.mediaContentMimeType = file.mime
+      userMessage.mediaContentPath = fileKey
       if (activeChatInputContainer.dataset.repliedTo !== "") {
         userMessage.isRepliedMessage = true
         userMessage.repliedTo = activeChatInputContainer.dataset.repliedTo
@@ -276,46 +329,8 @@ import { v4 as uuidv4 } from "uuid"
         userMessage.isRepliedMessage = false
       }
 
-      if (userMessage.mediaContentType === "image") {
-        userMessage.mediaContentImagePreview = file.preview
-      }
-
+      userMessage.clientMediaContentPath = fileTempUrl
       sendAndCreateClientUserMessage(userMessage, "media-content")
-      // fetch("/message", {
-      //   method: "POST", // or 'PUT'
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify(userMessage)
-      // })
-      //   .then(response => {
-      //     if (response.ok) {
-      //       return response.json()
-      //     }
-      //     return Promise.reject(response)
-      //   })
-      //   .then(async data => {
-      //     if (data.isSuccess) {
-      //       checkTimeAndCreateNewMessage(data.message, true)
-      //       closeReplyMessageBox()
-      //       updateAllChatSection(data.message)
-      //     } else {
-      //       let { createMainNotification } = await import(
-      //         "../common/mainNotification.dev"
-      //       )
-      //       createMainNotification(data.error, "error")
-      //     }
-      //   })
-      //   .catch(async err => {
-      //     console.log(err)
-      //     let { createMainNotification } = await import(
-      //       "../common/mainNotification.dev"
-      //     )
-      //     createMainNotification(
-      //       "Server Error In Sending Message, Please Try Again",
-      //       "error"
-      //     )
-      //   })
     })
 
     // active chat input youtube send btn
@@ -333,6 +348,7 @@ import { v4 as uuidv4 } from "uuid"
         if (activeChatInputAttachmentYoutubeContent.value !== "") {
           userMessage.chat = activeChatSection.dataset.chatId
           userMessage.hasMediaContent = true
+          userMessage.hasDirectMediaContentPath = true
           userMessage.mediaContentType = "youtube"
           userMessage.mediaContentMimeType = "video/mp4"
           userMessage.mediaContentPath =
@@ -344,6 +360,8 @@ import { v4 as uuidv4 } from "uuid"
             userMessage.isRepliedMessage = false
           }
 
+          userMessage.clientMediaContentPath =
+            activeChatInputAttachmentYoutubeContent.value
           activeChatInputAttachmentYoutubeContent.value = ""
           // createUserMessageSocket(userMessage)
           sendAndCreateClientUserMessage(userMessage, "youtube")
@@ -504,11 +522,11 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
   let { sendCreateUserMessageSocket } = await import(
     "../socket/event-emitter/message-socket"
   )
-
-  userMessage.clientMessageId = uuidv4()
   let { checkTimeAndCreateNewClientUserMessage } = await import(
     "./js/message.dev"
   )
+
+  userMessage.clientMessageId = uuidv4()
 
   checkTimeAndCreateNewClientUserMessage(userMessage, true)
 
@@ -516,9 +534,17 @@ async function sendAndCreateClientUserMessage(userMessage, type) {
   closeReplyMessageBox()
   if (type === "media-content") {
   } else if (type === "youtube") {
-    document
-      .getElementById("activeChatInputAttachmentYoutubeBtnInputBox")
-      .classList.add("input-attachment-btn-box__input-box--hide")
+    let activeChatInputAttachmentYoutubeBtnInputBox = document.getElementById(
+      "activeChatInputAttachmentYoutubeBtnInputBox"
+    )
+    if (
+      !activeChatInputAttachmentYoutubeBtnInputBox.classList.contains(
+        "input-attachment-btn-box__input-box--hide"
+      )
+    )
+      activeChatInputAttachmentYoutubeBtnInputBox.classList.add(
+        "input-attachment-btn-box__input-box--hide"
+      )
   } else if (type === "text") {
     activeChatInputAttachmentBox.classList.remove(
       "active-chat-input-attachment-box--hide"

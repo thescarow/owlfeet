@@ -93,6 +93,11 @@
     --on-call-main-view-user-box-container-height: 100%;
 }
 
+.uppy-Root svg {
+    width: initial;
+    height: initial;
+}
+
 body {
     height: 100vh;
     /* in each page we define main container so it has 100vh height  */

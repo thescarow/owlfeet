@@ -13,23 +13,65 @@ export async function createMessageSocket(socket) {
     let activeChatHeaderStatus = document.getElementById(
       "activeChatHeaderStatus"
     )
-
-    socket.on("message:client-message-sent", async data => {
-      let chatId = activeChatSection.dataset.chatId
+    socket.on("message:create-user-message-res", async data => {
+      let { isSuccess, clientMessageId, chatId } = data
+      let { updateClientUserMessageStatus } = await import(
+        "../../../chat/js/message.dev.js"
+      )
       if (
-        chatId.toString() !== "" &&
-        chatId.toString() === data.chatId.toString()
+        activeChatSection.dataset.chatId.toString() !== "" &&
+        chatId.toString() === activeChatSection.dataset.chatId.toString()
       ) {
-        let { updateClientUserMessageStatus } = await import(
-          "../../../chat/js/message.dev.js"
-        )
-        updateClientUserMessageStatus(data.clientMessageId, "sent")
+        if (isSuccess) {
+          let { messageId } = data
+
+          updateClientUserMessageStatus(clientMessageId, "sent", messageId)
+        } else {
+          let { error } = data
+
+          updateClientUserMessageStatus(clientMessageId, "error")
+          createMainNotification(error, "error")
+        }
       }
     })
-    socket.on("message:create-user-message-res", async data => {
-      if (data.isSuccess) {
+
+    // socket.on("message:client-user-message-sent", async data => {
+    //   let { clientMessageId, messageId, chatId } = data
+
+    //   if (
+    //     activeChatSection.dataset.chatId.toString() !== "" &&
+    //     chatId.toString() === activeChatSection.dataset.chatId.toString()
+    //   ) {
+    //     let { updateClientUserMessageStatus } = await import(
+    //       "../../../chat/js/message.dev.js"
+    //     )
+    //     updateClientUserMessageStatus(clientMessageId, "sent", messageId)
+    //   }
+    // })
+
+    socket.on("message:user-message-delivered", async data => {
+      let { clientMessageId, messageId, chatId, deliveredTime } = data
+
+      if (chatId.toString() === activeChatSection.dataset.chatId.toString()) {
+        let { changeUserMessageStatusToDelivered } = await import(
+          "../../../chat/js/message.dev"
+        )
+        changeUserMessageStatusToDelivered(clientMessageId, messageId)
+
+        let { updateMessageInfoModalDeliveryStatus } = await import(
+          "../../../chat/js/userMessageOptionModal.dev"
+        )
+        updateMessageInfoModalDeliveryStatus(messageId, deliveredTime)
+      }
+    })
+
+    socket.on(
+      "message:replace-client-user-message-to-server-user-message",
+      async data => {
+        let clientMessageId = data.clientMessageId
         let message = data.message
         let chatId = activeChatSection.dataset.chatId
+
         let { updateAllChatSection } = await import(
           "../../../chat/js/updateAllChatSection.dev"
         )
@@ -42,21 +84,54 @@ export async function createMessageSocket(socket) {
           chatId.toString() !== "" &&
           chatId.toString() === message.chat._id.toString()
         ) {
-          let { replaceClientUserMessage } = await import(
+          let { replaceClientUserMessageToServerMessage } = await import(
             "../../../chat/js/message.dev"
           )
-          replaceClientUserMessage(data.clientMessageId, message, true, false)
+          replaceClientUserMessageToServerMessage(
+            clientMessageId,
+            message,
+            false
+          )
         }
-      } else {
-        let { updateClientUserMessageStatus } = await import(
-          "../../../chat/js/message.dev.js"
-        )
-        updateClientUserMessageStatus(data.clientMessageId, "error")
-        createMainNotification(data.error, "error")
       }
-    })
+    )
 
-    socket.on("message:new-message", async data => {
+    // socket.on("message:create-user-media-message-request-res", async data => {
+    //   if (data.isSuccess) {
+    //     let message = data.message
+    //     let chatId = activeChatSection.dataset.chatId
+    //     let { updateAllChatSection } = await import(
+    //       "../../../chat/js/updateAllChatSection.dev"
+    //     )
+    //     updateAllChatSection(message)
+    //     // let { increaseUnseenMessagesCountInChatBox } = await import(
+    //     //   "../../../chat/js/updateAllChatSection.dev"
+    //     // )
+    //     // increaseUnseenMessagesCountInChatBox(message.chat._id)
+    //     if (
+    //       chatId.toString() !== "" &&
+    //       chatId.toString() === message.chat._id.toString()
+    //     ) {
+    //       let { replaceClientUserMessageToServerMessage } = await import(
+    //         "../../../chat/js/message.dev"
+    //       )
+    //       replaceClientUserMessageToServerMessage(
+    //         data.clientMessageId,
+    //         message,
+    //         true,
+    //         false
+    //       )
+    //     }
+    //   } else {
+    //     let { updateClientUserMessageStatus } = await import(
+    //       "../../../chat/js/message.dev.js"
+    //     )
+    //     updateClientUserMessageStatus(data.clientMessageId, "error")
+    //     createMainNotification(data.error, "error")
+    //   }
+    // })
+
+    socket.on("message:new-user-message", async data => {
       let message = data.message
       let chatId = activeChatSection.dataset.chatId
       let { updateAllChatSection } = await import(
@@ -114,38 +189,30 @@ export async function createMessageSocket(socket) {
         updateChatBoxLatestMessage(data.latestMessage)
       }
     })
-    socket.on("message:message-delivered", async data => {
-      if (
-        data.chatId.toString() === activeChatSection.dataset.chatId.toString()
-      ) {
-        let { changeUserMessageStatusToDelivered } = await import(
-          "../../../chat/js/message.dev"
-        )
-        changeUserMessageStatusToDelivered(data.messageId)
-        let { updateMessageInfoDeliveryStatus } = await import(
-          "../../../chat/js/userMessageOptionModal.dev"
-        )
-        updateMessageInfoDeliveryStatus(data.messageId, data.deliveredTime)
-      }
-    })
     socket.on("message:update-message-seen-status", async data => {
-      if (
-        data.chatId.toString() === activeChatSection.dataset.chatId.toString()
-      ) {
+      let {
+        messageId,
+        chatId,
+        pushedUser,
+        pushedUserTime,
+        messageSeenStatusCount,
+        messageReaderCount
+      } = data
+      if (chatId.toString() === activeChatSection.dataset.chatId.toString()) {
         let { changeUserMessageStatusWithMessageSeenStatusCount } =
           await import("../../../chat/js/message.dev")
         changeUserMessageStatusWithMessageSeenStatusCount(
-          data.messageId,
-          data.messageSeenStatusCount,
-          data.messageReaderCount
+          messageId,
+          messageSeenStatusCount,
+          messageReaderCount
         )
-        let { addUserToMessageInfoSeenStatus } = await import(
+        let { addUserToMessageInfoModalSeenStatus } = await import(
           "../../../chat/js/userMessageOptionModal.dev"
         )
-        addUserToMessageInfoSeenStatus(
-          data.messageId,
-          data.pushedUser,
-          data.pushedUserTime
+        addUserToMessageInfoModalSeenStatus(
+          messageId,
+          pushedUser,
+          pushedUserTime
         )
       }
     })

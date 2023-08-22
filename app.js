@@ -13,7 +13,7 @@ const expressLayouts = require("express-ejs-layouts")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const compression = require("compression")
-const { companion, companionApp } = require("./services/companionServer") //fetching companion package and companion app
+// const { companion, companionApp } = require("./services/companionServer") //fetching companion package and companion app
 const { connectDB } = require("./config/database")
 const { registerRoutes } = require("./routes")
 const {
@@ -30,8 +30,6 @@ let io = createSocketIOInstance(httpServer) //creating socket io instance and de
 
 connectDB() // connecting to database
 
-//delete
-// console.log("all environments variable:", process.env)
 //setting express app settings
 app.set("view engine", "ejs")
 app.set("views", "./frontend/pages")
@@ -74,7 +72,7 @@ app.use((req, res, next) => {
   next()
 }) // asigning io instance to req object
 
-app.use("/companion", companionApp) // define companion app on /companion end Point here
+// app.use("/companion", companionApp) // define companion app on /companion end Point here
 
 registerRoutes(app) // register routes
 

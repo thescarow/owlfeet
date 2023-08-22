@@ -1200,7 +1200,7 @@ svg {
 }
 
 .text-message-url {
-    color: rgba(var(--rgba-third-color), 1);
+    color: rgba(var(--rgba-second-color), 1);
     font-size: 15px;
     font-weight: 600;
 }
@@ -1210,7 +1210,7 @@ svg {
 }
 
 .text-message-url--link {
-    color: rgba(var(--rgba-third-color), 1);
+    color: rgba(var(--rgba-second-color), 1);
 }
 
 .active-chat-user-message-box--right .text-message-url--link {
