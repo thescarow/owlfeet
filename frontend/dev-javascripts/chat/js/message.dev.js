@@ -30,26 +30,39 @@ let svg_deletedMessageBlankIcon = `
 <path d="M50 0C22.4304 0 0 22.4304 0 50C0 77.5696 22.4304 100 50 100C77.5696 100 100 77.5696 100 50C100 22.4304 77.5696 0 50 0ZM12.5 50C12.5 41.9136 15.0986 34.4372 19.4679 28.3058L71.6942 80.5321C65.5628 84.9014 58.0864 87.5 50 87.5C29.3213 87.5 12.5 70.6787 12.5 50ZM80.5319 71.6942L28.3056 19.4679C34.437 15.0986 41.9134 12.5 49.9998 12.5C70.6785 12.5 87.4998 29.3213 87.4998 50C87.4998 58.0864 84.9012 65.5628 80.5319 71.6942Z" />
 </svg>
 `
-let svg_imageIcon = `
+const svg_mediaImageIcon = `
 <svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
 <path d="M57.5 20C53.5 20 50 23.5 50 27.5C50 31.5 53.5 35 57.5 35C61.5 35 65 31.5 65 27.5C65 23.5 61.5 20 57.5 20ZM85 0H15C6.5 0 0 6.5 0 15V85C0 93.5 6.5 100 15 100H85C93.5 100 100 93.5 100 85V15C100 6.5 93.5 0 85 0ZM90 59.5L80.5 50C74.5 44.5 65 44.5 59.5 50L55 54.5L40.5 40C34.5 34.5 25 34.5 19.5 40L10 49.5V15C10 12 12 10 15 10H85C88 10 90 12 90 15V59.5Z" />
 </svg>
 `
-let svg_videoIcon = `
+const svg_mediaVideoIcon = `
 <svg width="100" height="65" viewBox="0 0 100 65"  xmlns="http://www.w3.org/2000/svg">
 <path d="M94.9525 9.98214C93.4341 9.34699 91.7483 9.14039 90.1046 9.38803C88.4608 9.63566 86.9317 10.3266 85.7071 11.375L74.9625 20.6607V13.9286C74.9625 10.2345 73.383 6.6917 70.5713 4.07958C67.7597 1.46747 63.9463 0 59.97 0H14.9925C11.0162 0 7.20284 1.46747 4.3912 4.07958C1.57956 6.6917 0 10.2345 0 13.9286V51.0714C0 54.7655 1.57956 58.3083 4.3912 60.9204C7.20284 63.5325 11.0162 65 14.9925 65H59.97C63.9463 65 67.7597 63.5325 70.5713 60.9204C73.383 58.3083 74.9625 54.7655 74.9625 51.0714V44.3393L85.7571 53.625C87.3463 54.9614 89.4107 55.7055 91.5542 55.7143C92.7438 55.7117 93.9192 55.4743 95.0025 55.0179C96.4765 54.4639 97.7392 53.5143 98.6294 52.2903C99.5196 51.0663 99.9968 49.6236 100 48.1464V16.8536C99.9928 15.371 99.5082 13.9244 98.6087 12.6999C97.7092 11.4753 96.4359 10.5288 94.9525 9.98214Z" />
 </svg>
 `
-let svg_audioIcon = `
+const svg_mediaAudioIcon = `
 <svg width="70" height="100" viewBox="0 0 70 100"  xmlns="http://www.w3.org/2000/svg">
 <path d="M35 65C40.3043 65 45.3914 62.8929 49.1421 59.1421C52.8929 55.3914 55 50.3043 55 45V20C55 14.6957 52.8929 9.60859 49.1421 5.85786C45.3914 2.10714 40.3043 0 35 0C29.6957 0 24.6086 2.10714 20.8579 5.85786C17.1071 9.60859 15 14.6957 15 20V45C15 50.3043 17.1071 55.3914 20.8579 59.1421C24.6086 62.8929 29.6957 65 35 65Z" />
 <path d="M70 45C70 43.6739 69.4732 42.4021 68.5355 41.4645C67.5979 40.5268 66.3261 40 65 40C63.6739 40 62.4021 40.5268 61.4645 41.4645C60.5268 42.4021 60 43.6739 60 45C60 51.6304 57.3661 57.9893 52.6777 62.6777C47.9893 67.3661 41.6304 70 35 70C28.3696 70 22.0107 67.3661 17.3223 62.6777C12.6339 57.9893 10 51.6304 10 45C10 43.6739 9.47321 42.4021 8.53553 41.4645C7.59785 40.5268 6.32608 40 5 40C3.67392 40 2.40215 40.5268 1.46447 41.4645C0.526785 42.4021 0 43.6739 0 45C0.00985554 53.4092 3.04704 61.5338 8.5559 67.8874C14.0648 74.2409 21.677 78.3987 30 79.6V90H19.45C18.2698 90 17.1379 90.4688 16.3034 91.3034C15.4688 92.1379 15 93.2698 15 94.45V95.55C15 96.7302 15.4688 97.8621 16.3034 98.6966C17.1379 99.5312 18.2698 100 19.45 100H50.55C51.7302 100 52.8621 99.5312 53.6966 98.6966C54.5312 97.8621 55 96.7302 55 95.55V94.45C55 93.2698 54.5312 92.1379 53.6966 91.3034C52.8621 90.4688 51.7302 90 50.55 90H40V79.6C48.323 78.3987 55.9352 74.2409 61.4441 67.8874C66.953 61.5338 69.9901 53.4092 70 45Z" />
 </svg>
 `
-let svg_youtubeIcon = `
+const svg_mediaYoutubeIcon = `
 <svg width="100" height="68" viewBox="0 0 100 68"  xmlns="http://www.w3.org/2000/svg">
 <path d="M99.977 23.9653C100.202 17.6732 98.7797 11.4282 95.8432 5.81006C93.8509 3.50481 91.0858 1.94914 88.03 1.4141C75.3903 0.304237 62.6984 -0.150661 50.0085 0.0513592C37.3649 -0.15983 24.7186 0.280389 12.1233 1.37015C9.63317 1.80849 7.32871 2.9388 5.49115 4.62315C1.40282 8.27179 0.948564 14.514 0.494306 19.7892C-0.164769 29.2737 -0.164769 38.7904 0.494306 48.2749C0.625724 51.244 1.08254 54.1911 1.85708 57.0668C2.4048 59.2871 3.51296 61.3412 5.08232 63.0453C6.93237 64.8189 9.2905 66.0135 11.8508 66.4742C21.6442 67.644 31.5121 68.1288 41.3776 67.9248C57.2766 68.1446 71.2224 67.9248 87.712 66.694C90.3351 66.2616 92.7597 65.0655 94.6621 63.2651C95.9339 62.0339 96.8838 60.5269 97.4331 58.8692C99.0577 54.0451 99.8556 48.9964 99.7953 43.923C99.977 41.4612 99.977 26.6029 99.977 23.9653ZM39.7423 46.5605V19.3496L66.6344 33.021C59.0937 37.0653 49.1454 41.6371 39.7423 46.5605Z" />
 </svg>
+`
+const svg_mediaStickerIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M66.6667 77.7778C66.6667 74.8309 67.8373 72.0048 69.921 69.921C72.0048 67.8373 74.8309 66.6667 77.7778 66.6667H100V16.6667C100 12.2464 98.2441 8.00716 95.1184 4.88155C91.9928 1.75595 87.7536 0 83.3333 0H16.6667C12.2464 0 8.00716 1.75595 4.88155 4.88155C1.75595 8.00716 0 12.2464 0 16.6667V83.3333C0 87.7536 1.75595 91.9928 4.88155 95.1184C8.00716 98.2441 12.2464 100 16.6667 100H66.6667V77.7778ZM66.6667 33.3333C67.7654 33.3333 68.8396 33.6592 69.7532 34.2696C70.6668 34.8801 71.3788 35.7477 71.7993 36.7629C72.2198 37.778 72.3298 38.8951 72.1155 39.9727C71.9011 41.0504 71.372 42.0403 70.595 42.8173C69.8181 43.5942 68.8282 44.1233 67.7505 44.3377C66.6728 44.5521 65.5558 44.442 64.5406 44.0216C63.5255 43.6011 62.6578 42.889 62.0474 41.9754C61.4369 41.0618 61.1111 39.9877 61.1111 38.8889C61.1111 37.4155 61.6964 36.0024 62.7383 34.9605C63.7802 33.9186 65.1932 33.3333 66.6667 33.3333ZM33.3333 33.3333C34.4321 33.3333 35.5062 33.6592 36.4198 34.2696C37.3334 34.8801 38.0455 35.7477 38.466 36.7629C38.8865 37.778 38.9965 38.8951 38.7821 39.9727C38.5678 41.0504 38.0387 42.0403 37.2617 42.8173C36.4847 43.5942 35.4948 44.1233 34.4172 44.3377C33.3395 44.5521 32.2225 44.442 31.2073 44.0216C30.1922 43.6011 29.3245 42.889 28.7141 41.9754C28.1036 41.0618 27.7778 39.9877 27.7778 38.8889C27.7778 37.4155 28.3631 36.0024 29.405 34.9605C30.4468 33.9186 31.8599 33.3333 33.3333 33.3333ZM28.8889 52.2222C29.3266 51.6386 29.875 51.1468 30.5028 50.7751C31.1306 50.4034 31.8254 50.159 32.5477 50.0558C33.2699 49.9527 34.0054 49.9927 34.7121 50.1738C35.4189 50.3549 36.083 50.6734 36.6667 51.1111C40.5132 53.996 45.1918 55.5556 50 55.5556C54.8082 55.5556 59.4867 53.996 63.3333 51.1111C63.917 50.6734 64.5811 50.3549 65.2879 50.1738C65.9946 49.9927 66.7301 49.9527 67.4523 50.0558C68.1746 50.159 68.8694 50.4034 69.4972 50.7751C70.125 51.1468 70.6734 51.6386 71.1111 52.2222C71.5488 52.8059 71.8673 53.47 72.0484 54.1768C72.2295 54.8835 72.2696 55.619 72.1664 56.3412C72.0632 57.0635 71.8188 57.7583 71.4471 58.3861C71.0754 59.0138 70.5837 59.5623 70 60C64.2301 64.3274 57.2123 66.6667 50 66.6667C42.7877 66.6667 35.7699 64.3274 30 60C29.4163 59.5623 28.9246 59.0138 28.5529 58.3861C28.1812 57.7583 27.9368 57.0635 27.8336 56.3412C27.7304 55.619 27.7705 54.8835 27.9516 54.1768C28.1327 53.47 28.4511 52.8059 28.8889 52.2222Z" />
+<path d="M77.7778 96.7445L96.7445 77.7778H77.7778V96.7445Z" />
+</svg>
+
+`
+const svg_mediaVideoClipIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M83.2384 0H16.7616C12.3162 0 8.05279 2.19493 4.90937 6.10194C1.76595 10.0089 0 15.308 0 20.8333V79.1667C0 84.692 1.76595 89.991 4.90937 93.8981C8.05279 97.8051 12.3162 100 16.7616 100H83.2384C87.6838 100 91.9472 97.8051 95.0906 93.8981C98.234 89.991 100 84.692 100 79.1667V20.8333C100 15.308 98.234 10.0089 95.0906 6.10194C91.9472 2.19493 87.6838 0 83.2384 0ZM67.9517 55.5L40.4459 73.8333C39.7145 74.3239 38.8968 74.5816 38.0657 74.5833C36.7321 74.5833 35.453 73.9249 34.51 72.7528C33.567 71.5806 33.0372 69.9909 33.0372 68.3333V31.6667C33.038 30.5862 33.2641 29.5244 33.6935 28.585C34.1229 27.6455 34.7409 26.8605 35.4872 26.3064C36.2335 25.7524 37.0826 25.4483 37.9517 25.4238C38.8208 25.3993 39.6801 25.6552 40.4459 26.1667L67.9517 44.5C68.75 45.0355 69.4169 45.8295 69.8816 46.7977C70.3464 47.766 70.5918 48.8725 70.5918 50C70.5918 51.1275 70.3464 52.234 69.8816 53.2023C69.4169 54.1705 68.75 54.9645 67.9517 55.5ZM39.7419 35.1458L62.0181 50L39.7419 64.8542V35.1458Z" />
+</svg>
+
 `
 let svg_messageLinkPreviewWebsiteIcon = `
 <svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
@@ -103,6 +116,31 @@ let svg_messageErrorIcon = `
 <path d="M50 0C22.3875 0 0 22.3875 0 50C0 77.6125 22.3875 100 50 100C77.6125 100 100 77.6125 100 50C100 22.3875 77.6125 0 50 0ZM50 93.75C25.875 93.75 6.25 74.125 6.25 50C6.25 25.875 25.875 6.25 50 6.25C74.125 6.25 93.75 25.875 93.75 50C93.75 74.125 74.125 93.75 50 93.75ZM50 18.75C48.3424 18.75 46.7527 19.4085 45.5806 20.5806C44.4085 21.7527 43.75 23.3424 43.75 25V56.25C43.75 57.9076 44.4085 59.4973 45.5806 60.6694C46.7527 61.8415 48.3424 62.5 50 62.5C51.6576 62.5 53.2473 61.8415 54.4194 60.6694C55.5915 59.4973 56.25 57.9076 56.25 56.25V25C56.25 23.3424 55.5915 21.7527 54.4194 20.5806C53.2473 19.4085 51.6576 18.75 50 18.75ZM43.75 74.9C43.75 76.5576 44.4085 78.1473 45.5806 79.3194C46.7527 80.4915 48.3424 81.15 50 81.15C51.6576 81.15 53.2473 80.4915 54.4194 79.3194C55.5915 78.1473 56.25 76.5576 56.25 74.9C56.25 74.0792 56.0883 73.2665 55.7742 72.5082C55.4602 71.7499 54.9998 71.061 54.4194 70.4806C53.8391 69.9002 53.1501 69.4398 52.3918 69.1258C51.6335 68.8117 50.8208 68.65 50 68.65C49.1792 68.65 48.3665 68.8117 47.6082 69.1258C46.8499 69.4398 46.1609 69.9002 45.5806 70.4806C45.0002 71.061 44.5398 71.7499 44.2258 72.5082C43.9117 73.2665 43.75 74.0792 43.75 74.9Z" />
 </svg>
 
+`
+let svg_messageVideoClipPlayBtnIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M91.5833 36.7555L25.0168 2.04038C13.8668 -3.78849 0 3.56939 0 15.27V84.7281C0 96.443 13.8667 103.772 25 97.9717L91.5833 63.2566C102.8 57.3991 102.8 42.6129 91.5833 36.7555Z" />
+</svg>
+
+`
+let svg_messageVideoClipMuteBtnIcon = `
+<svg width="109" height="100" viewBox="0 0 109 100"  xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M49.6686 10.2083C46.5542 12.1555 42.6074 15.4942 36.9831 20.2668L36.0285 21.077C35.9557 21.1386 35.8842 21.1995 35.8131 21.2596C34.1552 22.6671 33.007 23.6418 31.749 24.3565C30.5088 25.0608 29.2059 25.564 27.8693 25.8544C26.5132 26.1492 25.1374 26.1488 23.1514 26.1483C23.0667 26.1483 22.9808 26.1482 22.8937 26.1482C16.5984 26.1482 14.4735 26.2396 12.6668 27.3154C10.921 28.3549 9.0616 30.6065 8.14917 32.786C7.19733 35.0595 7.0226 37.3897 6.68661 44.4847C6.59439 46.4315 6.54097 48.2981 6.54097 49.9997C6.54097 51.7019 6.59439 53.5679 6.68661 55.5154C7.0226 62.6102 7.19733 64.9404 8.14917 67.2139C9.0616 69.3931 10.921 71.6447 12.6668 72.6846C14.4735 73.7605 16.5984 73.8514 22.8937 73.8514C22.9808 73.8514 23.0666 73.8514 23.1514 73.8514C25.1374 73.8508 26.5132 73.8508 27.8693 74.1455C29.2059 74.4356 30.5088 74.939 31.749 75.6434C33.007 76.3578 34.1552 77.3326 35.8131 78.7401C35.8837 78.8002 35.9557 78.8614 36.0285 78.9231L36.9831 79.7329C42.6074 84.5055 46.5542 87.8442 49.6686 89.7916C52.7747 91.7334 54.328 91.8114 55.4142 91.3338C56.0134 91.0712 56.5999 90.6868 57.1179 90.2187C58.0624 89.364 58.9237 87.7106 59.5293 83.382C60.1377 79.0331 60.3618 73.0174 60.6718 64.4263C60.899 58.143 61.049 52.872 61.049 49.9997C61.049 47.128 60.899 41.8565 60.6718 35.5734C60.3618 26.9826 60.1377 20.9667 59.5293 16.6179C58.9237 12.2889 58.0624 10.6358 57.1179 9.78132C56.5999 9.31287 56.0134 8.92889 55.4142 8.66573C54.328 8.18853 52.7747 8.26637 49.6686 10.2083ZM46.8107 2.6362C50.4125 0.384206 53.9591 -0.868314 57.5269 0.698656C58.7126 1.21935 59.8538 1.96684 60.8785 2.89385C63.9576 5.67861 65.261 10.0786 65.967 15.1264C66.6612 20.0896 66.8984 26.6668 67.1941 34.8599L67.2058 35.1827C67.4317 41.4401 67.59 46.9018 67.59 49.9997C67.59 53.0976 67.4317 58.5599 67.2058 64.8169L67.1941 65.1396C66.8984 73.3328 66.6612 79.9103 65.967 84.8731C65.261 89.9213 63.9576 94.3212 60.8785 97.1059C59.8538 98.0331 58.7126 98.7806 57.5269 99.3014C53.9591 100.868 50.4125 99.6157 46.8107 97.3635C43.2628 95.1456 38.9584 91.4927 33.5914 86.9384L32.4279 85.9506C30.4748 84.2934 29.8028 83.7395 29.1077 83.3449C28.3638 82.9223 27.582 82.6204 26.78 82.4459C26.0313 82.2831 25.2333 82.2696 22.8937 82.2696C22.6566 82.2696 22.4226 82.2702 22.1916 82.2702C16.8851 82.2736 13.1979 82.2764 9.92029 80.3245C6.89052 78.5207 3.97433 74.989 2.39085 71.207C0.678777 67.1174 0.477882 62.8409 0.19226 56.7596C0.180922 56.5182 0.169455 56.2747 0.157768 56.0277C0.0598717 53.9608 0 51.9168 0 49.9997C0 48.0832 0.0598717 46.0392 0.157768 43.9723C0.169455 43.7253 0.180922 43.4812 0.19226 43.2399C0.477882 37.1591 0.678777 32.8824 2.39085 28.793C3.97433 25.0106 6.89052 21.4793 9.92029 19.6752C13.1979 17.7236 16.8851 17.7261 22.1916 17.7297C22.4226 17.7298 22.6566 17.73 22.8937 17.73C25.2333 17.73 26.0313 17.7165 26.78 17.5537C27.582 17.3794 28.3638 17.0775 29.1077 16.655C29.8028 16.2603 30.4748 15.7064 32.4279 14.0489L33.5914 13.0616C38.9584 8.50691 43.2628 4.85418 46.8107 2.6362Z" />
+<path d="M80.1867 35.9227C78.5745 34.3121 76.4443 33.8307 75.4288 34.8473C74.4132 35.8639 74.8969 37.9936 76.5091 39.6041L101.993 65.0615C103.605 66.6721 105.736 67.1535 106.751 66.1369C107.767 65.1203 107.283 62.9906 105.671 61.3801L80.1867 35.9227Z" />
+<path d="M101.978 35.9191L76.5206 61.4032C74.9101 63.0154 74.4286 65.1456 75.4452 66.1612C76.4618 67.1767 78.5915 66.693 80.202 65.0808L105.66 39.5967C107.27 37.9845 107.751 35.8543 106.735 34.8387C105.718 33.8232 103.589 34.3069 101.978 35.9191Z" />
+</svg>
+`
+let svg_messageVideoClipUnmuteBtnIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M49.6705 10.2083C46.556 12.1555 42.6091 15.4942 36.9845 20.2668L36.0299 21.077C35.9571 21.1386 35.8856 21.1995 35.8145 21.2596C34.1565 22.6671 33.0083 23.6418 31.7502 24.3565C30.51 25.0608 29.207 25.564 27.8704 25.8544C26.5142 26.1492 25.1383 26.1488 23.1523 26.1483C23.0676 26.1483 22.9817 26.1482 22.8946 26.1482C16.599 26.1482 14.474 26.2396 12.6673 27.3154C10.9214 28.3549 9.06194 30.6065 8.14949 32.786C7.19761 35.0595 7.02287 37.3897 6.68687 44.4847C6.59464 46.4315 6.54122 48.2981 6.54122 49.9997C6.54122 51.7019 6.59464 53.5679 6.68687 55.5154C7.02287 62.6102 7.19761 64.9404 8.14949 67.2139C9.06194 69.3931 10.9214 71.6447 12.6673 72.6846C14.474 73.7605 16.599 73.8514 22.8946 73.8514C22.9817 73.8514 23.0675 73.8514 23.1523 73.8514C25.1383 73.8508 26.5142 73.8508 27.8704 74.1455C29.207 74.4356 30.51 74.939 31.7502 75.6434C33.0083 76.3578 34.1565 77.3326 35.8145 78.7401C35.8851 78.8002 35.9571 78.8614 36.0299 78.9231L36.9845 79.7329C42.6091 84.5055 46.556 87.8442 49.6705 89.7916C52.7767 91.7334 54.3301 91.8114 55.4163 91.3338C56.0155 91.0712 56.602 90.6868 57.1201 90.2187C58.0646 89.364 58.9259 87.7106 59.5316 83.382C60.14 79.0331 60.3641 73.0174 60.6742 64.4263C60.9014 58.143 61.0514 52.872 61.0514 49.9997C61.0514 47.128 60.9014 41.8565 60.6742 35.5734C60.3641 26.9826 60.14 20.9667 59.5316 16.6179C58.9259 12.2889 58.0646 10.6358 57.1201 9.78132C56.602 9.31287 56.0155 8.92889 55.4163 8.66573C54.3301 8.18853 52.7767 8.26637 49.6705 10.2083ZM46.8124 2.6362C50.4145 0.384206 53.9611 -0.868314 57.5291 0.698656C58.7149 1.21935 59.8561 1.96684 60.8809 2.89385C63.96 5.67861 65.2635 10.0786 65.9695 15.1264C66.6637 20.0896 66.901 26.6668 67.1966 34.8599L67.2084 35.1827C67.4343 41.4401 67.5926 46.9018 67.5926 49.9997C67.5926 53.0976 67.4343 58.5599 67.2084 64.8169L67.1966 65.1396C66.901 73.3328 66.6637 79.9103 65.9695 84.8731C65.2635 89.9213 63.96 94.3212 60.8809 97.1059C59.8561 98.0331 58.7149 98.7806 57.5291 99.3014C53.9611 100.868 50.4145 99.6157 46.8124 97.3635C43.2645 95.1456 38.9599 91.4927 33.5926 86.9384L32.4292 85.9506C30.476 84.2934 29.804 83.7395 29.1089 83.3449C28.3649 82.9223 27.583 82.6204 26.7811 82.4459C26.0323 82.2831 25.2343 82.2696 22.8946 82.2696C22.6574 82.2696 22.4234 82.2702 22.1925 82.2702C16.8857 82.2736 13.1984 82.2764 9.92067 80.3245C6.89078 78.5207 3.97449 74.989 2.39095 71.207C0.678803 67.1174 0.477901 62.8409 0.192267 56.7596C0.180929 56.5182 0.169461 56.2747 0.157774 56.0277C0.059874 53.9608 0 51.9168 0 49.9997C0 48.0832 0.059874 46.0392 0.157774 43.9723C0.169461 43.7253 0.180929 43.4812 0.192267 43.2399C0.477901 37.1591 0.678803 32.8824 2.39095 28.793C3.97449 25.0106 6.89078 21.4793 9.92067 19.6752C13.1984 17.7236 16.8857 17.7261 22.1924 17.7297C22.4234 17.7298 22.6574 17.73 22.8946 17.73C25.2343 17.73 26.0323 17.7165 26.7811 17.5537C27.583 17.3794 28.3649 17.0775 29.1089 16.655C29.804 16.2603 30.476 15.7064 32.4292 14.0489L33.5926 13.0616C38.9599 8.50691 43.2645 4.85418 46.8124 2.6362Z" />
+<path d="M79.3481 28.0522C78.2679 26.7606 76.4546 26.6356 75.2586 27.8022C74.0626 28.9689 73.9855 30.9272 75.0271 32.2189C78.9237 36.8856 81.0457 43.0106 81.0457 49.3856C81.0457 55.7606 78.8466 62.0522 74.8342 66.8022C73.754 68.0939 73.8312 70.0522 75.0271 71.2189C75.5673 71.7606 76.2617 72.0522 76.9947 72.0522C77.7663 72.0522 78.5765 71.7189 79.1166 71.0522C84.0935 65.1356 86.8713 57.4689 86.8713 49.3856C86.8713 41.3022 84.2092 33.8856 79.3867 28.0522H79.3481Z" />
+<path d="M92.3794 17.6115C91.2852 15.6333 89.4484 15.4418 88.2369 17.2287C87.0254 19.0155 86.9473 22.0148 88.0024 23.993C91.9495 31.1403 94.0989 40.5211 94.0989 50.2847C94.0989 60.0484 91.8714 69.6844 87.807 76.9593C86.7128 78.9376 86.791 81.9369 88.0024 83.7237C88.5496 84.5533 89.253 85 89.9955 85C90.7771 85 91.5978 84.4895 92.1449 83.4684C97.1862 74.4067 100 62.6648 100 50.2847C100 37.9047 97.3035 26.5456 92.4185 17.6115H92.3794Z" />
+</svg>
+`
+let svg_messageVideoClipFullScreenBtnIcon = `
+<svg width="100" height="100" viewBox="0 0 100 100"  xmlns="http://www.w3.org/2000/svg">
+<path d="M31.6667 4.7619C31.6667 6.02484 31.165 7.23605 30.2719 8.12908C29.3789 9.02211 28.1677 9.52381 26.9048 9.52381H14.2857C13.0228 9.52381 11.8116 10.0255 10.9185 10.9185C10.0255 11.8116 9.52381 13.0228 9.52381 14.2857V26.9048C9.52381 28.1677 9.02211 29.3789 8.12908 30.2719C7.23605 31.165 6.02484 31.6667 4.7619 31.6667C3.49897 31.6667 2.28776 31.165 1.39473 30.2719C0.5017 29.3789 0 28.1677 0 26.9048V14.2857C0 10.4969 1.5051 6.86328 4.18419 4.18419C6.86328 1.5051 10.4969 0 14.2857 0H26.9048C28.1677 0 29.3789 0.5017 30.2719 1.39473C31.165 2.28776 31.6667 3.49897 31.6667 4.7619ZM85.7143 0H73.0952C71.8323 0 70.6211 0.5017 69.7281 1.39473C68.835 2.28776 68.3333 3.49897 68.3333 4.7619C68.3333 6.02484 68.835 7.23605 69.7281 8.12908C70.6211 9.02211 71.8323 9.52381 73.0952 9.52381H85.7143C86.9772 9.52381 88.1884 10.0255 89.0815 10.9185C89.9745 11.8116 90.4762 13.0228 90.4762 14.2857V26.9048C90.4762 28.1677 90.9779 29.3789 91.8709 30.2719C92.7639 31.165 93.9752 31.6667 95.2381 31.6667C96.501 31.6667 97.7122 31.165 98.6053 30.2719C99.4983 29.3789 100 28.1677 100 26.9048V14.2857C100 10.4969 98.4949 6.86328 95.8158 4.18419C93.1367 1.5051 89.5031 0 85.7143 0ZM95.2381 68.2857C93.9752 68.2857 92.7639 68.7874 91.8709 69.6804C90.9779 70.5735 90.4762 71.7847 90.4762 73.0476V85.6667C90.4762 86.9296 89.9745 88.1408 89.0815 89.0338C88.1884 89.9269 86.9772 90.4286 85.7143 90.4286H73.0952C71.8323 90.4286 70.6211 90.9303 69.7281 91.8233C68.835 92.7163 68.3333 93.9275 68.3333 95.1905C68.3333 96.4534 68.835 97.6646 69.7281 98.5577C70.6211 99.4507 71.8323 99.9524 73.0952 99.9524H85.7143C89.5031 99.9524 93.1367 98.4473 95.8158 95.7682C98.4949 93.0891 100 89.4555 100 85.6667V73.0476C100 71.7847 99.4983 70.5735 98.6053 69.6804C97.7122 68.7874 96.501 68.2857 95.2381 68.2857ZM26.9048 90.4762H14.2857C13.0228 90.4762 11.8116 89.9745 10.9185 89.0815C10.0255 88.1884 9.52381 86.9772 9.52381 85.7143V73.0952C9.52381 71.8323 9.02211 70.6211 8.12908 69.7281C7.23605 68.835 6.02484 68.3333 4.7619 68.3333C3.49897 68.3333 2.28776 68.835 1.39473 69.7281C0.5017 70.6211 0 71.8323 0 73.0952V85.7143C0 89.5031 1.5051 93.1367 4.18419 95.8158C6.86328 98.4949 10.4969 100 14.2857 100H26.9048C28.1677 100 29.3789 99.4983 30.2719 98.6053C31.165 97.7122 31.6667 96.501 31.6667 95.2381C31.6667 93.9752 31.165 92.7639 30.2719 91.8709C29.3789 90.9779 28.1677 90.4762 26.9048 90.4762Z" />
+</svg>
 `
 
 import Plyr from "plyr"
@@ -305,7 +343,9 @@ export function checkTimeAndCreateOldMessages(
         let userMessageBox = createUserMessage(
           allMessages[i],
           isUserChanged,
-          isScrolledToBottom
+          isScrolledToBottom,
+          false,
+          false
         )
         activeChatMessageContainer.insertAdjacentElement(
           "afterbegin",
@@ -354,7 +394,9 @@ export function checkTimeAndCreateOldMessages(
 
 export function checkTimeAndCreateNewMessage(
   message,
-  isScrolledToBottom = false
+  isScrolledToBottom = false,
+  isVideoClipAutoPlayed = false,
+  isVideoClipMuted = true
 ) {
   let isUserChanged
   if (activeChatMessageContainer.children.length === 0) {
@@ -397,7 +439,9 @@ export function checkTimeAndCreateNewMessage(
     let userMessageBox = createUserMessage(
       message,
       isUserChanged,
-      isScrolledToBottom
+      isScrolledToBottom,
+      isVideoClipAutoPlayed,
+      isVideoClipMuted
     )
     activeChatMessageContainer.insertAdjacentElement(
       "beforeend",
@@ -415,7 +459,9 @@ export function checkTimeAndCreateNewMessage(
 export function createUserMessage(
   message,
   isUserChanged = true,
-  isScrolledToBottom = false
+  isScrolledToBottom = false,
+  isVideoClipAutoPlayed = false,
+  isVideoClipMuted = true
 ) {
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -432,8 +478,7 @@ export function createUserMessage(
     (message.hasOwnProperty("isDeletedForAll") &&
       message.isDeletedForAll === false)
   ) {
-    let messageBoxInnerHtml = `
-        
+    let messageBoxInnerHtml = `  
         <div class="active-chat-user-message-box__content-box">
       
            <div class="active-chat-user-message-box__content-info">
@@ -479,8 +524,7 @@ export function createUserMessage(
 
         messageContentBox.insertAdjacentElement("afterbegin", video)
         createPlyr(video, "video")
-      }
-      if (message.mediaContentType === "audio") {
+      } else if (message.mediaContentType === "audio") {
         messageBox.classList.add("active-chat-user-message-box--audio")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--audio"
@@ -501,8 +545,7 @@ export function createUserMessage(
 
         messageContentBox.insertAdjacentElement("afterbegin", audio)
         createPlyr(audio, "audio")
-      }
-      if (message.mediaContentType === "youtube") {
+      } else if (message.mediaContentType === "youtube") {
         messageBox.classList.add("active-chat-user-message-box--youtube")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--youtube"
@@ -521,8 +564,7 @@ export function createUserMessage(
 
         messageContentBox.insertAdjacentElement("afterbegin", youtube)
         createPlyr(youtube, "youtube")
-      }
-      if (message.mediaContentType === "image") {
+      } else if (message.mediaContentType === "image") {
         messageBox.classList.add("active-chat-user-message-box--image")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--image"
@@ -536,16 +578,224 @@ export function createUserMessage(
           "active-chat-user-message-box__content",
           "active-chat-user-message-box__content--image"
         )
+
+        image.setAttribute("src", message.mediaContentPath)
+        image.setAttribute("alt", "Image")
         image.onload = () => {
           if (isScrolledToBottom) {
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight
           }
         }
-        image.setAttribute("src", message.mediaContentPath)
-        image.setAttribute("alt", "Image")
-
         messageContentBox.insertAdjacentElement("afterbegin", image)
+      } else if (message.mediaContentType === "video-clip") {
+        messageBox.classList.add("active-chat-user-message-box--video-clip")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--video-clip"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--video-clip"
+        )
+        ///////////////////////////////
+        const videoClip = document.createElement("div")
+        videoClip.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--video-clip"
+        )
+
+        const video = document.createElement("video")
+
+        if (message.mediaVideoClipSpecs.mediaQuality.hasMedium) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.medium.url
+        } else if (message.mediaVideoClipSpecs.mediaQuality.hasHigh) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.high.url
+        } else if (message.mediaVideoClipSpecs.mediaQuality.hasLow) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.low.url
+        } else {
+          video.src = message.mediaContentPath
+        }
+        video.autoplay = isVideoClipAutoPlayed
+        video.loop = true
+        video.muted = isVideoClipMuted
+        video.controls = false
+
+        let videoClipBtns = `
+        <div class='video-clip-btn video-clip-btn--mute-unmute  ${
+          isVideoClipMuted
+            ? "video-clip-btn--selected"
+            : "video-clip-btn--unselected"
+        }' data-btn-type="mute-unmute">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+             ${svg_messageVideoClipUnmuteBtnIcon}
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+             ${svg_messageVideoClipMuteBtnIcon}
+        </div>
+       </div>
+
+       <div class='video-clip-btn video-clip-btn--play-pause ${
+         isVideoClipAutoPlayed
+           ? "video-clip-btn--unselected"
+           : "video-clip-btn--selected"
+       }'  data-btn-type="play-pause">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+        
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+        ${svg_messageVideoClipPlayBtnIcon}
+        </div>
+       </div>
+
+       <div class="video-clip-btn video-clip-btn--fullscreen video-clip-btn--unselected"  data-btn-type="fullscreen">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+             ${svg_messageVideoClipFullScreenBtnIcon}
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+             ${svg_messageVideoClipFullScreenBtnIcon}
+        </div>
+       </div>
+       `
+
+        videoClip.addEventListener("click", e => {
+          let videoClipBtn = e.target.closest(".video-clip-btn")
+
+          if (videoClipBtn && videoClip.contains(videoClipBtn)) {
+            let btnType = videoClipBtn.dataset.btnType
+            if (btnType === "play-pause") {
+              if (video.paused) {
+                video.play()
+                videoClipBtn.classList.remove("video-clip-btn--selected")
+                videoClipBtn.classList.add("video-clip-btn--unselected")
+              } else {
+                video.pause()
+                videoClipBtn.classList.remove("video-clip-btn--unselected")
+                videoClipBtn.classList.add("video-clip-btn--selected")
+              }
+            } else if (btnType === "mute-unmute") {
+              if (video.muted) {
+                video.muted = false
+                videoClipBtn.classList.remove("video-clip-btn--selected")
+                videoClipBtn.classList.add("video-clip-btn--unselected")
+              } else {
+                video.muted = true
+                videoClipBtn.classList.remove("video-clip-btn--unselected")
+                videoClipBtn.classList.add("video-clip-btn--selected")
+              }
+            } else if (btnType === "fullscreen") {
+              if (video.requestFullscreen) {
+                video.requestFullscreen()
+              } else if (video.mozRequestFullScreen) {
+                video.mozRequestFullScreen()
+              } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen()
+              } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen()
+              }
+            }
+          }
+        })
+        video.addEventListener("play", () => {
+          let playPauseBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="play-pause"]'
+          )
+          if (playPauseBtn) {
+            if (playPauseBtn.classList.contains("video-clip-btn--selected")) {
+              playPauseBtn.classList.remove("video-clip-btn--selected")
+              playPauseBtn.classList.add("video-clip-btn--unselected")
+            }
+          }
+        })
+        video.addEventListener("pause", () => {
+          let playPauseBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="play-pause"]'
+          )
+
+          if (playPauseBtn) {
+            if (playPauseBtn.classList.contains("video-clip-btn--unselected")) {
+              playPauseBtn.classList.remove("video-clip-btn--unselected")
+              playPauseBtn.classList.add("video-clip-btn--selected")
+            }
+          }
+        })
+        video.addEventListener("volumechange", () => {
+          let muteUnmuteBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="mute-unmute"]'
+          )
+
+          if (muteUnmuteBtn) {
+            if (video.muted) {
+              if (
+                muteUnmuteBtn.classList.contains("video-clip-btn--unselected")
+              ) {
+                muteUnmuteBtn.classList.remove("video-clip-btn--unselected")
+                muteUnmuteBtn.classList.add("video-clip-btn--selected")
+              }
+            } else {
+              if (
+                muteUnmuteBtn.classList.contains("video-clip-btn--selected")
+              ) {
+                muteUnmuteBtn.classList.remove("video-clip-btn--selected")
+                muteUnmuteBtn.classList.add("video-clip-btn--unselected")
+              }
+            }
+          }
+        })
+        videoClip.insertAdjacentElement("beforeend", video)
+        videoClip.insertAdjacentHTML("beforeend", videoClipBtns)
+        /////////////////////////////////////
+
+        messageContentBox.insertAdjacentElement("afterbegin", videoClip)
+      } else if (message.mediaContentType === "sticker") {
+        messageBox.classList.add("active-chat-user-message-box--sticker")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--sticker"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--sticker"
+        )
+        ///////////////////////////////
+        const picture = document.createElement("picture")
+        picture.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--sticker"
+        )
+
+        if (message.hasOwnProperty("mediaStickerSpecs")) {
+          if (message.mediaStickerSpecs.hasWebp) {
+            let source = document.createElement("source")
+            source.srcset = message.mediaStickerSpecs.webp
+
+            picture.insertAdjacentElement("beforeend", source)
+          }
+          if (message.mediaStickerSpecs.hasGif) {
+            let source = document.createElement("source")
+            source.srcset = message.mediaStickerSpecs.gif
+
+            picture.insertAdjacentElement("beforeend", source)
+          }
+          let img = document.createElement("img")
+          img.src = message.mediaContentPath
+          img.alt = "sticker"
+          // if (
+          //   message.mediaStickerSpecs.hasOwnProperty("width") &&
+          //   message.mediaStickerSpecs.hasOwnProperty("height") &&
+          //   message.mediaStickerSpecs.width !== "" &&
+          //   message.mediaStickerSpecs.height !== ""
+          // ) {
+          //   img.style.width = message.mediaStickerSpecs.width
+          //   img.style.height = message.mediaStickerSpecs.height
+          //   img.style.backgroundColor = "#888"
+          // }
+          img.onload = () => {
+            if (isScrolledToBottom) {
+              activeChatMessageContainer.scrollTop =
+                activeChatMessageContainer.scrollHeight
+            }
+          }
+          picture.insertAdjacentElement("beforeend", img)
+        }
+
+        messageContentBox.insertAdjacentElement("afterbegin", picture)
       }
     } else {
       messageBox.classList.add("active-chat-user-message-box--text")
@@ -635,16 +885,22 @@ export function createUserMessage(
       } else {
         if (message.repliedTo.hasMediaContent) {
           if (message.repliedTo.mediaContentType === "video") {
-            repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+            repliedMessageContent = `${svg_mediaVideoIcon} <span>Video</span>`
           }
           if (message.repliedTo.mediaContentType === "audio") {
-            repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
+            repliedMessageContent = `${svg_mediaAudioIcon} <span>Audio</span>`
           }
           if (message.repliedTo.mediaContentType === "image") {
-            repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
+            repliedMessageContent = `${svg_mediaImageIcon} <span>Image</span>`
           }
           if (message.repliedTo.mediaContentType === "youtube") {
-            repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
+            repliedMessageContent = `${svg_mediaYoutubeIcon} <span>Youtube</span>`
+          }
+          if (message.repliedTo.mediaContentType === "video-clip") {
+            repliedMessageContent = `${svg_mediaVideoClipIcon} <span>Video clip</span>`
+          }
+          if (message.repliedTo.mediaContentType === "sticker") {
+            repliedMessageContent = `${svg_mediaStickerIcon} <span>Sticker</span>`
           }
           messageContentBox.getElementsByClassName(
             "active-chat-user-message-reply-box__user-message"
@@ -764,6 +1020,7 @@ export function createUserMessage(
 
 export function checkTimeAndCreateNewClientUserMessage(
   message,
+  isVideoClipMuted = true,
   isScrolledToBottom = false
 ) {
   let isUserChanged
@@ -796,7 +1053,11 @@ export function checkTimeAndCreateNewClientUserMessage(
       isUserChanged = true
     }
   }
-  let userMessageBox = createClientUserMessage(message, isScrolledToBottom)
+  let userMessageBox = createClientUserMessage(
+    message,
+    isVideoClipMuted,
+    isScrolledToBottom
+  )
   activeChatMessageContainer.insertAdjacentElement("beforeend", userMessageBox)
   if (isUserChanged) BOTTOM_MESSAGE_USER_POINTER = loginUser
   if (isScrolledToBottom) {
@@ -804,7 +1065,11 @@ export function checkTimeAndCreateNewClientUserMessage(
       activeChatMessageContainer.scrollHeight + 1000
   }
 }
-export function createClientUserMessage(message, isScrolledToBottom = false) {
+export function createClientUserMessage(
+  message,
+  isVideoClipMuted = true,
+  isScrolledToBottom = false
+) {
   let currentTimeObj = new Date()
   const messageBox = document.createElement("div")
   messageBox.classList.add("active-chat-user-message-box")
@@ -866,8 +1131,7 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
 
         messageContentBox.insertAdjacentElement("afterbegin", video)
         createPlyr(video, "video")
-      }
-      if (message.mediaContentType === "audio") {
+      } else if (message.mediaContentType === "audio") {
         messageBox.classList.add("active-chat-user-message-box--audio")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--audio"
@@ -888,8 +1152,7 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
 
         messageContentBox.insertAdjacentElement("afterbegin", audio)
         createPlyr(audio, "audio")
-      }
-      if (message.mediaContentType === "youtube") {
+      } else if (message.mediaContentType === "youtube") {
         messageBox.classList.add("active-chat-user-message-box--youtube")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--youtube"
@@ -911,8 +1174,7 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
 
         messageContentBox.insertAdjacentElement("afterbegin", youtube)
         createPlyr(youtube, "youtube")
-      }
-      if (message.mediaContentType === "image") {
+      } else if (message.mediaContentType === "image") {
         messageBox.classList.add("active-chat-user-message-box--image")
         messageContentBox.classList.add(
           "active-chat-user-message-box__content-box--image"
@@ -926,16 +1188,208 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
           "active-chat-user-message-box__content",
           "active-chat-user-message-box__content--image"
         )
+
+        image.setAttribute("src", message.clientMediaContentPath)
+        image.setAttribute("alt", "Image")
         image.onload = () => {
           if (isScrolledToBottom) {
             activeChatMessageContainer.scrollTop =
               activeChatMessageContainer.scrollHeight
           }
         }
-        image.setAttribute("src", message.clientMediaContentPath)
-        image.setAttribute("alt", "Image")
-
         messageContentBox.insertAdjacentElement("afterbegin", image)
+      } else if (message.mediaContentType === "video-clip") {
+        messageBox.classList.add("active-chat-user-message-box--video-clip")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--video-clip"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--video-clip"
+        )
+        ///////////////////////////////
+        const videoClip = document.createElement("div")
+        videoClip.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--video-clip"
+        )
+
+        const video = document.createElement("video")
+        if (message.mediaVideoClipSpecs.mediaQuality.hasMedium) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.medium.url
+        } else if (message.mediaVideoClipSpecs.mediaQuality.hasHigh) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.high.url
+        } else if (message.mediaVideoClipSpecs.mediaQuality.hasLow) {
+          video.src = message.mediaVideoClipSpecs.mediaQuality.low.url
+        } else {
+          video.src = message.mediaContentPath
+        }
+
+        video.autoplay = true
+        video.loop = true
+        video.muted = isVideoClipMuted
+        video.controls = false
+
+        let videoClipBtns = `
+        <div class='video-clip-btn video-clip-btn--mute-unmute ${
+          isVideoClipMuted
+            ? "video-clip-btn--selected"
+            : "video-clip-btn--unselected"
+        }'  data-btn-type="mute-unmute">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+             ${svg_messageVideoClipUnmuteBtnIcon}
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+             ${svg_messageVideoClipMuteBtnIcon}
+        </div>
+       </div>
+
+       <div class="video-clip-btn video-clip-btn--play-pause video-clip-btn--unselected" data-btn-type="play-pause">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+        
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+        ${svg_messageVideoClipPlayBtnIcon}
+        </div>
+       </div>
+
+       <div class="video-clip-btn video-clip-btn--fullscreen video-clip-btn--unselected"  data-btn-type="fullscreen">
+        <div class="video-clip-btn__icon video-clip-btn__icon--unselected ">
+             ${svg_messageVideoClipFullScreenBtnIcon}
+        </div>
+        <div class="video-clip-btn__icon video-clip-btn__icon--selected">
+             ${svg_messageVideoClipFullScreenBtnIcon}
+        </div>
+       </div>
+       `
+
+        videoClip.addEventListener("click", e => {
+          let videoClipBtn = e.target.closest(".video-clip-btn")
+
+          if (videoClipBtn && videoClip.contains(videoClipBtn)) {
+            let btnType = videoClipBtn.dataset.btnType
+            if (btnType === "play-pause") {
+              if (video.paused) {
+                video.play()
+                videoClipBtn.classList.remove("video-clip-btn--selected")
+                videoClipBtn.classList.add("video-clip-btn--unselected")
+              } else {
+                video.pause()
+                videoClipBtn.classList.remove("video-clip-btn--unselected")
+                videoClipBtn.classList.add("video-clip-btn--selected")
+              }
+            } else if (btnType === "mute-unmute") {
+              if (video.muted) {
+                video.muted = false
+                videoClipBtn.classList.remove("video-clip-btn--selected")
+                videoClipBtn.classList.add("video-clip-btn--unselected")
+              } else {
+                video.muted = true
+                videoClipBtn.classList.remove("video-clip-btn--unselected")
+                videoClipBtn.classList.add("video-clip-btn--selected")
+              }
+            } else if (btnType === "fullscreen") {
+              if (video.requestFullscreen) {
+                video.requestFullscreen()
+              } else if (video.mozRequestFullScreen) {
+                video.mozRequestFullScreen()
+              } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen()
+              } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen()
+              }
+            }
+          }
+        })
+        video.addEventListener("play", () => {
+          let playPauseBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="play-pause"]'
+          )
+          if (playPauseBtn) {
+            if (playPauseBtn.classList.contains("video-clip-btn--selected")) {
+              playPauseBtn.classList.remove("video-clip-btn--selected")
+              playPauseBtn.classList.add("video-clip-btn--unselected")
+            }
+          }
+        })
+        video.addEventListener("pause", () => {
+          let playPauseBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="play-pause"]'
+          )
+
+          if (playPauseBtn) {
+            if (playPauseBtn.classList.contains("video-clip-btn--unselected")) {
+              playPauseBtn.classList.remove("video-clip-btn--unselected")
+              playPauseBtn.classList.add("video-clip-btn--selected")
+            }
+          }
+        })
+        video.addEventListener("volumechange", () => {
+          let muteUnmuteBtn = videoClip.querySelector(
+            '.video-clip-btn[data-btn-type="mute-unmute"]'
+          )
+
+          if (muteUnmuteBtn) {
+            if (video.muted) {
+              if (
+                muteUnmuteBtn.classList.contains("video-clip-btn--unselected")
+              ) {
+                muteUnmuteBtn.classList.remove("video-clip-btn--unselected")
+                muteUnmuteBtn.classList.add("video-clip-btn--selected")
+              }
+            } else {
+              if (
+                muteUnmuteBtn.classList.contains("video-clip-btn--selected")
+              ) {
+                muteUnmuteBtn.classList.remove("video-clip-btn--selected")
+                muteUnmuteBtn.classList.add("video-clip-btn--unselected")
+              }
+            }
+          }
+        })
+        videoClip.insertAdjacentElement("beforeend", video)
+        videoClip.insertAdjacentHTML("beforeend", videoClipBtns)
+        /////////////////////////////////////
+
+        messageContentBox.insertAdjacentElement("afterbegin", videoClip)
+      } else if (message.mediaContentType === "sticker") {
+        messageBox.classList.add("active-chat-user-message-box--sticker")
+        messageContentBox.classList.add(
+          "active-chat-user-message-box__content-box--sticker"
+        )
+        messageContentInfo.classList.add(
+          "active-chat-user-message-box__content-info--sticker"
+        )
+        ///////////////////////////////
+        const picture = document.createElement("picture")
+        picture.classList.add(
+          "active-chat-user-message-box__content",
+          "active-chat-user-message-box__content--sticker"
+        )
+
+        if (message.hasOwnProperty("mediaStickerSpecs")) {
+          if (message.mediaStickerSpecs.hasWebp) {
+            let source = document.createElement("source")
+            source.srcset = message.mediaStickerSpecs.webp
+            picture.insertAdjacentElement("beforeend", source)
+          }
+          if (message.mediaStickerSpecs.hasGif) {
+            let source = document.createElement("source")
+            source.srcset = message.mediaStickerSpecs.gif
+            picture.insertAdjacentElement("beforeend", source)
+          }
+          let img = document.createElement("img")
+          img.src = message.mediaContentPath
+          img.alt = "sticker"
+          img.onload = () => {
+            if (isScrolledToBottom) {
+              activeChatMessageContainer.scrollTop =
+                activeChatMessageContainer.scrollHeight
+            }
+          }
+          picture.insertAdjacentElement("beforeend", img)
+        }
+
+        messageContentBox.insertAdjacentElement("afterbegin", picture)
       }
     } else {
       messageBox.classList.add("active-chat-user-message-box--text")
@@ -1030,28 +1484,42 @@ export function createClientUserMessage(message, isScrolledToBottom = false) {
                 "active-chat-user-message-box--video"
               )
             ) {
-              repliedMessageContent = `${svg_videoIcon} <span>Video</span>`
+              repliedMessageContent = `${svg_mediaVideoIcon} <span>Video</span>`
             }
             if (
               userMessageBox.classList.contains(
                 "active-chat-user-message-box--audio"
               )
             ) {
-              repliedMessageContent = `${svg_audioIcon} <span>Audio</span>`
+              repliedMessageContent = `${svg_mediaAudioIcon} <span>Audio</span>`
             }
             if (
               userMessageBox.classList.contains(
                 "active-chat-user-message-box--image"
               )
             ) {
-              repliedMessageContent = `${svg_imageIcon} <span>Image</span>`
+              repliedMessageContent = `${svg_mediaImageIcon} <span>Image</span>`
             }
             if (
               userMessageBox.classList.contains(
                 "active-chat-user-message-box--youtube"
               )
             ) {
-              repliedMessageContent = `${svg_youtubeIcon} <span>Youtube</span>`
+              repliedMessageContent = `${svg_mediaYoutubeIcon} <span>Youtube</span>`
+            }
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--video-clip"
+              )
+            ) {
+              repliedMessageContent = `${svg_mediaVideoClipIcon} <span>Video clip</span>`
+            }
+            if (
+              userMessageBox.classList.contains(
+                "active-chat-user-message-box--sticker"
+              )
+            ) {
+              repliedMessageContent = `${svg_mediaStickerIcon} <span>Sticker</span>`
             }
 
             messageContentBox.getElementsByClassName(

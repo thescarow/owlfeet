@@ -60,14 +60,74 @@ const messageSchema = new mongoose.Schema(
     mediaImageSpecs: {
       width: { type: String, default: "" },
       height: { type: String, default: "" },
-      aspectRatio: { type: String, default: "1.5" },
+      url: { type: String, default: "" },
       averageColor: { type: String, default: "#888" }
     },
 
     mediaVideoSpecs: {
       width: { type: String, default: "" },
       height: { type: String, default: "" },
-      aspectRatio: { type: String, default: "1.7" }
+      url: { type: String, default: "" }
+    },
+
+    mediaVideoClipSpecs: {
+      width: { type: String, default: "" },
+      height: { type: String, default: "" },
+      mediaQuality: {
+        hasLow: { type: Boolean, default: false },
+        low: {
+          width: { type: String, default: "" },
+          height: { type: String, default: "" },
+          url: { type: String, default: "" }
+        },
+        hasMedium: { type: Boolean, default: false },
+        medium: {
+          width: { type: String, default: "" },
+          height: { type: String, default: "" },
+          url: { type: String, default: "" }
+        },
+        hasHigh: { type: Boolean, default: false },
+        high: {
+          width: { type: String, default: "" },
+          height: { type: String, default: "" },
+          url: { type: String, default: "" }
+        }
+      },
+
+      hasPreview: { type: Boolean, default: false },
+      preview: {
+        width: { type: String, default: "" },
+        height: { type: String, default: "" },
+        hasMp4: { type: Boolean, default: false },
+        mp4: { type: String, default: "" },
+        hasWebp: { type: Boolean, default: false },
+        webp: { type: String, default: "" },
+        hasGif: { type: Boolean, default: false },
+        gif: { type: String, default: "" }
+      }
+    },
+
+    mediaStickerSpecs: {
+      width: { type: String, default: "" },
+      height: { type: String, default: "" },
+      hasMp4: { type: Boolean, default: false },
+      mp4: { type: String, default: "" },
+      hasWebp: { type: Boolean, default: false },
+      webp: { type: String, default: "" },
+      hasGif: { type: Boolean, default: false },
+      gif: { type: String, default: "" },
+
+      hasPreview: { type: Boolean, default: false },
+      preview: {
+        width: { type: String, default: "" },
+        height: { type: String, default: "" },
+        hasMp4: { type: Boolean, default: false },
+        mp4: { type: String, default: "" },
+        hasWebp: { type: Boolean, default: false },
+        webp: { type: String, default: "" },
+        hasGif: { type: Boolean, default: false },
+        gif: { type: String, default: "" }
+      }
     },
 
     textContent: {

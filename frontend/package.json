@@ -14,6 +14,8 @@
   "dependencies": {
     "@betahuhn/feedback-js": "^2.1.22",
     "@emoji-mart/data": "^1.1.1",
+    "@giphy/js-components": "^5.12.1",
+    "@giphy/js-fetch-api": "^5.1.0",
     "@uppy/audio": "^1.1.1",
     "@uppy/core": "^3.3.1",
     "@uppy/dashboard": "^3.5.0",
@@ -29,6 +31,7 @@
     "peerjs": "^1.4.7",
     "plyr": "^3.7.3",
     "socket.io-client": "^4.5.4",
+    "throttle-debounce": "^5.0.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

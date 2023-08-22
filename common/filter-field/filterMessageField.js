@@ -22,6 +22,8 @@ let deletedForAllMessageField = {
   //   mediaContentPath: 1,
   //   mediaImageSpecs: 1,
   //   mediaVideoSpecs: 1,
+  //   mediaVideoClipSpecs:1,
+  //   mediaStickerSpecs:1,
   //   textContent: 1,
   //   updatedAt: 1
 }
@@ -48,6 +50,8 @@ exports.selectSafeMessageField = {
   mediaContentPath: 1,
   mediaImageSpecs: 1,
   mediaVideoSpecs: 1,
+  mediaVideoClipSpecs: 1,
+  mediaStickerSpecs: 1,
   textContent: 1,
   createdAt: 1
   // deletedFor: 1,
@@ -76,6 +80,8 @@ exports.selectMessageFieldForRepliedMessage = {
   // mediaContentPath: 1,
   // mediaImageSpecs: 1,
   // mediaVideoSpecs: 1,
+  // mediaVideoClipSpecs:1,
+  // mediaStickerSpecs:1,
   textContent: 1,
   createdAt: 1
   // deletedFor: 1,
@@ -106,6 +112,8 @@ exports.selectDeletedForAllMessageField = {
   //   mediaContentPath: 1,
   //   mediaImageSpecs: 1,
   //   mediaVideoSpecs: 1,
+  //   mediaVideoClipSpecs:1,
+  //   mediaStickerSpecs:1,
   //   textContent: 1,
   //   updatedAt: 1
 }
@@ -134,6 +142,8 @@ exports.selectLatestMessageField = {
   //   mediaContentPath: 1,
   //   mediaImageSpecs: 1,
   //   mediaVideoSpecs: 1,
+  //   mediaVideoClipSpecs:1,
+  //   mediaStickerSpecs:1,
 }
 
 exports.filterMessageFieldForDeletedForAll = message => {
