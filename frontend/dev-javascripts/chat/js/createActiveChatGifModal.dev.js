@@ -308,8 +308,8 @@ async function attachScript() {
   let relatedGifBox = document.getElementById("relatedGifBox")
 
   const GF = new GiphyFetch("QLgFtUH560HQ4D4rUiV1muOlyeZcVtTk")
-  let GFAction = "trending"
-  let GFType = "videos"
+  let GFAction = "trending" // search / trending / animate-text / emoji
+  let GFType = "videos" //gifs / stickers / text / videos
 
   let isGFSearchActionOn = false
   let GFSearchInputValue = "hi"
@@ -551,7 +551,7 @@ async function attachScript() {
     })
   }
   async function onChatGifClickFunc(gif, e) {
-    console.log("onChatGifClickFunc:", gif, "clicked-event:", e)
+    console.log("onChatGifClickFunc:", gif)
     let { sendGifMessage } = await import("../chat.dev")
     sendGifMessage(gif)
     // renderGif(
@@ -580,13 +580,15 @@ async function attachScript() {
             GF.related(gifId, {
               offset,
               limit: 10,
-              type: GFType
+              type:
+                GFAction === "emoji" || GFType === "text" ? "stickers" : GFType
             }),
           noResultsMessage: "",
           noLink: true,
           hideAttribution: true,
-          gutter: 5
-          // onGifClick: (gif: IGif) => window.open(gif.url)
+          gutter: 5,
+          onGifRightClick: onChatGifRightClickFunc,
+          onGifClick: onChatGifClickFunc
         },
         element
       )
