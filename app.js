@@ -8,7 +8,9 @@ console.log("ORIGIN:", ORIGIN)
 const { createServer } = require("http")
 const express = require("express")
 const { createSocketIOInstance } = require("./socket")
-const expressSession = require("express-session")
+const expressSession = require("express-session") // it's not suitable for production due to potential memory leaks and scalability issues
+const MongoDBStore = require("connect-mongodb-session")(expressSession) //persistent session store
+
 const expressLayouts = require("express-ejs-layouts")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
@@ -50,11 +52,22 @@ app.use(expressLayouts)
 app.use(express.static("./frontend/public"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+// Configure the session middleware
+const store = new MongoDBStore({
+  uri: process.env.DATABASE_URL,
+  collection: "sessions"
+})
+
 app.use(
   expressSession({
     secret: process.env.EXPRESS_SESSION_SECRET,
     saveUninitialized: false,
-    resave: false
+    resave: false,
+    store: store,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
   })
 )
 app.use(
