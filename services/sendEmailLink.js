@@ -9,8 +9,11 @@ if (process.env.NODE_ENV !== "production") {
 }
 const emailClient = require("@sendgrid/mail")
 
-const OWLFEET_FROM_EMAIL = "thescarow007@gmail.com"
-const OWLFEET_CONTACT_US_EMAIL = "thescarow007@gmail.com"
+const OWLFEET_SENDER_EMAIL =
+  process.env.SENDGRID_SENDER_EMAIL || "thescarow007@gmail.com"
+
+const OWLFEET_CONTACT_US_EMAIL =
+  process.env.SENDGRID_SUPPORT_EMAIL || "thescarow007@gmail.com"
 
 const EMAIL_LOGIN_TEMPLATE_ID = "d-ee3d0f38459a4dcaaa1b942effea3e0e"
 const EMAIL_VERIFICATION_TEMPLATE_ID = "d-08e2a8e6ec8f4adebc260dae43a2bb93"
@@ -59,7 +62,7 @@ exports.sendEmailLink = async (
     if (templateId === undefined) {
       message = {
         to: toEmail,
-        from: OWLFEET_FROM_EMAIL,
+        from: OWLFEET_SENDER_EMAIL,
         subject: emailSubject,
         text: emailLink,
         html: `<a href="${emailLink}" target="_blank  rel="noopener noreferrer">${emailLink}</a>`
@@ -67,7 +70,7 @@ exports.sendEmailLink = async (
     } else {
       message = {
         to: toEmail,
-        from: OWLFEET_FROM_EMAIL,
+        from: OWLFEET_SENDER_EMAIL,
         subject: emailSubject,
         personalizations: [
           {
