@@ -6,7 +6,7 @@ const mainErrorLog = chalk.white.bgYellow.bold
 
 const linkify = require("linkifyjs")
 const { getLinkPreview } = require("link-preview-js")
-const dns = require("node:dns")
+// const dns = require("node:dns")
 
 const User = require("../../models/user")
 const Message = require("../../models/message")
