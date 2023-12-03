@@ -13,9 +13,9 @@ module.exports = {
 
     test: path.resolve(__dirname, "./dev-javascripts/test/test.dev.js"),
 
-    test2: path.resolve(__dirname, "./dev-javascripts/test/test2.dev.js"),
+    // test2: path.resolve(__dirname, "./dev-javascripts/test/test2.dev.js"),
 
-    test3: path.resolve(__dirname, "./dev-javascripts/test/test3.dev.js"),
+    // test3: path.resolve(__dirname, "./dev-javascripts/test/test3.dev.js"),
 
     home: path.resolve(__dirname, "./dev-javascripts/index/home.dev.js"),
 
