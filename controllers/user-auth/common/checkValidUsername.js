@@ -23,14 +23,14 @@ exports.checkValidUsername = async username => {
       return {
         isValid: false,
         error:
-          "Capital letters(A-Z) are not allowed in username, Please use small letters(a-z) for your username"
+          "Special characters (except .) are not allowed in username,Please remove them from your username"
       }
     }
     if (username.search(capitalRegex) !== -1) {
       return {
         isValid: false,
         error:
-          "Special characters (except .) are not allowed in username,Please remove them from your username"
+          "Capital letters(A-Z) are not allowed in username, Please use small letters(a-z) for your username"
       }
     }
     if (username.search(smallRegex) === -1) {
@@ -45,7 +45,7 @@ exports.checkValidUsername = async username => {
       return {
         isValid: false,
         error:
-          "This username is already exists, Please choose a diffrent unique username"
+          "This username is already exists, Please choose a different unique username"
       }
     } else {
       return {

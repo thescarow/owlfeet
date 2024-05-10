@@ -9,7 +9,7 @@ exports.timeDifferenceFromNow = function (date) {
     year: 365 * 24 * 60 * 60 * 1000
   }
   let dateObj = date
-  if (typeof date == "string") {
+  if (typeof date === "string") {
     dateObj = new Date(date)
   }
   let timeDiff = Date.now() - dateObj.getTime() // in milisec

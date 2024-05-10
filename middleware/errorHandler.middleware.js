@@ -11,7 +11,7 @@ exports.notFound = (req, res, next) => {
 
 exports.errorHandler = (err, req, res, next) => {
   if (err.status == 404) {
-    res.status(404).render("./error/notFound", {
+    res.render("./error/notFound", {
       errorTitle: "I Think You Are Lost...",
       errorMessage: "Page Not Found"
     })

@@ -50,7 +50,7 @@ export async function createAddUserModal(
 
 
     <div class="add-user-btn-container">
-        <div class="add-user__btn" id="closeAddUserModalBtn">Cancle</div>
+        <div class="add-user__btn" id="closeAddUserModalBtn">Cancel</div>
         <div class="add-user__btn add-user__btn--active" id="getAddedUserBtn">Add</div>
     </div>
     </div>`
