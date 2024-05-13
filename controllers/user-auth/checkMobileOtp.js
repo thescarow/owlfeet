@@ -81,6 +81,6 @@ exports.checkMobileOtp = async (req, res) => {
     console.log(errorLog("Error in check Mobile Otp:"), mainErrorLog(err))
     res
       .status(500)
-      .json({ isSuccess: false, error: "Server error, Please tyr again" })
+      .json({ isSuccess: false, error: "Server error, Please try again" })
   }
 }

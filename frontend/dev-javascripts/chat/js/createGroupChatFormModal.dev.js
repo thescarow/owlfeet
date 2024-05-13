@@ -76,7 +76,7 @@ export async function createGroupChatFormModal(modalType = "new") {
     
     </div>
     <div class="group-chat-form-btn-container">
-        <div class="group-chat-form-btn-container__btn" id="closeGroupChatFormModalBtn">Cancle</div>
+        <div class="group-chat-form-btn-container__btn" id="closeGroupChatFormModalBtn">Cancel</div>
         <div class="group-chat-form-btn-container__btn group-chat-form-btn-container__btn--active" id="submitGroupChatDataBtn"></div>
     </div>
     </div>`

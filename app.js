@@ -38,6 +38,8 @@ app.set("views", "./frontend/pages")
 app.set("layout", "layout/mainLayout")
 app.set("layout extractScripts", true)
 app.set("layout extractStyles", true)
+app.set("layout extractMetas", true)
+
 app.set("query parser", "simple") // Only parse query parameters into strings and array, not objects
 if (process.env.NODE_ENV === "production") {
   app.set("trust proxy", true) //for reverse proxy or load balancer

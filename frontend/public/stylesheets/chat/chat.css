@@ -2637,6 +2637,7 @@ em-emoji-picker {
     font-size: 18px;
     font-weight: 600;
     margin: 12px 0 0 0;
+    width: -moz-fit-content;
     width: fit-content;
     text-align: center;
     color: rgba(var(--rgba-fourth-color), 1);

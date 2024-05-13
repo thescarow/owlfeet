@@ -60,7 +60,7 @@ exports.userLogin = async (req, res) => {
           res.cookie("user", accessToken, {
             expires: new Date(Date.now() + 84600 * 1000 * cookieExpireDays),
             httpOnly: true,
-            secure: true, //for https connection only
+            // secure: true, //for https connection only
             sameSite: "Lax",
             signed: true
             // domain: '' // default exclude all subdomain

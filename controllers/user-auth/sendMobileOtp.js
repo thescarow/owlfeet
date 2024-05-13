@@ -32,7 +32,7 @@ exports.sendMobileOtp = async (req, res) => {
             error: `Otp already sent,Please wait for ${
               120 -
               Math.floor((Date.now() - otpExist.createdAt.getTime()) / 1000)
-            } seconds after that resend it again`
+            } seconds before resend it again`
           })
         } else {
           const resultOtp = await mobileOtpProcess(mobile)

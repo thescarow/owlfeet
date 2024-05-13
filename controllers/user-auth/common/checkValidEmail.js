@@ -8,8 +8,8 @@ const emailValidator = require("email-validator")
 
 exports.checkValidEmail = async email => {
   try {
-    email = email.trim()
     email = email.toString()
+    email = email.trim()
     if (email === "") {
       return {
         isValid: false,

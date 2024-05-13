@@ -1,3 +1,4 @@
+/////////////
 ;(async function () {
   // await import("./socket.dev") // define socket here
   let { createMainNotification } = await import(
@@ -65,3 +66,20 @@
     }
   }
 })()
+
+const allFeaturesBox = document.getElementById("allFeaturesBox")
+
+allFeaturesBox.addEventListener("click", e => {
+  const featureTitle = e.target.closest(`.feature__title`)
+  if (featureTitle && allFeaturesBox.contains(featureTitle)) {
+    const feature = e.target.closest(`.feature`)
+    feature.classList.toggle("feature--expand")
+  } else {
+    const featureTopicTitle = e.target.closest(`.feature-topic__title`)
+
+    if (featureTopicTitle && allFeaturesBox.contains(featureTopicTitle)) {
+      const featureTopic = e.target.closest(`.feature-topic`)
+      featureTopic.classList.toggle("feature-topic--expand")
+    }
+  }
+})

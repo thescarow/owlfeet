@@ -1,4 +1,9 @@
+document.body.style.height = window.innerHeight + "px"
+window.addEventListener("resize", () => {
+  document.body.style.height = window.innerHeight + "px"
+})
 ;(async function () {
+  document.body.style.height = window.innerHeight
   if (!IS_INIT_MAIN_LAYOUT_MODULE) {
     await updateGlobalIsLogin()
     if (isLogin) {

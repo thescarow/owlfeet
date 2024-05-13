@@ -1,0 +1,1795 @@
+{
+  "highlights": [
+    {
+      "topic": "Highlighted Features",
+      "features": []
+    }
+  ],
+  "Authentication": [
+    {
+      "topic": "Signup",
+      "features": [
+        {
+          "title": "Secure Sign-Up with Mobile OTP",
+          "description": "We've added extra security to your sign-up! When you register, we'll send you a code to make sure it's really you. Our system checks your mobile number carefully to avoid any fakes. Each sign-up is unique—no sharing numbers here! It's all about keeping things simple and secure. Trust the process, enjoy the security!"
+        },
+        {
+          "title": "Smart Defense Against Spam: Mobile OTP API Protection",
+          "description": "We've implemented smart safeguards to protect our Mobile OTP API from misuse. Users can't request OTPs too frequently—there's a two-minute cooldown implimented on both client side and in our database. This not only stops automated bots but also ensures the reliability and security of your Mobile OTP API, defending it against spam and misuse."
+        },
+        {
+          "title": "Profile Details in Sign-Up",
+          "description": "Once your mobile number is verified, it's time to create your profile! Register with your first name, last name, and a unique username. You can add your email if you like (totally optional), share your gender, birthdate, bio, and even your address. It's your space to personalize and connect with others—making your profile uniquely yours right from the start."
+        },
+        {
+          "title": "Diverse Profile Pictures: Your Style, Your Choice",
+          "description": "Tailor your profile with ease! Whether it's from your local storage, a camera click, or third-party platforms like Facebook, Instagram, Google Drive, OneDrive, Dropbox, Zoom, Box—take your pick. Fetch images from any link, or explore Unsplash for that perfect profile picture. Plus, don't forget, you can edit your picture on the spot while uploading. Your profile is uniquely yours—express yourself with the picture that suits your style!"
+        },
+        {
+          "title": "Username Guidelines: Your Unique Identifier",
+          "description": "Crafting your username? Follow these guidelines for a unique and personalized touch. Choose a unique username using only small alphabets (a-z), dots, or underscores. Avoid special characters (!@#$%^&*;'...), spaces, or capital letters (A-Z). Don't worry if inspiration doesn't strike—we can create a username for you that aligns perfectly with these guidelines. Your username is your distinct identifier—make it uniquely yours!"
+        },
+        {
+          "title": "Secure Password Creation: Strength at Your Fingertips",
+          "description": "Strengthen your profile security by crafting a robust password. Ensure it contains a minimum of 8 characters, including letters (both uppercase and lowercase), numbers, and special characters. Worried about the strength of your password? Fear not! Our system provides clear indicators to help you assess whether your password is strong, weak, or somewhere in between. Your profile's safety is in your hands—create a password that stands up to the challenge!"
+        }
+      ]
+    },
+    {
+      "topic": "Login",
+      "features": [
+        {
+          "title": "Multiple Authentication Options",
+          "description": "Users can seamlessly log in using unique username, registered mobile number, or their verified registered email ID, providing flexibility and convenience in the authentication process."
+        }
+      ]
+    },
+    {
+      "topic": "Forgot Password",
+      "features": [
+        {
+          "title": "Password Recovery",
+          "description": "Enable users to securely reset forgotten passwords by verifying their mobile number through OTP and setting a new password for account access. This ensures a streamlined process for users to regain control of their accounts while maintaining security measures."
+        },
+        {
+          "title": "Password History Restriction",
+          "description": "Enhance account security by implementing a password history restriction feature. Users, when resetting their password, are prevented from reusing their old passwords. This safeguard ensures that compromised passwords from the past do not pose a security risk, contributing to a more secure user environment."
+        }
+      ]
+    },
+    {
+      "topic": "Login Without Password",
+      "features": [
+        {
+          "title": "Passwordless Login via Email Link",
+          "description": "Provide users with a convenient passwordless login option by utilizing their registered and verified email address. Users receive a secure and unique link in their registered email, which they can use to securely access their accounts without the need for a traditional password. This streamlined process enhances user experience while maintaining a high level of security."
+        },
+        {
+          "title": "Secure Email Login Link Expiry",
+          "description": "Enhance security by implementing a time-sensitive expiry for the secure, unique login links sent to users via email. Each link has a 15-minute expiration period, reducing the risk of unauthorized access. Initiating a new login link automatically invalidates the old link, adding an extra layer of protection against potential security threats and ensuring the security of user accounts."
+        },
+        {
+          "title": "Secure Email Link Resend Delay",
+          "description": "Implement a deliberate 2-minute delay for users attempting to resend the secure login link. This intentional delay, enforced on both client and server sides, acts as a safeguard against automation and bot attacks. By incorporating this security measure, users are prevented from bypassing the designated time window for link resending, enhancing overall system security."
+        },
+        {
+          "title": "Flexible Login Window Selection",
+          "description": "Offer users flexibility in choosing their login window/tab after opening the secure unique login link. Whether initiated on a laptop or mobile device, users can decide to log in on the current window/tab or the one from which they requested the login link. This feature provides convenience to users, allowing them to choose the login environment that best suits their preferences and needs."
+        },
+        {
+          "title": "Temporary Access via Secure Login Link",
+          "description": "Enhance security and user control by providing a secure login link that grants temporary access to the account. If a user forgets to log out, the system automatically expires the access after a designated time, safeguarding the user's account. This feature also enables users to share temporary access with others without sharing their credentials, adding a layer of flexibility and security to account management."
+        }
+      ]
+    }
+  ],
+  "User Profile": [
+    {
+      "topic": "Design",
+      "features": [
+        {
+          "title": "User-Friendly Design",
+          "description": "Craft a user-friendly profile page with an attractive design tailored for both small screens (mobile) and large screens (laptop/desktop). The layout ensures optimal presentation of information, offering an intuitive and visually pleasing experience for users on various devices. The user-friendly design enhances accessibility, allowing users to seamlessly navigate and interact with the profile page, regardless of the screen size."
+        },
+        {
+          "title": "Total Responsive Design",
+          "description": "Implement a fully responsive design for the user profile page, ensuring compatibility across a spectrum of screen sizes, from small screens (mobile) to large screens (laptop/desktop). This responsiveness guarantees a consistent and optimal user experience, allowing users to access and interact with the profile page seamlessly on any device, without compromising design or functionality."
+        },
+        {
+          "title": "Single-Page Workflow",
+          "description": "Optimize user interaction by consolidating all actions within the user profile page onto a single page. This approach ensures a seamless and efficient workflow for users. Whether it's updating information, managing followers, or engaging in various profile-related activities, users can perform all actions within the confines of the user profile page, streamlining the overall user experience."
+        },
+        {
+          "title": "Comprehensive Profile Information",
+          "description": "Present a comprehensive set of user information on the profile page, including full name, username, bio, profile picture, follower count, following count, follow request count, user posts, and post count. The page also features all necessary buttons for profile-related actions. The user-friendly design ensures that this wealth of information is presented in a clear and accessible manner, enhancing the overall user experience."
+        }
+      ]
+    },
+    {
+      "topic": "Edit Profile",
+      "features": [
+        {
+          "title": "Profile Picture Editing Options",
+          "description": "Empower users with diverse options for editing their profile picture. Users can upload images from local storage, capture photos using their device camera, select from third-party platforms like Facebook, Instagram, Google Drive, OneDrive, Dropbox, Box, Zoom, or even use any image link. Additionally, users have the creative option to choose images from Unsplash, providing a rich array of choices to personalize their profile picture. After selecting an image, users can further edit and enhance that image according to their preferences, ensuring a customized and visually appealing profile picture."
+        },
+        {
+          "title": "Username Editing with Validation",
+          "description": "Facilitate username editing for users while enforcing uniqueness and adhering to specified restrictions. Users can choose a new username, and the system ensures its uniqueness and compliance with validation criteria. In cases where users lack ideas, the system can generate a unique username. This feature streamlines the process of updating usernames while maintaining integrity and adherence to platform requirements."
+        },
+        {
+          "title": "Flexible Profile Information Editing",
+          "description": "Provide users with the flexibility to edit various profile details, including first name, last name, bio, birthday, gender, and location. This feature empowers users to customize their profile information, tailoring it to reflect their preferences and personal details. Users can easily update and modify these fields, contributing to a dynamic and personalized user experience."
+        }
+      ]
+    },
+    {
+      "topic": "Change Password",
+      "features": [
+        {
+          "title": "Secure Password Change Verification",
+          "description": "Ensure a secure password change process by requiring users to have access to their old password. This verification step adds an essential layer of security, preventing unauthorized password changes even if someone gains temporary access to the user's account. By enforcing the need for the current password, the system mitigates the risk of unauthorized modifications to account credentials."
+        },
+        {
+          "title": "Password Change with History Restriction",
+          "description": "Improve account security during password changes by implementing a restriction on using old passwords. Users, when updating their passwords, are prevented from reusing any of their previous passwords. This security measure ensures that compromised old passwords do not pose a risk to the account's integrity, fortifying the overall protection of user accounts."
+        },
+        {
+          "title": "Password Change with Confirmation",
+          "description": "Allow users to change their password while logged in, providing an added layer of security. During this process, users must input their current password and confirm the new password. This double-entry requirement ensures accuracy and prevents accidental password changes, enhancing the security and integrity of the account credentials."
+        }
+      ]
+    },
+    {
+      "topic": "Email Verification",
+      "features": [
+        {
+          "title": "Add and Verify New Email",
+          "description": "Empower users to enhance their account security by attaching a new, unique email to their profile. Users can initiate this process at any time, receiving a verification link via email. Upon verification, the new email becomes associated with the account, allowing users to utilize it for login and various features where email verification is required. This feature provides flexibility and an additional layer of account protection."
+        },
+        {
+          "title": "Flexible Email Management",
+          "description": "Grant users the ability to update their email with a new, unique address at any time. This process requires users to undergo a verification procedure for added security. Additionally, users can choose to remove their email altogether, offering an extra layer of security in case of email compromise. This feature empowers users to manage their email settings proactively, enhancing overall account security and control."
+        },
+        {
+          "title": "Email Verification Safeguards",
+          "description": "Implement safeguards to prevent misuse of email-related features. Users are required to wait 2-3 minutes before being able to resend a verification link or change their email. This intentional delay, enforced on both client and server sides, acts as a protective measure against potential abuse. By introducing this restriction, the system enhances security and ensures responsible use of email-related functionalities."
+        },
+        {
+          "title": "Seamless Email Verification Handling",
+          "description": "Provide a seamless user experience by automatically managing email verification without requiring users to refresh the page or take additional actions. Once the user completes the email verification process, the system seamlessly updates the status on the login page. This feature enhances user convenience, ensuring a smooth transition after email verification without disrupting the login workflow."
+        }
+      ]
+    },
+    {
+      "topic": "Account Privacy",
+      "features": [
+        {
+          "title": "Flexible Profile Privacy Settings",
+          "description": "By default, each user profile is set to private, safeguarding personal information. Users have the flexibility to switch between public and private settings at their discretion. This feature empowers users to control the visibility of their profile, ensuring privacy when needed and allowing for public sharing when desired. The ability to customize privacy settings adds a layer of user autonomy and personalization to the platform."
+        },
+        {
+          "title": "Private Profile: Information Privacy",
+          "description": "Maintain strict privacy for users with private profiles, ensuring that no other user can access or share information with the profile owner without explicit permission. In this mode, the private information of the user remains concealed from others, promoting a secure and confidential environment for users who choose to keep their profiles private."
+        },
+        {
+          "title": "Public Profile: Information Visibility",
+          "description": "In the case of a public profile, other users can freely access the profile owner's information and share information with them. This open setting encourages a more transparent and collaborative environment, allowing users to easily connect and engage with others who have chosen to make their profiles public."
+        }
+      ]
+    },
+    {
+      "topic": "feedback/Suggestions And Bug Reporting System",
+      "features": [
+        {
+          "title": "Feedback and Bug Reporting",
+          "description": "Facilitate user engagement by providing an option for users to submit feedback, suggestions, or report bugs. Upon submission, the server securely stores and maintains these inputs along with the associated user information. This feature encourages user participation in improving the platform, fostering a collaborative relationship between users and developers for ongoing enhancements and issue resolution."
+        }
+      ]
+    },
+    {
+      "topic": "Account Switching",
+      "features": [
+        {
+          "title": "Secure Logout and Account Switching",
+          "description": "Ensure a secure logout experience for users, allowing them to seamlessly sign out of their current account. Following a secure logout, users can conveniently log in with another account of their choice. This feature prioritizes both security and user flexibility, offering a smooth transition between different user accounts on the platform."
+        }
+      ]
+    }
+  ],
+  "Follow System": [
+    {
+      "topic": "Follower And Following",
+      "features": [
+        {
+          "title": "Real-Time Follow System",
+          "description": "Immerse users in a dynamic social experience with a real-time follow system. Changes in follower counts, following lists, follow requests, and sent follow request lists are reflected instantly without requiring a page reload. This real-time functionality enhances user engagement, providing a seamless and responsive social networking environment."
+        },
+        {
+          "title": "Followers and Following Lists",
+          "description": "Enrich user profiles by showcasing follower and following counts. Additionally, users have the ability to view a detailed list of followers and those they are following back. This feature enhances user visibility into their social network, fostering connections and interactions within the platform."
+        },
+        {
+          "title": "Follower System Based on Account Privacy",
+          "description": "Implement a follower system that aligns with account privacy settings. For public accounts, any user can follow directly. However, for private accounts, individuals must send a follow request. The account owner has the authority to accept or decline the follow request, providing control over who can access their content and contribute to a secure and consent-driven environment."
+        },
+        {
+          "title": "Manage Follow Requests",
+          "description": "Empower users with the ability to manage follow requests by providing a list of pending requests. Users can review and decide whether to accept or delete each follow request, offering control over their follower base. This feature enhances user autonomy in curating their social connections and fostering a tailored online experience."
+        },
+        {
+          "title": "Manage Sent Follow Requests",
+          "description": "Enhance user engagement by providing a list of sent follow requests that are pending acceptance. Users have the option to cancel pending follow requests at any time and resend them if desired. This feature grants users flexibility and control over their social connections, ensuring a personalized and dynamic experience on the platform."
+        },
+        {
+          "title": "Manage Followers",
+          "description": "Provide users with the ability to manage their followers by allowing them to remove followers if desired. This feature empowers users to curate their follower list, ensuring that they have control over their online connections. Whether for privacy or personal preference, users can make decisions about who remains in their follower base."
+        },
+        {
+          "title": "Manage Following",
+          "description": "Grant users the ability to manage accounts they are following by allowing them to unfollow at any time. Additionally, users can choose to follow again if the profile is public or send a follow request if the profile is private. This feature provides users with flexibility and control over their network connections, ensuring a personalized and dynamic social experience."
+        },
+        {
+          "title": "Limited Follower and Following Visibility",
+          "description": "Introduce a nuanced follower system where followers can access detailed follower and following lists of the user. However, for other users, only the count is displayed. This feature strikes a balance between user privacy and follower engagement, offering followers additional insights while preserving the privacy of the user's social connections from the general audience."
+        }
+      ]
+    }
+  ],
+  "Chat": [
+    {
+      "topic": "Design",
+      "features": [
+        {
+          "title": "User-Friendly Chat Page Design",
+          "description": "Craft a user-friendly design for the chat page that seamlessly adapts to both small screens (mobile) and large screens (laptop/desktop). This ensures a consistent and intuitive user experience across different devices, enhancing accessibility and usability for all users engaging in conversations on the platform."
+        },
+        {
+          "title": "Seamless Single-Page Chat Experience",
+          "description": "Provide users with a seamless chat experience by implementing a single-page design. Users can engage in conversations without the need to reload pages in between. This feature enhances the fluidity and continuity of chat interactions, allowing users to communicate without interruption and enjoy a smooth chatting experience."
+        },
+        {
+          "title": "Responsive Chat Design",
+          "description": "Ensure a responsive chat section that seamlessly adapts to various screen sizes, providing optimal performance on both small screens (mobile) and large screens (laptop/desktop). The design transitions smoothly when users switch between different screen sizes, guaranteeing a consistent and enjoyable chat experience regardless of the device being used."
+        }
+      ]
+    },
+    {
+      "topic": "One To One Chat",
+      "features": [
+        {
+          "topic": "Create One To One Chat",
+          "features": [
+            {
+              "title": "Restricted One-to-One Chat Access",
+              "description": "Implement a controlled messaging system where users can create one-to-one chat conversations only with those they follow. This restriction ensures that messaging privileges are tied to the follow relationship, adding an extra layer of privacy and consent to the chat functionality. Users must follow someone before initiating a one-to-one chat, fostering a more intentional and secure communication environment."
+            }
+          ]
+        },
+        {
+          "topic": "Exit One To One Chat",
+          "features": [
+            {
+              "title": "Exiting One-to-One Chat",
+              "description": "Allow users to exit from a one-to-one chat by removing the other person from their followers list. This action ensures that the other person loses the ability to message them, providing users with control over their chat interactions and fostering a secure and personalized communication experience within the platform."
+            },
+            {
+              "title": "Retaining Chat History After Exiting",
+              "description": "Even after exiting a one-to-one chat, users retain access to their old chat history. This feature allows users to revisit and review past conversations, providing a comprehensive record of their interactions. This functionality enhances the user experience by preserving valuable chat content for reference and reflection."
+            },
+            {
+              "title": "Resuming Chat Continuity",
+              "description": "Facilitate seamless chat continuity by allowing users who follow each other again to pick up their conversation from where they left off. This feature enhances the user experience, ensuring that reconnected users can easily resume their chat interactions without any disruptions, contributing to a fluid and continuous communication experience within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Delete One To One Chat",
+          "features": [
+            {
+              "title": "One-to-One Chat Deletion",
+              "description": "Empower users with the ability to delete one-to-one chats. This feature allows users to manage their chat history, offering control over their messaging environment. Whether for privacy or organization, users can easily remove individual chat conversations, enhancing their overall chat experience within the platform."
+            },
+            {
+              "title": "One-to-One Chat Deletion (For Other User)",
+              "description": "Empower users with the ability to delete one-to-one chats not only from their own side but also from the other user's side. This feature provides users with a comprehensive level of control over their conversations, allowing them to manage chat history on both ends. By extending this capability, users can ensure a synchronized and privacy-conscious approach to chat management within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Change Chat Appearance",
+          "features": [
+            {
+              "title": "Customized Chat Appearance per Conversation with color",
+              "description": "Offer users the flexibility to define unique chat appearances for different conversations. Users can choose from predefined colors or select any custom color for individual chats, allowing them to personalize the visual experience based on the nature or significance of each conversation. This feature adds a layer of personalization, contributing to a more tailored and visually distinctive chat interface."
+            },
+            {
+              "title": "Custom Image Chat Appearance",
+              "description": "Enable users to further personalize their chat experience by allowing the use of custom images for changing chat appearance. This feature empowers users to express themselves creatively by incorporating unique visuals into the appearance of individual chats. It adds a personalized and visually rich dimension to the user's messaging environment."
+            },
+            {
+              "title": "Diverse Options for Custom Chat Image",
+              "description": "Enhance user options for customizing chat appearance by allowing them to pick images from various sources. Users can select custom images from their local storage, capture from their camera, or choose from third-party platforms like Facebook, Instagram, Google Drive, Dropbox, and more. Additionally, users can directly use any image link or pick from the diverse collection on Unsplash. This feature provides users with a wide range of choices to personalize their chat experience."
+            },
+            {
+              "title": "Image Editing for Chat Appearance",
+              "description": "Offer users a comprehensive customization experience by allowing them to edit the chosen image for chat appearance according to their preferences. This feature enables users to make adjustments, crop the image, ensuring that it aligns perfectly with their desired chat aesthetic. The capability to edit selected images adds a layer of creativity and personalization to the chat appearance customization process."
+            },
+            {
+              "title": "Reset to Default Chat Appearance",
+              "description": "Provide users with the convenience of reverting to the default chat appearance in a single click. This feature ensures flexibility and ease of use, allowing users to experiment with customizations and, when desired, quickly return to the default visual theme. It adds a layer of user-friendly functionality to the chat appearance customization feature."
+            }
+          ]
+        },
+        {
+          "topic": "Clear All Messages",
+          "features": [
+            {
+              "title": "One-Click Clearing of One-to-One Chat",
+              "description": "Empower users with the ability to clear all messages in a one-to-one chat with a single click. This feature provides users with a convenient and efficient way to manage their own chat history. It streamlines the chat interface, allowing users to maintain a clutter-free and organized conversation space within the platform."
+            },
+            {
+              "title": "Personalized One-to-One Chat History",
+              "description": "Implement a personalized chat history approach where clearing all messages in a one-to-one chat with a single click only affects the user initiating the action. The messages on the other side remain unchanged, preserving a consistent history for both users. This feature maintains a separate and personal chat history, ensuring a considerate and individualized experience for each user involved in the conversation."
+            },
+            {
+              "title": "Chat Recovery Through User Report",
+              "description": "Introduce a safeguard for users by enabling the recovery of cleared chats through the reporting feature. If a user reports a specific chat, the platform can facilitate the retrieval of the full chat history for that user. This feature adds an additional layer of user support and ensures that important conversations can be recovered when needed, contributing to a reliable and responsive chat experience."
+            }
+          ]
+        },
+        {
+          "topic": "One To One Chat Info",
+          "features": [
+            {
+              "title": "Preview Latest Messages or Notifications",
+              "description": "Facilitate quick access to information by allowing users to preview the latest messages or notifications from all chats without opening each one individually. This feature streamlines the user experience, providing a convenient way to stay updated on recent activity across multiple chats. Users can efficiently manage their conversations and prioritize interactions based on the latest content."
+            },
+            {
+              "title": "Distinct Visual Representation for Latest Message Types",
+              "description": "Enhance user awareness by visually differentiating between various types of messages or notifications in the latest message section. This feature ensures that different message types are uniquely presented, enabling users to quickly identify and comprehend the nature of each message directly from the latest message display. The distinct visual representation adds clarity and efficiency to the user's interaction with the messaging platform."
+            },
+            {
+              "title": "Preview Arrival Time of Latest Messages or Notifications",
+              "description": "Improve user awareness by displaying the arrival time of the latest messages or notifications in each chat from the all-chat section. This feature allows users to quickly assess when the most recent activity occurred across their various conversations without the need to open each chat individually. Enhancing user awareness contributes to a more informed and efficient chat management experience."
+            },
+            {
+              "title": "Online Status Indication in One-to-One Chat",
+              "description": "Improve user engagement by displaying the online status of the other user directly on the latest page of one-to-one chats. Users can quickly ascertain whether the other user is currently online without navigating into the chat. This feature adds a real-time dimension to the user interface, enhancing the overall user experience and facilitating timely and meaningful interactions."
+            },
+            {
+              "title": "Comprehensive Chat Information Display",
+              "description": "Enrich the user experience by providing comprehensive chat information directly within the chat interface. Users can easily view details such as the other user's name, bio, profile picture, and active status without navigating to a separate section. This feature streamlines user interactions, offering valuable context and real-time information for more engaging and informed conversations."
+            },
+            {
+              "title": "Real-Time User Active Status in Chat Section",
+              "description": "Enhance user engagement by presenting the real-time active status of the other user directly within the chat section. Users can easily determine whether the other user is currently active and, if inactive, view the timestamp of their last activity. This feature provides valuable insights into the availability of other users, fostering more informed and timely interactions within the chat platform."
+            }
+          ]
+        },
+        {
+          "topic": "Share Other User's Profile From One To One Chat",
+          "features": [
+            {
+              "title": "Effortless Sharing of Other User's Profile",
+              "description": "Streamline user interactions by enabling users to share the profile of the other user in a one-to-one chat with just one click. This feature provides a convenient and efficient way for users to exchange profile information, enhancing the user experience and facilitating seamless communication within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Profile Visit",
+          "features": [
+            {
+              "title": "Direct Profile Visit from Chat",
+              "description": "Facilitate seamless navigation for users by allowing them to visit the profile of the other user directly from the chat interface. This feature streamlines user interactions, providing a quick and convenient way for users to access additional information about the person they are chatting with. Enhancing the overall user experience, this feature promotes a more connected and informed chat environment."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Group Chat",
+      "features": [
+        {
+          "topic": "Create Group Chat",
+          "features": [
+            {
+              "title": "Customizable Group Chat Creation",
+              "description": "Empower users to create group chats with personalized titles, descriptions, and group pictures. This feature adds a layer of customization to group communication, allowing users to tailor the group chat experience according to the nature or purpose of the conversation. The ability to set a custom title, description, and group picture enhances user engagement and fosters a more personalized group chat environment."
+            },
+            {
+              "title": "Diverse Group Picture Selection",
+              "description": "Enhance group chat personalization by allowing users to pick images for the group picture from various sources. Users can choose from local storage, capture from the camera, select from third-party platforms like Facebook, Instagram, Google Drive, Dropbox, OneDrive, Zoom, or use a custom link. Additionally, users can pick images from Unsplash, offering a wide range of options for creating a visually appealing group chat environment."
+            },
+            {
+              "title": "Group Image Editing",
+              "description": "Empower users with the capability to edit the selected image for the group picture after the initial selection. This feature allows users to make adjustments and personalize the chosen image according to their preferences. By offering post-selection editing, the platform enhances user creativity and ensures a visually satisfying and customized group chat picture."
+            },
+            {
+              "title": "Minimum Users for Group Chat",
+              "description": "Set a requirement that a minimum of two users must be selected to create a group chat. This feature ensures that group chats are collaborative and involve multiple participants, fostering interactive and engaging conversations within the platform."
+            },
+            {
+              "title": "Search and Add Following Members to Group Chat",
+              "description": "Enhance user convenience by providing the ability to search and add members whom the user is already following to a group chat. This feature streamlines the process of forming group chats, allowing users to easily locate and include specific individuals they have established connections with through the follow system. The search functionality adds efficiency to the group chat creation process."
+            },
+            {
+              "title": "Group Chat Creation Notification for Members",
+              "description": "Improve communication transparency by sending notifications to all members when a group chat is created. The group admin informs each member that they will be added to the newly created group. This feature ensures that all participants are aware of their inclusion in the group chat, promoting a clear and informed communication environment within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Update Group Chat",
+          "features": [
+            {
+              "title": "Admin-Controlled Group Chat Information",
+              "description": "Endow group chat administrators with comprehensive control by allowing them to update all the information associated with the group chat, such as title, description, and picture. The same restrictions and features available during the initial creation of the group chat are maintained, providing admins with flexibility and authority to adapt the group chat settings as needed."
+            },
+            {
+              "title": "Admin Authority in Group Chat Membership",
+              "description": "Empower group chat admins with the ability to manage group membership by allowing them to remove any member from the group or add any following member. This feature ensures that group chat administrators have control over the composition of the group, facilitating efficient moderation and ensuring that the group aligns with its intended purpose or focus."
+            },
+            {
+              "title": "Group Information Update Notification",
+              "description": "Facilitate seamless communication within the group by notifying all members when the group chat admin updates any information related to the group. This feature ensures that all members are promptly informed about changes, fostering transparency and awareness within the group chat environment."
+            }
+          ]
+        },
+        {
+          "topic": "Clear All Messages In Group Chat",
+          "features": [
+            {
+              "title": "One-Click Clearing of All Messages In Group Chat",
+              "description": "Empower members with the ability to clear all messages in a group chat with a single click. This feature provides members with a convenient and efficient way to manage their own chat history. It streamlines the chat interface, allowing members to maintain a clutter-free and organized conversation space within the platform."
+            },
+            {
+              "title": "Personalized Group Chat History",
+              "description": "Implement a personalized group chat history approach where clearing all messages in a group chat with a single click only affects the member initiating the action. The messages on the other members remain unchanged, preserving a consistent history for all the members of group chat. This feature maintains a separate and personal chat history, ensuring a considerate and individualized experience for each member involved in the conversation."
+            },
+            {
+              "title": "Admin-Initiated Group Chat Message Clearing For All Members",
+              "description": "Centralize chat management within group chats by allowing the admin to clear all messages for all members with a single click. This feature streamlines the process of maintaining a clean and organized conversation space, providing the admin with efficient control over the chat environment. It promotes effective moderation and upkeep of group chat discussions."
+            },
+            {
+              "title": "Chat Recovery Through User Report",
+              "description": "Introduce a safeguard for users by enabling the recovery of cleared chats through the reporting feature. If a user reports a specific chat, the platform can facilitate the retrieval of the full chat history for that user. This feature adds an additional layer of user support and ensures that important conversations can be recovered when needed, contributing to a reliable and responsive chat experience."
+            }
+          ]
+        },
+        {
+          "topic": "Left Group Chat",
+          "features": [
+            {
+              "title": "Leaving Group Chat",
+              "description": "Allow group chat members to leave the group at their convenience, providing the flexibility for individuals to manage their group memberships based on their preferences and engagement levels. This feature empowers users with control over their group participation, ensuring a user-friendly and accommodating group chat experience within the platform."
+            },
+            {
+              "title": "Group Chat Member Departure Notification",
+              "description": "Notify all group members when a member leaves the group. This feature promotes transparency and keeps all group members informed about changes in the group composition, fostering a cohesive and well-informed group chat environment."
+            },
+            {
+              "title": "Retaining Chat History After Leaving Group",
+              "description": "Even after leaving a group chat, members retain access to their old chat history, preserving the continuity of past conversations. This feature ensures that users can revisit and reference their previous interactions, maintaining a seamless and personalized user experience within the platform."
+            },
+            {
+              "title": "Privacy-Focused Rejoining of Group Chat",
+              "description": "Enhance privacy measures by allowing users who rejoin a group chat to access only their old chat history and new conversations. This feature ensures that users cannot access the chat content generated during their absence, promoting a more secure and privacy-centric user experience within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Join Group Chat",
+          "features": [
+            {
+              "title": "Restricted Group Chat Joining",
+              "description": "Enable a controlled group chat environment by allowing members to join a group chat only if the group chat admin adds them. To be added, members must be followed by the admin. This feature ensures that group chat membership remains intentional and controlled, enhancing the admin's ability to manage the composition of the group."
+            },
+            {
+              "title": "Member Addition Notification in Group",
+              "description": "Promote transparency and communication within the group by notifying all members when a new member is added to the group. This feature ensures that every member is promptly informed about changes in the group composition, fostering a sense of community and awareness within the group chat environment."
+            },
+            {
+              "title": "Privacy-Focused Access for New Members in Group Chat",
+              "description": "Establish privacy measures for new users joining a group chat, allowing them to access only new chat conversations upon joining. This feature ensures that new users cannot access chat content generated before their entry, promoting a more secure and privacy-centric user experience within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Delete Group Chat",
+          "features": [
+            {
+              "title": "Admin-Controlled Group Chat Deletion",
+              "description": "Grant group chat admins the authority to delete the group chat at their discretion. This feature empowers admins with the ability to efficiently manage group chats, facilitating the removal of groups that are no longer needed. Admins can exercise this control to maintain a streamlined and relevant group chat environment within the platform."
+            },
+            {
+              "title": "Recovery Option After Group Chat Deletion",
+              "description": "Incorporate a recovery option by allowing a deleted group chat to be restored if any member reports it. This feature adds a layer of flexibility, providing a mechanism for chat recovery in case a member accidentally deletes the chat or needs to retrieve important information. It ensures a user-centric approach to managing deleted group chats within the platform."
+            }
+          ]
+        },
+        {
+          "topic": "Change Group Chat Appearance",
+          "features": [
+            {
+              "title": "Customized Group Chat Appearance by Admin with Color",
+              "description": "Empower group chat administrators with the ability to customize the appearance of the group chat. Admins can define unique chat appearances, choosing from predefined colors or selecting any custom color for the group chat. This feature allows admins to personalize the visual experience of the group chat, adding a layer of customization and distinctiveness to the chat interface."
+            },
+            {
+              "title": "Custom Image Group Chat Appearance by Admin",
+              "description": "Grant group chat administrators the ability to personalize the group chat experience by using custom images for changing the chat appearance. This feature empowers admins to creatively express the group's identity by incorporating unique visuals into the appearance of the group chat. It adds a personalized and visually rich dimension to the group's messaging environment."
+            },
+            {
+              "title": "Diverse Options for Custom Group Chat Image by Admin",
+              "description": "Expand group chat admin options for customizing chat appearance by allowing them to pick images from various sources. Admins can select custom images from local storage, capture from the camera, or choose from third-party platforms like Facebook, Instagram, Google Drive, Dropbox, and more. Additionally, admins can directly use any image link or pick from the diverse collection on Unsplash. This feature provides admins with a wide range of choices to personalize the group chat experience."
+            },
+            {
+              "title": "Image Editing for Group Chat Appearance by Admin",
+              "description": "Provide group chat administrators with a comprehensive customization experience by allowing them to edit the chosen image for group chat appearance according to their preferences. This feature enables admins to make adjustments, crop the image, ensuring that it aligns perfectly with the desired group chat aesthetic. The capability to edit selected images adds a layer of creativity and personalization to the group chat appearance customization process."
+            },
+            {
+              "title": "Reset to Default Group Chat Appearance by Admin",
+              "description": "Empower group chat administrators with the convenience of reverting to the default group chat appearance in a single click. This feature ensures flexibility and ease of use, allowing admins to experiment with customizations and, when desired, quickly return to the default visual theme. It adds a layer of user-friendly functionality to the group chat appearance customization feature."
+            }
+          ]
+        },
+        {
+          "topic": "Profile Visit",
+          "features": [
+            {
+              "title": "Profile Visit from Group Chat",
+              "description": "Empower group chat members to easily visit the profiles of other members directly from the group chat. This feature enhances user interaction within the group by providing a convenient way for members to explore and connect with each other through their individual profiles."
+            }
+          ]
+        },
+        {
+          "topic": "Group Chat Info",
+          "features": [
+            {
+              "title": "Preview Latest Messages or Notifications in Group Chat",
+              "description": "Enhance user efficiency in group chats by allowing users to preview the latest messages or notifications specifically for the group without opening it individually. This feature streamlines the user experience, providing a convenient way for group chat members to stay updated on recent group activity. Users can efficiently manage group conversations and prioritize interactions based on the latest content within the group chat."
+            },
+            {
+              "title": "Distinct Visual Representation for Latest Message Types in Group Chat",
+              "description": "Elevate user awareness within group chats by visually differentiating between various types of messages or notifications in the latest message section. This feature ensures that different message types within the group chat are uniquely presented, enabling users to quickly identify and comprehend the nature of each message directly from the latest message display. The distinct visual representation adds clarity and efficiency to the user's interaction within the group chat environment."
+            },
+            {
+              "title": "Preview Arrival Time of Latest Messages or Notifications in Group Chat",
+              "description": "Enhance user awareness within group chats by displaying the arrival time of the latest messages or notifications specifically for the group from the all-chat section. This feature allows group chat members to quickly assess when the most recent group activity occurred without the need to open the group chat individually. Improving user awareness contributes to a more informed and efficient group chat management experience."
+            },
+            {
+              "title": "Comprehensive Group Chat Information Display",
+              "description": "Enrich the group chat experience by providing comprehensive group information directly within the chat interface. Group chat members can easily view details such as the group title, description, group picture, group members, and their authority (admin or member) without navigating to a separate section. This feature streamlines group interactions, offering valuable context and real-time information for more engaging and informed group conversations."
+            },
+            {
+              "title": "Real-Time Group Chat Information Updates",
+              "description": "Ensure real-time communication within the group by reflecting any information updates made by the group admin immediately for all group members. All group members are promptly notified about the update simultaneously, fostering a dynamic and informed group chat environment. This feature enhances transparency and ensures that group members stay aware of any changes within the group chat."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Message": [
+    {
+      "topic": "Design",
+      "features": [
+        {
+          "title": "Elegant Presentation of Chat Messages",
+          "description": "The chat system showcases all messages in an aesthetically pleasing and user-friendly manner. Whether it's text messages, images, videos, audios, or other content, the presentation is designed to enhance the overall visual appeal and readability of the messages within the chat."
+        },
+        {
+          "title": "Distinguishing Own and Other User Text Messages in Chat",
+          "description": "Within the chat, user messages are presented distinctly, creating a visual separation between the user's own messages and messages from other users. This feature enhances readability and helps users quickly identify their contributions in the conversation."
+        },
+        {
+          "title": "Timestamps for Chat Messages",
+          "description": "Improve message context by including a time tag for each chat message, indicating when the message was sent or received. This feature enhances the chronological understanding of the conversation, allowing users to track the timing of messages within the chat."
+        },
+        {
+          "title": "Message Status Indicators",
+          "description": "Improve communication visibility with distinct message status indicators. Messages are accompanied by visual cues such as single tick for sent, double tick for delivered, and colored double tick for seen. These indicators offer users a clear and intuitive way to track the status of their messages, enhancing the overall messaging experience."
+        },
+        {
+          "title": "Special Presentation for Informational Messages in Chat",
+          "description": "Improve the visibility and recognition of informational messages within the chat system by presenting them in a unique and distinguishable format. This special presentation ensures that messages conveying important information, such as user actions (joining, leaving), call events, or admin updates, are readily identifiable, contributing to a more intuitive and user-friendly chat experience."
+        },
+        {
+          "title": "Distinct Presentation for Date Messages in Chat",
+          "description": "Enhance clarity and organization in the chat system by displaying date messages in a distinct and recognizable format. This feature ensures to differentiate messages based on date and promoting a more organized and user-friendly chat interface."
+        }
+      ]
+    },
+    {
+      "topic": "Message Type",
+      "features": [
+        {
+          "topic": "Info Messages",
+          "features": [
+            {
+              "title": "Informative Call Messages in Chat",
+              "description": "The chat system delivers informative messages within individual chats regarding call events. Users receive notifications when a call is started, when a call concludes, and information about the user who initiated the call. These messages enhance user awareness and provide a seamless experience during voice or video calls within the chat."
+            },
+            {
+              "title": "User Activity Messages in Chat",
+              "description": "The chat system delivers informative messages within individual chats to notify users about activities like joining or leaving the chat. Users receive notifications when someone joins the chat or when a user decides to leave. These messages enhance user awareness of chat dynamics, contributing to a more engaging and informed chat experience."
+            },
+            {
+              "title": "Admin Update Messages in Group Chat",
+              "description": "The chat system generates informative messages within group chats to notify members when an admin updates any information. Whether it's a change in group title, description, picture, or other details, users receive messages in real-time. This feature ensures that all group members stay informed about any modifications made by the group admin, fostering transparency and effective communication."
+            }
+          ]
+        },
+        {
+          "topic": "Date And Time Messages",
+          "features": [
+            {
+              "title": "Date Change Messages in Chat",
+              "description": "The chat system includes date change messages within conversations to indicate shifts in dates between messages. This feature helps users track the chronological order of messages and provides clarity on when the conversation spans across different days. Date change messages contribute to an organized and comprehensible chat experience for users."
+            },
+            {
+              "title": "Timestamps for Message Tracking",
+              "description": "The chat system attaches a time tag to every message, indicating the exact moment it was sent or received. This feature enables users to track the timeline of messages, providing a clear understanding of when each interaction occurred. Timestamps contribute to organized and time-aware communication within the chat platform."
+            }
+          ]
+        },
+        {
+          "topic": "User Messages",
+          "features": [
+            {
+              "topic": "Text",
+              "features": [
+                {
+                  "title": "Elegant Presentation of User Text Messages",
+                  "description": "The chat system prioritizes an elegant presentation for user text messages within the chat interface. This feature aims to create a visually pleasing and user-friendly environment, contributing to a more enjoyable messaging experience."
+                }
+              ]
+            },
+            {
+              "topic": "Image",
+              "features": [
+                {
+                  "title": "Visual Appeal for User Image Messages",
+                  "description": "The chat system ensures that user image messages are displayed in a visually appealing manner within the chat. This feature enhances the overall aesthetics of the conversation, offering an engaging and enjoyable experience when users share images in their messages."
+                }
+              ]
+            },
+            {
+              "topic": "Video",
+              "features": [
+                {
+                  "title": "Rich Video Player for User Video Messages in Chat",
+                  "description": "Elevate the user experience by incorporating a feature-rich video player for displaying user video messages within the chat. This player is designed to be visually appealing, user-friendly, and equipped with various features to enhance the viewing experience. Users can enjoy seamless playback and interaction with video messages directly in the chat interface."
+                }
+              ]
+            },
+            {
+              "topic": "audio",
+              "features": [
+                {
+                  "title": "Enhanced Audio Player for User Audio Messages in Chat",
+                  "description": "Enhance the user experience by introducing a feature-rich audio player for playing user audio messages within the chat. This player is designed to be visually appealing, user-friendly, and equipped with various features to elevate the listening experience. Users can enjoy seamless playback and interaction with audio messages directly in the chat interface."
+                }
+              ]
+            },
+            {
+              "topic": "Emoji",
+              "features": [
+                {
+                  "title": "Feature-Rich Emoji Support in Chat",
+                  "description": "Enrich the expressive capabilities of users by providing support for a diverse set of feature-rich emojis within the chat system. This feature allows users to convey a wide range of emotions, reactions, and expressions, enhancing the overall communication experience with vibrant and engaging visuals."
+                },
+                {
+                  "title": "Emoji Search Functionality in Emoji Selection Modal",
+                  "description": "Simplify the emoji selection process by implementing an emoji search functionality within the emoji selection modal. Users can easily find and use specific emojis by entering relevant keywords, streamlining the emoji selection process and ensuring a seamless and efficient user experience."
+                },
+                {
+                  "title": "Categorized Emojis for Easy Selection",
+                  "description": "Enhance user experience by categorizing emojis within the chat system. This feature simplifies emoji selection, allowing users to easily find and use relevant emojis from different categories, promoting a more organized and user-friendly interface."
+                },
+                {
+                  "title": "Frequently Used Emoji Support",
+                  "description": "Enhance the user experience by providing support for frequently used emojis within the chat system. This feature offers quick access to commonly used emojis, streamlining the emoji selection process and allowing users to express themselves more efficiently in their conversations."
+                },
+                {
+                  "title": "Diverse Color Tones for Emojis",
+                  "description": "Enrich the expression palette by providing support for emojis in various color tones within the chat system. This feature allows users to choose from a diverse range of color options, enhancing the visual appeal and personalization of emoji usage in their conversations."
+                }
+              ]
+            },
+            {
+              "topic": "Animated Emoji",
+              "features": [
+                {
+                  "title": "Animated Emojis Support in Chat",
+                  "description": "Bring liveliness to conversations with the support for animated emojis in the chat system. Users can express a range of emotions and reactions with animated emojis, adding a dynamic and engaging element to their messages."
+                },
+                {
+                  "title": "Related Animated Emojis Preview",
+                  "description": "Enhance user convenience by implementing a feature that displays related animated emojis when a user right-clicks on a specific animated emoji. This allows users to preview and explore related animated emojis, promoting a more interactive and enjoyable chat experience."
+                }
+              ]
+            },
+            {
+              "topic": "GIF",
+              "features": [
+                {
+                  "title": "GIF Support in Chat",
+                  "description": "Enhance the chat experience by introducing support for GIFs. Users can seamlessly share and view GIFs directly within the chat, adding a dynamic and expressive element to their conversations. This feature enhances communication by allowing users to convey emotions and reactions through animated GIFs."
+                },
+                {
+                  "title": "GIF Search Functionality",
+                  "description": "Enable users to search for specific GIFs by entering relevant keywords, adding a convenient and efficient search option to enhance the GIF selection process within the chat system."
+                },
+                {
+                  "title": "Predefined GIF Templates",
+                  "description": "Facilitate easy access to GIFs by providing predefined templates such as trending, happy, sad, angry, love, cry, surprise, etc. Users can conveniently select relevant GIFs by clicking on these predefined categories, streamlining the GIF selection process and enhancing user experience."
+                },
+                {
+                  "title": "Related GIF Preview",
+                  "description": "Enhance user convenience by implementing a feature that displays related GIFs when a user right-clicks on a specific GIF. This allows users to preview and explore related GIFs, promoting a more interactive and enjoyable chat experience."
+                },
+                {
+                  "title": "Default Trending GIF Display",
+                  "description": "Optimize user experience by having the GIF system default to displaying trending GIFs. Users will be presented with a curated selection of trending GIFs upon accessing the GIF feature, offering a dynamic and engaging assortment for immediate use."
+                }
+              ]
+            },
+            {
+              "topic": "Short Video Clips With Sound",
+              "features": [
+                {
+                  "title": "Short Video Clips With Sound Support in Chat",
+                  "description": "Enhance the chat experience by introducing support for short video clips with sound. Users can share engaging video content with audio directly in the chat, adding a dynamic and immersive element to their conversations."
+                },
+                {
+                  "title": "Short Video Clips Search Functionality",
+                  "description": "Facilitate users in finding specific short video clips with sound by implementing a search functionality. Users can enter relevant keywords to quickly discover and share engaging video content within the chat system."
+                },
+                {
+                  "title": "Predefined Short Video Clip Templates",
+                  "description": "Facilitate user access to short video clips with sound by providing predefined templates such as trending, happy, sad, angry, love, cry, surprise, etc. Users can efficiently choose engaging video content by selecting from these predefined categories, adding convenience and diversity to the short video clip selection process within the chat system."
+                },
+                {
+                  "title": "Related Short Video Clip Preview",
+                  "description": "Enhance user convenience with a feature that presents related short video clips with sound when a user right-clicks on a specific video. This enables users to preview and explore related video clips, contributing to a more interactive and enjoyable chat experience within the chat system."
+                },
+                {
+                  "title": "Default Trending Short Video Clip Display",
+                  "description": "Enhance user experience by defaulting the short video clip system to display trending short video clips with sound. Users will encounter a curated selection of trending short video clips when accessing the feature, providing a dynamic and engaging assortment for immediate use."
+                }
+              ]
+            },
+            {
+              "topic": "Animated Meme Text",
+              "features": [
+                {
+                  "title": "Animated Meme Text Support in Chat",
+                  "description": "Enrich the chat experience by introducing support for animated meme text. Users can express themselves with a variety of animated meme text directly in the chat, adding a playful and dynamic element to their conversations."
+                },
+                {
+                  "title": "Animated Meme Text Search Functionality",
+                  "description": "Facilitate users in finding specific animated meme text by implementing a search functionality. Users can enter relevant keywords to quickly discover and use the animated meme text that best expresses their sentiments within the chat system."
+                },
+                {
+                  "title": "Predefined Animated Meme Text Templates",
+                  "description": "Enhance user accessibility to animated meme text by offering predefined templates such as trending, happy, sad, angry, love, cry, surprise, etc. Users can efficiently choose expressive animated meme text by selecting from these predefined categories, adding convenience and diversity to the animated meme text selection process within the chat system."
+                },
+                {
+                  "title": "Related Animated Meme Text Preview",
+                  "description": "Improve user convenience with a feature that presents related animated meme text when a user right-clicks on a specific animated meme text. This enables users to preview and explore related animated meme text, contributing to a more interactive and enjoyable chat experience within the chat system."
+                },
+                {
+                  "title": "Default Trending Animated Meme Text Display",
+                  "description": "Enhance user experience by defaulting the animated meme text system to display trending animated meme text. Users will encounter a curated selection of trending animated meme text when accessing the animated meme text feature, providing a dynamic and engaging assortment for immediate use."
+                }
+              ]
+            },
+            {
+              "topic": "Animated Sticker",
+              "features": [
+                {
+                  "title": "Animated Stickers Support in Chat",
+                  "description": "Enrich the chat experience by introducing support for animated stickers. Users can express themselves with a wide range of animated stickers directly in the chat, adding a playful and dynamic element to their conversations."
+                },
+                {
+                  "title": "Animated Stickers Search Functionality",
+                  "description": "Facilitate users in finding specific animated stickers by implementing a search functionality. Users can enter relevant keywords to quickly discover and use the animated stickers that best express their sentiments within the chat system."
+                },
+                {
+                  "title": "Predefined Animated Sticker Templates",
+                  "description": "Enhance user accessibility to animated stickers by offering predefined templates such as trending, happy, sad, angry, love, cry, surprise, etc. Users can efficiently choose expressive animated stickers by selecting from these predefined categories, adding convenience and diversity to the animated sticker selection process within the chat system."
+                },
+                {
+                  "title": "Related Animated Sticker Preview",
+                  "description": "Improve user convenience with a feature that presents related animated stickers when a user right-clicks on a specific animated sticker. This enables users to preview and explore related animated stickers, contributing to a more interactive and enjoyable chat experience within the chat system."
+                },
+                {
+                  "title": "Default Trending Animated Sticker Display",
+                  "description": "Enhance user experience by defaulting the animated sticker system to display trending animated stickers. Users will encounter a curated selection of trending animated stickers when accessing the animated sticker feature, providing a dynamic and engaging assortment for immediate use."
+                }
+              ]
+            },
+            {
+              "topic": "Customised Animated Text",
+              "features": [
+                {
+                  "title": "Customized Animated Text Support",
+                  "description": "Empower users with the ability to create and send customized animated text messages. Users can animate any text in various styles, adding a creative and dynamic element to their messages within the chat system."
+                },
+                {
+                  "title": "Extensive Animated Text Styles",
+                  "description": "Offer users a diverse selection of over 50 animated styles to animate their text messages. This feature provides users with a wide range of creative options, allowing them to choose the perfect animated style that aligns with the tone and expression of their messages within the chat system."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "Camera",
+          "features": [
+            {
+              "title": "Image Capture and Send",
+              "description": "Empower users to utilize their device's camera to capture images on the spot and seamlessly send them as image messages within the chat. This feature enhances spontaneity and allows users to share real-time visual experiences with others in the chat system."
+            },
+            {
+              "title": "Video Capture and Send",
+              "description": "Enable users to leverage their device's camera to record videos on the fly and effortlessly send them as video messages within the chat. This feature adds a dynamic dimension to communication, allowing users to share real-time video content with others in the chat system."
+            }
+          ]
+        },
+        {
+          "topic": "Audio Recording",
+          "features": [
+            {
+              "title": "Audio Recording and Messaging",
+              "description": "Empower users to record personalized audio messages using their device's microphone and seamlessly send them as audio messages within the chat. This feature enhances the expressive capabilities of users, providing a more versatile and engaging communication experience."
+            },
+            {
+              "title": "Microphone Selection During Audio Recording",
+              "description": "Offer users the flexibility to choose the microphone of their preference while recording audio messages. This feature ensures that users can optimize their audio recording experience by selecting the most suitable microphone for their needs."
+            },
+            {
+              "title": "Audio Message Preview and Discard",
+              "description": "Enhance user control and experience by allowing them to preview audio messages before sending. Users can listen to the recorded audio, providing an opportunity to review and decide whether to send or discard the message. This feature adds a layer of user-friendly functionality to the audio messaging experience."
+            },
+            {
+              "title": "Real-time Display of Audio Recording Duration and File Size",
+              "description": "Enhance the audio recording experience by providing users with real-time information on both the duration and file size of the recording. This feature adds transparency and usability, allowing users to track the length and file size of their audio messages during the recording process."
+            }
+          ]
+        },
+        {
+          "topic": "Screencast",
+          "features": [
+            {
+              "title": "Screen Recording for Video Messages",
+              "description": "Empower users to screen cast their device screen, record videos, and seamlessly send them as video messages within the chat. This feature enhances communication by allowing users to share dynamic content directly from their screens, adding a versatile and engaging dimension to video messages."
+            },
+            {
+              "title": "Privacy-Focused Screen Sharing for Video Messages",
+              "description": "Enhance user privacy and security by allowing users to choose between sharing their entire screen, a specific tab, or a particular window when recording a video for sending as a video message. This feature ensures that users have control over the content they share, preventing the unintentional exposure of sensitive information."
+            },
+            {
+              "title": "Screen Recording Preview and Confirmation",
+              "description": "Prioritize user control and privacy by enabling users to preview their screen recording before sending it to others. This feature ensures that users have the opportunity to review the content, allowing them to discard or proceed with sending, preventing the unintended sharing of sensitive information."
+            }
+          ]
+        },
+        {
+          "topic": "Youtube Integration",
+          "features": [
+            {
+              "title": "YouTube Video Integration Via Youtube Url Or Id",
+              "description": "Enhance the user experience by allowing seamless sharing of YouTube videos as video messages in the chat. When a user shares a YouTube video URL or video ID, it will be integrated into the chat as a video message. This integration ensures that no additional data is used to send the video, providing users with a convenient way to share and view YouTube content within the chat interface."
+            },
+            {
+              "title": "Error Handling for YouTube Video URLs",
+              "description": "Ensure a smooth user experience by implementing error handling for YouTube video URLs. If a user provides an incorrect YouTube video URL or ID, the chat system displays an error message in the video player, notifying the user of the issue and preventing potential disruptions to the chat flow."
+            },
+            {
+              "title": "Interactive YouTube Video Display",
+              "description": "Enhance user interaction by displaying shared YouTube videos as video messages within the chat. Users can enjoy the convenience of viewing the video directly in the chat interface. Additionally, they have the option to visit the original YouTube video by clicking on the video title, offering a seamless and interactive experience."
+            }
+          ]
+        },
+        {
+          "topic": "Third Party Integration",
+          "features": [
+            {
+              "topic": "Instagram",
+              "features": [
+                {
+                  "title": "Media Sharing from Instagram in Chat",
+                  "description": "Enable users to share media files directly from their Instagram accounts in the chat. Users can seamlessly share photos or videos from their Instagram profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent Instagram OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent Instagram OAuth verification. Once a user completes the OAuth verification for their Instagram account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Instagram accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "Facebook",
+              "features": [
+                {
+                  "title": "Media Sharing from Facebook in Chat",
+                  "description": "Enable users to share media files directly from their Facebook accounts in the chat. Users can seamlessly share photos or videos from their Facebook profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent Facebook OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent Facebook OAuth verification. Once a user completes the OAuth verification for their Facebook account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Facebook accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "Google Drive",
+              "features": [
+                {
+                  "title": "Media Sharing from Google Drive in Chat",
+                  "description": "Enable users to share media files directly from their Google Drive accounts in the chat. Users can seamlessly share photos or videos from their Google Drive, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent OAuth Verification for Google Drive",
+                  "description": "Enhance user convenience by implementing persistent OAuth verification for Google Drive integration. Once a user completes the OAuth verification for their Google Drive account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Google Drive accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "One Drive",
+              "features": [
+                {
+                  "title": "Media Sharing from OneDrive in Chat",
+                  "description": "Enable users to share media files directly from their OneDrive accounts in the chat. Users can seamlessly share photos or videos from their OneDrive profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent OneDrive OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent OneDrive OAuth verification. Once a user completes the OAuth verification for their OneDrive account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their OneDrive accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "DropBox",
+              "features": [
+                {
+                  "title": "Media Sharing from Dropbox in Chat",
+                  "description": "Enable users to share media files directly from their Dropbox accounts in the chat. Users can seamlessly share photos or videos from their Dropbox profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent Dropbox OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent Dropbox OAuth verification. Once a user completes the OAuth verification for their Dropbox account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Dropbox accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "Box",
+              "features": [
+                {
+                  "title": "Media Sharing from Box in Chat",
+                  "description": "Enable users to share media files directly from their Box accounts in the chat. Users can seamlessly share photos or videos from their Box profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent Box OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent Box OAuth verification. Once a user completes the OAuth verification for their Box account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Box accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            },
+            {
+              "topic": "Zoom",
+              "features": [
+                {
+                  "title": "Media Sharing from Zoom in Chat",
+                  "description": "Enable users to share media files directly from their Zoom accounts in the chat. Users can seamlessly share photos or videos from their Zoom profiles, enhancing the sharing capabilities and allowing for more diverse and engaging conversations within the chat system."
+                },
+                {
+                  "title": "Persistent Zoom OAuth Verification",
+                  "description": "Streamline the user experience by implementing persistent Zoom OAuth verification. Once a user completes the OAuth verification for their Zoom account, the system remembers the authentication until the user actively logs out. This ensures that users do not need to repeatedly log in to share media from their Zoom accounts, providing a more convenient and user-friendly interaction."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "Custom Media Link",
+          "features": [
+            {
+              "title": "Flexible Media Sharing from Custom Links",
+              "description": "Provide users with flexibility by allowing them to share media from any custom media link. The chat system fetches the media content from the provided link, enabling users to share a wide range of media from various sources, enhancing the diversity of content shared within the chat."
+            }
+          ]
+        },
+        {
+          "topic": "Unsplash Integration",
+          "features": [
+            {
+              "title": "Unsplash Integration for Image Search",
+              "description": "Empower users to enhance their conversations with visually appealing images. Integrate Unsplash image search, allowing users to enter keywords and explore a vast collection of related images. Users can effortlessly choose and send their selected images as messages in the chat, adding a creative and personalized touch to their communication."
+            }
+          ]
+        },
+        {
+          "topic": "Link And Email Extraction",
+          "features": [
+            {
+              "title": "Automatic Link Extraction and Highlighting",
+              "description": "Improve user experience by enabling the chat system to automatically extract all links from text messages and highlight them. This feature enhances readability and user interaction by making links easily identifiable and clickable within the text messages."
+            },
+            {
+              "title": "Secure Anchor Tags for Extracted Links",
+              "description": "Ensure security and privacy by converting all extracted links from text messages into secure anchor tags with the attributes 'noopener noreferrer.' This implementation prevents potential security vulnerabilities by restricting the opened tab or window's access to the document that initiated it. Additionally, it enhances user privacy by not sending a referrer header, thus protecting against information disclosure to the destination website."
+            },
+            {
+              "title": "Highlighting Extracted Email IDs as Anchor Tags",
+              "description": "Improve user interaction by extracting all email IDs from text messages and highlighting them as secure anchor tags. This enhancement allows users to easily identify and interact with email addresses within the chat, promoting a more efficient and user-friendly experience."
+            },
+            {
+              "title": "Secure Email Links for Extracted Email IDs",
+              "description": "Enhance user convenience and security by converting all extracted email IDs into secure email links. These links will open in the user's default email client, providing a seamless and secure way for users to engage with email addresses within the chat system."
+            }
+          ]
+        },
+        {
+          "topic": "Link Preview",
+          "features": [
+            {
+              "title": "Advanced Link Preview in Text Messages",
+              "description": "Elevate user experience with an advanced link preview in text messages. This includes the title, main image, description of the webpage, origin website name, and origin website favicon for the primary link extracted from messages. This comprehensive preview enhances user engagement by providing valuable information and visual elements before clicking on the link within the chat system."
+            },
+            {
+              "title": "Custom Link Type Recognition",
+              "description": "Improve user experience by implementing custom link type recognition. When a link lacks a default preview, the chat system will identify the link type (image, audio, video, application, etc.) and offer a tailored preview in the chat, providing users with relevant information about the linked content."
+            },
+            {
+              "title": "Secure Link Opening",
+              "description": "Enhance user security and privacy by implementing secure link opening. When a user clicks on a link preview, the chat system will open the link in a new tab with the 'noopener noreferrer' attributes. This ensures that the opened tab or window is restricted from accessing the document that initiated it, preventing potential security vulnerabilities. It also protects user privacy by not sending a referrer header, thus avoiding information disclosure to the destination website."
+            }
+          ]
+        },
+        {
+          "topic": "Image Editing",
+          "features": [
+            {
+              "title": "Image Editing Before Sending",
+              "description": "Allow users to perform image editing before sending an image message. This includes features such as cropping, rotating, zooming in and out, and flipping. These essential editing tools enable users to make quick adjustments and enhance their images before sharing them in the chat."
+            },
+            {
+              "title": "Image Editing Reset Feature",
+              "description": "Ensure a seamless image editing experience in chat by incorporating a reset button. If an image is inadvertently distorted during the editing process, users can easily restore it to its original state with the reset button, promoting user-friendly interactions."
+            },
+            {
+              "title": "Predefined Image Cropping Templates",
+              "description": "Enhance the image editing process in chat by providing users with predefined cropping templates. These templates offer convenient options for cropping images to commonly used aspect ratios or shapes, streamlining the editing experience and ensuring consistent results."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Reply Message",
+      "features": [
+        {
+          "title": "Message Reply Functionality",
+          "description": "Enable users to reply to any message within the chat. This feature enhances communication by allowing users to respond directly to specific messages, creating threaded conversations and improving overall message organization."
+        },
+        {
+          "title": "Effortless Message Replies",
+          "description": "Simplify the message reply process by allowing users to effortlessly respond to any message in the chat. Users can initiate a reply with a simple double-click on the desired message or by selecting the dedicated 'Reply' option, fostering a more intuitive and user-friendly interaction."
+        },
+        {
+          "title": "Distinct Design for Self and Other User Message Replies",
+          "description": "In the chat system, replies to self-messages and replies to other user messages will be differentiated with distinct designs and colors. This feature enhances visual clarity, making it easy for users to identify whether a reply is directed to their own message or another user's message in the chat."
+        },
+        {
+          "title": "Diverse Reply Designs for Message Types",
+          "description": "Enhance user engagement with a variety of reply designs tailored to different message types. The chat system features unique designs for text, video, image, audio, GIF, and sticker messages, providing a visually appealing and intuitive interaction for users."
+        },
+        {
+          "title": "Smooth Navigation to Replied Messages with Highlight",
+          "description": "When a user clicks on any replied message, the chat system will facilitate smooth scrolling to that specific message, ensuring it becomes prominently visible in the chat window. Additionally, the system will highlight the replied message, enhancing user interaction and navigation within the chat interface."
+        }
+      ]
+    },
+    {
+      "topic": "Message Deletion",
+      "features": [
+        {
+          "title": "Message Deletion (For Self)",
+          "description": "Empower users with the ability to delete any messages within the chat, providing them control over their conversation history. This feature enhances user privacy and allows for the seamless management of chat content."
+        },
+        {
+          "title": "Personalized Message Deletion (For All)",
+          "description": "Users can delete their messages for everyone if they were the sender. However, if the message is from another user, they retain the ability to delete it only from their side. This feature adds a layer of control, empowering users to manage their content while respecting the integrity of messages sent by others within the chat environment."
+        },
+        {
+          "title": "Message Deletion Notification (For All)",
+          "description": "When a user deletes a message for everyone in the chat, the message is replaced with a 'This message has been deleted' tag. This feature ensures transparency and notifies participants that a message has been removed, maintaining clarity in the conversation while respecting the user's decision to delete their content."
+        },
+        {
+          "title": "Privacy-Enhanced Message Deletion",
+          "description": "When a user deletes a message for all, the chat system diligently replaces that message across all instances where it's referenced, such as replies and the latest message. A tag 'This message has been deleted' is attached in place of the deleted message. This feature not only respects user privacy but also ensures a clear and consistent communication experience for all participants, fostering a trustworthy and secure chat environment."
+        }
+      ]
+    },
+    {
+      "topic": "Message Status",
+      "features": [
+        {
+          "title": "Comprehensive Message Status Indicators",
+          "description": "Enhancing communication transparency, every message is equipped with a status indicator in the chat. A single tick signifies the message has been sent, a double tick indicates delivery, a colored double tick confirms that the message has been seen by other participants, and an error icon is displayed in case of a message failure. This comprehensive status system ensures users are well-informed about the fate of their messages, promoting effective and reliable communication."
+        },
+        {
+          "title": "Delivery Confirmation with Timestamp",
+          "description": "Users have the ability to check if their messages have been delivered, providing a valuable delivery confirmation feature. If a user's message is successfully delivered, they can view the exact timing when the message reached its destination. This feature adds a layer of transparency to the communication process, empowering users with real-time insights into the status and timing of their delivered messages."
+        },
+        {
+          "title": "Message Seen Status with User Details",
+          "description": "Users can easily track the seen status of their messages, providing valuable insights into the engagement with their content. When a message is seen, users have visibility into who has viewed the message and the precise timing of when each participant saw it. This feature fosters transparency in communication, allowing users to stay informed about the reception of their messages within the chat."
+        },
+        {
+          "title": "Dynamic Color Change for Message Seen Status",
+          "description": "Innovatively, the status indicator undergoes a gradual color transformation from white to dark yellow as more participants in the chat view a message. Initially presented with a double tick in white color upon delivery, the indicator evolves its color spectrum. When all participants have seen the message, it settles into a distinctive dark yellow shade. This dynamic feature offers users a visually engaging representation of the message's seen status, fostering a lively and interactive chat experience."
+        },
+        {
+          "title": "Real-Time Message Status Updates",
+          "description": "Experience real-time updates on message seen status, delivery status, and error status. When someone views your message, these changes are immediately reflected to the message owner, ensuring prompt and dynamic awareness of the interaction with your messages. This feature keeps users informed in real-time, fostering a responsive and interactive communication environment within the chat."
+        }
+      ]
+    },
+    {
+      "topic": "Download Media Message",
+      "features": [
+        {
+          "title": "Media Download Capability",
+          "description": "Empower users with the ability to download media messages directly to their local storage within the chat. This feature ensures that users can easily save and access media content, providing a seamless and convenient way to manage and store valuable media shared in the conversation."
+        }
+      ]
+    },
+    {
+      "topic": "View Media Message",
+      "features": [
+        {
+          "title": "Enhanced Media Viewing Experience",
+          "description": "Users can enjoy an enriched media viewing experience with the option to enlarge image files and open video files in a new tab directly within the chat. This feature enhances user interaction with media content, providing a convenient and immersive way to explore and engage with images and videos shared in the conversation."
+        }
+      ]
+    },
+    {
+      "topic": "Copy Text Message",
+      "features": [
+        {
+          "title": "One-Click Text Copy",
+          "description": "Users can effortlessly copy text messages with a single click, offering a seamless and efficient way to duplicate and share text content within the chat. This feature simplifies the process of copying messages, enhancing the overall user experience and promoting quick and easy information sharing."
+        }
+      ]
+    },
+    {
+      "topic": "Message Time Stamp",
+      "features": [
+        {
+          "title": "Message Timestamps",
+          "description": "Every message is accompanied by a timestamp, indicating the exact moment it was created within the chat. This feature allows users to track the timing of messages, facilitating a chronological understanding of the conversation and enabling efficient navigation through the chat history."
+        }
+      ]
+    },
+    {
+      "topic": "Secure And Efficient Media Storage",
+      "features": [
+        {
+          "title": "Fast and Secure AWS S3 Bucket for Media Storage",
+          "description": "Elevating both speed and security, our chat application relies on a secure and high-performance AWS S3 bucket for all forms of media storage. This strategic choice not only prioritizes the protection of user data but also ensures a swift and efficient experience when storing and retrieving media files in the chat environment. By combining speed and security, we aim to provide users with a seamless and responsive media-sharing experience within the application."
+        },
+        {
+          "title": "Enhanced Security with Server-Verified Presigned URLs For Uploads",
+          "description": "In the secure AWS S3 bucket, users are restricted to uploading files solely through presigned URLs generated on our server. This stringent process ensures that file uploads to the AWS S3 bucket are only possible after our server verifies the user and generates a presigned URL. This robust system serves as a formidable barrier, preventing any unauthorized individuals from uploading files to the AWS S3 bucket and reinforcing the overall security of our chat system."
+        },
+        {
+          "title": "Secure Media Access with Presigned URLs",
+          "description": "To ensure secure access to media files from the AWS S3 bucket, our chat system utilizes a robust process. A secure presigned URL, generated on our server, is required for users to access any media file. Our system rigorously verifies the user's identity and permissions before generating a presigned URL for the requested media file. This meticulous process prevents unauthorized users from accessing media files. Furthermore, these presigned URLs have a limited lifespan, expiring after a few minutes, adding an extra layer of security by preventing unauthorized sharing of the URLs."
+        },
+        {
+          "title": "Direct AWS S3 Interaction for Media Upload and Access",
+          "description": "Streamlining the process for both media uploads and access, users directly interact with the AWS S3 bucket using presigned URLs generated by our server. This approach significantly enhances speed and reduces server load by eliminating the need for our server to act as an intermediary. Users can seamlessly upload and access media files, resulting in a more efficient and responsive experience within the chat system."
+        }
+      ]
+    },
+    {
+      "topic": "Media Encoding",
+      "features": [
+        {
+          "title": "Media Encoding with Transloadit Service",
+          "description": "To tailor media according to our specifications, we leverage the Transloadit service for encoding before storing it in the AWS S3 bucket. This versatile service allows us to encode videos by resizing, auto-correcting badly rotated videos, extracting thumbnails, and more. For images, we can convert them into various formats, apply effects and watermarks, crop, rotate, and resize images intelligently, and optimize images to reduce size by up to 80% without quality loss. Additionally, Transloadit enables us to encode audio by looping tracks, generating waveform images, concatenating audio files, normalizing loudness, and more. This comprehensive media encoding process enhances the quality, format, and presentation of media files within our chat system, ensuring a customized and optimized experience for users."
+        }
+      ]
+    }
+  ],
+  "Call": [
+    {
+      "topic": "Design",
+      "features": [
+        {
+          "title": "User-Friendly Design for Call Section",
+          "description": "The call section is meticulously crafted with a user-friendly design that seamlessly adapts to both small screens, such as mobile devices, and large screens, like desktops. This thoughtful approach ensures a consistent and intuitive user experience across various devices, enhancing accessibility and usability for all users engaging in calls."
+        },
+        {
+          "title": "Responsive Design for Call Section",
+          "description": "The call section boasts a responsive design that dynamically adjusts to the screen size, ensuring optimal user experience on both small screens (mobile) and large screens (desktop). This responsiveness enhances accessibility, providing users with a seamless and visually appealing interface regardless of the device they use for their calls."
+        },
+        {
+          "title": "Immersive Sound Effects in Call System",
+          "description": "The call system is enriched with accurate sound effects for every event, creating an immersive auditory experience. Users encounter distinctive sound cues for events such as call initiation, call connecting, call ringing, receiving a call, user join notifications, call disconnection, and more. This feature adds a layer of engagement and user feedback, enhancing the overall sensory experience within the call system."
+        },
+        {
+          "title": "Tabbed Call Section for Multitasking",
+          "description": "The call section is initiated in a separate tab, allowing users to continue communicating through chat with other individuals and stay active in different conversations. This feature enables users to initiate multiple calls simultaneously while still connecting each call with the respective chat. By leveraging multi-tab call initiation, users can efficiently manage and engage in numerous calls, fostering a seamless and productive communication experience within the call system."
+        },
+        {
+          "title": "Universal Call Notifications",
+          "description": "When a user creates a call, other users receive the call notification irrespective of the page or chat they are currently in. This universal notification feature ensures that users are promptly informed of incoming calls, promoting a responsive and streamlined communication experience within the call system. Users can stay connected and aware of calls regardless of their current location within the application, enhancing overall accessibility and responsiveness."
+        },
+        {
+          "title": "User Pinning in Call Display",
+          "description": "Within the call system, users have the ability to pin as many participants as they desire on their display. By default, all users are unpinned and visible in the sidebar. When a user chooses to pin someone, the display adjusts dynamically, ensuring that the pinned user is prominently and beautifully displayed on the screen. This feature enhances user customization and visual focus during calls, providing an enriched and personalized call experience."
+        },
+        {
+          "title": "Sidebar Toggle for Distraction-Free Calls",
+          "description": "Users in the call system can toggle the sidebar, allowing them to hide or show it as per their preference. This feature empowers users to focus on important individuals by pinning them to their display while minimizing distractions. By customizing the visibility of the sidebar, users can create a more streamlined and distraction-free environment during calls, enhancing their overall call experience."
+        }
+      ]
+    },
+    {
+      "topic": "Call Mode",
+      "features": [
+        {
+          "topic": "Audio",
+          "features": [
+            {
+              "title": "Audio Call Support",
+              "description": "The call system provides robust support for audio calls, allowing users to engage in high-quality and clear audio conversations. This feature enhances communication by offering a reliable and efficient platform for users to connect through voice, fostering seamless interaction within the call system."
+            },
+            {
+              "title": "Mute/Unmute Functionality in Audio Calls",
+              "description": "During audio calls in the call system, users have the flexibility to mute or unmute their audio. This feature empowers users with control over their audio presence during a call, allowing for a personalized and adaptable communication experience."
+            },
+            {
+              "title": "Seamless Audio-to-Video Call Transition",
+              "description": "Users in the audio call have the convenience to switch to a video call at any time and seamlessly transition back to the audio call as needed. This feature enhances the user experience by providing flexibility in communication modes, ensuring users can effortlessly adapt their calls based on the nature of the conversation."
+            },
+            {
+              "title": "Audio-to-Screen Share Transition",
+              "description": "During an audio call, users can seamlessly switch to screen share mode and effortlessly return to the audio call when needed. This feature enriches the communication experience by providing users with the flexibility to share their screens, facilitating effective collaboration and communication within the call system."
+            },
+            {
+              "title": "Flexible Call Termination in Audio Calls",
+              "description": "Users have the autonomy to disconnect the call at any time during an audio call. This feature ensures flexibility and convenience, allowing users to conclude the conversation as needed, providing a user-centric approach to managing audio calls within the call system."
+            },
+            {
+              "title": "Simultaneous Multi-Audio Call Support",
+              "description": "The call system facilitates users to join multiple audio calls simultaneously, allowing for versatile and efficient communication. This feature enables users to participate in multiple conversations concurrently, enhancing their ability to manage and engage in diverse discussions within the call system."
+            },
+            {
+              "title": "Individual Call Management in Multi-Audio Calls",
+              "description": "When a user is engaged in multiple audio calls, they can efficiently manage each call individually by muting or unmuting as per their preference. This feature empowers users with granular control, enabling them to customize their participation in each call, ensuring a seamless and organized multitasking experience within the call system."
+            },
+            {
+              "title": "Comprehensive Call Details Display",
+              "description": "Users can access comprehensive details of any call they are in within the call system. The information includes the name of the call, which could be the other person's name in a one-to-one call, the group name in a group call, or the name of the public call room. Additionally, users can view relevant descriptions, such as the other person's bio in a one-to-one call, the group description in a group call, or the description of the public call room. Users can also see information about other participants in the call room, providing a rich and informative overview of the ongoing call."
+            },
+            {
+              "title": "Secure Call Room Link Sharing",
+              "description": "In cases where another user is not online, the call system allows users to generate a unique and secure call room link. This link can be copied and shared with others, enabling them to join the call by simply accessing the provided link. This feature enhances accessibility and collaboration by offering a convenient way for users to connect to a call even if the other participant is not currently online."
+            }
+          ]
+        },
+        {
+          "topic": "Video",
+          "features": [
+            {
+              "title": "Video Call Support",
+              "description": "The call system seamlessly supports video calls, allowing users to engage in visually enriched and high-quality video conversations. This feature adds an extra layer of depth to communication, providing users with a versatile and immersive platform for connecting through both audio and video within the call system."
+            },
+            {
+              "title": "Mute/Unmute Functionality in Video Calls",
+              "description": "During a video call within the call system, users have the flexibility to mute or unmute their video. This feature empowers users with control over their video presence during a call, allowing for a personalized and adaptable visual communication experience."
+            },
+            {
+              "title": "Camera On/Off in Video Calls",
+              "description": "Users can easily toggle their camera on or off during a video call within the call system. This feature provides users with the flexibility to control their camera status, allowing for a customizable and adaptable visual communication experience based on individual preferences and needs."
+            },
+            {
+              "title": "Seamless Video-to-Audio Call Transition",
+              "description": "Users in a video call have the convenience to switch to an audio call at any time and seamlessly transition back to the video call as needed. This feature enhances the user experience by providing flexibility in communication modes, ensuring users can effortlessly adapt their calls based on the nature of the conversation within the call system."
+            },
+            {
+              "title": "Video-to-Screen Share Transition",
+              "description": "During a video call, users can seamlessly switch to screen share mode and effortlessly return to the video call when needed within the call system. This feature enriches the communication experience by providing users with the flexibility to share their screens, facilitating effective collaboration and communication within the call system."
+            },
+            {
+              "title": "Flexible Video Call Termination",
+              "description": "Users have the autonomy to terminate a video call at any time within the call system. This feature ensures flexibility and convenience, allowing users to conclude the video conversation as needed, providing a user-centric approach to managing video calls within the call system."
+            },
+            {
+              "title": "Multi-Video Call Support",
+              "description": "The call system supports users being in multiple video calls simultaneously, allowing for versatile and efficient video communication. This feature enables users to participate in multiple video conversations concurrently, enhancing their ability to manage and engage in diverse discussions within the call system."
+            },
+            {
+              "title": "Individual Call Management in Multi-Video Calls",
+              "description": "When a user is engaged in multiple video calls, they can efficiently manage each call individually by muting or unmuting and toggling the camera on or off as per their preference. This feature empowers users with granular control, enabling them to customize their participation in each video call, ensuring a seamless and organized multitasking experience within the call system."
+            },
+            {
+              "title": "Comprehensive Video Call Details Display",
+              "description": "Users can access comprehensive details of any video call they are in within the call system. The information includes the name of the video call, which could be the other person's name in a one-to-one video call, the group name in a group video call, or the name of the public video call room. Additionally, users can view relevant descriptions, such as the other person's bio in a one-to-one video call, the group description in a group video call, or the description of the public video call room. Users can also see information about other participants in the video call room, providing a rich and informative overview of the ongoing video call."
+            },
+            {
+              "title": "Secure Video Call Room Link Sharing",
+              "description": "In cases where another user is not online, the video call system allows users to generate a unique and secure video call room link. This link can be copied and shared with others, enabling them to join the video call by simply accessing the provided link. This feature enhances accessibility and collaboration by offering a convenient way for users to connect to a video call even if the other participant is not currently online."
+            }
+          ]
+        },
+        {
+          "topic": "Screen Share",
+          "features": [
+            {
+              "title": "Screen Sharing Capability",
+              "description": "Users have the option to share their screen within the call system, facilitating effective collaboration and communication. This feature enables users to present content, showcase documents, or collaborate on projects by sharing their screens during audio or video calls, enhancing the overall versatility of the communication experience."
+            },
+            {
+              "title": "Versatile Screen Sharing Options",
+              "description": "Users can choose from versatile screen sharing options within the call system, providing flexibility in their communication. Whether sharing the entire screen, a specific tab, or just a particular window, this feature allows users to tailor their screen sharing experience based on their communication needs. This versatility enhances collaboration by offering users precise control over the content they share during calls."
+            },
+            {
+              "title": "Seamless Transition after Screen Sharing",
+              "description": "After concluding screen sharing, users seamlessly return to the normal call environment within the call system. This feature ensures a smooth and uninterrupted transition, allowing users to easily shift between screen sharing and regular call modes without any disruptions. Such a seamless experience enhances user engagement and collaboration during calls."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Pre-Call Configuration And Preview",
+      "features": [
+        {
+          "title": "Pre-Call Mode Configuration",
+          "description": "Before entering a call or creating one, users have the option to decide their preferred mode. They can check and configure their camera, microphone, and screen sharing settings, ensuring a personalized and prepared entry into the call. This feature provides users with control over their audio and video settings, contributing to a smooth and tailored call experience within the call system."
+        },
+        {
+          "title": "Error Handling and Solutions in Call System",
+          "description": "In the event of permission errors or resource issues, such as camera or microphone problems, the call system displays clear error messages instead of initiating the camera preview. Furthermore, the system offers detailed solutions to address these issues, guiding users on resolving permission errors or troubleshooting resource problems. This user-centric approach ensures a seamless and supportive experience within the call system, addressing potential obstacles in real-time and providing users with the necessary tools to troubleshoot effectively."
+        }
+      ]
+    },
+    {
+      "topic": "Call Type",
+      "features": [
+        {
+          "topic": "One-To-One Call Room",
+          "features": [
+            {
+              "topic": "Create Call",
+              "features": [
+                {
+                  "title": "Secure One-to-One Call Initiation",
+                  "description": "Users can initiate a one-to-one call with someone only if they are connected through an active chat. By clicking the call button within the chat with that person, users can securely start a one-to-one call. This feature acts as a safeguard, preventing random and unauthorized calls in the call system. It ensures that users engage in meaningful conversations with individuals they actively communicate with through chat, enhancing the overall security and purposefulness of the communication experience."
+                },
+                {
+                  "title": "Real-time Call Status Updates",
+                  "description": "When a user initiates a one-to-one call, the call system provides real-time status updates, indicating when the call is connecting and when it starts ringing for the other person. Accompanied by corresponding sound effects, this feature enhances the user experience by keeping them informed about the progression of the call. Users receive instant feedback on the call's status, ensuring a transparent and engaging communication experience within the call system."
+                },
+                {
+                  "title": "Timed Call Termination for Unanswered Calls",
+                  "description": "To optimize user experience and prevent prolonged waiting times, the call system features automatic call termination if the other user does not receive the call within a specified time frame. This ensures efficiency and timely communication, preventing extended periods of ringing and enhancing the overall responsiveness of the call system. Users can initiate calls with the confidence that, if unanswered, the system will gracefully conclude the call, promoting a seamless and user-friendly communication experience."
+                },
+                {
+                  "title": "Shareable Call Links for Offline Participants",
+                  "description": "After creating a call, if the other person is not active or online, the user has the option to copy and share the call link with another user. This feature facilitates seamless call participation for individuals who may not be actively using the application at the moment. By sharing the call link, users can extend invitations and ensure that others can join the call without the need to be actively online in our application. This enhances accessibility and collaboration, promoting inclusive communication within the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Receive Call",
+              "features": [
+                {
+                  "title": "Join Option for Incoming One-to-One Calls",
+                  "description": "When a one-to-one call is initiated by another user, the recipient receives a call notification with the option to join the call. This feature provides users with immediate and convenient access to incoming calls, enhancing the responsiveness of the communication experience within the call system. Users can seamlessly respond to call invitations, ensuring quick and efficient connection with others in one-to-one calls."
+                },
+                {
+                  "title": "Delayed Join for Incoming One-to-One Calls",
+                  "description": "In a one-to-one call, if the other person is not active when the call is initiated and comes online later, they will receive a coming call notification in the specific one-to-one chat. The user can join the call using the 'Join' button displayed in that chat at that time. This feature ensures that even if the other person is initially inactive during the call initiation, they can still seamlessly join the ongoing call upon returning online. It enhances flexibility and convenience in one-to-one call interactions within the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Decline Call",
+              "features": [
+                {
+                  "title": "Decline Option for Incoming One-to-One Calls",
+                  "description": "When a one-to-one call is initiated by another user, the recipient receives a call notification with the option to decline the call. This feature empowers users to make quick decisions regarding incoming calls, providing flexibility and control over their communication within the call system. Users can choose to decline calls as needed, ensuring a personalized and responsive approach to managing incoming one-to-one calls."
+                },
+                {
+                  "title": "Real-time Status Update on Call Decline",
+                  "description": "When a user declines a call, the other user receives a real-time status update indicating that the call has ended. This feature ensures immediate and transparent communication of the call's status, allowing users to stay informed about the outcome. The real-time status update enhances the overall user experience within the call system, promoting clear and instant communication between users during call interactions."
+                }
+              ]
+            },
+            {
+              "topic": "Ignore Call",
+              "features": [
+                {
+                  "title": "Ignore Option for Incoming One-to-One Calls",
+                  "description": "When a one-to-one call is initiated by another user, the recipient receives a call notification with the option to ignore the call. This feature provides users with the flexibility to temporarily ignore incoming calls, allowing them to focus on other activities without immediately declining or joining call. While the call is ignored, the other user receives a real-time status update indicating the call status. This feature enhances user control and responsiveness within the call system, ensuring a personalized approach to managing incoming calls."
+                },
+                {
+                  "title": "Post-Ignoring Join Option",
+                  "description": "Following the decision to ignore a call, users have the option to join the call later by navigating to the relevant chat. If the call has not been terminated, a 'Join' button is displayed in the chat. This feature allows users to reengage with the call at their convenience, providing flexibility and control over their participation within the call system. Users can click on the 'Join' button to seamlessly connect with the ongoing call."
+                },
+                {
+                  "title": "Automatic Termination and Status Update on Ignored Calls",
+                  "description": "When a user chooses to ignore a call, the call system automatically terminates the call after a specified time frame. Simultaneously, the other user receives a real-time status update indicating that the call was not answered, and the call has ended. This feature ensures a seamless and efficient handling of ignored calls, maintaining transparency and providing immediate communication about the call status within the call system. Users can manage incoming calls with flexibility, enhancing the overall user experience."
+                }
+              ]
+            },
+            {
+              "topic": "Left Call",
+              "features": [
+                {
+                  "title": "One-to-One Call Exit Flexibility",
+                  "description": "In a one-to-one call, after joining the call, any user has the flexibility to leave the call at any time. Upon choosing to exit, the call is immediately terminated. This feature ensures that participants have control over their participation, allowing them to exit the call whenever needed. It enhances user autonomy and responsiveness within the call system, providing a seamless and user-friendly experience for managing one-to-one calls."
+                },
+                {
+                  "title": "Link Invalidation after One-to-One Call Ends",
+                  "description": "In a one-to-one call, when the call is ended, the link used for initiating the call becomes invalid. Users cannot reuse the same link to restart the call; instead, they need to initiate a new call. This security feature ensures that once a one-to-one call concludes, the associated link is no longer functional, adding an additional layer of privacy and preventing unauthorized access to past calls. It enhances the overall security and integrity of one-to-one call sessions within the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Switch Device During Call",
+              "features": [
+                {
+                  "title": "Active User Transition to New Tab/Device in One-to-One Call",
+                  "description": "In a one-to-one call, if a user is actively participating in a call and attempts to join the same call from a different tab or device, the user will be seamlessly transitioned to the new tab or device, and simultaneously removed from the previous tab. This feature ensures continuity and provides users with the flexibility to switch between different devices or tabs while actively engaged in the call. It enhances the user experience by facilitating smooth transitions within one-to-one call sessions in the call system."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "Group (Private) Call Room",
+          "features": [
+            {
+              "topic": "Create Group Call",
+              "features": [
+                {
+                  "title": "Group Call Initiation",
+                  "description": "In a group chat, every member of the group has the ability to initiate a call and wait for other members to join. This collaborative feature enhances group communication within the call system, allowing any group member to take the lead in initiating a call. Group members can seamlessly join the ongoing call, fostering interactive and inclusive discussions. This feature promotes a dynamic and participatory group communication experience, facilitating efficient coordination and engagement among group members."
+                },
+                {
+                  "title": "Simultaneous Group Call Notifications",
+                  "description": "When any member of a group chat initiates a call within the group, all members of that group chat receive simultaneous notifications about the group call in the call system. This synchronized notification feature ensures that every group member is promptly informed about the ongoing group call, fostering efficient communication and enabling quick participation. The simultaneous notifications enhance the collaborative nature of group calls, allowing all members to stay connected and engaged in real-time within the call system."
+                },
+                {
+                  "title": "Shareable Group Call Room Link for Inactive Members",
+                  "description": "In a group call initiated within a group, if some members are not active in that group at that time, any participating member has the option to copy and share the group call room link with inactive members. This feature enables direct access for inactive members to join the group call room by using the shared link. Importantly, the link ensures exclusivity, allowing only the group members to join the call room. This functionality enhances accessibility and collaboration, providing a convenient way for all group members to participate in the group call, even if they are momentarily inactive in the group."
+                }
+              ]
+            },
+            {
+              "topic": "Join Group Call",
+              "features": [
+                {
+                  "title": "Private Group Call Initiation and Joining",
+                  "description": "When any member initiates a group call within a group chat, all members of that group chat receive a call notification. Each member has the option to join the group call room. Importantly, only members of that specific group chat have the privilege to join the private group call room; no other users can access or join the call room. This feature ensures the exclusivity and privacy of group calls, fostering secure and focused communication among the members of the designated group within the call system."
+                },
+                {
+                  "title": "Delayed Join for Incoming Group Calls",
+                  "description": "In a group call, if some members are not active when the call is initiated and come online later, they will receive a coming call notification in the specific group chat. The members can join the call using the 'Join' button displayed in that chat at that time. This feature ensures that even if some members are initially inactive during the group call initiation, they can still seamlessly join the ongoing call upon returning online. It enhances flexibility and convenience in group call interactions within the call system."
+                },
+                {
+                  "title": "Pre-Join Group Call Member Preview",
+                  "description": "Before joining a group call, users can preview the list of participants who are already in the group. This information is conveniently displayed on the before-call configuration page in the call system. This feature provides users with an overview of the current participants, enabling them to make informed decisions about joining the group call. It enhances the user experience by offering transparency and allowing users to gauge the existing group dynamics before entering the call."
+                }
+              ]
+            },
+            {
+              "topic": "Ignore Group Call",
+              "features": [
+                {
+                  "title": "Ignore Option for Incoming Group Calls",
+                  "description": "When a group call is initiated by another user, the members of the group receive a call notification with the option to ignore the call. This feature provides group members with the flexibility to temporarily ignore incoming calls, allowing them to focus on other activities without immediately joining the call. This feature enhances group member control and responsiveness within the call system, ensuring a personalized approach to managing incoming group calls."
+                },
+                {
+                  "title": "Post-Ignoring Join Option for Group Calls",
+                  "description": "Following the decision to ignore a group call, users have the option to join the call later by navigating to the relevant group chat. If the group call has not been terminated, a 'Join' button is displayed in the group chat. This feature allows users to reengage with the group call at their convenience, providing flexibility and control over their participation within the call system. Users can click on the 'Join' button to seamlessly connect with the ongoing group call."
+                }
+              ]
+            },
+            {
+              "topic": "Left Group Call",
+              "features": [
+                {
+                  "title": "Flexibility to Leave Group Call",
+                  "description": "In a group call, any member has the flexibility to leave the call at any time. This feature allows participants to exit the group call whenever necessary, providing them with control over their involvement. It ensures a dynamic and adaptable group call experience, where members can join or leave the call based on their preferences and availability. This flexibility enhances user autonomy and responsiveness within group call sessions in the call system."
+                },
+                {
+                  "title": "Automatic Termination of Group Call",
+                  "description": "After a participant leaves a group call, if only one member remains in the call, the system automatically terminates the group call. This feature ensures an efficient and streamlined process for managing group calls. It prevents the call from continuing indefinitely with only one participant, optimizing the usage of resources and providing a seamless experience for users in the call system."
+                },
+                {
+                  "title": "Link Invalidation after Group Call Ends",
+                  "description": "When a group call is ended, the associated group call link becomes invalid. No one can reuse this link to restart the group call. To initiate the group call again, a member of the group must start the call afresh. This security measure ensures that once a group call concludes, the link is no longer functional, enhancing privacy and preventing unauthorized access to past group calls. It adds an extra layer of security and integrity to group call sessions within the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Switch Tab/Device During Group Call",
+              "features": [
+                {
+                  "title": "Seamless Tab/Device Switching in Group Call",
+                  "description": "In a group call, when an active member desires to switch to a different tab or device, they must first leave the group call. If they choose to rejoin from a new device or tab, their previous participation is automatically removed, and they seamlessly continue their involvement in the group call from the new tab or device. This feature ensures a smooth transition for active participants who wish to switch between different devices or tabs during a group call in the call system."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "Public Call Room",
+          "features": [
+            {
+              "topic": "Create Public Call Room",
+              "features": [
+                {
+                  "title": "User-Initiated Public Call Rooms",
+                  "description": "Users have the ability to create public call rooms with custom names, profile pictures, and descriptions in the call system. This feature is accessible by clicking on the call button on the main page of the chat. It empowers users to host open and customizable call environments, fostering collaboration and inclusivity within the community. Users can define the room's identity and purpose, creating a dynamic and engaging space for group communication in the call system."
+                },
+                {
+                  "title": "Image Customization for Public Call Rooms",
+                  "description": "Users can personalize their public call room by choosing an image from various sources such as local storage, camera capture, third-party platforms like Instagram, Facebook, Google Drive, OneDrive, Dropbox, Box, Zoom, and even search and use images from Unsplash. After selecting an image, users have the flexibility to adjust and customize it just before confirming it for the public call room. This feature allows users to create visually appealing and unique environments for their public call rooms, enhancing the overall user experience in the call system."
+                },
+                {
+                  "title": "Public Call Room Link Sharing",
+                  "description": "Once a user creates a public call room, they have the option to copy and share the call room link with anyone. This link serves as an invitation for others to join the public call room, enhancing accessibility and inclusivity within the community. Users can easily distribute the link through various communication channels, allowing friends, colleagues, or community members to join the public call room effortlessly in the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Join Public Call Room",
+              "features": [
+                {
+                  "title": "Joining Public Call Rooms via Shared Link",
+                  "description": "Users can join public call rooms by simply clicking on the shared link they receive. This feature facilitates seamless access to public call rooms, ensuring that anyone with the link can effortlessly join the conversation. Whether shared through messaging apps, emails, or other platforms, the link provides a direct entry point for users to participate in the public call room, promoting ease of collaboration and communication in the call system."
+                },
+                {
+                  "title": "Previewing Participants in Public Call Room",
+                  "description": "Before joining a public call room, users can preview the list of participants who are currently in the room. This feature provides users with valuable insights into the ongoing conversation and helps them decide whether to join based on the participants present. It enhances the user experience by offering transparency and awareness of the current dynamics within the public call room in the call system."
+                }
+              ]
+            },
+            {
+              "topic": "Left Public Call Room",
+              "features": [
+                {
+                  "title": "Leaving Public Call Rooms",
+                  "description": "Users have the flexibility to leave a public call room at any time, giving them full control over their participation. This feature enables users to seamlessly exit the room whenever they choose, promoting a dynamic and user-centric experience in the call system. Whether the conversation is complete or users need to step away, the ability to leave the public call room enhances user autonomy and engagement."
+                }
+              ]
+            },
+            {
+              "topic": "Switch Device During Call",
+              "features": [
+                {
+                  "title": "Seamless Tab/Device Switching in Public Call Rooms",
+                  "description": "In a public call room, when an active participant wishes to switch to a different tab or device, they must first leave the room. If they opt to rejoin from a new device or tab, their prior participation is automatically cleared. This ensures a seamless continuation of their involvement in the public call room from the new tab or device. This feature provides a smooth and uninterrupted experience for users who want to switch between different devices or tabs while participating in a public call room within the call system."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Privacy And Security",
+      "features": [
+        {
+          "title": "Unique Call Link Generation",
+          "description": "Upon initiation of any call, the call system dynamically generates a unique call link. This distinctive link is exclusively tied to the specific call session, contributing to heightened privacy and security. By ensuring that each call has its unique identifier, the system reinforces the confidentiality and integrity of communications within the call system. This feature is pivotal in maintaining a secure and private environment for users engaging in calls."
+        },
+        {
+          "title": "Automatic Expiry of Call Links",
+          "description": "After the conclusion of a call, the unique call link automatically expires, rendering it invalid for any future use. This deliberate expiration mechanism enhances security by preventing any unauthorized attempts to access or reuse the link. By dynamically managing the lifecycle of call links, the system ensures that privacy is consistently maintained in the call system. This feature adds an extra layer of protection, safeguarding the integrity of each call session."
+        },
+        {
+          "title": "Authorization Check for Call Access",
+          "description": "Before allowing users to join any call through a link, the call system performs a thorough authorization check. Only users who have been granted the necessary authorization are permitted to join the call, ensuring a secure and controlled access environment. This stringent authorization process guarantees that only authorized individuals can participate in the call, minimizing the risk of unauthorized access and enhancing the overall security of the call system."
+        },
+        {
+          "title": "Dynamic Peer IDs for Enhanced Privacy",
+          "description": "In the call system, each user is assigned a unique and randomly generated peer ID that undergoes continuous changes. When users connect with each other, the call system utilizes these dynamic IDs for communication. User IDs are only shared with others when explicit authorization to call has been granted. This approach significantly enhances privacy by ensuring that user identities are protected, and communication is established only between authorized users, contributing to a secure and confidential call system."
+        },
+        {
+          "title": "Secure Login Requirement for Call Access",
+          "description": "Prior to joining any call via a provided link, users must log in to the system. This mandatory login process ensures that only authenticated users, who are authorized for the specific call, can access the call session. By incorporating this secure login requirement, the call system adds an extra layer of verification, enhancing the overall security and safeguarding against unauthorized access to calls. This feature prioritizes user authentication and access control for a protected call environment."
+        }
+      ]
+    },
+    {
+      "topic": "Error Handling",
+      "features": [
+        {
+          "title": "Automatic Connection Recovery",
+          "description": "In the event of fluctuating network connections during a call, the call system initiates automatic efforts to reconnect the affected user. By continuously attempting to restore the user's connection, the system ensures a seamless and uninterrupted call experience. This feature is designed to address temporary disruptions and enhances the overall reliability of the call system, providing users with consistent and stable communication even in the face of network fluctuations."
+        },
+        {
+          "title": "Permission Guidance for Camera and Mic Access",
+          "description": "When a user attempts to join a call without granting the necessary permissions for camera or microphone access, the call system displays a clear message notifying the user about the missing permissions. Additionally, informative guidance is provided, explaining how to enable these permissions. This user-friendly feature ensures that users can easily troubleshoot and configure their settings, allowing them to participate seamlessly in calls by granting the required permissions for camera and microphone use."
+        },
+        {
+          "title": "Error Handling and Solution Display",
+          "description": "In the presence of any errors during call initiation or operation, the call system promptly displays an error message along with a detailed explanation of the issue. To further enhance user experience, the system also provides possible solutions or guidance to address the error. This proactive error handling ensures that users are informed about any technical challenges and are equipped with actionable steps to troubleshoot and resolve issues, promoting a smooth and trouble-free calling experience."
+        }
+      ]
+    }
+  ],
+  "Main User Search": [
+    {
+      "topic": "Design",
+      "features": [
+        {
+          "title": "Intuitive User-Friendly Search Design",
+          "description": "Experience a search interface designed with users in mind! Our application's search functionality is intuitive and user-friendly, providing a seamless experience for users looking to connect with others. The design prioritizes simplicity and efficiency, ensuring that users can navigate and explore search results effortlessly. Enjoy a visually appealing and user-centric search experience that enhances overall satisfaction and engagement."
+        },
+        {
+          "title": "Responsive User Search Design",
+          "description": "Enjoy a seamless search experience on any screen size! The application's search design is responsive, ensuring a beautiful and user-friendly appearance on both small screens (mobile) and large screens (desktop). Whether you're searching on your phone or desktop, the design adapts effortlessly, providing a consistent and visually appealing interface for users, regardless of their device."
+        },
+        {
+          "title": "Direct Profile Access from Search Results",
+          "description": "Effortlessly explore and connect! Users can directly visit a searched user's profile by simply clicking on the search result. This feature streamlines the navigation process, allowing users to instantly access the profiles of individuals they are interested in connecting with. It enhances user engagement by providing a quick and direct pathway to explore and connect with others within the application."
+        }
+      ]
+    },
+    {
+      "topic": "Search User",
+      "features": [
+        {
+          "title": "User Search by First Name",
+          "description": "Enable users to seamlessly find and connect with others by searching for individuals based on their first names. This feature enhances user experience by providing a quick and straightforward method to locate friends or contacts within the application, fostering better connectivity and engagement."
+        },
+        {
+          "title": "User Search by Last Name",
+          "description": "Facilitate users in effortlessly discovering and connecting with others by allowing them to search for individuals using their last names. This feature enhances user convenience, enabling efficient and precise identification of contacts within the application. It promotes a more personalized and user-friendly experience."
+        },
+        {
+          "title": "User Search by Username",
+          "description": "Empower users to efficiently locate and connect with others by providing the ability to search for individuals using their unique usernames. This feature streamlines the process of finding specific users within the application, offering a convenient and direct approach to building connections. It enhances user engagement by simplifying the discovery of friends or contacts."
+        },
+        {
+          "title": "Quick Search by Partial Name or Username",
+          "description": "Simplify your search! Users can effortlessly find someone by typing just a few letters of their first name, last name, or username. This feature enhances convenience, allowing users to discover and connect with friends or contacts effortlessly. No need to type the full name or username—connect with ease!"
+        }
+      ]
+    },
+    {
+      "topic": "Smart Searching Algo",
+      "features": [
+        {
+          "title": "Smart Search Result Sorting",
+          "description": "Enhance your search experience with intelligent sorting! When searching for 'test,' application prioritizes results strategically. Users are presented with individuals who have 'test' in their username, first name, or last name and are directly connected to the user through followers and following. Following that, users with connections of connections are listed, creating a tiered approach to display the most relevant and closely associated results first. This feature streamlines user search, ensuring that related users are easily and efficiently discovered, fostering meaningful connections within the application."
+        }
+      ]
+    }
+  ],
+  "Notification": [
+    {
+      "topic": "Main Notification",
+      "features": [
+        {
+          "topic": "Design",
+          "features": [
+            {
+              "title": "Accessible Notification Center",
+              "description": "Stay informed with ease! Users can view all new notifications by simply clicking on the notification button on the home page. This feature provides a centralized and easily accessible notification center, allowing users to stay updated on their interactions, messages, and other important activities within the application. Enhance user engagement by providing a seamless way to manage and respond to notifications."
+            },
+            {
+              "title": "User-Friendly In-App Notifications",
+              "description": "Experience notifications seamlessly integrated into the home page! The application presents notifications in a user-friendly manner, ensuring a smooth and visually appealing display. This feature enhances user awareness and engagement by showcasing notifications in a way that is easy to notice and interact with, keeping users informed about their interactions, messages, and other important activities within the application."
+            },
+            {
+              "title": "Chronological Notification Display",
+              "description": "Stay organized with notifications! The application displays notifications in a clear and intuitive manner, presenting them in a new-to-old order. This feature ensures that users can easily follow the sequence of their notifications, providing a chronological overview of their interactions, messages, and other important activities within the application. Enhance user experience by presenting information in a logical and easily understandable order."
+            },
+            {
+              "title": "Comprehensive Notification Viewing",
+              "description": "Get a complete overview! Users can explore all their notifications by clicking on the 'See All Notifications' button. This feature provides a comprehensive view of interactions, and important activities within the application. By offering a dedicated space for users to review all notifications, this feature enhances user control and engagement, allowing them to stay informed and updated with ease."
+            }
+          ]
+        },
+        {
+          "topic": "Notification Type",
+          "features": [
+            {
+              "title": "Follow Request Notification",
+              "description": "Never miss a connection opportunity! Users receive notifications when another user sends a follow request. This feature keeps users informed about incoming connection requests, allowing them to promptly respond and engage with potential connections. Enhance user connectivity and networking by ensuring that users are promptly notified of follow requests, fostering a dynamic and engaging social experience."
+            },
+            {
+              "title": "Follow Request Accepted Notification",
+              "description": "Celebrate connections! Users receive notifications when another user accepts their follow request. This feature keeps users informed and engaged by notifying them of successful connections. Enhance user satisfaction and interaction by providing timely notifications about accepted follow requests, fostering a sense of community and connectedness within the application."
+            },
+            {
+              "title": "New Follower Notification",
+              "description": "Stay connected and informed! Users receive notifications when another user starts following them. This feature ensures that users are promptly notified of new followers, allowing them to acknowledge and engage with their growing network. Enhance user experience by fostering a sense of community and connection through timely notifications about new followers within the application."
+            },
+            {
+              "title": "Follow Request Declined Notification",
+              "description": "Respectful Notifications! Users receive notifications when another user declines their follow request. This feature ensures transparent communication by promptly notifying users about declined follow requests. While not every connection may be accepted, this notification helps users manage their network and interactions, promoting a respectful and understanding social environment within the application."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "Quick Notification",
+      "features": [
+        {
+          "topic": "Design",
+          "features": [
+            {
+              "title": "Quick Notifications for Instant Updates",
+              "description": "Stay in the loop with quick notifications! The application provides brief, time-sensitive notifications that appear for a few seconds, ensuring users receive instant updates without interrupting their experience. This feature enhances user awareness by delivering concise and timely information about interactions, errors , and important activities within the application, promoting a seamless and uninterrupted user experience."
+            },
+            {
+              "title": "Non-Intrusive Quick Notifications",
+              "description": "Stay informed without disruptions! The application's quick notifications are designed to be user-friendly and non-intrusive, allowing users to receive updates without interrupting their activities. Users can quickly dismiss these notifications by pressing the cross button, providing control over their notification experience. This feature ensures a seamless and uninterrupted user interaction, prioritizing a positive and user-centric notification system."
+            },
+            {
+              "title": "Distinct Quick Message Design",
+              "description": "Enhance clarity with visual cues! The application presents error, info, and success quick messages in different colors and designs, providing users with clear visual indicators. This feature ensures that users can easily distinguish between different types of messages, enhancing their understanding and response to quick notifications. The visually distinct designs contribute to a more user-friendly and intuitive notification system."
+            }
+          ]
+        },
+        {
+          "topic": "Notification Type",
+          "features": [
+            {
+              "title": "Error Messages via Quick Notifications",
+              "description": "Instant awareness on errors! The application delivers error messages through quick notifications, ensuring users are promptly informed of any issues. This feature provides a swift and efficient way to communicate errors without disrupting the user's experience. Users can quickly understand and address issues, contributing to a smoother and more responsive application interaction."
+            },
+            {
+              "title": "Success Messages via Quick Notifications",
+              "description": "Celebrate achievements instantly! The application delivers success messages through quick notifications, ensuring users are promptly informed about successful actions. This feature provides a positive and efficient way to communicate successes without disrupting the user's experience. Users can quickly acknowledge and appreciate their accomplishments, contributing to a rewarding and responsive application interaction."
+            },
+            {
+              "title": "Informative Quick Notifications",
+              "description": "Stay in the know with quick info messages! The application provides quick notifications for informative updates, allowing users to receive important information without interruption. This feature enhances user awareness by delivering concise and relevant messages in a non-intrusive manner. Users can quickly grasp the information and continue their activities seamlessly, contributing to an informed and efficient user experience."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "Error Handling": [
+    {
+      "topic": "Not Found Error (404)",
+      "features": [
+        {
+          "title": "Graceful 404 Error Handling",
+          "description": "Turn setbacks into a pleasant experience! The application gracefully handles 404 errors by presenting them in a beautiful manner. Users are not only informed about the error but are also guided to navigate back to the home page seamlessly. This feature transforms potential frustrations into a user-friendly encounter, ensuring users feel supported and can easily continue their journey within the application."
+        }
+      ]
+    },
+    {
+      "topic": "User Not Found Error",
+      "features": [
+        {
+          "title": "User-Friendly Profile Not Found Page",
+          "description": "Discover with ease! When attempting to open a profile page that is not found, the application gracefully presents a beautiful page with a 'User Not Found' message. Instead of displaying an error, users are provided with a friendly message and suggested paths, such as returning to the home page. This feature enhances user experience by offering a seamless and aesthetically pleasing way to handle profile not found scenarios, ensuring users stay engaged and informed."
+        }
+      ]
+    },
+    {
+      "topic": "Server Error Handling",
+      "features": [
+        {
+          "title": "Graceful Error Handling on the Server",
+          "description": "Ensure stability and resilience! The server gracefully handles all errors, preventing the server from terminating. This feature emphasizes robust error management, ensuring that the application remains stable even in challenging situations. By handling errors with grace, the server maintains its functionality, providing users with a seamless and reliable experience, even during unexpected circumstances."
+        }
+      ]
+    }
+  ]
+}
