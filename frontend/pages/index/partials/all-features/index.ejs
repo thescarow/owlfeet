@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="/stylesheets/index/partials/all-features/index.css">
+
+
+<div id="allFeatures" class="all-features">
+    <div class="all-features__title">FEATURES</div>
+
+    <div id="allFeaturesBox" class="all-features__box">
+
+        <% for (const key in allFeatures) { %>
+            <div class="main-feature">
+
+                <div class="main-features__title">
+                    <span class="main-features__title-text">
+                        <%= key _%>
+                    </span>
+                    <!-- <span class="main-features__title-icon">
+                        <%# include('../../../partials/icons/index/expandIcon.svg') _%>
+                    </span> -->
+                </div>
+                <div class="main-features__box">
+
+                    <% allFeatures[key].forEach(feature=> { %>
+                        <%- include('topic',{topic: feature.topic,features: feature.features }) %>
+                            <% }) %>
+                </div>
+            </div>
+
+            <% } %>
+    </div>
+
+</div>

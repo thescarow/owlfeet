@@ -74,6 +74,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
+        // test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -88,6 +89,8 @@ module.exports = {
                   modules: false
                 }
               ]
+
+              // ["@babel/preset-react"]
             ] // ensure compatibility with older browsers
           }
         }

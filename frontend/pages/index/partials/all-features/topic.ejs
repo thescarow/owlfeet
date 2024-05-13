@@ -1,0 +1,27 @@
+<div class="feature-topic">
+    <div class="feature-topic__title">
+        <span class="feature-topic__title-text">
+            <%= topic %>
+        </span>
+        <span class="feature-topic__title-icon">
+            <%- include('../../../partials/icons/index/expandIcon.svg') _%>
+        </span>
+    </div>
+    <div class="feature-topic__features">
+
+        <% if (features.length> 0 && features[0].hasOwnProperty('topic')) { %>
+            <% features.forEach(feature=> { %>
+                <%- include('topic',{topic: feature.topic,features:feature.features}) %>
+                    <% }) %> %>
+
+                        <% } else { %>
+
+
+
+                            <% features.forEach(feature=> { %>
+                                <%- include('feature',{title: feature.title,description:feature.description}) %>
+                                    <% }) %> %>
+
+                                        <% } %>
+    </div>
+</div>

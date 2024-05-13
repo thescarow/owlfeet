@@ -27,6 +27,11 @@
 
   </div>
 
+  <div id="allFeaturesContainer" class="all-features-container">
+    <%- include("./partials/all-features/index.ejs", {allFeatures: locals.allFeatures}) %>
+  </div>
+
+
   <div class="user-notification-modal hide" id="userNotificationModal">
     <span class="user-notification-modal__close-btn" id="userNotificationModalCloseBtn">X</span>
 
@@ -40,7 +45,8 @@
       <div class="user-notification-status hide" id="userNotificationStatus">
         There is no notification.
       </div>
-      <a href="/user-notification" class="user-notification-content__see-all-notification">See all notification >></a>
+      <a href="/user-notification" class="user-notification-content__see-all-notification">See all notification
+        >></a>
 
     </div>
   </div>
