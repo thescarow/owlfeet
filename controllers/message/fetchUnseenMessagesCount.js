@@ -24,7 +24,7 @@ exports.fetchUnseenMessagesCount = async (req, res) => {
           reader: { $elemMatch: { $eq: req.user.id } },
           "seenStatus.seenBy": { $ne: req.user.id }
         })
-
+        console.log("unseenMessagesCount:", unseenMessagesCount)
         res.json({
           isSuccess: true,
           unseenMessagesCount: unseenMessagesCount
