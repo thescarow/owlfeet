@@ -181,7 +181,7 @@ exports.createChatRoom = async (req, res) => {
               callRoom: createdCallRoom
             })
             createInfoMessage(req, chat)
-            initialiseSocket(req, chat, createdCallRoom)
+            await initialiseSocket(req, chat, createdCallRoom)
           } else {
             let callRoomId = chat.callRoomId
             res.json({
@@ -221,7 +221,26 @@ exports.createChatRoom = async (req, res) => {
   }
 }
 
-function initialiseSocket(req, chat, createdCallRoom) {
+async function initialiseSocket(req, chat, createdCallRoom) {
+  let callCreatedMember = chat.currentChatMembers.find(
+    user => user._id.toString() === req.user.id.toString()
+  )
+  createdCallRoom.roomPic =
+    callCreatedMember.hasOwnProperty("profile") &&
+    callCreatedMember.profile !== ""
+      ? callCreatedMember.profile
+      : ""
+  createdCallRoom.roomName =
+    callCreatedMember.firstName + " " + callCreatedMember.lastName
+  createdCallRoom.roomDescription = callCreatedMember.bio
+  if (
+    createdCallRoom.hasOwnProperty("roomPic") &&
+    createdCallRoom.roomPic !== ""
+  ) {
+    createdCallRoom.roomPic = await signedUrlForGetAwsS3Object(
+      createdCallRoom.roomPic
+    )
+  }
   let eventData = {
     callRoom: createdCallRoom,
     chatId: chat._id,

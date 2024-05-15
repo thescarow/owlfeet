@@ -50,7 +50,8 @@ exports.leaveGroupChat = async (req, res) => {
               isGroupChat: 1,
               chatName: 1,
               chatPic: 1,
-              chatDescription: 1
+              chatDescription: 1,
+              currentChatMembers: 1
             })
             .lean()
 
@@ -66,7 +67,7 @@ exports.leaveGroupChat = async (req, res) => {
           updatedChat.canSendMessageToThisChat = false
           res.json({ isSuccess: true, chat: updatedChat })
 
-          attachSocket(req, chat)
+          attachSocket(req, updatedChat)
         } else {
           res.json({
             isSuccess: false,

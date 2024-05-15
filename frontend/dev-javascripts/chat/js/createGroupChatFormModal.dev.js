@@ -28,6 +28,7 @@ let groupChatFormData = {
   chatDesc: "",
   chatUsers: []
 }
+
 export async function createGroupChatFormModal(modalType = "new") {
   const chatMainContainer = document.getElementById("chatMainContainer")
   let groupChatFormModal = document.getElementById("groupChatFormModal")
@@ -96,150 +97,6 @@ export async function createGroupChatFormModal(modalType = "new") {
           groupChatFormData.chatUsers,
           updateGroupChatFormModalUsers
         )
-      })
-
-    document
-      .getElementById("submitGroupChatDataBtn")
-      .addEventListener("click", async () => {
-        if (
-          groupChatFormData.chatUsers.length >= 2 &&
-          groupChatFormData.chatUsers.length <= 10
-        ) {
-          groupChatFormData.chatName = document
-            .getElementById("groupChatFormName")
-            .value.trim()
-          groupChatFormData.chatDesc = document
-            .getElementById("groupChatFormDesc")
-            .value.trim()
-          groupChatFormData.chatPic =
-            document.getElementById("groupChatFormPic").dataset.chatPic
-          if (groupChatFormData.chatName !== "") {
-            let newGroupChatData = {}
-
-            newGroupChatData.chatId = groupChatFormData.chatId
-
-            newGroupChatData.chatName = groupChatFormData.chatName
-
-            newGroupChatData.chatDesc = groupChatFormData.chatDesc
-
-            newGroupChatData.chatPic = groupChatFormData.chatPic
-
-            newGroupChatData.chatUserIds = groupChatFormData.chatUsers.map(
-              user => user._id
-            )
-
-            if (modalType === "new") {
-              fetch("/chat/create-new-group-chat", {
-                method: "POST", // or 'PUT'
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newGroupChatData)
-              })
-                .then(response => {
-                  if (response.ok) {
-                    return response.json()
-                  }
-                  return Promise.reject(response)
-                })
-                .then(async data => {
-                  if (data.isSuccess) {
-                    updateGroupChatFormModalData()
-                    groupChatFormModal.classList.add("chat-modal--hide")
-
-                    let { createChatBox } = await import(
-                      "./updateAllChatSection.dev"
-                    )
-                    createChatBox(data.chat)
-                  } else {
-                    let { createMainNotification } = await import(
-                      "../../common/mainNotification.dev"
-                    )
-                    createMainNotification(data.error, "error")
-                  }
-                })
-                .catch(async err => {
-                  console.log(err)
-                  let { createMainNotification } = await import(
-                    "../../common/mainNotification.dev"
-                  )
-                  createMainNotification(
-                    "Server Error In Creating New Group Chat, Please Check Your Input",
-                    "error"
-                  )
-                })
-            }
-            if (modalType === "edit") {
-              fetch("/chat/edit-group-chat", {
-                method: "POST", // or 'PUT'
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newGroupChatData)
-              })
-                .then(response => {
-                  if (response.ok) {
-                    return response.json()
-                  }
-                  return Promise.reject(response)
-                })
-                .then(async data => {
-                  if (data.isSuccess) {
-                    // console.log(data)
-                    activeChatData = { ...data.chat }
-                    let { updateActiveChatInfoModal } = await import(
-                      "./createActiveChatInfoModal.dev"
-                    )
-                    let { updateActiveChatSection } = await import(
-                      "./showActiveChatSection.dev"
-                    )
-                    let { updateChatBox } = await import(
-                      "./updateAllChatSection.dev"
-                    )
-
-                    updateActiveChatInfoModal()
-                    updateActiveChatSection(activeChatData)
-                    updateChatBox(activeChatData)
-
-                    groupChatFormModal.classList.add("chat-modal--hide")
-                  } else {
-                    let { createMainNotification } = await import(
-                      "../../common/mainNotification.dev"
-                    )
-                    createMainNotification(data.error, "error")
-                  }
-                })
-                .catch(async err => {
-                  console.log(err)
-                  let { createMainNotification } = await import(
-                    "../../common/mainNotification.dev"
-                  )
-                  createMainNotification(
-                    "Server Error In Editing Group Chat, Please Check Your Input",
-                    "error"
-                  )
-                })
-            }
-          } else {
-            let { createMainNotification } = await import(
-              "../../common/mainNotification.dev"
-            )
-            createMainNotification("Please Fill Your Group Name Field", "error")
-          }
-        } else if (groupChatFormData.chatUsers.length > 10) {
-          let { createMainNotification } = await import(
-            "../../common/mainNotification.dev"
-          )
-          createMainNotification(
-            "Sorry,You Can Only Select Up To 10 Members",
-            "error"
-          )
-        } else {
-          let { createMainNotification } = await import(
-            "../../common/mainNotification.dev"
-          )
-          createMainNotification("Please Select Atleast 2 Members", "error")
-        }
       })
 
     // close group chat modal
@@ -400,7 +257,149 @@ export async function createGroupChatFormModal(modalType = "new") {
   } else {
     groupChatFormModal.classList.remove("chat-modal--hide")
   }
+
+  document.getElementById("submitGroupChatDataBtn").onclick = async () => {
+    await submitEventLishtener(modalType)
+  }
   updateGroupChatFormModal(groupChatFormModal, modalType)
+}
+async function submitEventLishtener(modalType) {
+  let groupChatFormModal = document.getElementById("groupChatFormModal")
+  if (
+    groupChatFormData.chatUsers.length >= 2 &&
+    groupChatFormData.chatUsers.length <= 10
+  ) {
+    groupChatFormData.chatName = document
+      .getElementById("groupChatFormName")
+      .value.trim()
+    groupChatFormData.chatDesc = document
+      .getElementById("groupChatFormDesc")
+      .value.trim()
+    groupChatFormData.chatPic =
+      document.getElementById("groupChatFormPic").dataset.chatPic
+    if (groupChatFormData.chatName !== "") {
+      let newGroupChatData = {}
+
+      newGroupChatData.chatId = groupChatFormData.chatId
+
+      newGroupChatData.chatName = groupChatFormData.chatName
+
+      newGroupChatData.chatDesc = groupChatFormData.chatDesc
+
+      newGroupChatData.chatPic = groupChatFormData.chatPic
+
+      newGroupChatData.chatUserIds = groupChatFormData.chatUsers.map(
+        user => user._id
+      )
+
+      if (modalType === "new") {
+        fetch("/chat/create-new-group-chat", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newGroupChatData)
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+            return Promise.reject(response)
+          })
+          .then(async data => {
+            if (data.isSuccess) {
+              updateGroupChatFormModalData()
+              groupChatFormModal.classList.add("chat-modal--hide")
+
+              let { createChatBox } = await import("./updateAllChatSection.dev")
+              createChatBox(data.chat)
+            } else {
+              let { createMainNotification } = await import(
+                "../../common/mainNotification.dev"
+              )
+              createMainNotification(data.error, "error")
+            }
+          })
+          .catch(async err => {
+            console.log(err)
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
+            createMainNotification(
+              "Server Error In Creating New Group Chat, Please Check Your Input",
+              "error"
+            )
+          })
+      }
+      if (modalType === "edit") {
+        fetch("/chat/edit-group-chat", {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newGroupChatData)
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            }
+            return Promise.reject(response)
+          })
+          .then(async data => {
+            if (data.isSuccess) {
+              // console.log(data)
+              activeChatData = { ...data.chat }
+              let { updateActiveChatInfoModal } = await import(
+                "./createActiveChatInfoModal.dev"
+              )
+              let { updateActiveChatSection } = await import(
+                "./showActiveChatSection.dev"
+              )
+              let { updateChatBox } = await import("./updateAllChatSection.dev")
+
+              updateActiveChatInfoModal()
+              updateActiveChatSection(activeChatData)
+              updateChatBox(activeChatData)
+
+              groupChatFormModal.classList.add("chat-modal--hide")
+            } else {
+              let { createMainNotification } = await import(
+                "../../common/mainNotification.dev"
+              )
+              createMainNotification(data.error, "error")
+            }
+          })
+          .catch(async err => {
+            console.log(err)
+            let { createMainNotification } = await import(
+              "../../common/mainNotification.dev"
+            )
+            createMainNotification(
+              "Server Error In Editing Group Chat, Please Check Your Input",
+              "error"
+            )
+          })
+      }
+    } else {
+      let { createMainNotification } = await import(
+        "../../common/mainNotification.dev"
+      )
+      createMainNotification("Please Fill Your Group Name Field", "error")
+    }
+  } else if (groupChatFormData.chatUsers.length > 10) {
+    let { createMainNotification } = await import(
+      "../../common/mainNotification.dev"
+    )
+    createMainNotification(
+      "Sorry,You Can Only Select Up To 10 Members",
+      "error"
+    )
+  } else {
+    let { createMainNotification } = await import(
+      "../../common/mainNotification.dev"
+    )
+    createMainNotification("Please Select Atleast 2 Members", "error")
+  }
 }
 
 export function updateGroupChatFormModal(

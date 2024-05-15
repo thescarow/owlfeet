@@ -49,7 +49,7 @@ exports.removeChatBackground = async (req, res) => {
         } else {
           if (
             chat.isGroupChat &&
-            chat.groupChatAdmin.some(userId => {
+            !chat.groupChatAdmin.some(userId => {
               return userId.toString() === req.user.id.toString()
             })
           ) {
