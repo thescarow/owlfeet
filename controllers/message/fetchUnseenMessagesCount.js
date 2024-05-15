@@ -21,9 +21,10 @@ exports.fetchUnseenMessagesCount = async (req, res) => {
       if (chat) {
         let unseenMessagesCount = await Message.countDocuments({
           chat: chat._id,
+          reader: { $elemMatch: { $eq: req.user.id } },
           "seenStatus.seenBy": { $ne: req.user.id }
         })
-
+        console.log("unseenMessagesCount:", unseenMessagesCount)
         res.json({
           isSuccess: true,
           unseenMessagesCount: unseenMessagesCount
