@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "production") {
 const fetch = require("node-fetch")
 exports.sendMobileOtp = async (number, otp) => {
   try {
+    // return true
     console.log("OTP Info:", number, "==>", otp)
 
     const apiKey = process.env.FAST2SMS_API_KEY
