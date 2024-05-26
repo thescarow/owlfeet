@@ -4,6 +4,9 @@ const { getLoginUser } = require("../middleware/auth.middleware")
 const { getHomePage } = require("../controllers/index")
 
 router.get("/", getHomePage)
+router.get("/features", (req, res) => {
+  res.redirect("/")
+})
 
 // router.post("/fetchNews", getLoginUser, indexController.postFetchNews)
 
