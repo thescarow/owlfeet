@@ -22,10 +22,15 @@
 
   /* application colors  */
   --page-color: #ffffff;
-  --first-color: #162527;
+  /* --first-color: #162527;
   --second-color: #08af7c;
   --third-color: #ECB365;
-  --fourth-color: #ffffff;
+  --fourth-color: #ffffff; */
+  --first-color: #1E201E;
+  --second-color: #3C3D37;
+  --third-color: #697565;
+  --fourth-color: #ECDFCC;
+
   --light-color: #ffffff;
   --dark-color: #141615;
   --danger-color: #eb6600;
@@ -64,12 +69,22 @@
   /* for rgba so that we can use the alpha value  */
   /* application rgba color */
   --rgba-page-color: 255, 255, 255;
-  --rgba-first-color: 22, 37, 39;
+  /* --rgba-first-color: 22, 37, 39;
   --rgba-second-color: 8, 175, 124;
   --rgba-third-color: 236, 179, 101;
-  --rgba-fourth-color: 255, 255, 255;
-  --rgba-light-color: 255, 255, 255;
-  --rgba-dark-color: 20, 22, 21;
+  --rgba-fourth-color: 255, 255, 255; */
+  /* --rgba-first-color: 30, 32, 30;
+  --rgba-second-color: 60, 61, 55;
+  --rgba-third-color: 105, 117, 101;
+  --rgba-fourth-color: 236, 223, 204; */
+  --rgba-first-color: 30, 32, 30;
+  --rgba-second-color: 106, 156, 137;
+  --rgba-third-color: 105, 117, 101;
+  --rgba-fourth-color: 236, 223, 204;
+  /* --rgba-light-color: 255, 255, 255; */
+  --rgba-light-color: 236, 223, 204;
+  /* --rgba-dark-color: 20, 22, 21; */
+  --rgba-dark-color: 30, 32, 30;
   --rgba-danger-color: 204, 59, 33;
   --rgba-success-color: 167, 249, 167;
 }
