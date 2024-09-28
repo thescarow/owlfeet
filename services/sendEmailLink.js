@@ -1,43 +1,22 @@
-const chalk = require("chalk")
-const dataLog = chalk.blue.bold
-const errorLog = chalk.red.bgWhite.bold
-const mainErrorLog = chalk.white.bgYellow.bold
+const chalk = require("chalk");
+const dataLog = chalk.blue.bold;
+const errorLog = chalk.red.bgWhite.bold;
+const mainErrorLog = chalk.white.bgYellow.bold;
 ////////////////////////////////////////////////////
 
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config()
+  require("dotenv").config();
 }
-const emailClient = require("@sendgrid/mail")
+const sgMail = require("@sendgrid/mail");
 
-const OWLFEET_SENDER_EMAIL =
-  process.env.SENDGRID_SENDER_EMAIL || "thescarow007@gmail.com"
+const apiKey = process.env.SENDGRID_API_KEY;
+const sender = process.env.SENDGRID_SENDER_EMAIL || "joker.tempmail@gmail.com";
 
-const OWLFEET_CONTACT_US_EMAIL =
-  process.env.SENDGRID_SUPPORT_EMAIL || "thescarow007@gmail.com"
+sgMail.setApiKey(apiKey);
 
-const EMAIL_LOGIN_TEMPLATE_ID = "d-ee3d0f38459a4dcaaa1b942effea3e0e"
-const EMAIL_VERIFICATION_TEMPLATE_ID = "d-08e2a8e6ec8f4adebc260dae43a2bb93"
+const EMAIL_LOGIN_TEMPLATE_ID = "d-ee3d0f38459a4dcaaa1b942effea3e0e";
+const EMAIL_VERIFICATION_TEMPLATE_ID = "d-08e2a8e6ec8f4adebc260dae43a2bb93";
 
-const OWLFEET_TWITTER_URL = "#"
-const OWLFEET_INSTAGRAM_URL = "#"
-const OWLFEET_FACEBOOK_URL = "#"
-const OWLFEET_WHATSAPP_URL = "#"
-const OWLFEET_LINKEDIN_URL = "#"
-
-const OWLFEET_UNSUBSCRIBE_URL = "#"
-const OWLFEET_UNSUBSCRIBE_PREFERENCES_URL = "#"
-
-// {"emailUser": "Rithik Pathak",
-// "emailUrl":"http://localhost:5000",
-// "owlfeetContactUsEmail":"thescarow007@gmail.com",
-// "owlfeetTwitterUrl":"#",
-// "owlfeetInstagramUrl":"#",
-// "owlfeetFacebookUrl":"#",
-// "owlfeetWhatsappUrl":"#",
-// "owlfeetLinkedinUrl":"#",
-// "owlfeetUnsubscribeUrl":"#",
-// "owlfeetUnsubscribePreferencesUrl":"#"
-// }
 exports.sendEmailLink = async (
   toEmail,
   emailType,
@@ -45,70 +24,62 @@ exports.sendEmailLink = async (
   emailUser = ""
 ) => {
   try {
-    const apiKey = process.env.SENDGRID_API_KEY
-    emailClient.setApiKey(apiKey)
-
-    let templateId
-    let emailSubject = "Owlfeet"
+    let msg = {
+      to: toEmail, // Recipient's email address
+      from: sender, // Your email address (must be verified with SendGrid)
+      templateId: EMAIL_LOGIN_TEMPLATE_ID, // SendGrid Dynamic Template ID
+      dynamic_template_data: {
+        emailSubject: `OWLFEET !!`,
+        emailUser: "",
+        emailUrl: emailLink,
+        owlfeetTwitterUrl: "#",
+        owlfeetInstagramUrl: "#",
+        owlfeetFacebookUrl: "#",
+        owlfeetWhatsappUrl: "#",
+        owlfeetLinkedinUrl: "#",
+        owlfeetContactUsEmail: sender,
+        owlfeetUnsubscribeUrl: "#",
+        owlfeetUnsubscribePreferencesUrl: "#",
+      },
+    };
+    if (emailUser !== "") {
+      msg.dynamic_template_data.emailUser = emailUser;
+    }
 
     if (emailType === "email-verification") {
-      templateId = EMAIL_VERIFICATION_TEMPLATE_ID
-      emailSubject = "Email Verification"
+      msg.templateId = EMAIL_VERIFICATION_TEMPLATE_ID;
+      msg.dynamic_template_data.emailSubject = "Email Verification";
     } else if (emailType === "email-login") {
-      templateId = EMAIL_LOGIN_TEMPLATE_ID
-      emailSubject = "Email Login (Login Without Password)"
+      msg.templateId = EMAIL_LOGIN_TEMPLATE_ID;
+      msg.dynamic_template_data.emailSubject =
+        "Email Login (Login Without Password)";
+      templateId = EMAIL_LOGIN_TEMPLATE_ID;
+    } else {
+      msg = {
+        to: toEmail,
+        from: sender,
+        subject: "OWLFEET !!!",
+        text: emailLink,
+        html: `<a href="${emailLink}" target="_blank  rel="noopener noreferrer">${emailLink}</a>`,
+      };
     }
 
-    if (templateId === undefined) {
-      message = {
-        to: toEmail,
-        from: OWLFEET_SENDER_EMAIL,
-        subject: emailSubject,
-        text: emailLink,
-        html: `<a href="${emailLink}" target="_blank  rel="noopener noreferrer">${emailLink}</a>`
-      }
-    } else {
-      message = {
-        to: toEmail,
-        from: OWLFEET_SENDER_EMAIL,
-        subject: emailSubject,
-        personalizations: [
-          {
-            to: [
-              {
-                email: toEmail
-              }
-            ],
-            dynamic_template_data: {
-              emailUser: emailUser || "",
-              emailUrl: emailLink,
-              owlfeetContactUsEmail: OWLFEET_CONTACT_US_EMAIL,
-              owlfeetTwitterUrl: OWLFEET_TWITTER_URL,
-              owlfeetInstagramUrl: OWLFEET_INSTAGRAM_URL,
-              owlfeetFacebookUrl: OWLFEET_FACEBOOK_URL,
-              owlfeetWhatsappUrl: OWLFEET_WHATSAPP_URL,
-              owlfeetLinkedinUrl: OWLFEET_LINKEDIN_URL,
-              owlfeetUnsubscribeUrl: OWLFEET_UNSUBSCRIBE_URL,
-              owlfeetUnsubscribePreferencesUrl:
-                OWLFEET_UNSUBSCRIBE_PREFERENCES_URL
-            }
-          }
-        ],
-        template_id: templateId
-      }
-    }
-    emailClient
-      .send(message)
-      .then(() => {
-        console.log("Email is sent successfully:", emailSubject)
-      })
-      .catch(error => {
+    try {
+      await sgMail.send(msg);
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.error("Email Error:", error);
+      if (error.response) {
         console.log(
           errorLog("Error In Sending email link:"),
-          mainErrorLog(error)
-        )
-      })
+          mainErrorLog(error.response.body)
+        );
+      }
+    }
   } catch (err) {
-    console.log(errorLog("Error In Sending email link:"), mainErrorLog(err))
+    console.log(errorLog("Error In Sending email link:"), mainErrorLog(err));
   }
-}
+};
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
